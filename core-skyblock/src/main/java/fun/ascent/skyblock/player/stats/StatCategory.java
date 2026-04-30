@@ -12,6 +12,6 @@ public enum StatCategory {
     RIFT,
     OTHER,
     BACKEND,
-    HIDDEN;
+    PLAYER;
 
 }
