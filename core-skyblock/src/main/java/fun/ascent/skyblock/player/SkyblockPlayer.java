@@ -8,6 +8,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,6 +20,17 @@ public class SkyblockPlayer extends Player {
 
     public SkyblockPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
+        loadProfiles();
+
+        if(playerProfiles.isEmpty() && activeProfile == null && activeProfileData == null) {
+            SkyblockProfile profile = new SkyblockProfile(List.of(this));
+            addProfile(profile);
+            setActiveProfile(profile.profileID);
+        }
+    }
+
+    public void loadProfiles(){
+        //TODO: Load Profiles from DB
     }
 
     public void addProfile(SkyblockProfile profile) {
