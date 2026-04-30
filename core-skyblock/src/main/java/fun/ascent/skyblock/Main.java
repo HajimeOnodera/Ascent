@@ -7,6 +7,8 @@ import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 
 import fun.ascent.skyblock.npc.impl.SkyblockNPCManager;
+import fun.ascent.skyblock.calendar.Calendar;
+import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 
 public class Main {
 
@@ -16,6 +18,8 @@ public class Main {
         WorldManager.initialise();
         EventManager.initialise();
         SkyblockNPCManager.init();
+        Calendar.startTimeUpdates();
+        ScoreboardManager.init();
 
         System.out.println("[Skyblock] Starting the Server ");
         server.start("0.0.0.0",25565);

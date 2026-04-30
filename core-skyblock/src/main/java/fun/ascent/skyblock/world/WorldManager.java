@@ -38,12 +38,21 @@ public class WorldManager {
         worldInstance.setGenerator(unit -> unit.modifier().fillHeight(0,40, Block.GRASS_BLOCK));
         registerWorld(startingWorld, worldInstance);
         System.out.println("[Proximity] Created Starting World ");
-        
-        fun.ascent.skyblock.npc.impl.SkyBlockNPC banker = new fun.ascent.skyblock.npc.impl.SkyBlockNPC(new fun.ascent.skyblock.npc.village.BankerNPC(worldInstance));
-        banker.spawn();
-        
-        fun.ascent.skyblock.npc.impl.SkyBlockNPC lumberjack = new fun.ascent.skyblock.npc.impl.SkyBlockNPC(new fun.ascent.skyblock.npc.village.LumberjackNPC(worldInstance));
-        lumberjack.spawn();
+
+        org.reflections.Reflections reflections = new org.reflections.Reflections("fun.ascent.skyblock.npc.village");
+        java.util.Set<Class<? extends fun.ascent.skyblock.npc.impl.NPCParameters>> npcClasses = reflections.getSubTypesOf(fun.ascent.skyblock.npc.impl.NPCParameters.class);
+
+        for (Class<? extends fun.ascent.skyblock.npc.impl.NPCParameters> npcClass : npcClasses) {
+            try {
+                java.lang.reflect.Constructor<? extends fun.ascent.skyblock.npc.impl.NPCParameters> constructor = npcClass.getConstructor(net.minestom.server.instance.Instance.class);
+                fun.ascent.skyblock.npc.impl.NPCParameters parameters = constructor.newInstance(worldInstance);
+                fun.ascent.skyblock.npc.impl.SkyBlockNPC npc = new fun.ascent.skyblock.npc.impl.SkyBlockNPC(parameters);
+                npc.spawn();
+            } catch (Exception e) {
+                System.err.println("[Skyblock] Failed to spawn NPC: " + npcClass.getSimpleName());
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void registerWorld(String worldName, Instance container){

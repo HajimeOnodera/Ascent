@@ -1,8 +1,9 @@
 package fun.ascent.skyblock.npc.impl;
 
+import fun.ascent.skyblock.events.EventManager;
+import fun.ascent.skyblock.events.SEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 
 import java.util.HashSet;
@@ -12,11 +13,13 @@ public class SkyblockNPCManager {
     private static final Set<SkyBlockNPC> SKYBLOCK_NPCS = new HashSet<>();
 
     public static void init() {
-        GlobalEventHandler eventHandler = MinecraftServer.getGlobalEventHandler();
-        eventHandler.addListener(PlayerEntityInteractEvent.class, event -> {
-            SkyBlockNPC npc = getNPCByEntity(event.getTarget());
-            if (npc != null) {
-                npc.getParameters().onInteract(event.getPlayer(), npc);
+        EventManager.registerEvent(new SEvent<PlayerEntityInteractEvent>() {
+            @Override
+            public void onEvent(PlayerEntityInteractEvent event) {
+                SkyBlockNPC npc = getNPCByEntity(event.getTarget());
+                if (npc != null) {
+                    npc.getParameters().onInteract(event.getPlayer(), npc);
+                }
             }
         });
     }
