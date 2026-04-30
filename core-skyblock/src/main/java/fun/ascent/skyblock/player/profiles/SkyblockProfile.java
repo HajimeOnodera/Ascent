@@ -1,28 +1,26 @@
-package fun.ascent.skyblock.player;
+package fun.ascent.skyblock.player.profiles;
 
-
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.utility.RandomUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-// This is where the main implementation will be
 public class SkyblockProfile {
 
-    public UUID profileID;
     public String profileName;
-    public String playerName;
+    public UUID profileID;
+    public List<ProfilePlayer> profilePlayers;
 
-    public transient SkyblockPlayer activePlayer;
-
-    public SkyblockProfile(SkyblockPlayer activePlayer) {
+    public SkyblockProfile(List<SkyblockPlayer> players) {
         this.profileID = UUID.randomUUID();
-        this.profileName = generateRandomProfile();
-        this.activePlayer = activePlayer;
-        this.playerName = activePlayer.getUsername();
+        this.profileName = generateRandomProfileName();
+        this.profilePlayers = new ArrayList<>();
+        players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID,pl.getUuid())));
     }
 
-    public String generateRandomProfile(){
+    public String generateRandomProfileName(){
         List<String> names = List.of(
                 "Apple", "Banana", "Blueberry", "Coconut", "Cucumber",
                 "Grapes", "Kiwi", "Lemon", "Lime", "Mango", "Orange", "Papaya", "Peach",
@@ -31,4 +29,5 @@ public class SkyblockProfile {
         int num = RandomUtils.getRandomInt(names.size() - 1);
         return names.get(num);
     }
+
 }
