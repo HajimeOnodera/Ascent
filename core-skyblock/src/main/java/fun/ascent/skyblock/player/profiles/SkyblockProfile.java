@@ -18,6 +18,7 @@ public class SkyblockProfile {
         this.profileName = generateRandomProfileName();
         this.profilePlayers = new ArrayList<>();
         players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID,pl.getUuid())));
+
     }
 
     public String generateRandomProfileName(){
