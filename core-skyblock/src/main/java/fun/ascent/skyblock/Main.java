@@ -5,16 +5,16 @@ import fun.ascent.skyblock.npc.impl.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
-import fun.ascent.skyblock.skill.SkillRegistry;
-import fun.ascent.skyblock.skill.command.SkillsCommand;
-import fun.ascent.skyblock.skill.listener.SkillListeners;
+import fun.ascent.skyblock.player.skill.SkillRegistry;
+import fun.ascent.skyblock.player.skill.command.SkillsCommand;
+import fun.ascent.skyblock.player.skill.listener.SkillListeners;
 import fun.ascent.skyblock.world.WorldManager;
 import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 
 public class Main {
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         MinecraftServer server = MinecraftServer.init(new Auth.Offline());
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
 

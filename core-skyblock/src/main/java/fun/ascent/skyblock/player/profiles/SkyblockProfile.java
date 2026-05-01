@@ -17,7 +17,12 @@ public class SkyblockProfile {
         this.profileID = UUID.randomUUID();
         this.profileName = generateRandomProfileName();
         this.profilePlayers = new ArrayList<>();
-        players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID,pl.getUuid())));
+        players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID,pl)));
+
+    }
+
+    //WARN: Put Null Checks for All Variables Added
+    public void postLoad(){
 
     }
 
