@@ -2,7 +2,7 @@ package fun.ascent.skyblock;
 
 import fun.ascent.skyblock.config.ServerConfig;
 import fun.ascent.skyblock.events.EventManager;
-import fun.ascent.skyblock.npc.impl.SkyblockNPCManager;
+import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.XpCommand;
