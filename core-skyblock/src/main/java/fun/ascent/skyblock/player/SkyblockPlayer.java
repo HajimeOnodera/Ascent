@@ -2,10 +2,12 @@ package fun.ascent.skyblock.player;
 
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
+import fun.ascent.skyblock.skill.PlayerSkillData;
 import lombok.Getter;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,35 +24,37 @@ public class SkyblockPlayer extends Player {
         super(playerConnection, gameProfile);
         loadProfiles();
 
-        if(playerProfiles.isEmpty() && activeProfile == null && activeProfileData == null) {
+        if (playerProfiles.isEmpty()) {
             SkyblockProfile profile = new SkyblockProfile(List.of(this));
             addProfile(profile);
             setActiveProfile(profile.profileID);
         }
     }
 
-    public void loadProfiles(){
-        //TODO: Load Profiles from DB
+    public void loadProfiles() {
+        // TODO: Load from database
     }
 
     public void addProfile(SkyblockProfile profile) {
-        this.playerProfiles.put(profile.profileID, profile);
+        playerProfiles.put(profile.profileID, profile);
     }
 
     public void setActiveProfile(UUID profileID) {
-        SkyblockProfile targetProfile = playerProfiles.get(profileID);
-        if (targetProfile == null) return;
-        this.activeProfile = targetProfile;
+        SkyblockProfile target = playerProfiles.get(profileID);
+        if (target == null) return;
 
-        for (ProfilePlayer pp : targetProfile.profilePlayers) {
-            if (pp.playerUUID.equals(this.getUuid())) {
+        this.activeProfile = target;
+
+        for (ProfilePlayer pp : target.profilePlayers) {
+            if (pp.playerUUID.equals(getUuid())) {
                 this.activeProfileData = pp;
                 break;
             }
         }
-
-        //TODO: Apply profile effects
     }
 
-
+    @Nullable
+    public PlayerSkillData getSkillData() {
+        return activeProfileData != null ? activeProfileData.skillData : null;
+    }
 }
