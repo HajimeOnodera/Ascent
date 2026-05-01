@@ -10,20 +10,26 @@ import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SkillOverviewMenu {
 
-    private static final int[] SKILL_SLOTS = {19, 20, 21, 22, 23, 24, 25, 28, 29, 30};
+    private static final int[] SKILL_SLOTS = {
+            19, 20, 21, 22, 23, 24, 25,
+            28, 29, 30, 32, 33, 34
+    };
+    private static final int INFO_SLOT = 4;
+    private static final int BACK_SLOT = 48;
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player) {
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "§aSkills");
 
-        fillBorder(inv);
+        SkillMenuFormat.fill(inv);
+        inv.setItemStack(INFO_SLOT, SkillMenuFormat.infoButton());
+        inv.setItemStack(BACK_SLOT, SkillMenuFormat.backButton());
 
         ProfilePlayer data = player.getActiveProfileData();
         if (data != null) {
@@ -34,7 +40,7 @@ public class SkillOverviewMenu {
             }
         }
 
-        inv.setItemStack(CLOSE_SLOT, closeButton());
+        inv.setItemStack(CLOSE_SLOT, SkillMenuFormat.closeButton());
         inv.eventNode().addListener(InventoryPreClickEvent.class, SkillOverviewMenu::handleClick);
 
         player.openInventory(inv);
@@ -45,7 +51,7 @@ public class SkillOverviewMenu {
         event.setCancelled(true);
 
         int slot = event.getSlot();
-        if (slot == CLOSE_SLOT) {
+        if (slot == CLOSE_SLOT || slot == BACK_SLOT) {
             player.closeInventory();
             return;
         }
@@ -63,7 +69,6 @@ public class SkillOverviewMenu {
     private static ItemStack buildSkillItem(SkillType type, PlayerSkillData data) {
         int level = data.getLevel(type);
         Integer nextLevel = data.getNextLevel(type);
-        double progress = data.getProgressToNextLevel(type);
 
         List<Component> lore = new ArrayList<>();
         for (String line : type.definition().description()) {
@@ -73,10 +78,8 @@ public class SkillOverviewMenu {
 
         if (nextLevel != null) {
             SkillReward reward = type.definition().rewardAt(nextLevel);
-            String progressText = String.format("§7Progress to Level %s: §e%.1f%%",
-                    SkillReward.toRoman(nextLevel), progress * 100);
-            lore.add(Component.text(progressText));
-            lore.add(Component.text(data.progressBar(type)));
+            SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(),
+                    "§7Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
             lore.add(Component.text(" "));
             reward.toLore().forEach(s -> lore.add(Component.text(s)));
         } else {
@@ -86,31 +89,9 @@ public class SkillOverviewMenu {
         lore.add(Component.text(" "));
         lore.add(Component.text("§eClick to view!"));
 
-        String displayName = "§a" + type.definition().name() + " " + SkillReward.toRoman(level);
-
         return ItemStack.builder(type.definition().icon())
-                .customName(Component.text(displayName))
+                .customName(Component.text(SkillMenuFormat.skillNameWithLevel(type, level)))
                 .lore(lore)
-                .build();
-    }
-
-    private static void fillBorder(Inventory inv) {
-        ItemStack filler = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE)
-                .customName(Component.text(" "))
-                .build();
-
-        for (int i = 0; i < inv.getSize(); i++) {
-            int row = i / 9;
-            int col = i % 9;
-            if (row == 0 || row == 5 || col == 0 || col == 8) {
-                inv.setItemStack(i, filler);
-            }
-        }
-    }
-
-    private static ItemStack closeButton() {
-        return ItemStack.builder(Material.BARRIER)
-                .customName(Component.text("§cClose"))
                 .build();
     }
 }

@@ -21,9 +21,9 @@ public class SkillDetailMenu {
     private static final int[] REWARD_SLOTS = {
             9, 18, 27, 28, 29, 20, 11, 2, 3, 4, 13, 22, 31, 32, 33, 24, 15, 6, 7, 8, 17, 26, 35, 44, 53
     };
+    private static final int PAGE_BACK_SLOT = 48;
+    private static final int CLOSE_SLOT = 49;
     private static final int NEXT_PAGE_SLOT = 50;
-    private static final int PREV_PAGE_SLOT = 48;
-    private static final int BACK_SLOT = 45;
     private static final int SKILL_INFO_SLOT = 0;
 
     public static void open(SkyblockPlayer player, SkillType type, int page) {
@@ -36,10 +36,9 @@ public class SkillDetailMenu {
 
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "§a" + type.getDisplayName() + " Skill");
 
-        fillBorder(inv);
+        SkillMenuFormat.fill(inv);
 
         inv.setItemStack(SKILL_INFO_SLOT, buildInfoItem(type, def, skillData));
-        inv.setItemStack(BACK_SLOT, buildBackButton());
 
         List<SkillReward> allRewards = List.of(def.rewards());
         int perPage = REWARD_SLOTS.length;
@@ -55,8 +54,9 @@ public class SkillDetailMenu {
         boolean hasNextPage = end < allRewards.size();
         boolean hasPrevPage = page > 0;
 
-        if (hasNextPage) inv.setItemStack(NEXT_PAGE_SLOT, buildNavButton("§eNext Page", Material.ARROW));
-        if (hasPrevPage) inv.setItemStack(PREV_PAGE_SLOT, buildNavButton("§ePrevious Page", Material.ARROW));
+        inv.setItemStack(PAGE_BACK_SLOT, hasPrevPage ? SkillMenuFormat.previousPageButton() : SkillMenuFormat.backButton());
+        inv.setItemStack(CLOSE_SLOT, SkillMenuFormat.closeButton());
+        if (hasNextPage) inv.setItemStack(NEXT_PAGE_SLOT, SkillMenuFormat.nextPageButton());
         inv.eventNode().addListener(InventoryPreClickEvent.class, event -> handleClick(event, type, page, hasNextPage, hasPrevPage));
 
         player.openInventory(inv);
@@ -67,7 +67,16 @@ public class SkillDetailMenu {
         event.setCancelled(true);
 
         int slot = event.getSlot();
-        if (slot == BACK_SLOT) {
+        if (slot == CLOSE_SLOT) {
+            player.closeInventory();
+            return;
+        }
+        if (slot == PAGE_BACK_SLOT && hasPrevPage) {
+            player.closeInventory();
+            open(player, type, page - 1);
+            return;
+        }
+        if (slot == PAGE_BACK_SLOT) {
             player.closeInventory();
             SkillOverviewMenu.open(player);
             return;
@@ -76,10 +85,6 @@ public class SkillDetailMenu {
             player.closeInventory();
             open(player, type, page + 1);
             return;
-        }
-        if (slot == PREV_PAGE_SLOT && hasPrevPage) {
-            player.closeInventory();
-            open(player, type, page - 1);
         }
     }
 
@@ -93,16 +98,15 @@ public class SkillDetailMenu {
 
         if (nextLevel != null) {
             SkillReward reward = def.rewardAt(nextLevel);
-            lore.add(Component.text(String.format("§7Progress to Level %s: §e%.1f%%",
-                    SkillReward.toRoman(nextLevel), data.getProgressToNextLevel(type) * 100)));
-            lore.add(Component.text(data.progressBar(type)));
-
-            String xpInLevel = String.format("§e%.0f§6/§e%.0f",
-                    data.getXpIntoCurrentLevel(type), (double) reward.xpRequired());
-            lore.add(Component.text("§7XP: " + xpInLevel));
+            SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(),
+                    "§7Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
         } else {
             lore.add(Component.text("§aMAX LEVEL REACHED!"));
         }
+
+        lore.add(Component.text(" "));
+        lore.add(Component.text("§7View all rewards for this"));
+        lore.add(Component.text("§7Skill below."));
 
         return ItemStack.builder(def.icon())
                 .customName(Component.text("§a" + def.name() + " Skill"))
@@ -129,7 +133,7 @@ public class SkillDetailMenu {
             lore.add(Component.text("§aUNLOCKED"));
         } else if (isCurrent) {
             lore.add(Component.text(" "));
-            lore.add(Component.text(data.progressBar(type)));
+            SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(), "§7Progress: ");
         }
 
         return ItemStack.builder(glass)
@@ -138,31 +142,4 @@ public class SkillDetailMenu {
                 .build();
     }
 
-    private static ItemStack buildNavButton(String name, Material material) {
-        return ItemStack.builder(material)
-                .customName(Component.text(name))
-                .build();
-    }
-
-    private static ItemStack buildBackButton() {
-        return ItemStack.builder(Material.ARROW)
-                .customName(Component.text("§aGo Back"))
-                .lore(List.of(Component.text("§7Return to Skills Menu")))
-                .build();
-    }
-
-    private static void fillBorder(Inventory inv) {
-        ItemStack filler = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE)
-                .customName(Component.text(" "))
-                .build();
-
-        int size = inv.getSize();
-        for (int i = 0; i < size; i++) {
-            int row = i / 9;
-            int col = i % 9;
-            if (row == 0 || row == 5 || col == 0 || col == 8) {
-                inv.setItemStack(i, filler);
-            }
-        }
-    }
 }
