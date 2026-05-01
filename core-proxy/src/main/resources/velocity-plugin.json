@@ -1,0 +1,9 @@
+{
+  "id": "ascent-proxy",
+  "name": "Ascent Proxy",
+  "version": "1.0.0",
+  "main": "fun.ascent.proxy.CoreProxy",
+  "authors": [
+    "Ascent"
+  ]
+}

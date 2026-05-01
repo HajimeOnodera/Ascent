@@ -1,0 +1,27 @@
+# Drop CoreProxy.jar into Velocity's plugins directory. Players join lobby
+# first, then use lobby NPCs or commands to move to backend servers.
+bind = "0.0.0.0:25565"
+online-mode = true
+player-info-forwarding-mode = "modern"
+#If you are using modern or BungeeGuard IP forwarding, configure a file that contains a unique secret here.
+#The file is expected to be UTF-8 encoded and not empty.
+forwarding-secret-file = "forwarding.secret"
+bungee-plugin-message-channel = true
+config-version = "2.7"
+#Should the proxy enforce the new public key security standard? By default, this is on.
+force-key-authentication = true
+# What should be the MOTD? This gets displayed when the player adds your server to
+# their server list. Only MiniMessage format is accepted.
+motd = "\\<#09add3>A Velocity Server"
+
+[servers]
+	lobby = "127.0.0.1:25567"
+	skyblock = "127.0.0.1:25566"
+	try = ["lobby", "skyblock"]
+
+[forced-hosts]
+
+[advanced]
+	#Allows players transferred from other hosts via the
+	#Transfer packet (Minecraft 1.20.5) to be received.
+	accepts-transfers = false

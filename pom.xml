@@ -15,6 +15,7 @@
     <modules>
         <module>commons</module>
         <module>core-skyblock</module>
+        <module>core-lobby</module>
         <module>core-proxy</module>
     </modules>
 
