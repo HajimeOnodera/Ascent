@@ -4,6 +4,8 @@ import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.npc.impl.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.XpCommand;
+import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.command.SkillsCommand;
@@ -23,10 +25,12 @@ public class Main {
         SkyblockNPCManager.init();
         Calendar.startTimeUpdates();
         ScoreboardManager.init();
+        ProfileManager.initialise();
 
         SkillRegistry.init();
         SkillListeners.register();
         MinecraftServer.getCommandManager().register(new SkillsCommand());
+        MinecraftServer.getCommandManager().register(new XpCommand());
 
         System.out.println("[Skyblock] Starting the Server");
         server.start("0.0.0.0", 25565);
