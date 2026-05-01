@@ -1,8 +1,4 @@
-<<<<<<<< HEAD:core-skyblock/src/main/java/fun/ascent/skyblock/menus/SkillMenuFormat.java
-package fun.ascent.skyblock.menus;
-========
 package fun.ascent.skyblock.player.skill.gui;
->>>>>>>> origin/main:core-skyblock/src/main/java/fun/ascent/skyblock/player/skill/gui/SkillMenuFormat.java
 
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.skill.SkillReward;

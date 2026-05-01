@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.world.location;
 
-import fun.ascent.skyblock.skill.SkillType;
+import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.world.WorldManager;
 import lombok.Getter;
 import net.minestom.server.coordinate.Pos;
@@ -95,7 +95,7 @@ public enum SkyblockLocation {
 
     public boolean canGo(fun.ascent.skyblock.player.SkyblockPlayer player) {
         if (skill == null || lvl <= 0) return true;
-        fun.ascent.skyblock.skill.PlayerSkillData skillData = player.getSkillData();
+        fun.ascent.skyblock.player.skill.PlayerSkillData skillData = player.getSkillData();
         if (skillData == null) return false;
         return skillData.getLevel(skill) >= lvl;
     }

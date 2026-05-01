@@ -21,20 +21,35 @@ public class GuiCommand extends Command {
             }
 
             String guiName = ctx.get(guiArg);
-            String className = "fun.ascent.skyblock.menus." + guiName;
+            String[] packages = {
+                "fun.ascent.skyblock.menus.",
+                "fun.ascent.skyblock.player.skill.gui."
+            };
 
-            try {
-                Class<?> clazz = Class.forName(className);
-                Method openMethod = clazz.getMethod("open", SkyblockPlayer.class);
-                openMethod.invoke(null, player);
-                player.sendMessage("§aOpened GUI: §f" + guiName);
-            } catch (ClassNotFoundException e) {
-                player.sendMessage("§cGUI " + guiName + " not found in fun.ascent.skyblock.menus");
-            } catch (NoSuchMethodException e) {
-                player.sendMessage("§cGUI " + guiName + " does not have a static open(SkyblockPlayer) method.");
-            } catch (Exception e) {
-                player.sendMessage("§cError opening GUI: " + e.getMessage());
-                e.printStackTrace();
+            boolean found = false;
+            for (String pkg : packages) {
+                try {
+                    Class<?> clazz = Class.forName(pkg + guiName);
+                    java.lang.reflect.Method openMethod = clazz.getMethod("open", SkyblockPlayer.class);
+                    openMethod.invoke(null, player);
+                    player.sendMessage("§aOpened GUI: §f" + guiName);
+                    found = true;
+                    break;
+                } catch (ClassNotFoundException ignored) {
+                } catch (NoSuchMethodException e) {
+                    player.sendMessage("§cGUI " + guiName + " does not have a static open(SkyblockPlayer) method.");
+                    found = true;
+                    break;
+                } catch (Exception e) {
+                    player.sendMessage("§cError opening GUI: " + e.getMessage());
+                    e.printStackTrace();
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                player.sendMessage("§cGUI " + guiName + " not found.");
             }
         }, guiArg);
     }
