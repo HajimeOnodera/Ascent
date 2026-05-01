@@ -1,7 +1,9 @@
 package fun.ascent.skyblock.world;
 
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -26,6 +28,18 @@ public class WorldManager {
 
     public static Pos getStartingSpawn() {
         return STARTING_SPAWN;
+    }
+
+    public static SkyblockPlayer getPlayer(UUID playerUUID) {
+        for (UUID world : worlds.values()) {
+            Instance container = instanceManager.getInstance(world);
+            if(container == null) continue;
+
+            Player player = container.getPlayerByUuid(playerUUID);
+            if(!(player instanceof SkyblockPlayer)) continue;
+            return (SkyblockPlayer) player;
+        }
+        return null;
     }
 
     public static void initialise(){

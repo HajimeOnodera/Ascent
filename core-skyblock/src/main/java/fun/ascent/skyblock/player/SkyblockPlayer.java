@@ -2,7 +2,7 @@ package fun.ascent.skyblock.player;
 
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
-import fun.ascent.skyblock.skill.PlayerSkillData;
+import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import lombok.Getter;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.player.GameProfile;
@@ -48,9 +48,14 @@ public class SkyblockPlayer extends Player {
         for (ProfilePlayer pp : target.profilePlayers) {
             if (pp.playerUUID.equals(getUuid())) {
                 this.activeProfileData = pp;
+                updatePlayer();
                 break;
             }
         }
+    }
+
+    public void updatePlayer(){
+        this.activeProfileData.updateStats();
     }
 
     @Nullable
