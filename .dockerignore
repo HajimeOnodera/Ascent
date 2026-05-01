@@ -8,3 +8,5 @@ forwarding.secret
 lobby.properties
 skyblock.properties
 *.log
+maps/hypixel_prototype_lobby/**
+!maps/hypixel_prototype_lobby.polar
