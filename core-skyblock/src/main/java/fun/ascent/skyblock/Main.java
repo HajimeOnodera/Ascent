@@ -27,6 +27,7 @@ public class Main {
         SkillRegistry.init();
         SkillListeners.register();
         MinecraftServer.getCommandManager().register(new SkillsCommand());
+        MinecraftServer.getCommandManager().register(new fun.ascent.skyblock.menus.command.GuiCommand());
 
         System.out.println("[Skyblock] Starting the Server");
         server.start("0.0.0.0", 25565);

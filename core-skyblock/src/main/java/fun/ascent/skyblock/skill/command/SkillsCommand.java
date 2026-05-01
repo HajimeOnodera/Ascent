@@ -2,8 +2,8 @@ package fun.ascent.skyblock.skill.command;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.skill.SkillType;
-import fun.ascent.skyblock.skill.gui.SkillDetailMenu;
-import fun.ascent.skyblock.skill.gui.SkillOverviewMenu;
+import fun.ascent.skyblock.menus.SkillDetailMenu;
+import fun.ascent.skyblock.menus.SkillOverviewMenu;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;

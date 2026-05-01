@@ -37,10 +37,21 @@ public class EventManager {
             event.getPlayer().sendMessage(MINI_MESSAGE.deserialize("<yellow>Welcome to <green>Hypixel SkyBlock</green><yellow>!</yellow>"));
         });
         handler.addListener(PlayerMoveEvent.class, event -> {
-            if (event.getNewPosition().y() >= 0) {
-                return;
+            if (event.getPlayer() instanceof fun.ascent.skyblock.player.SkyblockPlayer sbPlayer) {
+                fun.ascent.skyblock.world.location.SkyblockLocation newLoc = fun.ascent.skyblock.world.location.SkyblockLocation.getLocation(event.getInstance(), event.getNewPosition());
+                fun.ascent.skyblock.world.location.SkyblockLocation oldLoc = fun.ascent.skyblock.world.location.SkyblockLocation.getLocation(event.getInstance(), event.getPlayer().getPosition());
+
+                if (newLoc != oldLoc && !newLoc.canGo(sbPlayer)) {
+                    String msg = newLoc.getRequirementMessage();
+                    if (msg != null) sbPlayer.sendMessage(MINI_MESSAGE.deserialize(msg));
+                    event.setCancelled(true);
+                    return;
+                }
             }
-            event.getPlayer().teleport(WorldManager.getStartingSpawn());
+
+            if (event.getNewPosition().y() < 0) {
+                event.getPlayer().teleport(WorldManager.getStartingSpawn());
+            }
         });
         System.out.println("[Proximity] Registered " + dispatchers.size() + " event dispatchers.");
     }

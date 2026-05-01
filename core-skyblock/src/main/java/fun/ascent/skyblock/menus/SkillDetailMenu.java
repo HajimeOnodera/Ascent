@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.skill.gui;
+package fun.ascent.skyblock.menus;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;

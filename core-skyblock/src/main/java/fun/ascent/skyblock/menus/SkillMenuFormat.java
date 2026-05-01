@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.skill.gui;
+package fun.ascent.skyblock.menus;
 
 import fun.ascent.skyblock.skill.PlayerSkillData;
 import fun.ascent.skyblock.skill.SkillType;

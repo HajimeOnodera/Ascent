@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.skill.gui;
+package fun.ascent.skyblock.menus;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
@@ -18,7 +18,7 @@ public class SkillOverviewMenu {
 
     private static final int[] SKILL_SLOTS = {
             19, 20, 21, 22, 23, 24, 25,
-            28, 29, 30, 32, 33, 34
+            28, 29, 30, 34, 35, 36
     };
     private static final int INFO_SLOT = 4;
     private static final int BACK_SLOT = 48;
@@ -47,7 +47,8 @@ public class SkillOverviewMenu {
     }
 
     private static void handleClick(InventoryPreClickEvent event) {
-        if (!(event.getPlayer() instanceof SkyblockPlayer player)) return;
+        if (!(event.getPlayer() instanceof SkyblockPlayer player))
+            return;
         event.setCancelled(true);
 
         int slot = event.getSlot();

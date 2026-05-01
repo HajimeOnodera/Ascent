@@ -59,4 +59,12 @@ public class WorldManager {
         worlds.put(worldName, container.getUuid());
     }
 
+    public static String getWorldName(Instance instance) {
+        if (instance == null) return null;
+        return worlds.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(instance.getUuid()))
+                .map(java.util.Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+    }
 }
