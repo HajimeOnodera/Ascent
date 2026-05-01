@@ -1,0 +1,10 @@
+.git
+.idea
+**/target
+**/*.iml
+proxy/logs
+run-logs
+forwarding.secret
+lobby.properties
+skyblock.properties
+*.log

@@ -23,8 +23,8 @@ public record ServerConfig(String host, int port, String velocitySecret) {
             throw new IllegalStateException("Could not read " + CONFIG_FILE.toAbsolutePath(), e);
         }
 
-        String host = properties.getProperty("server.host", "0.0.0.0").trim();
-        int port = Integer.parseInt(properties.getProperty("server.port", "25566").trim());
+        String host = envOrProperty("ASCENT_SERVER_HOST", properties, "server.host", "0.0.0.0");
+        int port = Integer.parseInt(envOrProperty("ASCENT_SERVER_PORT", properties, "server.port", "25566"));
         String secret = resolveVelocitySecret(properties);
         return new ServerConfig(host, port, secret);
     }
@@ -42,7 +42,7 @@ public record ServerConfig(String host, int port, String velocitySecret) {
             return envSecret.trim();
         }
 
-        String secretFile = properties.getProperty("velocity.secret-file", "forwarding.secret").trim();
+        String secretFile = envOrProperty("ASCENT_VELOCITY_SECRET_FILE", properties, "velocity.secret-file", "forwarding.secret");
         Path path = Path.of(secretFile);
         if (Files.isRegularFile(path)) {
             try {
@@ -53,6 +53,14 @@ public record ServerConfig(String host, int port, String velocitySecret) {
         }
 
         return properties.getProperty("velocity.secret", "").trim();
+    }
+
+    private static String envOrProperty(String envName, Properties properties, String propertyName, String fallback) {
+        String env = System.getenv(envName);
+        if (env != null && !env.isBlank()) {
+            return env.trim();
+        }
+        return properties.getProperty(propertyName, fallback).trim();
     }
 
     private static void createDefaultConfig() {
