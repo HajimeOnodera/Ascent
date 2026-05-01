@@ -11,10 +11,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SkyblockPlayer extends Player {
 
