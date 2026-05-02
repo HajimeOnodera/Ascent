@@ -10,10 +10,10 @@ import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import lombok.NonNull;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
@@ -28,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Getter
 public abstract class SkyblockMobEntity extends EntityCreature {
@@ -35,6 +36,8 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     private static final List<SkyblockMobEntity> activeMobs = new ArrayList<>();
 
     private FloatingTextEntity nameplate;
+    private Component currentNameplate;
+    private final AtomicLong lastAttackMillis = new AtomicLong(0);
 
     protected SkyblockMobEntity(EntityType type) {
         super(type);
@@ -44,6 +47,9 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         if (this instanceof SkinOverride skin) {
             applySkin(skin);
         }
+
+        currentNameplate = buildNameplateComponent(baseStat(Stats.HEALTH), baseStat(Stats.HEALTH));
+        nameplate = new FloatingTextEntity(currentNameplate, meta -> {});
 
         onSetup();
     }
@@ -66,15 +72,16 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     public void spawn() {
         super.spawn();
         activeMobs.add(this);
-
-        Component plate = buildNameplateComponent(getHealth(), baseStat(Stats.HEALTH));
-        set(DataComponents.CUSTOM_NAME, plate);
-
-        nameplate = new FloatingTextEntity(plate,
-                meta -> meta.setTranslation(new Pos(0, nameplateOffset(), 0)));
-        addPassenger(nameplate);
-
+        nameplate.setInstance(getInstance(), nameplatePos());
         onSpawn();
+    }
+
+    @Override
+    public void updateNewViewer(@NotNull Player player) {
+        super.updateNewViewer(player);
+        if (nameplate != null) {
+            nameplate.updateNewViewer(player);
+        }
     }
 
     @Override
@@ -90,13 +97,9 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             );
         }
 
-        Component updated = buildNameplateComponent(getHealth(), baseStat(Stats.HEALTH));
-        set(DataComponents.CUSTOM_NAME, updated);
+        currentNameplate = buildNameplateComponent(getHealth(), baseStat(Stats.HEALTH));
         if (nameplate != null) {
-            nameplate.editEntityMeta(TextDisplayMeta.class, meta -> {
-                meta.setText(updated);
-                meta.setTranslation(new Pos(0, nameplateOffset(), 0));
-            });
+            nameplate.editEntityMeta(TextDisplayMeta.class, meta -> meta.setText(currentNameplate));
         }
 
         return true;
@@ -104,9 +107,13 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
     @Override
     public void kill() {
-        super.kill();
+        if (nameplate != null) {
+            nameplate.remove();
+            nameplate = null;
+        }
+
         activeMobs.remove(this);
-        if (nameplate != null) nameplate.kill();
+        super.kill();
 
         if (!(getLastDamageSource().getAttacker() instanceof SkyblockPlayer killer)) return;
 
@@ -133,12 +140,20 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             world.loadChunk(pos).join();
         }
 
+        if (nameplate != null && nameplate.getInstance() != null) {
+            nameplate.teleport(nameplatePos());
+        }
+
         pushOverlappingMobs();
 
         try {
             super.tick(time);
         } catch (Exception ignored) {
         }
+    }
+
+    private Pos nameplatePos() {
+        return getPosition().add(0, getBoundingBox().height() + nameplateOffset(), 0);
     }
 
     private void pushOverlappingMobs() {
@@ -178,6 +193,13 @@ public abstract class SkyblockMobEntity extends EntityCreature {
                         + " §a" + Math.round(hp)
                         + "§f/§a" + Math.round(max)
         );
+    }
+
+    public boolean tryAttack() {
+        long now = System.currentTimeMillis();
+        return lastAttackMillis.getAndUpdate(last ->
+                now - last >= attackCooldown() ? now : last
+        ) + attackCooldown() <= now;
     }
 
     public float nameplateOffset() {
