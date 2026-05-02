@@ -1,5 +1,8 @@
 package fun.ascent.skyblock;
 
+import fun.ascent.skyblock.entity.mob.EntityRegistry;
+import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
+import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.npc.impl.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
@@ -27,6 +30,10 @@ public class Main {
         SkillRegistry.init();
         SkillListeners.register();
         MinecraftServer.getCommandManager().register(new SkillsCommand());
+
+        EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
+        ZonePopulationTicker.start();
+        MinecraftServer.getCommandManager().register(new SpawnMobCommand());
 
         System.out.println("[Skyblock] Starting the Server");
         server.start("0.0.0.0", 25565);
