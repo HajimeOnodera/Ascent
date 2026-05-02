@@ -1,0 +1,62 @@
+package fun.ascent.lobby;
+
+import fun.ascent.lobby.command.ServerTransferCommand;
+import fun.ascent.lobby.config.LobbyConfig;
+import fun.ascent.lobby.npc.LobbyNpcManager;
+import fun.ascent.lobby.world.LobbyWorld;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.event.player.PlayerMoveEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
+
+public final class Main {
+
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+
+    private Main() {
+    }
+
+    public static void main(String[] args) {
+        LobbyConfig config = LobbyConfig.load();
+        MinecraftServer server = MinecraftServer.init(config.auth());
+
+        LobbyWorld world = LobbyWorld.create();
+        LobbyNpcManager npcManager = new LobbyNpcManager(world.instance());
+        npcManager.spawnDefaults();
+
+        registerEvents(world, npcManager);
+        MinecraftServer.getCommandManager().register(new ServerTransferCommand("skyblock", "sb", "island"));
+
+        System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
+        server.start(config.host(), config.port());
+        System.out.println("[Lobby] Started the Server");
+    }
+
+    private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {
+        GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
+
+        handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
+            event.setSpawningInstance(world.instance());
+            event.getPlayer().setRespawnPoint(world.spawn());
+        });
+
+        handler.addListener(PlayerSpawnEvent.class, event -> {
+            if (!event.isFirstSpawn()) {
+                return;
+            }
+
+            event.getPlayer().teleport(world.spawn());
+            event.getPlayer().sendMessage(MINI_MESSAGE.deserialize("<yellow>Welcome to <gold>Ascent</gold><yellow>! Pick a server to begin.</yellow>"));
+        });
+
+        handler.addListener(PlayerMoveEvent.class, event -> {
+            if (event.getNewPosition().y() < 0) {
+                event.getPlayer().teleport(world.spawn());
+            }
+        });
+
+        npcManager.registerListeners(handler);
+    }
+}

@@ -1,2 +1,9 @@
 .idea
 /impl
+target/
+*.iml
+skyblock.properties
+lobby.properties
+forwarding.secret
+run-logs/
+proxy/logs/

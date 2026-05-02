@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import fun.ascent.skyblock.world.location.SkyblockLocation;
 
 public class AdvancedScoreboard {
 
@@ -125,8 +126,9 @@ public class AdvancedScoreboard {
     public static class LocationBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
+            SkyblockLocation location = SkyblockLocation.getLocation(player.getInstance(), player.getPosition());
             return List.of(
-                    "<dark_gray>⏣</dark_gray> <dark_gray>None</dark_gray>",
+                    "<dark_gray>⏣</dark_gray> " + location.getName(),
                     "");
         }
     }
