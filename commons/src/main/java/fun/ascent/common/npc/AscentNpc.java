@@ -1,7 +1,5 @@
 package fun.ascent.common.npc;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -81,7 +79,6 @@ public class AscentNpc {
             int delayTicks = Math.max(1, delayMultiplier * 20);
             MinecraftServer.getSchedulerManager().buildTask(() -> {
                 sendMessage(player, message);
-                player.playSound(Sound.sound(Key.key("entity.villager.yes"), Sound.Source.NEUTRAL, 1f, 1f));
             }).delay(TaskSchedule.tick(delayTicks)).schedule();
 
             delayMultiplier++;

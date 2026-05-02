@@ -9,8 +9,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
-import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -53,16 +53,16 @@ public final class MinionManager {
                 MinionMenu.open(player, minion);
             }
         });
-        EventManager.registerEvent(new SEvent<PlayerUseItemOnBlockEvent>() {
+        EventManager.registerEvent(new SEvent<PlayerBlockPlaceEvent>() {
             @Override
-            public void onEvent(PlayerUseItemOnBlockEvent event) {
+            public void onEvent(PlayerBlockPlaceEvent event) {
                 if (!(event.getPlayer() instanceof SkyblockPlayer player)) {
                     return;
                 }
                 if (event.getHand() != PlayerHand.MAIN) {
                     return;
                 }
-                ItemStack itemStack = event.getItemStack();
+                ItemStack itemStack = player.getInventory().getItemStack(player.getHeldSlot());
                 if (!MinionItems.isMinionItem(itemStack)) {
                     return;
                 }
@@ -71,7 +71,8 @@ public final class MinionManager {
                     return;
                 }
                 int tier = MinionItems.getTier(itemStack);
-                placeMinion(player, type, tier, event.getPosition().blockX(), event.getPosition().blockY(), event.getPosition().blockZ(), event.getBlockFace(), true);
+                event.setCancelled(true);
+                placeMinionAt(player, type, tier, event.getBlockPosition().blockX(), event.getBlockPosition().blockY(), event.getBlockPosition().blockZ(), true);
             }
         });
 
@@ -87,10 +88,15 @@ public final class MinionManager {
 
     public static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type, int tier) {
         Pos base = commandBasePosition(player);
-        return placeMinion(player, type, tier, base.blockX(), base.blockY(), base.blockZ(), BlockFace.TOP, false);
+        return placeMinionAt(player, type, tier, base.blockX(), base.blockY(), base.blockZ(), false);
     }
 
     private static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type, int tier, int blockX, int blockY, int blockZ, BlockFace face, boolean consumeItem) {
+        Direction direction = face.toDirection();
+        return placeMinionAt(player, type, tier, blockX + direction.normalX(), blockY + direction.normalY(), blockZ + direction.normalZ(), consumeItem);
+    }
+
+    private static SkyblockMinion placeMinionAt(SkyblockPlayer player, MinionType type, int tier, int placeX, int placeY, int placeZ, boolean consumeItem) {
         List<SkyblockMinion> owned = MINIONS_BY_OWNER.computeIfAbsent(player.getUuid(), ignored -> new ArrayList<>());
         if (owned.size() >= MAX_MINIONS_PER_PLAYER) {
             player.sendMessage(MINI_MESSAGE.deserialize("<red>You already have the maximum number of placed minions.</red>"));
@@ -102,11 +108,6 @@ public final class MinionManager {
             return null;
         }
 
-        Direction direction = face.toDirection();
-        int placeX = blockX + direction.normalX();
-        int placeY = blockY + direction.normalY();
-        int placeZ = blockZ + direction.normalZ();
-        int baseY = placeY - 1;
         Pos placeAt = new Pos(placeX + 0.5, placeY, placeZ + 0.5, snappedYaw(player), 0f);
 
         for (SkyblockMinion existing : MINIONS_BY_ID.values()) {
@@ -132,18 +133,13 @@ public final class MinionManager {
             player.getInventory().setItemStack(player.getHeldSlot(), newAmount <= 0 ? ItemStack.AIR : heldItem.withAmount(newAmount));
         }
 
-        instance.setBlock(placeX, baseY, placeZ, type.getBaseBlock());
-        SkyblockMinion minion = new SkyblockMinion(player.getUuid(), type, tier, instance, placeAt);
+        SkyblockMinion minion = MinionFactory.create(player.getUuid(), type, tier, instance, placeAt);
         minion.spawn();
 
         MINIONS_BY_ID.put(minion.getId(), minion);
         owned.add(minion);
 
         player.sendMessage(MINI_MESSAGE.deserialize("<aqua>You placed a minion! <gray>(" + owned.size() + "/" + MAX_MINIONS_PER_PLAYER + ")</gray>"));
-        MinionLayoutValidator.ValidationResult validation = MinionLayoutValidator.validate(minion);
-        if (!validation.valid()) {
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>" + validation.message() + "</red>"));
-        }
         return minion;
     }
 

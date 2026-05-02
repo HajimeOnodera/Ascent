@@ -22,10 +22,9 @@ public class SkyblockMenu {
 
         fill(inv);
 
-        // Player Stats
         inv.setItemStack(INFO_SLOT, ItemStack.builder(Material.PLAYER_HEAD)
-                .customName(MiniMessage.miniMessage().deserialize("<green>Your SkyBlock Profile"))
-                .lore(List.of(MiniMessage.miniMessage().deserialize("<gray>View your stats, skills, and more!")))
+                .customName(MiniMessage.miniMessage().deserialize("<green>Click"))
+                .lore(List.of(MiniMessage.miniMessage().deserialize("<gray>Button")))
                 .build());
 
         // Close button

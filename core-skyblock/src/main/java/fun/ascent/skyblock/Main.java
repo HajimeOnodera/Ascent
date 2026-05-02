@@ -11,6 +11,8 @@ import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
 import fun.ascent.skyblock.config.ServerConfig;
+import fun.ascent.skyblock.minion.MinionManager;
+import fun.ascent.skyblock.minion.command.MinionCommand;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
@@ -24,7 +26,7 @@ public class Main {
     /** Docker service name used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "skyblock");
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
 
         // ── Redis ───────────────────────────────────────────────────────────
@@ -40,10 +42,12 @@ public class Main {
         SkyblockNPCManager.init();
         Calendar.startTimeUpdates();
         ScoreboardManager.init();
+        MinionManager.init();
 
         SkillRegistry.init();
         SkillListeners.register();
         MinecraftServer.getCommandManager().register(new SkillsCommand());
+        MinecraftServer.getCommandManager().register(new MinionCommand());
 
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();

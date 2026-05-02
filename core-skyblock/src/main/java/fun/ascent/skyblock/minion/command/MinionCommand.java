@@ -28,7 +28,7 @@ public final class MinionCommand extends Command {
             }
 
             String actionName = context.get(action);
-            if (actionName.equalsIgnoreCase("give")) {
+            if (actionName.equalsIgnoreCase("give") || actionName.equalsIgnoreCase("get")) {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
@@ -81,7 +81,7 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
         }, action, type, tier);
 
         addSyntax((sender, context) -> {
@@ -102,7 +102,7 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            if (actionName.equalsIgnoreCase("give")) {
+            if (actionName.equalsIgnoreCase("give") || actionName.equalsIgnoreCase("get")) {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
@@ -114,7 +114,7 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
         }, action, type);
 
         addSyntax((sender, context) -> {
@@ -154,10 +154,10 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
         }, action);
 
         setDefaultExecutor((sender, context) ->
-                sender.sendMessage("Usage: /minion give <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types"));
+                sender.sendMessage("Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types"));
     }
 }

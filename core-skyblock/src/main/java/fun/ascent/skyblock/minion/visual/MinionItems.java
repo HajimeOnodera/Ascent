@@ -2,6 +2,7 @@ package fun.ascent.skyblock.minion;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -24,25 +25,27 @@ public final class MinionItems {
 
     public static ItemStack createPlacementItem(MinionType type, int tier) {
         MinionData data = new MinionData(type, tier);
+        MinionProfile profile = MinionProfiles.get(type);
         List<Component> lore = new ArrayList<>();
-        lore.add(MINI_MESSAGE.deserialize("<gray>Place this minion and it will"));
-        lore.add(MINI_MESSAGE.deserialize("<gray>start " + type.getPlacementDescription()));
-        lore.add(MINI_MESSAGE.deserialize("<gray>" + type.getLayoutHint()));
-        lore.add(MINI_MESSAGE.deserialize("<gray>Minions also work when you are"));
-        lore.add(MINI_MESSAGE.deserialize("<gray>offline!"));
+        lore.add(text("<gray>Place this minion and it will"));
+        lore.add(text("<gray>start " + profile.placementDescription()));
+        lore.add(text("<gray>" + profile.layoutHint()));
+        lore.add(text("<gray>Minions also work when you are"));
+        lore.add(text("<gray>offline!"));
         lore.add(Component.empty());
-        lore.add(MINI_MESSAGE.deserialize("<gray>Time Between Actions: <green>" + data.getActionDelaySeconds() + "s</green>"));
-        lore.add(MINI_MESSAGE.deserialize("<gray>Max Storage: <yellow>" + data.getMaxStorage() + "</yellow>"));
+        lore.add(text("<gray>Time Between Actions: <green>" + data.getActionDelaySeconds() + "s</green>"));
+        lore.add(text("<gray>Max Storage: <yellow>" + data.getMaxStorage() + "</yellow>"));
         lore.add(Component.empty());
-        lore.add(MINI_MESSAGE.deserialize("<yellow>Right-click a block to place this minion.</yellow>"));
+        lore.add(text("<yellow>Right-click a block to place this minion.</yellow>"));
 
-        return ItemStack.builder(resolveItemMaterial(type))
-                .customName(MINI_MESSAGE.deserialize("<blue>" + type.getDisplayName() + " " + roman(tier)))
-                .lore(lore)
-                .set(DataComponents.CUSTOM_DATA, CustomData.EMPTY
+        return createHead(profile.texture())
+                .withCustomName(text("<blue>" + type.getDisplayName() + " " + roman(tier)))
+                .withLore(lore)
+                .withTag(MINION_TYPE_TAG, type.getId())
+                .withTag(MINION_TIER_TAG, tier)
+                .with(DataComponents.CUSTOM_DATA, CustomData.EMPTY
                         .withTag(MINION_TYPE_TAG, type.getId())
-                        .withTag(MINION_TIER_TAG, tier))
-                .build();
+                        .withTag(MINION_TIER_TAG, tier));
     }
 
     public static ItemStack createHead(String base64Texture) {
@@ -88,10 +91,7 @@ public final class MinionItems {
         };
     }
 
-    private static Material resolveItemMaterial(MinionType type) {
-        return switch (type.getActionKind()) {
-            case FISHING -> Material.FISHING_ROD;
-            default -> type.getIcon();
-        };
+    private static Component text(String value) {
+        return MINI_MESSAGE.deserialize(value).decoration(TextDecoration.ITALIC, false);
     }
 }

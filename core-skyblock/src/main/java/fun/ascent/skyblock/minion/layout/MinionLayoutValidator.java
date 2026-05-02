@@ -10,21 +10,21 @@ public final class MinionLayoutValidator {
     }
 
     public static ValidationResult validate(SkyblockMinion minion) {
-        MinionType type = minion.getType();
-        return switch (type.getActionKind()) {
-            case MINING -> validateMining(minion, type);
-            case CROP -> validateCrop(minion, type);
-            case TREE -> validateTree(minion, type);
+        MinionProfile profile = minion.getProfile();
+        return switch (minion.getType().getActionKind()) {
+            case MINING -> validateMining(minion, profile);
+            case CROP -> validateCrop(minion, profile);
+            case TREE -> validateTree(minion, profile);
             case MOB -> validateMob(minion);
             case FISHING -> validateFishing(minion);
         };
     }
 
-    private static ValidationResult validateMining(SkyblockMinion minion, MinionType type) {
+    private static ValidationResult validateMining(SkyblockMinion minion, MinionProfile profile) {
         for (Pos pos : minion.getMiningPositions()) {
             Block block = minion.getInstance().getBlock(pos);
             Block above = minion.getInstance().getBlock(pos.blockX(), pos.blockY() + 1, pos.blockZ());
-            if (!block.isAir() && block != type.getGeneratedBlock()) {
+            if (!block.isAir() && block != profile.generatedBlock()) {
                 return ValidationResult.failure("This location is not perfect!");
             }
             if (!above.isAir()) {
@@ -34,21 +34,21 @@ public final class MinionLayoutValidator {
         return ValidationResult.success();
     }
 
-    private static ValidationResult validateCrop(SkyblockMinion minion, MinionType type) {
+    private static ValidationResult validateCrop(SkyblockMinion minion, MinionProfile profile) {
         for (Pos pos : minion.getCropPositions()) {
             Block block = minion.getInstance().getBlock(pos);
             Block below = minion.getInstance().getBlock(pos.blockX(), pos.blockY() - 1, pos.blockZ());
-            if (!isValidCropBase(type, minion, pos, below)) {
+            if (!isValidCropBase(profile, minion, pos, below)) {
                 return ValidationResult.failure("This location is not perfect!");
             }
-            if (!block.isAir() && block != type.getGeneratedBlock()) {
+            if (!block.isAir() && block != profile.generatedBlock()) {
                 return ValidationResult.failure("This location is not perfect!");
             }
         }
         return ValidationResult.success();
     }
 
-    private static ValidationResult validateTree(SkyblockMinion minion, MinionType type) {
+    private static ValidationResult validateTree(SkyblockMinion minion, MinionProfile profile) {
         for (Pos pos : minion.getTreePositions()) {
             Block base = minion.getInstance().getBlock(pos);
             if (base != Block.DIRT && base != Block.GRASS_BLOCK) {
@@ -56,7 +56,7 @@ public final class MinionLayoutValidator {
             }
             for (int y = 1; y <= 4; y++) {
                 Block block = minion.getInstance().getBlock(pos.blockX(), pos.blockY() + y, pos.blockZ());
-                if (!block.isAir() && block != type.getGeneratedBlock() && block != type.getSecondaryGeneratedBlock()) {
+                if (!block.isAir() && block != profile.generatedBlock() && block != profile.secondaryGeneratedBlock()) {
                     return ValidationResult.failure("This location is not perfect!");
                 }
             }
@@ -88,11 +88,11 @@ public final class MinionLayoutValidator {
         return ValidationResult.failure("This location is not perfect!");
     }
 
-    private static boolean isValidCropBase(MinionType type, SkyblockMinion minion, Pos pos, Block below) {
-        if (type == MinionType.SUGARCANE) {
+    private static boolean isValidCropBase(MinionProfile profile, SkyblockMinion minion, Pos pos, Block below) {
+        if (profile.type() == MinionType.SUGARCANE) {
             return below == Block.SAND && hasAdjacentWater(minion, pos.blockX(), pos.blockY() - 1, pos.blockZ());
         }
-        return below == type.getIdealLayoutBlock();
+        return below == profile.idealLayoutBlock();
     }
 
     private static boolean hasAdjacentWater(SkyblockMinion minion, int x, int y, int z) {

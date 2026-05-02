@@ -15,10 +15,12 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.SendablePacket;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
-public final class SkyblockMinion {
+public abstract class SkyblockMinion {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     private final UUID id;
@@ -29,18 +31,21 @@ public final class SkyblockMinion {
     private final Entity warningTop;
     private final Entity warningBottom;
     private final MinionStorage storage;
+    private final List<LivingEntity> spawnedMobs;
 
-    private MinionType type;
+    private final MinionType type;
+    private final MinionProfile profile;
     private MinionData data;
-    private LivingEntity spawnedMob;
     private long nextActionAt;
     private long totalGenerated;
     private boolean busy;
+    private MinionTask currentTask;
 
-    public SkyblockMinion(UUID ownerUuid, MinionType type, int tier, Instance instance, Pos position) {
+    protected SkyblockMinion(UUID ownerUuid, MinionType type, int tier, Instance instance, Pos position) {
         this.id = UUID.randomUUID();
         this.ownerUuid = ownerUuid;
         this.type = type;
+        this.profile = MinionProfiles.get(type);
         this.data = new MinionData(type, tier);
         this.instance = instance;
         this.position = position;
@@ -48,7 +53,9 @@ public final class SkyblockMinion {
         this.warningTop = new Entity(EntityType.ARMOR_STAND);
         this.warningBottom = new Entity(EntityType.ARMOR_STAND);
         this.storage = new MinionStorage();
+        this.spawnedMobs = new ArrayList<>();
         this.nextActionAt = System.currentTimeMillis() + data.getActionDelaySeconds() * 1000L;
+        this.currentTask = MinionTask.FILL;
     }
 
     public void spawn() {
@@ -102,14 +109,10 @@ public final class SkyblockMinion {
             return;
         }
         nextActionAt = now + data.getActionDelaySeconds() * 1000L;
-        switch (type.getActionKind()) {
-            case MINING -> tickMining();
-            case CROP -> tickCrop();
-            case TREE -> tickTree();
-            case MOB -> tickMob();
-            case FISHING -> tickFishing();
-        }
+        performAction();
     }
+
+    protected abstract void performAction();
 
     public List<ItemStack> collectAll() {
         return storage.collectAll();
@@ -134,9 +137,10 @@ public final class SkyblockMinion {
     }
 
     public void remove() {
-        if (spawnedMob != null) {
+        for (LivingEntity spawnedMob : spawnedMobs) {
             spawnedMob.remove();
         }
+        spawnedMobs.clear();
         warningBottom.remove();
         warningTop.remove();
         entity.remove();
@@ -156,6 +160,10 @@ public final class SkyblockMinion {
 
     public MinionType getType() {
         return type;
+    }
+
+    public MinionProfile getProfile() {
+        return profile;
     }
 
     public MinionData getData() {
@@ -194,6 +202,14 @@ public final class SkyblockMinion {
         return MinionLayoutValidator.validate(this).valid();
     }
 
+    public MinionTask getCurrentTask() {
+        return currentTask;
+    }
+
+    protected void setCurrentTask(MinionTask currentTask) {
+        this.currentTask = currentTask;
+    }
+
     public void setBusy(boolean busy) {
         this.busy = busy;
     }
@@ -223,35 +239,11 @@ public final class SkyblockMinion {
     }
 
     public List<Pos> getMiningPositions() {
-        List<Pos> positions = new ArrayList<>();
-        int baseX = position.blockX();
-        int baseY = position.blockY() - 1;
-        int baseZ = position.blockZ();
-        for (int x = -2; x <= 2; x++) {
-            for (int z = -2; z <= 2; z++) {
-                if (x == 0 && z == 0) {
-                    continue;
-                }
-                positions.add(new Pos(baseX + x, baseY, baseZ + z));
-            }
-        }
-        return positions;
+        return buildFiveByFivePattern(position.blockY() - 1);
     }
 
     public List<Pos> getCropPositions() {
-        List<Pos> positions = new ArrayList<>();
-        int baseX = position.blockX();
-        int baseY = position.blockY();
-        int baseZ = position.blockZ();
-        for (int x = -2; x <= 2; x++) {
-            for (int z = -2; z <= 2; z++) {
-                if (x == 0 && z == 0) {
-                    continue;
-                }
-                positions.add(new Pos(baseX + x, baseY, baseZ + z));
-            }
-        }
-        return positions;
+        return buildFiveByFivePattern(position.blockY());
     }
 
     public List<Pos> getTreePositions() {
@@ -270,150 +262,7 @@ public final class SkyblockMinion {
         );
     }
 
-    private void tickMining() {
-        Pos breakPos = findBreakBlock(getMiningPositions(), type.getGeneratedBlock());
-        if (breakPos != null) {
-            List<ItemStack> drops = type.createHarvestDrops();
-            if (!storage.canFit(drops, data.getStorageSlots())) {
-                setWarning("My storage is full!", "/!\\");
-                return;
-            }
-            Block block = instance.getBlock(breakPos);
-            MinionAnimation.animateBreak(this, breakPos, block, () -> {
-                instance.setBlock(breakPos, Block.AIR);
-                storeDrops(drops);
-            });
-            return;
-        }
-        Pos placePos = findAir(getMiningPositions());
-        if (placePos != null) {
-            MinionAnimation.animatePlace(this, placePos, () -> instance.setBlock(placePos, type.getGeneratedBlock()));
-        }
-    }
-
-    private void tickCrop() {
-        Pos breakPos = findBreakBlock(getCropPositions(), type.getGeneratedBlock());
-        if (breakPos != null) {
-            List<ItemStack> drops = type.createHarvestDrops();
-            if (!storage.canFit(drops, data.getStorageSlots())) {
-                setWarning("My storage is full!", "/!\\");
-                return;
-            }
-            Block block = instance.getBlock(breakPos);
-            MinionAnimation.animateBreak(this, breakPos, block, () -> {
-                instance.setBlock(breakPos, Block.AIR);
-                storeDrops(drops);
-            });
-            return;
-        }
-        Pos placePos = findCropPlacement();
-        if (placePos != null) {
-            MinionAnimation.animatePlace(this, placePos, () -> instance.setBlock(placePos, type.getGeneratedBlock()));
-        }
-    }
-
-    private void tickTree() {
-        Pos breakPos = findTreeBreak();
-        if (breakPos != null) {
-            List<ItemStack> drops = List.of(ItemStack.of(type.getOutputMaterial(), 3));
-            if (!storage.canFit(drops, data.getStorageSlots())) {
-                setWarning("My storage is full!", "/!\\");
-                return;
-            }
-            Block block = instance.getBlock(breakPos);
-            MinionAnimation.animateBreak(this, breakPos, block, () -> {
-                removeTreeAt(breakPos.blockX(), breakPos.blockY() - 1, breakPos.blockZ());
-                storeDrops(drops);
-            });
-            return;
-        }
-        Pos placePos = findTreePlacement();
-        if (placePos != null) {
-            MinionAnimation.animatePlace(this, placePos.add(0, 1, 0), () -> createTreeAt(placePos.blockX(), placePos.blockY(), placePos.blockZ()));
-        }
-    }
-
-    private void tickMob() {
-        if (spawnedMob != null && !spawnedMob.isRemoved()) {
-            List<ItemStack> drops = type.createHarvestDrops();
-            if (!storage.canFit(drops, data.getStorageSlots())) {
-                setWarning("My storage is full!", "/!\\");
-                return;
-            }
-            Pos target = spawnedMob.getPosition();
-            MinionAnimation.animateKill(this, target, () -> {
-                spawnedMob.remove();
-                spawnedMob = null;
-                storeDrops(drops);
-            });
-            return;
-        }
-        Pos spawnPos = findAir(getCropPositions());
-        if (spawnPos != null && type.getMobEntityType() != null) {
-            MinionAnimation.animatePlace(this, spawnPos, () -> {
-                spawnedMob = new LivingEntity(type.getMobEntityType());
-                spawnedMob.setInstance(instance, spawnPos.add(0.5, 0, 0.5));
-            });
-        }
-    }
-
-    private void tickFishing() {
-        Pos waterPos = findWater();
-        if (waterPos == null) {
-            setWarning("This location is not perfect!", "/!\\");
-            return;
-        }
-        List<ItemStack> drops = type.createHarvestDrops();
-        if (!storage.canFit(drops, data.getStorageSlots())) {
-            setWarning("My storage is full!", "/!\\");
-            return;
-        }
-        MinionAnimation.animateFishing(this, waterPos, () -> storeDrops(drops));
-    }
-
-    private void equipEntity() {
-        entity.setEquipment(EquipmentSlot.HELMET, MinionItems.createHead(type.getTexture()));
-        entity.setEquipment(EquipmentSlot.CHESTPLATE, leather(Material.LEATHER_CHESTPLATE));
-        entity.setEquipment(EquipmentSlot.LEGGINGS, leather(Material.LEATHER_LEGGINGS));
-        entity.setEquipment(EquipmentSlot.BOOTS, leather(Material.LEATHER_BOOTS));
-        entity.setEquipment(EquipmentSlot.MAIN_HAND, ItemStack.of(type.getHeldTool(data.getTier())));
-    }
-
-    private ItemStack leather(net.minestom.server.item.Material material) {
-        return ItemStack.builder(material)
-                .set(net.minestom.server.component.DataComponents.DYED_COLOR, type.getArmorColor())
-                .build();
-    }
-
-    private void setWarning(String top, String bottom) {
-        warningTop.setCustomName(MINI_MESSAGE.deserialize("<red>" + top));
-        warningBottom.setCustomName(MINI_MESSAGE.deserialize("<red>" + bottom));
-        warningTop.setCustomNameVisible(true);
-        warningBottom.setCustomNameVisible(true);
-    }
-
-    private void clearWarning() {
-        warningTop.setCustomNameVisible(false);
-        warningBottom.setCustomNameVisible(false);
-    }
-
-    private void storeDrops(List<ItemStack> drops) {
-        storage.addAll(drops, data.getStorageSlots());
-        for (ItemStack stack : drops) {
-            totalGenerated += stack.amount();
-        }
-    }
-
-    private Pos findBreakBlock(List<Pos> positions, Block blockType) {
-        for (Pos pos : positions) {
-            if (instance.getBlock(pos) == blockType) {
-                return pos;
-            }
-        }
-        return null;
-    }
-
-    private Pos findAir(List<Pos> positions) {
+    protected Pos findAir(List<Pos> positions) {
         for (Pos pos : positions) {
             if (instance.getBlock(pos).isAir()) {
                 return pos;
@@ -422,7 +271,20 @@ public final class SkyblockMinion {
         return null;
     }
 
-    private Pos findCropPlacement() {
+    protected Pos findBreakBlock(List<Pos> positions, Block blockType) {
+        List<Pos> matches = new ArrayList<>();
+        for (Pos pos : positions) {
+            if (instance.getBlock(pos) == blockType) {
+                matches.add(pos);
+            }
+        }
+        if (matches.isEmpty()) {
+            return null;
+        }
+        return matches.get(ThreadLocalRandom.current().nextInt(matches.size()));
+    }
+
+    protected Pos findCropPlacement() {
         for (Pos pos : getCropPositions()) {
             if (!instance.getBlock(pos).isAir()) {
                 continue;
@@ -434,14 +296,14 @@ public final class SkyblockMinion {
                 }
                 continue;
             }
-            if (below == type.getIdealLayoutBlock()) {
+            if (below == profile.idealLayoutBlock()) {
                 return pos;
             }
         }
         return null;
     }
 
-    private Pos findTreePlacement() {
+    protected Pos findTreePlacement() {
         for (Pos pos : getTreePositions()) {
             Block base = instance.getBlock(pos);
             if (base != Block.DIRT && base != Block.GRASS_BLOCK) {
@@ -461,32 +323,64 @@ public final class SkyblockMinion {
         return null;
     }
 
-    private Pos findTreeBreak() {
+    protected Pos findTreeBreak() {
         for (Pos pos : getTreePositions()) {
-            if (instance.getBlock(pos.blockX(), pos.blockY() + 1, pos.blockZ()) == type.getGeneratedBlock()) {
+            if (instance.getBlock(pos.blockX(), pos.blockY() + 1, pos.blockZ()) == profile.generatedBlock()) {
                 return new Pos(pos.blockX(), pos.blockY() + 1, pos.blockZ());
             }
         }
         return null;
     }
 
-    private void createTreeAt(int x, int y, int z) {
-        instance.setBlock(x, y + 1, z, type.getGeneratedBlock());
-        instance.setBlock(x, y + 2, z, type.getGeneratedBlock());
-        instance.setBlock(x, y + 3, z, type.getGeneratedBlock());
-        if (type.getSecondaryGeneratedBlock() != null) {
-            instance.setBlock(x, y + 4, z, type.getSecondaryGeneratedBlock());
-            instance.setBlock(x + 1, y + 3, z, type.getSecondaryGeneratedBlock());
-            instance.setBlock(x - 1, y + 3, z, type.getSecondaryGeneratedBlock());
-            instance.setBlock(x, y + 3, z + 1, type.getSecondaryGeneratedBlock());
-            instance.setBlock(x, y + 3, z - 1, type.getSecondaryGeneratedBlock());
+    protected Pos findMobSpawnPosition() {
+        for (Pos pos : getCropPositions()) {
+            if (!instance.getBlock(pos).isAir() || !instance.getBlock(pos.blockX(), pos.blockY() + 1, pos.blockZ()).isAir()) {
+                continue;
+            }
+            if (hasSpawnedMobAt(pos)) {
+                continue;
+            }
+            return pos;
+        }
+        return null;
+    }
+
+    protected LivingEntity findMobToKill() {
+        return spawnedMobs.stream()
+                .filter(mob -> !mob.isRemoved())
+                .min(Comparator.comparingDouble(mob -> mob.getPosition().distanceSquared(position)))
+                .orElse(null);
+    }
+
+    protected void addSpawnedMob(LivingEntity spawnedMob) {
+        spawnedMobs.add(spawnedMob);
+    }
+
+    protected void removeSpawnedMob(LivingEntity spawnedMob) {
+        spawnedMobs.remove(spawnedMob);
+    }
+
+    protected void pruneSpawnedMobs() {
+        spawnedMobs.removeIf(LivingEntity::isRemoved);
+    }
+
+    protected void createTreeAt(int x, int y, int z) {
+        instance.setBlock(x, y + 1, z, profile.generatedBlock());
+        instance.setBlock(x, y + 2, z, profile.generatedBlock());
+        instance.setBlock(x, y + 3, z, profile.generatedBlock());
+        if (profile.secondaryGeneratedBlock() != null) {
+            instance.setBlock(x, y + 4, z, profile.secondaryGeneratedBlock());
+            instance.setBlock(x + 1, y + 3, z, profile.secondaryGeneratedBlock());
+            instance.setBlock(x - 1, y + 3, z, profile.secondaryGeneratedBlock());
+            instance.setBlock(x, y + 3, z + 1, profile.secondaryGeneratedBlock());
+            instance.setBlock(x, y + 3, z - 1, profile.secondaryGeneratedBlock());
         }
     }
 
-    private void removeTreeAt(int x, int y, int z) {
+    protected void removeTreeAt(int x, int y, int z) {
         for (int dy = 1; dy <= 4; dy++) {
             Block block = instance.getBlock(x, y + dy, z);
-            if (block == type.getGeneratedBlock() || block == type.getSecondaryGeneratedBlock()) {
+            if (block == profile.generatedBlock() || block == profile.secondaryGeneratedBlock()) {
                 instance.setBlock(x, y + dy, z, Block.AIR);
             }
         }
@@ -496,19 +390,90 @@ public final class SkyblockMinion {
         clearLeaf(x, y + 3, z - 1);
     }
 
-    private void clearLeaf(int x, int y, int z) {
-        if (instance.getBlock(x, y, z) == type.getSecondaryGeneratedBlock()) {
-            instance.setBlock(x, y, z, Block.AIR);
-        }
-    }
-
-    private Pos findWater() {
+    protected Pos findWater() {
         for (Pos pos : getCropPositions()) {
             if (instance.getBlock(pos) == Block.WATER) {
                 return pos;
             }
         }
         return null;
+    }
+
+    protected boolean canStoreDrops(List<ItemStack> drops) {
+        if (storage.canFit(drops, data.getStorageSlots())) {
+            return true;
+        }
+        setWarning("My storage is full!", "/!\\");
+        return false;
+    }
+
+    protected void storeDrops(List<ItemStack> drops) {
+        storage.addAll(drops, data.getStorageSlots());
+        for (ItemStack stack : drops) {
+            totalGenerated += stack.amount();
+        }
+    }
+
+    protected void setWarning(String top, String bottom) {
+        warningTop.setCustomName(MINI_MESSAGE.deserialize("<red>" + top));
+        warningBottom.setCustomName(MINI_MESSAGE.deserialize("<red>" + bottom));
+        warningTop.setCustomNameVisible(true);
+        warningBottom.setCustomNameVisible(true);
+    }
+
+    protected void clearWarning() {
+        warningTop.setCustomNameVisible(false);
+        warningBottom.setCustomNameVisible(false);
+    }
+
+    private void equipEntity() {
+        entity.setEquipment(EquipmentSlot.HELMET, MinionItems.createHead(profile.texture()));
+        entity.setEquipment(EquipmentSlot.CHESTPLATE, leather(Material.LEATHER_CHESTPLATE));
+        entity.setEquipment(EquipmentSlot.LEGGINGS, leather(Material.LEATHER_LEGGINGS));
+        entity.setEquipment(EquipmentSlot.BOOTS, leather(Material.LEATHER_BOOTS));
+        entity.setEquipment(EquipmentSlot.MAIN_HAND, ItemStack.of(profile.heldTool(data.getTier())));
+    }
+
+    private ItemStack leather(Material material) {
+        return ItemStack.builder(material)
+                .set(net.minestom.server.component.DataComponents.DYED_COLOR, profile.armorColor())
+                .build();
+    }
+
+    private List<Pos> buildFiveByFivePattern(int y) {
+        List<Pos> positions = new ArrayList<>();
+        int baseX = position.blockX();
+        int baseZ = position.blockZ();
+        int[][] offsets = {
+                {0, -1}, {1, 0}, {0, 1}, {-1, 0},
+                {1, -1}, {1, 1}, {-1, 1}, {-1, -1},
+                {0, -2}, {2, 0}, {0, 2}, {-2, 0},
+                {1, -2}, {2, -1}, {2, 1}, {1, 2},
+                {-1, 2}, {-2, 1}, {-2, -1}, {-1, -2},
+                {2, -2}, {2, 2}, {-2, 2}, {-2, -2}
+        };
+        for (int[] offset : offsets) {
+            positions.add(new Pos(baseX + offset[0], y, baseZ + offset[1]));
+        }
+        return positions;
+    }
+
+    private boolean hasSpawnedMobAt(Pos pos) {
+        for (LivingEntity mob : spawnedMobs) {
+            if (mob.isRemoved()) {
+                continue;
+            }
+            if (mob.getPosition().blockX() == pos.blockX() && mob.getPosition().blockY() == pos.blockY() && mob.getPosition().blockZ() == pos.blockZ()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void clearLeaf(int x, int y, int z) {
+        if (instance.getBlock(x, y, z) == profile.secondaryGeneratedBlock()) {
+            instance.setBlock(x, y, z, Block.AIR);
+        }
     }
 
     private boolean hasAdjacentWater(Pos pos) {
