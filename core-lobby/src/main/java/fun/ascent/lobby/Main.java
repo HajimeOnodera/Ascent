@@ -1,5 +1,8 @@
 package fun.ascent.lobby;
 
+import fun.ascent.common.redis.PingService;
+import fun.ascent.common.redis.RedisConfig;
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.lobby.command.ServerTransferCommand;
 import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.npc.LobbyNpcManager;
@@ -16,11 +19,21 @@ public final class Main {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
+    /** Docker service name used by Velocity to reach this container. */
+    private static final String ADVERTISE_HOST =
+            System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "lobby");
+
     private Main() {
     }
 
     public static void main(String[] args) {
         LobbyConfig config = LobbyConfig.load();
+
+        // ── Redis ───────────────────────────────────────────────────────────
+        RedisManager.connect(RedisConfig.fromEnv());
+        System.out.println("[Lobby] Connected to Redis");
+
+        // ── Minestom ────────────────────────────────────────────────────────
         MinecraftServer server = MinecraftServer.init(config.auth());
 
         LobbyWorld world = LobbyWorld.create();
@@ -34,6 +47,9 @@ public final class Main {
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
         server.start(config.host(), config.port());
         System.out.println("[Lobby] Started the Server");
+
+        // ── Ping (must start AFTER server.start()) ─────────────────────
+        PingService.start("lobby", ADVERTISE_HOST, config.port());
     }
 
     private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {

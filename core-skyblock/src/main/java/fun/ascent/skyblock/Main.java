@@ -1,5 +1,8 @@
 package fun.ascent.skyblock;
 
+import fun.ascent.common.redis.PingService;
+import fun.ascent.common.redis.RedisConfig;
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
 import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
@@ -7,19 +10,29 @@ import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
+import fun.ascent.skyblock.config.ServerConfig;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.command.SkillsCommand;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
 import fun.ascent.skyblock.world.WorldManager;
-import net.minestom.server.Auth;
 import net.minestom.server.MinecraftServer;
 
 public class Main {
 
+    /** Docker service name used by Velocity to reach this container. */
+    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "skyblock");
+
     static void main(String[] args) {
-        MinecraftServer server = MinecraftServer.init(new Auth.Offline());
+        ServerConfig config = ServerConfig.load();
+
+        // ── Redis ───────────────────────────────────────────────────────────
+        RedisManager.connect(RedisConfig.fromEnv());
+        System.out.println("[Skyblock] Connected to Redis");
+
+        // ── Minestom ────────────────────────────────────────────────────────
+        MinecraftServer server = MinecraftServer.init(config.auth());
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
 
         WorldManager.initialise();
@@ -38,7 +51,10 @@ public class Main {
         MinecraftServer.getCommandManager().register(new SpawnMobCommand());
 
         System.out.println("[Skyblock] Starting the Server");
-        server.start("0.0.0.0", 25565);
+        server.start(config.host(), config.port());
         System.out.println("[Skyblock] Started the Server");
+
+        // ── Ping (must start AFTER server.start()) ─────────────────────
+        PingService.start("skyblock", ADVERTISE_HOST, config.port());
     }
 }

@@ -3,6 +3,7 @@ package fun.ascent.proxy;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -24,6 +25,7 @@ public final class CoreProxy {
     private final Logger logger;
     private final Path dataDirectory;
     private ProxyConfig config;
+    private ServerRegistryManager registryManager;
 
     @Inject
     public CoreProxy(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
@@ -37,6 +39,17 @@ public final class CoreProxy {
         reload();
         registerCommands();
         logger.info("Ascent proxy loaded with {} server route(s).", config.routes().size());
+
+        // Start dynamic Redis-based server discovery
+        registryManager = new ServerRegistryManager(proxy, logger);
+        registryManager.start();
+    }
+
+    @Subscribe
+    public void onProxyShutdown(ProxyShutdownEvent event) {
+        if (registryManager != null) {
+            registryManager.stop();
+        }
     }
 
     public void reload() {
