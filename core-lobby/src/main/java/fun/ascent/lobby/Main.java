@@ -19,8 +19,8 @@ public final class Main {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    /** Docker service name used by Velocity to reach this container. */
-    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "lobby");
+    /** Host that Velocity uses to reach this server (Docker sets ASCENT_ADVERTISE_HOST). */
+    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
     private Main() {
     }
@@ -47,8 +47,14 @@ public final class Main {
         server.start(config.host(), config.port());
         System.out.println("[Lobby] Started the Server");
 
+        String serverName = System.getenv("ASCENT_SERVER_NAME");
+        if (serverName == null || serverName.isBlank() || serverName.equals("lobby")) {
+            String base = (serverName == null || serverName.isBlank()) ? "lobby" : serverName;
+            serverName = base + "-" + java.util.UUID.randomUUID().toString().substring(0, 5);
+        }
+
         // ── Ping (must start AFTER server.start()) ─────────────────────
-        PingService.start("lobby", ADVERTISE_HOST, config.port());
+        PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 
     private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {

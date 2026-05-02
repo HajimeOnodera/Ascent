@@ -17,6 +17,7 @@
         <module>core-skyblock</module>
         <module>core-lobby</module>
         <module>core-proxy</module>
+        <module>loader</module>
     </modules>
 
     <properties>

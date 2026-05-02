@@ -10,6 +10,7 @@ COPY commons/pom.xml commons/pom.xml
 COPY core-lobby/pom.xml core-lobby/pom.xml
 COPY core-skyblock/pom.xml core-skyblock/pom.xml
 COPY core-proxy/pom.xml core-proxy/pom.xml
+COPY loader/pom.xml loader/pom.xml
 
 RUN mvn -q -pl "${MODULE}" -am dependency:go-offline
 
@@ -17,6 +18,7 @@ COPY commons/src commons/src
 COPY core-lobby/src core-lobby/src
 COPY core-skyblock/src core-skyblock/src
 COPY core-proxy/src core-proxy/src
+COPY loader/src loader/src
 
 RUN mvn -q -pl "${MODULE}" -am package -DskipTests
 

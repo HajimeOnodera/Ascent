@@ -26,7 +26,14 @@ final class ServerSwitchCommand implements SimpleCommand {
             return;
         }
 
-        RegisteredServer server = proxy.getServer(targetServer).orElse(null);
+        RegisteredServer server = proxy.getAllServers().stream()
+                .filter(s -> {
+                    String name = s.getServerInfo().getName();
+                    return name.equals(targetServer) || name.startsWith(targetServer + "-");
+                })
+                .min(java.util.Comparator.comparingInt(s -> s.getPlayersConnected().size()))
+                .orElse(null);
+
         if (server == null) {
             player.sendMessage(Component.text("That server is not registered on the proxy.", NamedTextColor.RED));
             return;

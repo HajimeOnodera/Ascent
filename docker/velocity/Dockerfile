@@ -7,6 +7,7 @@ COPY commons/pom.xml commons/pom.xml
 COPY core-lobby/pom.xml core-lobby/pom.xml
 COPY core-proxy/pom.xml core-proxy/pom.xml
 COPY core-skyblock/pom.xml core-skyblock/pom.xml
+COPY loader/pom.xml loader/pom.xml
 COPY core-proxy/src core-proxy/src
 
 RUN mvn -q -pl core-proxy package -DskipTests

@@ -25,6 +25,7 @@ public record LobbyConfig(String host, int port, String velocitySecret) {
 
         String host = envOrProperty("ASCENT_SERVER_HOST", properties, "server.host", "0.0.0.0");
         int port = Integer.parseInt(envOrProperty("ASCENT_SERVER_PORT", properties, "server.port", "25567"));
+        port = findFreePort(port);
         String secret = resolveVelocitySecret(properties);
         return new LobbyConfig(host, port, secret);
     }
@@ -61,6 +62,33 @@ public record LobbyConfig(String host, int port, String velocitySecret) {
             return env.trim();
         }
         return properties.getProperty(propertyName, fallback).trim();
+    }
+
+    /**
+     * Tries to bind to {@code preferred}. If it is already in use,
+     * scans upward from 25565 until a free port is found.
+     */
+    private static int findFreePort(int preferred) {
+        if (isPortAvailable(preferred)) {
+            return preferred;
+        }
+        System.out.println("[Lobby] Port " + preferred + " is busy, scanning for a free port...");
+        for (int p = 25565; p <= 65535; p++) {
+            if (isPortAvailable(p)) {
+                System.out.println("[Lobby] Found free port: " + p);
+                return p;
+            }
+        }
+        throw new IllegalStateException("No free port found in range 25565-65535");
+    }
+
+    private static boolean isPortAvailable(int port) {
+        try (java.net.ServerSocket socket = new java.net.ServerSocket(port)) {
+            socket.setReuseAddress(true);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private static void createDefaultConfig() {

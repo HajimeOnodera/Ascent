@@ -22,9 +22,9 @@ import net.minestom.server.MinecraftServer;
 public class Main {
 
     /** Docker service name used by Velocity to reach this container. */
-    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "skyblock");
+    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
 
         // ── Redis ───────────────────────────────────────────────────────────
@@ -54,7 +54,13 @@ public class Main {
         server.start(config.host(), config.port());
         System.out.println("[Skyblock] Started the Server");
 
+        String serverName = System.getenv("ASCENT_SERVER_NAME");
+        if (serverName == null || serverName.isBlank() || serverName.equals("skyblock")) {
+            String base = (serverName == null || serverName.isBlank()) ? "skyblock" : serverName;
+            serverName = base + "-" + java.util.UUID.randomUUID().toString().substring(0, 5);
+        }
+
         // ── Ping (must start AFTER server.start()) ─────────────────────
-        PingService.start("skyblock", ADVERTISE_HOST, config.port());
+        PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 }

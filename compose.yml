@@ -10,7 +10,7 @@ services:
       timeout: 3s
       retries: 5
 
-  lobby:
+  lobby-1:
     build:
       context: .
       dockerfile: docker/minestom/Dockerfile
@@ -28,7 +28,33 @@ services:
     environment:
       ASCENT_SERVER_PORT: "25567"
       ASCENT_VELOCITY_SECRET_FILE: /app/forwarding.secret
-      ASCENT_ADVERTISE_HOST: "lobby"
+      ASCENT_ADVERTISE_HOST: "lobby-1"
+      ASCENT_SERVER_NAME: "lobby-1"
+      REDIS_HOST: "redis"
+    secrets:
+      - source: velocity_forwarding_secret
+        target: /app/forwarding.secret
+
+  lobby-2:
+    build:
+      context: .
+      dockerfile: docker/minestom/Dockerfile
+      args:
+        MODULE: core-lobby
+        JAR_NAME: CoreLobby
+    image: ascent/lobby:local
+    restart: unless-stopped
+    stop_grace_period: 20s
+    depends_on:
+      redis:
+        condition: service_healthy
+    expose:
+      - "25568"
+    environment:
+      ASCENT_SERVER_PORT: "25568"
+      ASCENT_VELOCITY_SECRET_FILE: /app/forwarding.secret
+      ASCENT_ADVERTISE_HOST: "lobby-2"
+      ASCENT_SERVER_NAME: "lobby-2"
       REDIS_HOST: "redis"
     secrets:
       - source: velocity_forwarding_secret

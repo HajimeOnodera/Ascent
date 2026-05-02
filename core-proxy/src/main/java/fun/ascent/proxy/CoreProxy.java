@@ -2,6 +2,7 @@ package fun.ascent.proxy;
 
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.PlayerChooseInitialServerEvent;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -49,6 +50,22 @@ public final class CoreProxy {
     public void onProxyShutdown(ProxyShutdownEvent event) {
         if (registryManager != null) {
             registryManager.stop();
+        }
+    }
+
+    @Subscribe
+    public void onPlayerChooseInitialServer(PlayerChooseInitialServerEvent event) {
+        String defaultServer = config.defaultServer();
+        RegisteredServer bestServer = proxy.getAllServers().stream()
+                .filter(s -> {
+                    String name = s.getServerInfo().getName();
+                    return name.equals(defaultServer) || name.startsWith(defaultServer + "-");
+                })
+                .min(java.util.Comparator.comparingInt(s -> s.getPlayersConnected().size()))
+                .orElse(null);
+
+        if (bestServer != null) {
+            event.setInitialServer(bestServer);
         }
     }
 
