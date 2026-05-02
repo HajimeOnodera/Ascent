@@ -20,8 +20,7 @@ public final class Main {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     /** Docker service name used by Velocity to reach this container. */
-    private static final String ADVERTISE_HOST =
-            System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "lobby");
+    private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "lobby");
 
     private Main() {
     }

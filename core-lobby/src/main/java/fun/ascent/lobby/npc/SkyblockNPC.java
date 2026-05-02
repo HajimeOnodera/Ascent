@@ -40,7 +40,7 @@ public record SkyblockNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public Pos position() {
-        return new Pos(-8.5, 74, 0.5, -90, 0);
+        return new Pos(-25.5, 93, -1.5, 90, 0);
     }
 
     @Override

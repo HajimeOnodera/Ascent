@@ -11,9 +11,9 @@ import java.nio.file.Path;
 
 public record LobbyWorld(InstanceContainer instance, Pos spawn) {
 
-    private static final Path ANVIL_LOBBY_WORLD = Path.of("maps", "hypixel_prototype_lobby");
-    private static final Path POLAR_LOBBY_WORLD = Path.of("maps", "hypixel_prototype_lobby.polar");
-    private static final Pos LOBBY_SPAWN = new Pos(11.5, 75, 0.5, 90, 0);
+    private static final Path ANVIL_LOBBY_WORLD = Path.of("maps", "hypixel_lobby");
+    private static final Path POLAR_LOBBY_WORLD = Path.of("maps", "hypixel_lobby.polar");
+    private static final Pos LOBBY_SPAWN = new Pos(-52, 94.5, 0.5, -90, 0);
 
     public static LobbyWorld create() {
         InstanceContainer instance = MinecraftServer.getInstanceManager().createInstanceContainer();

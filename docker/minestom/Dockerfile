@@ -28,7 +28,7 @@ ARG MODULE
 ARG JAR_NAME
 
 COPY --from=build /workspace/${MODULE}/target/${JAR_NAME}.jar /app/server.jar
-COPY maps/hypixel_prototype_lobby.polar /app/maps/hypixel_prototype_lobby.polar
+COPY maps /app/maps
 
 EXPOSE 25565 25566 25567
 
