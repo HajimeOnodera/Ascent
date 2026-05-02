@@ -1,5 +1,6 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.model;
 
+import lombok.Getter;
 import net.minestom.server.color.Color;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
@@ -62,20 +63,35 @@ public enum MinionType {
 
     private static final int[] UPGRADE_COST_BY_TIER = {0, 80, 160, 320, 512, 640, 768, 896, 1024, 1280, 1536, 2048};
 
+    @Getter
     private final String id;
+    @Getter
     private final String displayName;
+    @Getter
     private final Material icon;
+    @Getter
     private final Material outputMaterial;
+    @Getter
     private final MinionCategory category;
+    @Getter
     private final MinionActionKind actionKind;
+    @Getter
     private final Block baseBlock;
+    @Getter
     private final Block generatedBlock;
+    @Getter
     private final Block idealLayoutBlock;
+    @Getter
     private final Block secondaryGeneratedBlock;
+    @Getter
     private final EntityType mobEntityType;
+    @Getter
     private final String texture;
+    @Getter
     private final Color armorColor;
+    @Getter
     private final String placementDescription;
+    @Getter
     private final String layoutHint;
     private final String idealLayoutText;
     private final int tierOneStorageSlots;
@@ -101,66 +117,6 @@ public enum MinionType {
         this.layoutHint = layoutHint;
         this.idealLayoutText = idealLayoutText;
         this.tierOneStorageSlots = tierOneStorageSlots;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public Material getIcon() {
-        return icon;
-    }
-
-    public Material getOutputMaterial() {
-        return outputMaterial;
-    }
-
-    public MinionCategory getCategory() {
-        return category;
-    }
-
-    public MinionActionKind getActionKind() {
-        return actionKind;
-    }
-
-    public Block getBaseBlock() {
-        return baseBlock;
-    }
-
-    public Block getGeneratedBlock() {
-        return generatedBlock;
-    }
-
-    public Block getIdealLayoutBlock() {
-        return idealLayoutBlock;
-    }
-
-    public Block getSecondaryGeneratedBlock() {
-        return secondaryGeneratedBlock;
-    }
-
-    public EntityType getMobEntityType() {
-        return mobEntityType;
-    }
-
-    public String getTexture() {
-        return texture;
-    }
-
-    public Color getArmorColor() {
-        return armorColor;
-    }
-
-    public String getPlacementDescription() {
-        return placementDescription;
-    }
-
-    public String getLayoutHint() {
-        return layoutHint;
     }
 
     public String getIdealLayout() {

@@ -1,5 +1,9 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.visual;
 
+import fun.ascent.skyblock.minion.model.MinionData;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.profile.MinionProfile;
+import fun.ascent.skyblock.minion.profile.MinionProfiles;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.format.TextDecoration;

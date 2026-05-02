@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.upgrade;
 
 import net.minestom.server.item.Material;
 

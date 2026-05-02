@@ -1,16 +1,15 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.model;
+
+import lombok.Getter;
 
 public final class MinionData {
+    @Getter
     private final MinionType type;
     private final MinionTier tier;
 
     public MinionData(MinionType type, int tier) {
         this.type = type;
         this.tier = type.getTierData(tier);
-    }
-
-    public MinionType getType() {
-        return type;
     }
 
     public int getTier() {

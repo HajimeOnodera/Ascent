@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.model;
 
 public record MinionTier(int tier, int actionDelaySeconds, int storageSlots) {
     public int maxStorage() {

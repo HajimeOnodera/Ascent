@@ -1,10 +1,9 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.storage;
 
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 

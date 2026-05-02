@@ -1,6 +1,7 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.upgrade;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;

@@ -1,5 +1,6 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.profile;
 
+import fun.ascent.skyblock.minion.model.MinionType;
 import net.minestom.server.color.Color;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;

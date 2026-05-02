@@ -1,5 +1,8 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.base;
 
+import fun.ascent.skyblock.minion.model.MinionTask;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.visual.MinionAnimation;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;

@@ -1,5 +1,15 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.base;
 
+import fun.ascent.skyblock.minion.layout.MinionLayoutValidator;
+import fun.ascent.skyblock.minion.model.MinionData;
+import fun.ascent.skyblock.minion.model.MinionTask;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.profile.MinionProfile;
+import fun.ascent.skyblock.minion.profile.MinionProfiles;
+import fun.ascent.skyblock.minion.storage.MinionStorage;
+import fun.ascent.skyblock.minion.visual.MinionItems;
+import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -23,22 +33,33 @@ import java.util.concurrent.ThreadLocalRandom;
 public abstract class SkyblockMinion {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
+    @Getter
     private final UUID id;
+    @Getter
     private final UUID ownerUuid;
+    @Getter
     private final Instance instance;
+    @Getter
     private final Pos position;
+    @Getter
     private final LivingEntity entity;
     private final Entity warningTop;
     private final Entity warningBottom;
     private final MinionStorage storage;
     private final List<LivingEntity> spawnedMobs;
 
+    @Getter
     private final MinionType type;
+    @Getter
     private final MinionProfile profile;
+    @Getter
     private MinionData data;
     private long nextActionAt;
+    @Getter
     private long totalGenerated;
+    @Setter
     private boolean busy;
+    @Getter
     private MinionTask currentTask;
 
     protected SkyblockMinion(UUID ownerUuid, MinionType type, int tier, Instance instance, Pos position) {
@@ -150,48 +171,12 @@ public abstract class SkyblockMinion {
         return MinionItems.createPlacementItem(type, data.getTier());
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public UUID getOwnerUuid() {
-        return ownerUuid;
-    }
-
-    public MinionType getType() {
-        return type;
-    }
-
-    public MinionProfile getProfile() {
-        return profile;
-    }
-
-    public MinionData getData() {
-        return data;
-    }
-
-    public Instance getInstance() {
-        return instance;
-    }
-
-    public Pos getPosition() {
-        return position;
-    }
-
-    public LivingEntity getEntity() {
-        return entity;
-    }
-
     public int getTier() {
         return data.getTier();
     }
 
     public int getStoredAmount() {
         return storage.totalItems();
-    }
-
-    public long getTotalGenerated() {
-        return totalGenerated;
     }
 
     public List<ItemStack> getStoredStacks() {
@@ -202,16 +187,8 @@ public abstract class SkyblockMinion {
         return MinionLayoutValidator.validate(this).valid();
     }
 
-    public MinionTask getCurrentTask() {
-        return currentTask;
-    }
-
     protected void setCurrentTask(MinionTask currentTask) {
         this.currentTask = currentTask;
-    }
-
-    public void setBusy(boolean busy) {
-        this.busy = busy;
     }
 
     public void rotateToward(Pos target) {

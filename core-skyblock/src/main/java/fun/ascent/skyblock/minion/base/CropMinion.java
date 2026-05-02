@@ -1,5 +1,8 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.base;
 
+import fun.ascent.skyblock.minion.model.MinionTask;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.visual.MinionAnimation;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -18,7 +21,8 @@ public abstract class CropMinion extends SkyblockMinion {
         Pos placePos = findCropPlacement();
         if (placePos != null) {
             setCurrentTask(MinionTask.FILL);
-            MinionAnimation.animatePlace(this, placePos, () -> getInstance().setBlock(placePos, getProfile().generatedBlock()));
+            MinionAnimation.animatePlace(this, placePos,
+                    () -> getInstance().setBlock(placePos, getProfile().generatedBlock()));
             return;
         }
         Pos breakPos = findBreakBlock(getCropPositions(), getProfile().generatedBlock());

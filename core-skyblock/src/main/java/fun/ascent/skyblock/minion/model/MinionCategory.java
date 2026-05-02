@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.model;
 
 public enum MinionCategory {
     MINING(new int[]{14, 14, 12, 12, 10, 10, 9, 9, 8, 8, 7, 7}, new int[]{1, 3, 3, 6, 6, 9, 9, 12, 12, 15, 15, 15}),

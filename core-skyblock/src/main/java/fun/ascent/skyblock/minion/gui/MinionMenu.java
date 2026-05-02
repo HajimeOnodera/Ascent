@@ -1,10 +1,10 @@
 package fun.ascent.skyblock.minion.gui;
 
-import fun.ascent.skyblock.minion.MinionItems;
-import fun.ascent.skyblock.minion.MinionManager;
-import fun.ascent.skyblock.minion.SkyblockMinion;
-import fun.ascent.skyblock.minion.MinionUpgradeCost;
-import fun.ascent.skyblock.minion.MinionUpgradeManager;
+import fun.ascent.skyblock.minion.base.SkyblockMinion;
+import fun.ascent.skyblock.minion.service.MinionManager;
+import fun.ascent.skyblock.minion.upgrade.MinionUpgradeCost;
+import fun.ascent.skyblock.minion.upgrade.MinionUpgradeManager;
+import fun.ascent.skyblock.minion.visual.MinionItems;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;

@@ -1,14 +1,16 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.service;
 
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.events.SEvent;
+import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.gui.MinionMenu;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.visual.MinionItems;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.PlayerHand;
-import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.instance.Instance;
@@ -82,13 +84,13 @@ public final class MinionManager {
                 .schedule();
     }
 
-    public static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type) {
-        return placeMinion(player, type, 1);
+    public static void placeMinion(SkyblockPlayer player, MinionType type) {
+        placeMinion(player, type, 1);
     }
 
-    public static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type, int tier) {
+    public static void placeMinion(SkyblockPlayer player, MinionType type, int tier) {
         Pos base = commandBasePosition(player);
-        return placeMinionAt(player, type, tier, base.blockX(), base.blockY(), base.blockZ(), false);
+        placeMinionAt(player, type, tier, base.blockX(), base.blockY(), base.blockZ(), false);
     }
 
     private static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type, int tier, int blockX, int blockY, int blockZ, BlockFace face, boolean consumeItem) {

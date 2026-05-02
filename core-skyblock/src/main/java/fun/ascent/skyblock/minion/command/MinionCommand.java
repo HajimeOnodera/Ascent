@@ -1,10 +1,10 @@
 package fun.ascent.skyblock.minion.command;
 
-import fun.ascent.skyblock.minion.MinionManager;
-import fun.ascent.skyblock.minion.MinionItems;
-import fun.ascent.skyblock.minion.MinionType;
-import fun.ascent.skyblock.minion.SkyblockMinion;
+import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.gui.MinionMenu;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.service.MinionManager;
+import fun.ascent.skyblock.minion.visual.MinionItems;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.command.builder.Command;

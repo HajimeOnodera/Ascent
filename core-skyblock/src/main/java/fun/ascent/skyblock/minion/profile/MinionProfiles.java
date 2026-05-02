@@ -1,4 +1,6 @@
-package fun.ascent.skyblock.minion;
+package fun.ascent.skyblock.minion.profile;
+
+import fun.ascent.skyblock.minion.model.MinionType;
 
 import java.util.EnumMap;
 import java.util.Map;
