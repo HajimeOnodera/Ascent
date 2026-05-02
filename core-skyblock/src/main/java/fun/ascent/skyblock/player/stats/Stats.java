@@ -123,8 +123,8 @@ public enum Stats {
     /**
      * Hidden Stats (Used for things that are technically stats but don't fit into the other categories)
      */
-    SOULFLOW(false,"Soulflow","§c❁",StatCategory.PLAYER ,"§c",0,0),
-    OVERFLOW_MANA(false,"Overflow Mana","§c❁",StatCategory.PLAYER ,"§c",0,0),
+    SOULFLOW(false,"Soulflow","§3⸎",StatCategory.PLAYER ,"§c",0,0),
+    OVERFLOW_MANA(false,"Overflow Mana","§3⸎",StatCategory.PLAYER ,"§c",0,0),
     ;
 
     private final boolean isPercentage;

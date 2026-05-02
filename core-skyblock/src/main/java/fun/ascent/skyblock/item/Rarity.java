@@ -30,5 +30,19 @@ public enum Rarity {
     public String getDisplay() {
         return color + "§l" + display;
     }
+
+    public Rarity getNextRarity() {
+        return switch (this) {
+            case COMMON -> UNCOMMON;
+            case UNCOMMON -> RARE;
+            case RARE -> EPIC;
+            case EPIC -> LEGENDARY;
+            case LEGENDARY -> MYTHIC;
+            case MYTHIC -> DIVINE;
+            case SPECIAL -> VERY_SPECIAL;
+            default -> null;
+        };
+    }
+
 }
 
