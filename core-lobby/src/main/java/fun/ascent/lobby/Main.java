@@ -4,6 +4,7 @@ import fun.ascent.lobby.command.ServerTransferCommand;
 import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.world.LobbyWorld;
+import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
@@ -29,6 +30,7 @@ public final class Main {
         registerEvents(world, npcManager);
         MinecraftServer.getCommandManager().register(new ServerTransferCommand("skyblock", "sb", "island"));
 
+        LobbyScoreboardManager.init();
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
         server.start(config.host(), config.port());
         System.out.println("[Lobby] Started the Server");
@@ -57,6 +59,7 @@ public final class Main {
             }
         });
 
+        fun.ascent.lobby.item.LobbyItemManager.init(handler);
         npcManager.registerListeners(handler);
     }
 }

@@ -3,6 +3,7 @@ package fun.ascent.skyblock.item;
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
 import fun.ascent.skyblock.item.gemstone.GemstoneStatTable;
 import fun.ascent.skyblock.player.stats.Stats;
+import net.minestom.server.component.DataComponents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -119,7 +120,167 @@ public class SkyblockItem {
             loreComponents.add(LEGACY.deserialize(line).decoration(TextDecoration.ITALIC, false));
         }
 
-        ItemStack item = ItemStack.of(material)
+        Component displayComponent = LEGACY.deserialize(effectiveRarity.getColor() + displayName)
+                .decoration(TextDecoration.ITALIC, false);
+
+        return ItemStack.builder(material)
+                .set(DataComponents.CUSTOM_NAME, displayComponent)
+                .set(DataComponents.LORE, loreComponents)
+                .build();
+    }
+
+    private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
+        List<String> lore = new ArrayList<>();
+
+        // Description
+        if (!description.isEmpty()) {
+            for (String line : description) {
+                lore.add("§7" + line);
+            }
+            lore.add("");
+        }
+
+        // Stats section
+        boolean hasStats = false;
+        for (Stats stat : LORE_STAT_ORDER) {
+            double value = baseStats.getOrDefault(stat, 0.0);
+            if (value != 0.0) {
+                hasStats = true;
+                String sign = value > 0 ? "+" : "";
+                String formatted = stat.getStatIntType()
+                        ? sign + (int) value + "%"
+                        : sign + (int) value;
+                lore.add(stat.getStatColor() + stat.getStatSymbol() + " " + stat.getStatFormattedDisplay() + ": " + formatted);
+            }
+        }
+        if (hasStats) lore.add("");
+
+        // Enchantments
+        if (!enchantments.isEmpty()) {
+            StringBuilder enchLine = new StringBuilder();
+            int count = 0;
+            for (Map.Entry<String, Integer> entry : enchantments.entrySet()) {
+                if (count > 0 && count % 3 == 0) {
+                    lore.add(enchLine.toString().trim());
+                    enchLine = new StringBuilder();
+                }
+                enchLine.append("§9").append(entry.getKey()).append(" ").append(entry.getValue()).append("  ");
+                count++;
+            }
+            if (!enchLine.toString().isBlank()) lore.add(enchLine.toString().trim());
+        }
+
+        // Ultimate enchant
+        if (ultimateEnchant != null && !ultimateEnchant.isEmpty()) {
+            lore.add("§d§l" + ultimateEnchant + " " + ultimateEnchantLevel);
+        }
+
+        if (!enchantments.isEmpty() || (ultimateEnchant != null && !ultimateEnchant.isEmpty())) {
+            lore.add("");
+        }
+
+        // Gemstone slots
+        if (!gemstoneSlots.isEmpty()) {
+            StringBuilder gemLine = new StringBuilder("§7Gemstone Slots: ");
+            for (GemstoneSlot slot : gemstoneSlots) {
+                String display = slot.isEmpty()
+                        ? slot.getType().getColorCode() + slot.getType().getSymbol()
+                        : slot.getType().getColorCode() + slot.getType().getSymbol();
+                gemLine.append(display).append(" ");
+            }
+            lore.add(gemLine.toString().trim());
+            lore.add("");
+        }
+
+        // Abilities
+        for (ItemAbility ability : abilities) {
+            lore.addAll(ability.buildLore());
+            lore.add("");
+        }
+
+        // Rune
+        if (runeType != null && !runeType.isEmpty()) {
+            lore.add("§dRune: " + runeType + " " + runeLevel);
+            lore.add("");
+        }
+
+        // Flags
+        if (dungeon)         lore.add("§8Dungeon Item");
+        if (consumable)      lore.add("§8Consumable");
+        if (soulbound)       lore.add("§8Soulbound");
+        if (coopSoulbound)   lore.add("§8Co-op Soulbound");
+        if (dyeName != null && !dyeName.isEmpty()) lore.add("§8Dye: " + dyeName);
+        if (bookOfStats)     lore.add("§8Book of Stats Applied");
+        if (kills > 0)       lore.add("§cKills: §f" + kills);
+        if (recombobulated)  lore.add("§dRecombobulated!");
+
+        // Rarity line
+        lore.add(effectiveRarity.getDisplay());
+
+        return lore;
+    }
+
+    public static Builder builder(String itemId, Material material, Rarity rarity) {
+        return new Builder(itemId, material, rarity);
+    }
+
+    public static class Builder {
+        private final String itemId;
+        private String displayName = "";
+        private final Material material;
+        private ItemType itemType = ItemType.NONE;
+        private final Rarity rarity;
+        private final Map<Stats, Double> baseStats = new EnumMap<>(Stats.class);
+        private final List<String> description = new ArrayList<>();
+        private final List<ItemAbility> abilities = new ArrayList<>();
+        private boolean enchantable = true;
+        private boolean reforgeable = true;
+        private boolean glowing = false;
+        private String skinValue = null;
+        private final List<GemstoneSlot> gemstoneSlots = new ArrayList<>();
+        private boolean recombobulated = false;
+        private final Map<String, Integer> enchantments = new LinkedHashMap<>();
+        private String ultimateEnchant = null;
+        private int ultimateEnchantLevel = 0;
+        private String runeType = null;
+        private int runeLevel = 0;
+        private boolean consumable = false;
+        private boolean dungeon = false;
+        private boolean soulbound = false;
+        private boolean coopSoulbound = false;
+        private String dyeName = null;
+        private boolean bookOfStats = false;
+        private int kills = 0;
+
+        private Builder(String itemId, Material material, Rarity rarity) {
+            this.itemId = itemId;
+            this.material = material;
+            this.rarity = rarity;
+        }
+
+        public Builder displayName(String displayName) { this.displayName = displayName; return this; }
+        public Builder itemType(ItemType itemType) { this.itemType = itemType; return this; }
+        public Builder stat(Stats stat, double value) { this.baseStats.put(stat, value); return this; }
+        public Builder description(String... lines) { this.description.addAll(List.of(lines)); return this; }
+        public Builder ability(ItemAbility ability) { this.abilities.add(ability); return this; }
+        public Builder enchantable(boolean enchantable) { this.enchantable = enchantable; return this; }
+        public Builder reforgeable(boolean reforgeable) { this.reforgeable = reforgeable; return this; }
+        public Builder glowing(boolean glowing) { this.glowing = glowing; return this; }
+        public Builder skinValue(String skinValue) { this.skinValue = skinValue; return this; }
+        public Builder gemstoneSlot(GemstoneSlot slot) { this.gemstoneSlots.add(slot); return this; }
+        public Builder recombobulated(boolean recombobulated) { this.recombobulated = recombobulated; return this; }
+        public Builder enchantment(String name, int level) { this.enchantments.put(name, level); return this; }
+        public Builder ultimateEnchant(String name, int level) { this.ultimateEnchant = name; this.ultimateEnchantLevel = level; return this; }
+        public Builder rune(String type, int level) { this.runeType = type; this.runeLevel = level; return this; }
+        public Builder consumable(boolean consumable) { this.consumable = consumable; return this; }
+        public Builder dungeon(boolean dungeon) { this.dungeon = dungeon; return this; }
+        public Builder soulbound(boolean soulbound) { this.soulbound = soulbound; return this; }
+        public Builder coopSoulbound(boolean coopSoulbound) { this.coopSoulbound = coopSoulbound; return this; }
+        public Builder dyeName(String dyeName) { this.dyeName = dyeName; return this; }
+        public Builder bookOfStats(boolean bookOfStats) { this.bookOfStats = bookOfStats; return this; }
+        public Builder kills(int kills) { this.kills = kills; return this; }
+
+        public SkyblockItem build() { return new SkyblockItem(this); }
     }
 }
 
