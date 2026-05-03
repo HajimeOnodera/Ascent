@@ -118,8 +118,8 @@ public class AdvancedScoreboard {
 
             return List.of(
                     "<white>" + time.getMonthName() + " " + time.getOrdinalDay() + "</white>",
-                    "<gray>" + time.getHourFormatted() + "</gray>",
-                    "");
+                    "<gray>" + time.getHourFormatted() + "</gray>"
+            );
         }
     }
 

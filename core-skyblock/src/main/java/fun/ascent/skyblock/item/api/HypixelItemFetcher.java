@@ -147,6 +147,7 @@ public class HypixelItemFetcher {
         }
 
         String soulbound = obj.has("soulbound") ? obj.get("soulbound").getAsString() : null;
+        boolean dungeon = obj.has("dungeon_item") && obj.get("dungeon_item").getAsBoolean();
         boolean glowing = obj.has("glowing") && obj.get("glowing").getAsBoolean();
         boolean unstackable = obj.has("unstackable") && obj.get("unstackable").getAsBoolean();
         String color = obj.has("color") ? obj.get("color").getAsString() : null;
@@ -155,7 +156,7 @@ public class HypixelItemFetcher {
 
         return new SkyblockItemData(id, name, material, rarity, itemType, skinValue, npcSellPrice,
                 Collections.unmodifiableMap(stats), List.copyOf(gemstoneSlotTypes),
-                soulbound, glowing, unstackable, color, description, itemModel);
+                soulbound, dungeon, glowing, unstackable, color, description, itemModel);
     }
 
     private static Material parseMaterial(String apiName) {

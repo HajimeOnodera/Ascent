@@ -159,13 +159,9 @@ public class SkyblockItem {
     private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
         List<String> lore = new ArrayList<>();
 
-        // Description
-        if (!description.isEmpty()) {
-            for (String line : description) {
-                lore.add("§7" + line);
-            }
-            lore.add("");
-        }
+
+
+        if (consumable)      lore.add("§8Consumable");
 
         // Stats section
         boolean hasStats = false;
@@ -206,6 +202,13 @@ public class SkyblockItem {
             lore.add("");
         }
 
+        if (!description.isEmpty()) {
+            for (String line : description) {
+                lore.add("§7" + line);
+            }
+            lore.add("");
+        }
+
         // Enchantments
         if (!enchantments.isEmpty()) {
             StringBuilder enchLine = new StringBuilder();
@@ -242,9 +245,7 @@ public class SkyblockItem {
             lore.add("");
         }
 
-        // Flags
-        if (dungeon)         lore.add("§8Dungeon Item");
-        if (consumable)      lore.add("§8Consumable");
+
         if (soulbound)       lore.add("§8Soulbound");
         if (coopSoulbound)   lore.add("§8Co-op Soulbound");
         if (dyeName != null && !dyeName.isEmpty()) lore.add("§8Dye: " + dyeName);
@@ -253,7 +254,10 @@ public class SkyblockItem {
         if (recombobulated)  lore.add("§dRecombobulated!");
 
         // Rarity line
-        lore.add(effectiveRarity.getDisplay() + " " + itemType.getDisplay());
+        String typeDisplay = dungeon && itemType != ItemType.NONE
+                ? "DUNGEON " + itemType.getDisplay()
+                : itemType.getDisplay();
+        lore.add(effectiveRarity.getDisplay() + (typeDisplay.isEmpty() ? "" : " " + typeDisplay));
 
         return lore;
     }

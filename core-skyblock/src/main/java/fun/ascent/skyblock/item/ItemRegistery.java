@@ -42,6 +42,8 @@ public class ItemRegistery {
             builder.description(data.description());
         }
 
+        builder.dungeon(data.dungeon());
+
         if ("SOLO".equals(data.soulbound())) {
             builder.soulbound(true);
         } else if ("COOP".equals(data.soulbound())) {

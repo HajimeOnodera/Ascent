@@ -16,6 +16,7 @@ public record SkyblockItemData(
         Map<String, Double> stats,
         List<String> gemstoneSlotTypes,
         String soulbound,
+        boolean dungeon,
         boolean glowing,
         boolean unstackable,
         String color,

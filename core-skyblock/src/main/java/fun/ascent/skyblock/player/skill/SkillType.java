@@ -5,23 +5,29 @@ import net.minestom.server.item.Material;
 
 public enum SkillType {
 
-    COMBAT("Combat", Material.DIAMOND_SWORD),
-    FARMING("Farming", Material.GOLDEN_HOE),
-    MINING("Mining", Material.IRON_PICKAXE),
-    FISHING("Fishing", Material.FISHING_ROD),
-    FORAGING("Foraging", Material.IRON_AXE),
-    ENCHANTING("Enchanting", Material.BOOKSHELF),
-    ALCHEMY("Alchemy", Material.BREWING_STAND),
-    TAMING("Taming", Material.LEAD),
-    CARPENTRY("Carpentry", Material.CRAFTING_TABLE),
-    RUNECRAFTING("Runecrafting", Material.MAGMA_CREAM);
+    COMBAT("Combat", Material.STONE_SWORD, false),
+    FARMING("Farming", Material.GOLDEN_HOE, false),
+    MINING("Mining", Material.STONE_PICKAXE, false),
+    FISHING("Fishing", Material.FISHING_ROD, false),
+    FORAGING("Foraging", Material.JUNGLE_SAPLING, false),
+    ENCHANTING("Enchanting", Material.ENCHANTING_TABLE, false),
+    ALCHEMY("Alchemy", Material.BREWING_STAND, false),
+    TAMING("Taming", Material.POLAR_BEAR_SPAWN_EGG, false),
+    CARPENTRY("Carpentry", Material.CRAFTING_TABLE, false),
+    RUNECRAFTING("Runecrafting", Material.MAGMA_CREAM, true);
+//    SOCIAL("Social", Material.EMERALD, true),
+//    HUNTING("Hunting", Material.LEAD, false),
+//    DUNGEONEERING("Dungeoneering", Material.PLAYER_HEAD, true);
+
 
     @Getter private final String displayName;
     @Getter private final Material icon;
+    @Getter private final boolean isCosmetic;
 
-    SkillType(String displayName, Material icon) {
+    SkillType(String displayName, Material icon, boolean isCosmetic) {
         this.displayName = displayName;
         this.icon = icon;
+        this.isCosmetic = isCosmetic;
     }
 
     public SkillDefinition definition() {
