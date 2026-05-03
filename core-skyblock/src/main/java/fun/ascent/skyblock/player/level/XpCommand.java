@@ -9,7 +9,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 public class XpCommand extends Command {
 
     public XpCommand() {
-        super("adxp");
+        super("addxp");
 
         var amount = ArgumentType.Integer("amount");
         addSyntax((sender,context) -> {

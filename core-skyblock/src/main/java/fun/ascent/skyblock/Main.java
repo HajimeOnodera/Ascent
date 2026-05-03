@@ -50,14 +50,10 @@ public class Main {
 
         SkillRegistry.init();
         SkillListeners.register();
-        MinecraftServer.getCommandManager().register(new SkillsCommand());
-        MinecraftServer.getCommandManager().register(new MinionCommand());
 
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();
         CombatListener.register();
-        MinecraftServer.getCommandManager().register(new SpawnMobCommand());
-        MinecraftServer.getCommandManager().register(new ItemCommand());
 
         System.out.println("[Skyblock] Starting the Server");
         server.start(config.host(), config.port());
