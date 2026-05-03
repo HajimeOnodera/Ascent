@@ -85,7 +85,10 @@ public class LobbyItemManager {
             } else if (item.material() == Material.NETHER_STAR) {
                 openLobbySelector(player);
                 event.setCancelled(true);
-            } else if (item.material() == Material.COMPASS || item.material() == Material.CHEST || item.material() == Material.PLAYER_HEAD) {
+            } else if (item.material() == Material.COMPASS) {
+                openGameMenu(player);
+                event.setCancelled(true);
+            } else if (item.material() == Material.CHEST || item.material() == Material.PLAYER_HEAD) {
                 event.setCancelled(true);
             }
         });
@@ -129,7 +132,7 @@ public class LobbyItemManager {
         player.getInventory().setItemStack(7, newHiddenState ? PLAYERS_HIDDEN : PLAYERS_VISIBLE);
         
         player.updateViewableRule(entity -> {
-            if (entity instanceof Player && entity != player) {
+            if (entity != player) {
                 return !newHiddenState;
             }
             return true;
@@ -139,11 +142,11 @@ public class LobbyItemManager {
     }
 
     private static void openLobbySelector(Player player) {
-        Inventory inventory = new Inventory(InventoryType.CHEST_3_ROW, MM.deserialize("Lobby Selector"));
+        Inventory inventory = new Inventory(InventoryType.CHEST_2_ROW, MM.deserialize("Lobby Selector"));
         
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 0; i <= 4; i++) {
             boolean isCurrent = (i == 1);
-            ItemStack lobbyItem = ItemStack.builder(Material.NETHER_STAR)
+            ItemStack lobbyItem = ItemStack.builder(Material.RED_CONCRETE)
                     .set(DataComponents.CUSTOM_NAME, MM.deserialize(isCurrent ? "<green>Lobby " + i + "</green>" : "<yellow>Lobby " + i + "</yellow>"))
                     .set(DataComponents.LORE, List.of(
                             MM.deserialize("<gray>Status: </gray>" + (isCurrent ? "<green>Connected</green>" : "<yellow>Online</yellow>")),
@@ -151,9 +154,21 @@ public class LobbyItemManager {
                             isCurrent ? MM.deserialize("<red>Already connected!</red>") : MM.deserialize("<gray>Click to connect!</gray>")
                     ))
                     .build();
-            inventory.setItemStack(10 + i, lobbyItem); // Slots 11, 12, 13, 14, 15
+            inventory.setItemStack(i, lobbyItem);
         }
-                
+        player.openInventory(inventory);
+    }
+
+    private static void openGameMenu(Player player) {
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, MM.deserialize("Game Menu"));
+        ItemStack sb = ItemStack.builder(Material.PLAYER_HEAD)
+                .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>SkyBlock</green>"))
+                .set(DataComponents.LORE, List.of(
+                        MM.deserialize("<gray>Play the popular SkyBlock game mode!</gray>"),
+                        MM.deserialize("<gray>Complete quests, collect resources, and more!</gray>")
+                ))
+                .build();
+        inventory.setItemStack(10, sb);
         player.openInventory(inventory);
     }
 }

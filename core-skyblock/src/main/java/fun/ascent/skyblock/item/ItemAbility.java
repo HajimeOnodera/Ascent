@@ -1,10 +1,13 @@
 package fun.ascent.skyblock.item;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemAbility {
+public record ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int cooldownSeconds) {
 
+    @Getter
     public enum AbilityType {
         RIGHT_CLICK("RIGHT CLICK"),
         LEFT_CLICK("LEFT CLICK"),
@@ -17,16 +20,7 @@ public class ItemAbility {
             this.displayName = displayName;
         }
 
-        public String getDisplayName() { return displayName; }
     }
-
-    private final String abilityName;
-    private final AbilityType abilityType;
-    private final List<String> description;
-    private final int manaCost;
-    private final int soulflowCost;
-    private final int cooldownSeconds;
-
 
     public ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int cooldownSeconds) {
         this.abilityName = abilityName;
@@ -37,13 +31,6 @@ public class ItemAbility {
         this.cooldownSeconds = cooldownSeconds;
 
     }
-
-    public String getAbilityName() { return abilityName; }
-    public AbilityType getAbilityType() { return abilityType; }
-    public List<String> getDescription() { return description; }
-    public int getManaCost() { return manaCost; }
-    public int getSoulflowCost() { return soulflowCost; }
-    public int getCooldownSeconds() { return cooldownSeconds; }
 
 
     public List<String> buildLore() {

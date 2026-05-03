@@ -62,8 +62,8 @@ public enum SkyblockLocation {
     private final Point min;
     private final Point max;
     @Getter private final String[] features;
-    @Getter private SkillType skill;
-    @Getter private int lvl;
+    @Getter private final SkillType skill;
+    @Getter private final int lvl;
 
     SkyblockLocation(String name, Point min, Point max, String... features) {
         this(name, min, max, null, 0, features);

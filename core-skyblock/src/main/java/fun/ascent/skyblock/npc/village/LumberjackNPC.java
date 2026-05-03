@@ -7,12 +7,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
-public class LumberjackNPC implements NpcDefinition {
-    private final Instance instance;
-
-    public LumberjackNPC(Instance instance) {
-        this.instance = instance;
-    }
+public record LumberjackNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public String id() {
@@ -27,11 +22,6 @@ public class LumberjackNPC implements NpcDefinition {
     @Override
     public NpcType type() {
         return NpcType.VILLAGER;
-    }
-
-    @Override
-    public Instance instance() {
-        return instance;
     }
 
     @Override

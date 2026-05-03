@@ -18,17 +18,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Watches Redis for backend server pings and keeps Velocity's server
- * list in sync automatically.
- *
- * Redis key format: {@code ascent:servers:*}
- * Each value is a JSON {@link ServerRecord}.
- *
- * A server is registered in Velocity when its key appears in Redis and
- * unregistered when the key expires (i.e. the backend stopped sending
- * pings within the TTL window).
- */
 final class ServerRegistryManager {
 
     private static final String KEY_PREFIX = "ascent:servers:";

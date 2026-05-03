@@ -56,16 +56,16 @@ public class AscentNpc {
         definition.onInteract(player, this);
     }
 
-    public CompletableFuture<Void> speak(Player player, String... messagesToSpeak) {
+    public void speak(Player player, String... messagesToSpeak) {
         CompletableFuture<Void> future = new CompletableFuture<>();
         if (player == null || messagesToSpeak == null || messagesToSpeak.length == 0) {
             future.complete(null);
-            return future;
+            return;
         }
 
         if (ALREADY_TALKING.contains(player.getUuid())) {
             future.complete(null);
-            return future;
+            return;
         }
 
         ALREADY_TALKING.add(player.getUuid());
@@ -90,7 +90,6 @@ public class AscentNpc {
             future.complete(null);
         }).delay(TaskSchedule.tick(totalDelay)).schedule();
 
-        return future;
     }
 
     public void updateLocation(Pos newPosition) {

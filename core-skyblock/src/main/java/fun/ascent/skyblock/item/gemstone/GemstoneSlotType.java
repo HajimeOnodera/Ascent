@@ -1,7 +1,9 @@
 package fun.ascent.skyblock.item.gemstone;
 
+import lombok.Getter;
 import net.minestom.server.item.Material;
 
+@Getter
 public enum GemstoneSlotType {
     MINING("✦", "§5", Material.PURPLE_STAINED_GLASS_PANE,
             GemstoneType.JADE, GemstoneType.AMBER, GemstoneType.TOPAZ),
@@ -40,11 +42,6 @@ public enum GemstoneSlotType {
         this.glassPaneMaterial = glassPaneMaterial;
         this.allowedTypes = allowedTypes;
     }
-
-    public String getSymbol() { return symbol; }
-    public String getColorCode() { return colorCode; }
-    public Material getGlassPaneMaterial() { return glassPaneMaterial; }
-    public GemstoneType[] getAllowedTypes() { return allowedTypes; }
 
     public boolean accepts(GemstoneType type) {
         for (GemstoneType t : allowedTypes) {

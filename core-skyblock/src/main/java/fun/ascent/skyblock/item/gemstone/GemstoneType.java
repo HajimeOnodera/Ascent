@@ -1,8 +1,9 @@
 package fun.ascent.skyblock.item.gemstone;
 
-
 import fun.ascent.skyblock.player.stats.Stats;
+import lombok.Getter;
 
+@Getter
 public enum GemstoneType {
     RUBY(Stats.HEALTH, "§c", "❤"),
     AMBER(Stats.MINING_SPEED, "§6", "⸕"),
@@ -27,7 +28,4 @@ public enum GemstoneType {
         this.symbol = symbol;
     }
 
-    public Stats getStat() { return stat; }
-    public String getColorCode() { return colorCode; }
-    public String getSymbol() { return symbol; }
 }

@@ -1,5 +1,8 @@
 package fun.ascent.skyblock.calendar;
 
+import lombok.Getter;
+
+@Getter
 public enum DwarvenKing {
     BRAMMOR(0, "Brammor", Calendar.SkyBlockEvent.KING_BRAMMOR),
     EMKAM(1, "Emkam", Calendar.SkyBlockEvent.KING_EMKAM),
@@ -18,10 +21,6 @@ public enum DwarvenKing {
         this.displayName = displayName;
         this.linkedEvent = linkedEvent;
     }
-
-    public int getIndex() { return index; }
-    public String getDisplayName() { return displayName; }
-    public Calendar.SkyBlockEvent getLinkedEvent() { return linkedEvent; }
 
     public static DwarvenKing fromIndex(int index) {
         return values()[index % values().length];

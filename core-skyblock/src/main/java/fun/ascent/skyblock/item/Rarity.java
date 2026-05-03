@@ -1,5 +1,7 @@
 package fun.ascent.skyblock.item;
 
+import lombok.Getter;
+
 public enum Rarity {
     COMMON("§f", "COMMON"),
     UNCOMMON("§a", "UNCOMMON"),
@@ -13,6 +15,7 @@ public enum Rarity {
     ULTIMATE("§4", "ULTIMATE"),
     ADMIN("§4", "ADMIN");
 
+    @Getter
     private final String color;
     private final String display;
 
@@ -21,10 +24,6 @@ public enum Rarity {
         this.display = display;
 
 
-    }
-
-    public String getColor() {
-        return color;
     }
 
     public String getDisplay() {

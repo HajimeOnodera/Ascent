@@ -6,11 +6,6 @@ import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.Duration;
 
-/**
- * Manages a thread-safe Jedis connection pool.
- * Call {@link #connect(RedisConfig)} once on startup, then use
- * {@link #getResource()} inside try-with-resources blocks.
- */
 public final class RedisManager {
 
     /** Redis key prefix for all server ping entries. */
@@ -38,13 +33,14 @@ public final class RedisManager {
         }
     }
 
-    /** Initialise the global instance. Call once per JVM. */
-    public static RedisManager connect(RedisConfig config) {
+    /**
+     * Initialise the global instance. Call once per JVM.
+     */
+    public static void connect(RedisConfig config) {
         if (instance != null) {
             throw new IllegalStateException("RedisManager already initialised");
         }
         instance = new RedisManager(config);
-        return instance;
     }
 
     public static RedisManager get() {

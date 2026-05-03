@@ -7,27 +7,12 @@ import redis.clients.jedis.exceptions.JedisException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * Publishes a {@link ServerPing} to Redis every second.
- * Uses Minestom's scheduler so no extra threads are needed.
- *
- * Usage (in Main, after server.start()):
- * <pre>
- *   PingService.start("lobby", "lobby", 25567);
- * </pre>
- */
 public final class PingService {
 
     private static final AtomicBoolean started = new AtomicBoolean(false);
 
     private PingService() {}
 
-    /**
-     * @param serverName  logical name used as the Velocity backend name (e.g. "lobby")
-     * @param advertiseHost  hostname/IP that Velocity will use to reach this server
-     *                       (Docker service name works; e.g. "lobby")
-     * @param port            Minecraft port this server is listening on
-     */
     public static void start(String serverName, String advertiseHost, int port) {
         if (!started.compareAndSet(false, true)) {
             throw new IllegalStateException("PingService already started");

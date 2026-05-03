@@ -3,7 +3,6 @@ package fun.ascent.lobby.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
-import fun.ascent.common.npc.NpcType;
 import fun.ascent.lobby.transfer.ProxyTransfer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
@@ -23,11 +22,6 @@ public record SkyblockNPC(Instance instance) implements NpcDefinition {
     @Override
     public String name() {
         return "<gold>SkyBlock</gold>";
-    }
-
-    @Override
-    public NpcType type() {
-        return NpcType.PLAYER;
     }
 
     @Override

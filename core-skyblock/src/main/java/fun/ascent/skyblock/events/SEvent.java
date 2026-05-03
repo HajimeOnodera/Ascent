@@ -14,8 +14,7 @@ public abstract class SEvent<T extends Event> {
     @SuppressWarnings("unchecked")
     public SEvent() {
         Type superclass = getClass().getGenericSuperclass();
-        if (superclass instanceof ParameterizedType) {
-            ParameterizedType parameterizedType = (ParameterizedType) superclass;
+        if (superclass instanceof ParameterizedType parameterizedType) {
 
             this.eventType = (Class<T>) parameterizedType.getActualTypeArguments()[0];
         } else {

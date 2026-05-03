@@ -1,5 +1,8 @@
 package fun.ascent.skyblock.calendar;
 
+import lombok.Getter;
+
+@Getter
 public enum Day {
     SUNDAY(1, "Sunday"),
     MONDAY(2, "Monday"),
@@ -16,9 +19,6 @@ public enum Day {
         this.number = number;
         this.displayName = displayName;
     }
-
-    public int getNumber() { return number; }
-    public String getDisplayName() { return displayName; }
 
     public static Day fromNumber(int number) {
         for (Day d : values()) {

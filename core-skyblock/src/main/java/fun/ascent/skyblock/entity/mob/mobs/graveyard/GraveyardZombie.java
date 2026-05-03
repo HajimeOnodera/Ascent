@@ -9,7 +9,6 @@ import fun.ascent.skyblock.entity.mob.ai.MeleeChaseGoal;
 import fun.ascent.skyblock.entity.mob.ai.NearestPlayerTarget;
 import fun.ascent.skyblock.entity.mob.ai.RegionWanderGoal;
 import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
-import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.NonNull;
 import net.minestom.server.entity.EntityType;
@@ -85,9 +84,6 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
             }
         };
     }
-
-    @Override
-    public void onKilledBy(SkyblockPlayer killer) {}
 
     @Override
     public List<SpawnZone> spawnZones() {

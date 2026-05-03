@@ -35,7 +35,7 @@ public class SkillListeners {
         EventManager.registerEvent(new SEvent<PlayerBlockBreakEvent>() {
             @Override
             public void onEvent(PlayerBlockBreakEvent event) {
-                if (!(event.getPlayer() instanceof SkyblockPlayer player)) return;
+                SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
                 // Mining XP - full block tracking will live here once
                 // the item system is wired up. This shows the hook point.
                 // SkillRegistry.grantXp(player, SkillType.MINING, xpValue);
@@ -44,12 +44,12 @@ public class SkillListeners {
     }
 
     private static void handleXpDisplay(SkillXpGainEvent event) {
-        SkyblockPlayer player = event.getPlayer();
+        SkyblockPlayer player = event.player();
         ProfilePlayer profileData = player.getActiveProfileData();
         if (profileData == null) return;
 
-        SkillType type = event.getSkillType();
-        double gained = event.getXpGained();
+        SkillType type = event.skillType();
+        double gained = event.xpGained();
         double xpInLevel = profileData.skillData.getXpIntoCurrentLevel(type);
         Integer nextLevel = profileData.skillData.getNextLevel(type);
 
@@ -64,12 +64,12 @@ public class SkillListeners {
     }
 
     private static void handleLevelUp(SkillXpGainEvent event) {
-        SkyblockPlayer player = event.getPlayer();
-        SkillType type = event.getSkillType();
-        int newLevel = event.getNewLevel();
+        SkyblockPlayer player = event.player();
+        SkillType type = event.skillType();
+        int newLevel = event.newLevel();
 
         String border = "§3§l" + "▬".repeat(38);
-        String oldRoman = SkillReward.toRoman(event.getOldLevel());
+        String oldRoman = SkillReward.toRoman(event.oldLevel());
         String newRoman = SkillReward.toRoman(newLevel);
 
         String arrow = oldRoman.isEmpty() ? "§e" + newRoman : oldRoman + "§8➜§e" + newRoman;

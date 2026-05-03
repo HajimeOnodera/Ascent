@@ -1,5 +1,8 @@
 package fun.ascent.skyblock.calendar;
 
+import lombok.Getter;
+
+@Getter
 public enum Month {
     EARLY_SPRING(1, "Early Spring"),
     SPRING(2, "Spring"),
@@ -21,9 +24,6 @@ public enum Month {
         this.number = number;
         this.displayName = displayName;
     }
-
-    public int getNumber() { return number; }
-    public String getDisplayName() { return displayName; }
 
     public static Month fromNumber(int number) {
         for (Month m : values()) if (m.number == number) return m;

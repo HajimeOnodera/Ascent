@@ -61,14 +61,10 @@ public class LobbyScoreboard {
         renderedLines.add("   ");
         renderedLines.add("<yellow>play.ascent.fun</yellow>");
 
-        if (renderedLines.size() > 15) {
-            renderedLines = renderedLines.subList(0, 15);
-        }
-
         int score = renderedLines.size();
 
         for (int i = 0; i < renderedLines.size(); i++) {
-            String lineId = "\u00A7" + Integer.toHexString(i) + "\u00A7r";
+            String lineId = "§7" + Integer.toHexString(i) + "§r";
             String content = renderedLines.get(i);
 
             if (i < lastLineCount) {
@@ -81,7 +77,7 @@ public class LobbyScoreboard {
         }
 
         for (int i = renderedLines.size(); i < lastLineCount; i++) {
-            String lineId = "\u00A7" + Integer.toHexString(i) + "\u00A7r";
+            String lineId = "§7" + Integer.toHexString(i) + "§r";
             sidebar.removeLine(lineId);
         }
 

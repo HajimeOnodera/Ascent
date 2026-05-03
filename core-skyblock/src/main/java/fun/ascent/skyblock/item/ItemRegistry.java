@@ -21,9 +21,9 @@ public class ItemRegistry {
             for (SkyblockItemData data : rawItems) {
                 ITEMS.put(data.id(), convert(data));
             }
-            System.out.println("[ItemRegistery] Loaded " + ITEMS.size() + " items.");
+            System.out.println("[ItemRegistry] Loaded " + ITEMS.size() + " items.");
         } catch (Exception e) {
-            System.err.println("[ItemRegistery] Failed to load items from Hypixel API: " + e.getMessage());
+            System.err.println("[ItemRegistry] Failed to load items from Hypixel API: " + e.getMessage());
             e.printStackTrace();
         }
     }

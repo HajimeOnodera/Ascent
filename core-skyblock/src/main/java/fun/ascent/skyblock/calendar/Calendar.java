@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.calendar;
 
 import fun.ascent.skyblock.calendar.events.*;
+import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.timer.TaskSchedule;
 
@@ -30,6 +31,7 @@ public class Calendar {
         // Initialization if needed
     }
 
+    @Getter
     public enum SkyBlockEvent {
         DARK_AUCTION(false),
         JACOBS_CONTEST(false),
@@ -55,10 +57,6 @@ public class Calendar {
 
         SkyBlockEvent(boolean specialEvent) {
             this.specialEvent = specialEvent;
-        }
-
-        public boolean isSpecialEvent() {
-            return specialEvent;
         }
 
         public boolean isDwarvenKingEvent() {
@@ -133,19 +131,12 @@ public class Calendar {
             if (day >= 11 && day <= 13)
                 suffix = "th";
             else
-                switch (day % 10) {
-                    case 1:
-                        suffix = "st";
-                        break;
-                    case 2:
-                        suffix = "nd";
-                        break;
-                    case 3:
-                        suffix = "rd";
-                        break;
-                    default:
-                        suffix = "th";
-                }
+                suffix = switch (day % 10) {
+                    case 1 -> "st";
+                    case 2 -> "nd";
+                    case 3 -> "rd";
+                    default -> "th";
+                };
             return day + suffix;
         }
 
@@ -404,61 +395,38 @@ public class Calendar {
     }
 
     private static SkyBlockTime getEventEndTime(SkyBlockEvent event, SkyBlockTime start) {
-        switch (event) {
-            case SPOOKY_FESTIVAL:
-                return new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
-            case TRAVELLING_ZOO:
-                return new SkyBlockTime(start.year, start.month, 3, 23, 23, 59);
-            case JERRYS_WORKSHOP:
-                return new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
-            case SEASON_OF_JERRY:
-                return new SkyBlockTime(start.year, start.month, 26, 23, 23, 59);
-            case NEW_YEAR_CELEBRATION:
-                return new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
-            case BINGO_EVENT:
-                return new SkyBlockTime(start.year, start.month, 7, 23, 23, 59);
-            case SPECIAL_MAYOR:
-                return new SkyBlockTime(start.year, start.year % 8 == 0 ? 12 : 3, 31, 23, 23, 59);
-            default:
-                return new SkyBlockTime(start.year, start.month, start.day, 23, 23, 59);
-        }
+        return switch (event) {
+            case SPOOKY_FESTIVAL -> new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
+            case TRAVELLING_ZOO -> new SkyBlockTime(start.year, start.month, 3, 23, 23, 59);
+            case JERRYS_WORKSHOP -> new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
+            case SEASON_OF_JERRY -> new SkyBlockTime(start.year, start.month, 26, 23, 23, 59);
+            case NEW_YEAR_CELEBRATION -> new SkyBlockTime(start.year, start.month, 31, 23, 23, 59);
+            case BINGO_EVENT -> new SkyBlockTime(start.year, start.month, 7, 23, 23, 59);
+            case SPECIAL_MAYOR -> new SkyBlockTime(start.year, start.year % 8 == 0 ? 12 : 3, 31, 23, 23, 59);
+            default -> new SkyBlockTime(start.year, start.month, start.day, 23, 23, 59);
+        };
     }
 
     private static boolean isMultiDayEvent(SkyBlockEvent event) {
-        switch (event) {
-            case SPOOKY_FESTIVAL:
-            case TRAVELLING_ZOO:
-            case JERRYS_WORKSHOP:
-            case SEASON_OF_JERRY:
-            case NEW_YEAR_CELEBRATION:
-            case SPECIAL_MAYOR:
-            case BINGO_EVENT:
-                return true;
-            default:
-                return false;
-        }
+        return switch (event) {
+            case SPOOKY_FESTIVAL, TRAVELLING_ZOO, JERRYS_WORKSHOP, SEASON_OF_JERRY, NEW_YEAR_CELEBRATION, SPECIAL_MAYOR,
+                 BINGO_EVENT -> true;
+            default -> false;
+        };
     }
 
     private static boolean isFirstDayOfMultiDayEvent(SkyBlockEvent event, SkyBlockTime time) {
-        switch (event) {
-            case SPOOKY_FESTIVAL:
-                return time.month == 8 && time.day == 29;
-            case TRAVELLING_ZOO:
-                return (time.month == 4 || time.month == 10) && time.day == 1;
-            case JERRYS_WORKSHOP:
-                return time.month == 12 && time.day == 1;
-            case SEASON_OF_JERRY:
-                return time.month == 12 && time.day == 24;
-            case NEW_YEAR_CELEBRATION:
-                return time.month == 12 && time.day == 29;
-            case BINGO_EVENT:
-                return time.day == 1;
-            case SPECIAL_MAYOR:
-                return (time.year % 8 == 0 && time.month == 6 && time.day == 1) ||
-                        (time.year % 8 == 1 && time.month == 1 && time.day == 1);
-            default:
-                return true;
-        }
+        return switch (event) {
+            case SPOOKY_FESTIVAL -> time.month == 8 && time.day == 29;
+            case TRAVELLING_ZOO -> (time.month == 4 || time.month == 10) && time.day == 1;
+            case JERRYS_WORKSHOP -> time.month == 12 && time.day == 1;
+            case SEASON_OF_JERRY -> time.month == 12 && time.day == 24;
+            case NEW_YEAR_CELEBRATION -> time.month == 12 && time.day == 29;
+            case BINGO_EVENT -> time.day == 1;
+            case SPECIAL_MAYOR -> (time.year % 8 == 0 && time.month == 6 && time.day == 1) ||
+                    (time.year % 8 == 1 && time.month == 1 && time.day == 1);
+            default -> true;
+        };
     }
 
     private static boolean isLastDayOfMultiDayEvent(SkyBlockEvent event, SkyBlockTime time) {
@@ -521,7 +489,7 @@ public class Calendar {
 
         long sleep = ceil - ms;
 
-        MinecraftServer.LOGGER.info("[SkyBlock Calendar] Sync Sleep " + sleep);
+        MinecraftServer.LOGGER.info("[SkyBlock Calendar] Sync Sleep {}", sleep);
 
         try {
             Thread.sleep(sleep);

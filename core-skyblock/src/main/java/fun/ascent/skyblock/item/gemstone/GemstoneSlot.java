@@ -1,8 +1,11 @@
 package fun.ascent.skyblock.item.gemstone;
 
+import lombok.Getter;
+
 /**
  * Represents a gemstone slot on an item. When empty, gemstone and quality are null.
  */
+@Getter
 public class GemstoneSlot {
 
     private final GemstoneSlotType type;
@@ -24,10 +27,6 @@ public class GemstoneSlot {
         this(type, null, null, unlocked);
     }
 
-    public GemstoneSlotType getType() { return type; }
-    public GemstoneType getGemstone() { return gemstone; }
-    public GemstoneQuality getQuality() { return quality; }
-    public boolean isUnlocked() { return unlocked; }
     public boolean isEmpty() { return gemstone == null; }
 
     /**

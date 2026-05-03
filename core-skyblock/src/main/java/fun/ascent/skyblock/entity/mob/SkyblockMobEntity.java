@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Getter
 public abstract class SkyblockMobEntity extends EntityCreature {
 
+    @Getter
     private static final List<SkyblockMobEntity> activeMobs = new ArrayList<>();
 
     private FloatingTextEntity nameplate;
@@ -115,6 +116,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         activeMobs.remove(this);
         super.kill();
 
+        assert getLastDamageSource() != null;
         if (!(getLastDamageSource().getAttacker() instanceof SkyblockPlayer killer)) return;
 
         onKilledBy(killer);
@@ -228,7 +230,4 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
     public abstract @Nullable DropTable dropTable();
 
-    public static List<SkyblockMobEntity> getActiveMobs() {
-        return activeMobs;
-    }
 }
