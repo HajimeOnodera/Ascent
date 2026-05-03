@@ -20,7 +20,7 @@ public class WorldHandler {
     public static HashMap<String, World> worlds = new HashMap<>();
     public static InstanceManager instanceManager;
     public static WorldRegistry WORLD_REGISTRY = new WorldRegistry();
-    private static final Pos STARTING_SPAWN = new Pos(0.5, 41, 0.5);
+    private static final Pos STARTING_SPAWN = new Pos(0.5, 79, 13);
 
     public static void initialise() {
         instanceManager = MinecraftServer.getInstanceManager();
@@ -44,8 +44,8 @@ public class WorldHandler {
     }
 
     public static void createLobbyWorld(){
-        World world = new World("lobby",new File("maps/hypixel_lobby"),
-                new File("maps/hypixel_lobby"),false);
+        World world = new World("lobby",new File("maps/sbhub"),
+                new File("maps/sbhub"),false);
         world.getInstance();
     }
 
