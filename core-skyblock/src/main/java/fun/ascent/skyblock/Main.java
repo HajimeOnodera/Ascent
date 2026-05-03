@@ -3,6 +3,7 @@ package fun.ascent.skyblock;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
+import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.command.ItemCommand;
 import fun.ascent.skyblock.minion.service.MinionManager;
@@ -50,6 +51,7 @@ public class Main {
 
         SkillRegistry.init();
         SkillListeners.register();
+        CommandHandler.initialise();
 
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();

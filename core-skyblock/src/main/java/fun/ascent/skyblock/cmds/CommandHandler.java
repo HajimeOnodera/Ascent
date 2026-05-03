@@ -8,6 +8,8 @@ import fun.ascent.skyblock.player.skill.command.SkillsCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
+import org.reflections.Reflections;
+import java.util.Set;
 
 public class CommandHandler {
 
@@ -21,6 +23,17 @@ public class CommandHandler {
         register(new MinionCommand());
         register(new XpCommand());
 
+        Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
+        Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);
+        for(Class<? extends Command> cmd : commands){
+            try {
+                Command definition  = cmd.getDeclaredConstructor().newInstance();
+                register(definition);
+            } catch (Exception e) {
+                System.err.println("[Skyblock] Failed to spawn NPC: " + cmd.getSimpleName());
+                e.printStackTrace();
+            }
+        }
     }
 
     public static void register(Command command){
