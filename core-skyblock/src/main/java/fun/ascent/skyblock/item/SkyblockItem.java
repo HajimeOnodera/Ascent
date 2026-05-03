@@ -1,7 +1,10 @@
 package fun.ascent.skyblock.item;
 
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
-import fun.ascent.skyblock.item.gemstone.GemstoneStatTable;
+import fun.ascent.skyblock.item.registries.ArrowPoisonRegistry;
+import fun.ascent.skyblock.item.registries.ConsumableRegistry;
+import fun.ascent.skyblock.item.registries.FishingBaitRegistry;
+import fun.ascent.skyblock.item.registries.ShortbowRegistry;
 import fun.ascent.skyblock.player.stats.Stats;
 import net.minestom.server.component.DataComponents;
 import net.kyori.adventure.text.Component;
@@ -16,9 +19,7 @@ import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.ResolvableProfile;
 
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.Base64;
 
 public class SkyblockItem {
 
@@ -158,7 +159,21 @@ public class SkyblockItem {
 
     private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
         List<String> lore = new ArrayList<>();
-        if (consumable)      lore.add("§8Consumable");
+
+        if (ConsumableRegistry.isConsumable(itemId)) {
+            lore.add("§8Consumable");
+            lore.add("");
+        }
+
+        if (FishingBaitRegistry.isFishingBait(itemId)) {
+            lore.add("§8Fishing Bait");
+            lore.add("§8Consumes on Cast");
+            lore.add("");
+        }
+
+        if (ArrowPoisonRegistry.isArrowPoison(itemId)) {
+            lore.add("§8Consumed on arrow shot");
+        }
 
         boolean hasStats = false;
         for (Stats stat : LORE_STAT_ORDER) {
@@ -237,6 +252,11 @@ public class SkyblockItem {
 
         if (ShortbowRegistry.isShortbow(itemId)) {
             lore.add(effectiveRarity.getColor() + "Shortbow: Instantly Shoots!");
+            lore.add("");
+        }
+
+        if (ConsumableRegistry.isConsumable(itemId)) {
+            lore.add("§eRight-click to consume!");
             lore.add("");
         }
 

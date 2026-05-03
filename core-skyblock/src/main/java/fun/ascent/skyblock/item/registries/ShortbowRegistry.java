@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.item;
+package fun.ascent.skyblock.item.registries;
 
 import java.util.Set;
 
