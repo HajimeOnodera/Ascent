@@ -30,7 +30,7 @@ public class CommandHandler {
                 Command definition  = cmd.getDeclaredConstructor().newInstance();
                 register(definition);
             } catch (Exception e) {
-                System.err.println("[Skyblock] Failed to spawn NPC: " + cmd.getSimpleName());
+                System.err.println("[Skyblock] Failed to register CMD: " + cmd.getSimpleName());
                 e.printStackTrace();
             }
         }

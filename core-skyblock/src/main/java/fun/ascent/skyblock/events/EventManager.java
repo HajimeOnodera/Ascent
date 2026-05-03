@@ -1,18 +1,18 @@
 package fun.ascent.skyblock.events;
 
-import fun.ascent.skyblock.world.WorldManager;
+import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
+import org.reflections.Reflections;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Modifier;
+import java.util.*;
 
 public class EventManager {
 
@@ -22,38 +22,27 @@ public class EventManager {
     private static final Map<Class<? extends Event>, List<SEvent<? extends Event>>> dispatchers = new HashMap<>();
 
     public static void initialise(){
-        handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            if (WorldManager.getStartingWorld() == null) {
-                return;
-            }
-            event.setSpawningInstance(WorldManager.getStartingWorld());
-            event.getPlayer().setRespawnPoint(WorldManager.getStartingSpawn());
-        });
-        handler.addListener(PlayerSpawnEvent.class, event -> {
-            if (!event.isFirstSpawn()) {
-                return;
-            }
-            event.getPlayer().teleport(WorldManager.getStartingSpawn());
-            event.getPlayer().sendMessage(MINI_MESSAGE.deserialize("<yellow>Welcome to <green>Hypixel SkyBlock</green><yellow>!</yellow>"));
-        });
-        handler.addListener(PlayerMoveEvent.class, event -> {
-            if (event.getPlayer() instanceof fun.ascent.skyblock.player.SkyblockPlayer sbPlayer) {
-                fun.ascent.skyblock.world.location.SkyblockLocation newLoc = fun.ascent.skyblock.world.location.SkyblockLocation.getLocation(event.getInstance(), event.getNewPosition());
-                fun.ascent.skyblock.world.location.SkyblockLocation oldLoc = fun.ascent.skyblock.world.location.SkyblockLocation.getLocation(event.getInstance(), event.getPlayer().getPosition());
 
-                if (newLoc != oldLoc && !newLoc.canGo(sbPlayer)) {
-                    String msg = newLoc.getRequirementMessage();
-                    if (msg != null) sbPlayer.sendMessage(MINI_MESSAGE.deserialize(msg));
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-
-            if (event.getNewPosition().y() < 0) {
-                event.getPlayer().teleport(WorldManager.getStartingSpawn());
-            }
-        });
+        registerEventsFromReflection();
         System.out.println("[Proximity] Registered " + dispatchers.size() + " event dispatchers.");
+    }
+
+    public static void registerEventsFromReflection(){
+        Reflections reflections = new Reflections("fun.ascent.skyblock.events.impl");
+        Set<Class<? extends SEvent>> events = reflections.getSubTypesOf(SEvent.class);
+        for (Class<? extends SEvent> event : events) {
+            if (Modifier.isAbstract(event.getModifiers()) || event.isInterface()) {
+                continue;
+            }
+            try {
+                SEvent definition  = event.getDeclaredConstructor().newInstance();
+                registerEvent(definition);
+            } catch (Exception e) {
+                System.err.println("[Skyblock] Failed to register CMD: " + event.getSimpleName());
+                e.printStackTrace();
+            }
+
+        }
     }
 
     @SuppressWarnings("unchecked")

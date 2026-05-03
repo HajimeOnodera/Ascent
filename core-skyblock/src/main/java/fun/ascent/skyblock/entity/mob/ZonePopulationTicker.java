@@ -1,19 +1,17 @@
 package fun.ascent.skyblock.entity.mob;
 
 import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
-import fun.ascent.skyblock.world.WorldManager;
+import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.TaskSchedule;
 
-import java.util.List;
-
 public class ZonePopulationTicker {
 
     public static void start() {
         MinecraftServer.getSchedulerManager().submitTask(() -> {
-            InstanceContainer world = WorldManager.getStartingWorld();
+            InstanceContainer world = WorldHandler.getLobby();
             if (world == null || world.getPlayers().isEmpty()) {
                 return TaskSchedule.seconds(10);
             }

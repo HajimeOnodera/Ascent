@@ -5,23 +5,19 @@ import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
-import fun.ascent.skyblock.item.command.ItemCommand;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
 import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
-import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
 import fun.ascent.skyblock.config.ServerConfig;
-import fun.ascent.skyblock.minion.command.MinionCommand;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
-import fun.ascent.skyblock.player.skill.command.SkillsCommand;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
-import fun.ascent.skyblock.world.WorldManager;
+import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
 
 public class Main {
@@ -42,7 +38,7 @@ public class Main {
 
         ItemRegistry.init();
 
-        WorldManager.initialise();
+        WorldHandler.initialise();
         EventManager.initialise();
         SkyblockNPCManager.init();
         Calendar.startTimeUpdates();
