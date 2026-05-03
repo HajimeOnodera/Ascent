@@ -5,6 +5,7 @@ import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
+import fun.ascent.skyblock.item.reforge.Reforge;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
@@ -36,6 +37,7 @@ public class Main {
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
 
         ItemRegistry.init();
+        Reforge.init();
 
         WorldHandler.initialise();
         EventManager.initialise();

@@ -34,7 +34,7 @@ public class SkyblockItem {
             Stats.HEALTH_REGEN, Stats.VITALITY, Stats.MENDING, Stats.SWING_RANGE,
             Stats.MAGIC_FIND, Stats.PET_LUCK, Stats.SEA_CREATURE_CHANCE,
             Stats.DOUBLE_HOOK_CHANCE, Stats.FISHING_SPEED, Stats.TROPHY_FISH_CHANCE,
-            Stats.TREASURE_CHANCE, Stats.BREAKING_POWER, Stats.MINING_SPEED,
+            Stats.TREASURE_CHANCE, Stats.MINING_SPEED,
             Stats.MINING_FORTUNE, Stats.ORE_FORTUNE, Stats.BLOCK_FORTUNE,
             Stats.GEMSTONE_FORTUNE, Stats.DWARVEN_METAL_FORTUNE, Stats.PRISTINE,
             Stats.FARMING_FORTUNE, Stats.BONUS_PEST_CHANCE, Stats.FORAGING_FORTUNE,
@@ -173,6 +173,12 @@ public class SkyblockItem {
 
         if (ArrowPoisonRegistry.isArrowPoison(itemId)) {
             lore.add("§8Consumed on arrow shot");
+        }
+
+        double breakingPower = baseStats.getOrDefault(Stats.BREAKING_POWER, 0.0);
+        if (breakingPower != 0.0) {
+            lore.add("§8Breaking Power " + (int) breakingPower);
+            lore.add("");
         }
 
         boolean hasStats = false;
