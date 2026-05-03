@@ -158,12 +158,8 @@ public class SkyblockItem {
 
     private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
         List<String> lore = new ArrayList<>();
-
-
-
         if (consumable)      lore.add("§8Consumable");
 
-        // Stats section
         boolean hasStats = false;
         for (Stats stat : LORE_STAT_ORDER) {
             double value = baseStats.getOrDefault(stat, 0.0);
@@ -236,6 +232,11 @@ public class SkyblockItem {
         // Abilities
         for (ItemAbility ability : abilities) {
             lore.addAll(ability.buildLore());
+            lore.add("");
+        }
+
+        if (ShortbowRegistry.isShortbow(itemId)) {
+            lore.add(effectiveRarity.getColor() + "Shortbow: Instantly Shoots!");
             lore.add("");
         }
 

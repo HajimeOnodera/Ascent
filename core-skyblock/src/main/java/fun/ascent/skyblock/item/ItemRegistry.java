@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ItemRegistery {
+public class ItemRegistry {
 
     private static final Map<String, SkyblockItem> ITEMS = new HashMap<>();
 

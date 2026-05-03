@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.item.command;
 
-import fun.ascent.skyblock.item.ItemRegistery;
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -20,7 +20,7 @@ public class ItemCommand extends Command {
             if (!(sender instanceof Player player)) return;
 
             String id = ctx.get(idArg).toUpperCase();
-            SkyblockItem item = ItemRegistery.getItem(id);
+            SkyblockItem item = ItemRegistry.getItem(id);
 
             if (item == null) {
                 player.sendMessage("§cUnknown item: §f" + id);
