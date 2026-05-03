@@ -85,4 +85,7 @@ public class WorldHandler {
         return null;
     }
 
+    public static String getWorldName(Instance instance) {
+        return WORLD_REGISTRY.name(instance).orElse(null);
+    }
 }

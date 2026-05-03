@@ -1,7 +1,7 @@
 package fun.ascent.skyblock.world.location;
 
 import fun.ascent.skyblock.player.skill.SkillType;
-import fun.ascent.skyblock.world.WorldManager;
+import fun.ascent.skyblock.world.WorldHandler;
 import lombok.Getter;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
@@ -108,7 +108,7 @@ public enum SkyblockLocation {
     public static SkyblockLocation getLocation(Instance instance, Pos pos) {
         if (instance == null || pos == null) return NONE;
 
-        String worldName = WorldManager.getWorldName(instance);
+        String worldName = WorldHandler.getWorldName(instance);
         if (worldName == null) worldName = "";
         worldName = worldName.toLowerCase();
 

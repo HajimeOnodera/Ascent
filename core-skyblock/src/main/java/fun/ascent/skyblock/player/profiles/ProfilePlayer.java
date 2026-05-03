@@ -7,7 +7,7 @@ import fun.ascent.skyblock.player.stats.StatBuilder;
 import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.utility.AlignUtils;
-import fun.ascent.skyblock.world.WorldManager;
+import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -45,7 +45,7 @@ public class ProfilePlayer {
         if(skillData == null) skillData = new PlayerSkillData();
         if(level == null) level = new SkyblockLevel();
         if(playerUUID != null){
-            this.skyblockPlayer = WorldManager.getPlayer(playerUUID);
+            this.skyblockPlayer = WorldHandler.getPlayer(playerUUID);
         }
     }
 

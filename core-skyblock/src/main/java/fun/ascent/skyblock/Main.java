@@ -27,7 +27,6 @@ public class Main {
 
     public static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
-
         // ── Redis ───────────────────────────────────────────────────────────
         RedisManager.connect(RedisConfig.fromEnv());
         System.out.println("[Skyblock] Connected to Redis");
