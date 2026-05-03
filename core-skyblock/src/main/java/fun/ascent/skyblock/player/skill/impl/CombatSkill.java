@@ -20,25 +20,25 @@ public class CombatSkill extends SkillDefinition {
         for (int i = 0; i < 60; i++) {
             int level = i + 1;
             REWARDS[i] = switch (level) {
-                case 1  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRIT_CHANCE, 1));
+                case 1  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1));
                 case 2  -> new SkillReward(level, table[i], new XpBoostUnlock(4));
-                case 3  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRIT_DAMAGE, 1));
+                case 3  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 1));
                 case 4  -> new SkillReward(level, table[i], new XpBoostUnlock(4));
-                case 5  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRIT_CHANCE, 1), new CoinRewardUnlock(1500));
+                case 5  -> new SkillReward(level, table[i], new XpBoostUnlock(4), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1), new CoinRewardUnlock(1500));
                 case 6  -> new SkillReward(level, table[i], new XpBoostUnlock(5));
-                case 7  -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRIT_DAMAGE, 2));
+                case 7  -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 2));
                 case 8  -> new SkillReward(level, table[i], new XpBoostUnlock(5));
-                case 9  -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRIT_CHANCE, 1));
-                case 10 -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRIT_DAMAGE, 2), new CoinRewardUnlock(4000));
-                case 15 -> new SkillReward(level, table[i], new XpBoostUnlock(6), new StatBoostUnlock(Stats.CRIT_CHANCE, 1), new CoinRewardUnlock(8000));
-                case 20 -> new SkillReward(level, table[i], new XpBoostUnlock(7), new StatBoostUnlock(Stats.CRIT_DAMAGE, 3), new CoinRewardUnlock(12000));
-                case 25 -> new SkillReward(level, table[i], new XpBoostUnlock(8), new StatBoostUnlock(Stats.CRIT_CHANCE, 1), new CoinRewardUnlock(20000));
-                case 30 -> new SkillReward(level, table[i], new XpBoostUnlock(9), new StatBoostUnlock(Stats.CRIT_DAMAGE, 3), new CoinRewardUnlock(35000));
-                case 35 -> new SkillReward(level, table[i], new XpBoostUnlock(10), new StatBoostUnlock(Stats.CRIT_CHANCE, 1), new CoinRewardUnlock(50000));
-                case 40 -> new SkillReward(level, table[i], new XpBoostUnlock(12), new StatBoostUnlock(Stats.CRIT_DAMAGE, 4), new CoinRewardUnlock(75000));
-                case 45 -> new SkillReward(level, table[i], new XpBoostUnlock(14), new StatBoostUnlock(Stats.CRIT_CHANCE, 1), new CoinRewardUnlock(100000));
-                case 50 -> new SkillReward(level, table[i], new XpBoostUnlock(15), new StatBoostUnlock(Stats.CRIT_DAMAGE, 5), new StatBoostUnlock(Stats.FEROCITY, 1), new CoinRewardUnlock(150000));
-                case 60 -> new SkillReward(level, table[i], new XpBoostUnlock(20), new StatBoostUnlock(Stats.CRIT_DAMAGE, 5), new StatBoostUnlock(Stats.FEROCITY, 2), new CoinRewardUnlock(250000));
+                case 9  -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1));
+                case 10 -> new SkillReward(level, table[i], new XpBoostUnlock(5), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 2), new CoinRewardUnlock(4000));
+                case 15 -> new SkillReward(level, table[i], new XpBoostUnlock(6), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1), new CoinRewardUnlock(8000));
+                case 20 -> new SkillReward(level, table[i], new XpBoostUnlock(7), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 3), new CoinRewardUnlock(12000));
+                case 25 -> new SkillReward(level, table[i], new XpBoostUnlock(8), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1), new CoinRewardUnlock(20000));
+                case 30 -> new SkillReward(level, table[i], new XpBoostUnlock(9), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 3), new CoinRewardUnlock(35000));
+                case 35 -> new SkillReward(level, table[i], new XpBoostUnlock(10), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1), new CoinRewardUnlock(50000));
+                case 40 -> new SkillReward(level, table[i], new XpBoostUnlock(12), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 4), new CoinRewardUnlock(75000));
+                case 45 -> new SkillReward(level, table[i], new XpBoostUnlock(14), new StatBoostUnlock(Stats.CRITICAL_CHANCE, 1), new CoinRewardUnlock(100000));
+                case 50 -> new SkillReward(level, table[i], new XpBoostUnlock(15), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 5), new StatBoostUnlock(Stats.FEROCITY, 1), new CoinRewardUnlock(150000));
+                case 60 -> new SkillReward(level, table[i], new XpBoostUnlock(20), new StatBoostUnlock(Stats.CRITICAL_DAMAGE, 5), new StatBoostUnlock(Stats.FEROCITY, 2), new CoinRewardUnlock(250000));
                 default -> new SkillReward(level, table[i], new XpBoostUnlock(4 + level / 10));
             };
         }

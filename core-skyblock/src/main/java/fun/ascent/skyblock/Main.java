@@ -3,6 +3,8 @@ package fun.ascent.skyblock;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
+import fun.ascent.skyblock.item.ItemRegistery;
+import fun.ascent.skyblock.item.command.ItemCommand;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
@@ -37,6 +39,8 @@ public class Main {
         MinecraftServer server = MinecraftServer.init(config.auth());
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
 
+        ItemRegistery.init();
+
         WorldManager.initialise();
         EventManager.initialise();
         SkyblockNPCManager.init();
@@ -53,6 +57,7 @@ public class Main {
         ZonePopulationTicker.start();
         CombatListener.register();
         MinecraftServer.getCommandManager().register(new SpawnMobCommand());
+        MinecraftServer.getCommandManager().register(new ItemCommand());
 
         System.out.println("[Skyblock] Starting the Server");
         server.start(config.host(), config.port());

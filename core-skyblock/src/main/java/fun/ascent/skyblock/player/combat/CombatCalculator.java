@@ -13,8 +13,8 @@ public class CombatCalculator {
 
     public static CombatResult playerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob) {
         double strength = playerStat(player, Stats.STRENGTH);
-        double critChance = playerStat(player, Stats.CRIT_CHANCE);
-        double critDamage = playerStat(player, Stats.CRIT_DAMAGE);
+        double critChance = playerStat(player, Stats.CRITICAL_CHANCE);
+        double critDamage = playerStat(player, Stats.CRITICAL_DAMAGE);
         double defense = mob.baseStat(Stats.DEFENSE);
 
         boolean isCrit = Math.random() * 100 <= critChance;

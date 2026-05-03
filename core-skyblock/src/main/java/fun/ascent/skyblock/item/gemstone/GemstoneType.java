@@ -14,7 +14,7 @@ public enum GemstoneType {
     OPAL(Stats.TRUE_DEFENSE, "§f", "❂"),
     AQUAMARINE(Stats.SEA_CREATURE_CHANCE, "§3", "α"),
     CITRINE(Stats.FORAGING_FORTUNE, "§4", "☘"),
-    ONYX(Stats.CRIT_DAMAGE, "§9", "☠"),
+    ONYX(Stats.CRITICAL_DAMAGE, "§9", "☠"),
     PERIDOT(Stats.FARMING_FORTUNE, "§2", "☘");
 
     private final Stats stat;

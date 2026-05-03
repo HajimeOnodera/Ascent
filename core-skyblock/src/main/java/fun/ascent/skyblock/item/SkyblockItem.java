@@ -10,9 +10,12 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.network.player.ResolvableProfile;
 
-
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.Base64;
 
 public class SkyblockItem {
 
@@ -22,8 +25,8 @@ public class SkyblockItem {
 
     private static final Stats[] LORE_STAT_ORDER = {
             Stats.DAMAGE, Stats.HEALTH, Stats.DEFENSE, Stats.TRUE_DEFENSE,
-            Stats.STRENGTH, Stats.INTELLIGENCE, Stats.CRIT_CHANCE, Stats.CRIT_DAMAGE,
-            Stats.BONUS_ATTACK_SPEED, Stats.ABILITY_DAMAGE, Stats.FEROCITY, Stats.SPEED,
+            Stats.STRENGTH, Stats.INTELLIGENCE, Stats.CRITICAL_CHANCE, Stats.CRITICAL_DAMAGE,
+            Stats.ATTACK_SPEED, Stats.ABILITY_DAMAGE, Stats.FEROCITY, Stats.SPEED,
             Stats.HEALTH_REGEN, Stats.VITALITY, Stats.MENDING, Stats.SWING_RANGE,
             Stats.MAGIC_FIND, Stats.PET_LUCK, Stats.SEA_CREATURE_CHANCE,
             Stats.DOUBLE_HOOK_CHANCE, Stats.FISHING_SPEED, Stats.TROPHY_FISH_CHANCE,
@@ -123,10 +126,18 @@ public class SkyblockItem {
         Component displayComponent = LEGACY.deserialize(effectiveRarity.getColor() + displayName)
                 .decoration(TextDecoration.ITALIC, false);
 
-        return ItemStack.builder(material)
+        ItemStack.Builder builder = ItemStack.builder(material)
                 .set(DataComponents.CUSTOM_NAME, displayComponent)
-                .set(DataComponents.LORE, loreComponents)
-                .build();
+                .set(DataComponents.LORE, loreComponents);
+
+        if (material == Material.PLAYER_HEAD && skinValue != null && !skinValue.isEmpty()) {
+            ResolvableProfile profile = new ResolvableProfile(new ResolvableProfile.Partial(
+                    "", UUID.randomUUID(),
+                    List.of(new GameProfile.Property("textures", skinValue, ""))));
+            builder.set(DataComponents.PROFILE, profile);
+        }
+
+        return builder.build();
     }
 
     private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
@@ -150,10 +161,34 @@ public class SkyblockItem {
                 String formatted = stat.getStatIntType()
                         ? sign + (int) value + "%"
                         : sign + (int) value;
-                lore.add(stat.getStatColor() + stat.getStatSymbol() + " " + stat.getStatFormattedDisplay() + ": " + formatted);
+                lore.add("§7" + stat.getStatFormattedDisplay() + ": " + stat.getStatColor() + formatted);
             }
         }
-        if (hasStats) lore.add("");
+
+        if (!gemstoneSlots.isEmpty()) {
+            StringBuilder gemLine = new StringBuilder();
+            for (GemstoneSlot slot : gemstoneSlots) {
+                String bracketColor;
+                String symbolColor;
+                String symbol = slot.getType().getSymbol();
+
+                if (!slot.isEmpty()) {
+                    bracketColor = slot.getQuality().getRarity().getColor();
+                    symbolColor = slot.getGemstone().getColorCode();
+                } else {
+                    bracketColor = "§8";
+                    symbolColor = slot.isUnlocked() ? "§7" : "§8";
+                }
+
+                gemLine.append(bracketColor).append(" [")
+                       .append(symbolColor).append(symbol)
+                       .append(bracketColor).append("]");
+            }
+            lore.add(gemLine.toString());
+            lore.add("");
+        } else if (hasStats) {
+            lore.add("");
+        }
 
         // Enchantments
         if (!enchantments.isEmpty()) {
@@ -176,19 +211,6 @@ public class SkyblockItem {
         }
 
         if (!enchantments.isEmpty() || (ultimateEnchant != null && !ultimateEnchant.isEmpty())) {
-            lore.add("");
-        }
-
-        // Gemstone slots
-        if (!gemstoneSlots.isEmpty()) {
-            StringBuilder gemLine = new StringBuilder("§7Gemstone Slots: ");
-            for (GemstoneSlot slot : gemstoneSlots) {
-                String display = slot.isEmpty()
-                        ? slot.getType().getColorCode() + slot.getType().getSymbol()
-                        : slot.getType().getColorCode() + slot.getType().getSymbol();
-                gemLine.append(display).append(" ");
-            }
-            lore.add(gemLine.toString().trim());
             lore.add("");
         }
 
