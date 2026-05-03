@@ -66,4 +66,9 @@ public enum ItemType {
             default -> false;
         };
     }
+
+    public String getDisplay() {
+        if (this == NONE) return "";
+        return name().replace('_', ' ');
+    }
 }

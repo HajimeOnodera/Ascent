@@ -4,6 +4,7 @@ import fun.ascent.skyblock.item.api.HypixelItemFetcher;
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
 import fun.ascent.skyblock.item.gemstone.GemstoneSlotType;
 import fun.ascent.skyblock.player.stats.Stats;
+import net.minestom.server.color.Color;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -51,6 +52,16 @@ public class ItemRegistery {
             try {
                 builder.stat(Stats.valueOf(entry.getKey()), entry.getValue());
             } catch (IllegalArgumentException ignored) {}
+        }
+
+        if (data.color() != null) {
+            try {
+                String[] parts = data.color().split(",");
+                builder.armorColor(new Color(
+                        Integer.parseInt(parts[0].trim()),
+                        Integer.parseInt(parts[1].trim()),
+                        Integer.parseInt(parts[2].trim())));
+            } catch (Exception ignored) {}
         }
 
         for (String slotType : data.gemstoneSlotTypes()) {

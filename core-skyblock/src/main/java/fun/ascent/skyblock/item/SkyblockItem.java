@@ -10,6 +10,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.color.Color;
+import net.minestom.server.item.component.AttributeList;
+import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.ResolvableProfile;
 
@@ -59,6 +62,7 @@ public class SkyblockItem {
     private final boolean reforgeable;
     private final boolean glowing;
     private final String skinValue;
+    private final Color armorColor;
     private final List<GemstoneSlot> gemstoneSlots;
     private final boolean recombobulated;
 
@@ -89,6 +93,7 @@ public class SkyblockItem {
         this.reforgeable = builder.reforgeable;
         this.glowing = builder.glowing;
         this.skinValue = builder.skinValue;
+        this.armorColor = builder.armorColor;
         this.gemstoneSlots = List.copyOf(builder.gemstoneSlots);
         this.recombobulated = builder.recombobulated;
         this.enchantments = Collections.unmodifiableMap(new LinkedHashMap<>(builder.enchantments));
@@ -126,9 +131,20 @@ public class SkyblockItem {
         Component displayComponent = LEGACY.deserialize(effectiveRarity.getColor() + displayName)
                 .decoration(TextDecoration.ITALIC, false);
 
+        TooltipDisplay tooltipDisplay = new TooltipDisplay(false, Set.of(
+                DataComponents.ATTRIBUTE_MODIFIERS,
+                DataComponents.DYED_COLOR
+        ));
+
         ItemStack.Builder builder = ItemStack.builder(material)
                 .set(DataComponents.CUSTOM_NAME, displayComponent)
-                .set(DataComponents.LORE, loreComponents);
+                .set(DataComponents.LORE, loreComponents)
+                .set(DataComponents.ATTRIBUTE_MODIFIERS, AttributeList.EMPTY)
+                .set(DataComponents.TOOLTIP_DISPLAY, tooltipDisplay);
+
+        if (armorColor != null) {
+            builder.set(DataComponents.DYED_COLOR, armorColor);
+        }
 
         if (material == Material.PLAYER_HEAD && skinValue != null && !skinValue.isEmpty()) {
             ResolvableProfile profile = new ResolvableProfile(new ResolvableProfile.Partial(
@@ -237,7 +253,7 @@ public class SkyblockItem {
         if (recombobulated)  lore.add("§dRecombobulated!");
 
         // Rarity line
-        lore.add(effectiveRarity.getDisplay());
+        lore.add(effectiveRarity.getDisplay() + " " + itemType.getDisplay());
 
         return lore;
     }
@@ -259,6 +275,7 @@ public class SkyblockItem {
         private boolean reforgeable = true;
         private boolean glowing = false;
         private String skinValue = null;
+        private Color armorColor = null;
         private final List<GemstoneSlot> gemstoneSlots = new ArrayList<>();
         private boolean recombobulated = false;
         private final Map<String, Integer> enchantments = new LinkedHashMap<>();
@@ -289,6 +306,7 @@ public class SkyblockItem {
         public Builder reforgeable(boolean reforgeable) { this.reforgeable = reforgeable; return this; }
         public Builder glowing(boolean glowing) { this.glowing = glowing; return this; }
         public Builder skinValue(String skinValue) { this.skinValue = skinValue; return this; }
+        public Builder armorColor(Color color) { this.armorColor = color; return this; }
         public Builder gemstoneSlot(GemstoneSlot slot) { this.gemstoneSlots.add(slot); return this; }
         public Builder recombobulated(boolean recombobulated) { this.recombobulated = recombobulated; return this; }
         public Builder enchantment(String name, int level) { this.enchantments.put(name, level); return this; }
