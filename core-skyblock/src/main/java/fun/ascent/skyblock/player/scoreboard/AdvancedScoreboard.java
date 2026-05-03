@@ -117,8 +117,8 @@ public class AdvancedScoreboard {
                 return List.of("<gray>Loading...</gray>", "");
 
             return List.of(
-                    "<white>" + time.getMonthName() + " " + time.getOrdinalDay() + "</white>",
-                    "<gray>" + time.getHourFormatted() + "</gray>"
+                    "<white> " + time.getMonthName() + " " + time.getOrdinalDay() + "</white>",
+                    "<gray> " + time.getHourFormatted() + "</gray>"
             );
         }
     }
@@ -128,7 +128,7 @@ public class AdvancedScoreboard {
         public List<String> render(SkyblockPlayer player) {
             SkyblockLocation location = SkyblockLocation.getLocation(player.getInstance(), player.getPosition());
             return List.of(
-                    "<dark_gray>⏣</dark_gray> " + location.getName(),
+                    "<dark_gray> ⏣</dark_gray> " + location.getName(),
                     "");
         }
     }
