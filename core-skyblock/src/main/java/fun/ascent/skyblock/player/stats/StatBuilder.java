@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.player.stats;
 
-import fun.ascent.skyblock.utility.ColorUtils;
+import fun.ascent.common.util.ColorUtils;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class StatBuilder {

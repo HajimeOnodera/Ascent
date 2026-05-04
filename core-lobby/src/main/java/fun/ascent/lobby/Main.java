@@ -8,24 +8,24 @@ import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 
+import static fun.ascent.common.util.CC.c;
+
 public final class Main {
-
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-
-    /** Host that Velocity uses to reach this server. */
+    private static String currentServerName;
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
-
-    private Main() {
+    public static String getServerName() {
+        return currentServerName;
     }
 
-    public static void main(String[] args) {
+    private Main() {}
+
+    static void main() {
         LobbyConfig config = LobbyConfig.load();
 
         // ── Redis ───────────────────────────────────────────────────────────
@@ -53,6 +53,8 @@ public final class Main {
             serverName = base + "-" + java.util.UUID.randomUUID().toString().substring(0, 5);
         }
 
+        currentServerName = serverName;
+
         // ── Ping (must start AFTER server.start()) ─────────────────────
         PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
@@ -71,7 +73,7 @@ public final class Main {
             }
 
             event.getPlayer().teleport(world.spawn());
-            event.getPlayer().sendMessage(MINI_MESSAGE.deserialize("<yellow>Welcome to <gold>Ascent</gold><yellow>! Pick a server to begin.</yellow>"));
+            event.getPlayer().sendMessage(c("&eWelcome to &6Ascent&e! Pick a server to begin."));
         });
 
         handler.addListener(PlayerMoveEvent.class, event -> {

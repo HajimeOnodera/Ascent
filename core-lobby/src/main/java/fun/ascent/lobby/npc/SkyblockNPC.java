@@ -3,16 +3,17 @@ package fun.ascent.lobby.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
+import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.lobby.transfer.ProxyTransfer;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
+import static fun.ascent.common.util.CC.c;
+
 public record SkyblockNPC(Instance instance) implements NpcDefinition {
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-    private static final String TARGET_SERVER = "skyblock";
+    private static final String TARGET_PREFIX = "skyblock";
 
     @Override
     public String id() {
@@ -47,7 +48,12 @@ public record SkyblockNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
-        player.sendMessage(MINI_MESSAGE.deserialize("<yellow>Sending you to <gold>SkyBlock</gold><yellow>...</yellow>"));
-        ProxyTransfer.send(player, TARGET_SERVER);
+        String serverName = ServerLookup.findAnyByPrefix(TARGET_PREFIX);
+        if (serverName == null) {
+            player.sendMessage(c("&cNo SkyBlock server is currently online!"));
+            return;
+        }
+        player.sendMessage(c("&eSending you to &6SkyBlock&e..."));
+        ProxyTransfer.send(player, serverName);
     }
 }

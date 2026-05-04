@@ -1,7 +1,9 @@
 package fun.ascent.lobby.item;
 
+import fun.ascent.common.redis.ServerLookup;
+import fun.ascent.common.redis.ServerPing;
+import fun.ascent.lobby.Main;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
@@ -19,53 +21,57 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static fun.ascent.common.util.CC.c;
+
 public class LobbyItemManager {
 
-    private static final MiniMessage MM = MiniMessage.miniMessage();
     private static final Map<UUID, Boolean> playerVisibility = new ConcurrentHashMap<>();
 
+    /** Maximum lobby slots to display in the selector. */
+    private static final int MAX_LOBBY_SLOTS = 5;
+
     private static final ItemStack GAME_MENU = ItemStack.builder(Material.COMPASS)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>Game Menu</green> <gray>(Right Click)</gray>"))
-            .set(DataComponents.LORE, List.of(MM.deserialize("<gray>Right Click to bring up the Game Menu!</gray>")))
+            .set(DataComponents.CUSTOM_NAME, c("&aGame Menu &7(Right Click)"))
+            .set(DataComponents.LORE, List.of(c("&7Right Click to bring up the Game Menu!")))
             .build();
 
     private static final ItemStack MY_PROFILE = ItemStack.builder(Material.PLAYER_HEAD)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>My Profile</green> <gray>(Right Click)</gray>"))
+            .set(DataComponents.CUSTOM_NAME, c("&aMy Profile &7(Right Click)"))
             .set(DataComponents.LORE, List.of(
-                    MM.deserialize("<gray>Right-click to browse quests, view achievements,</gray>"),
-                    MM.deserialize("<gray>activate Network Boosters and more!</gray>")
+                    c("&7Right-click to browse quests, view achievements,"),
+                    c("&7activate Network Boosters and more!")
             ))
             .build();
 
     private static final ItemStack COLLECTIBLES = ItemStack.builder(Material.CHEST)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>Collectibles</green> <gray>(Right Click)</gray>"))
+            .set(DataComponents.CUSTOM_NAME, c("&aCollectibles &7(Right Click)"))
             .set(DataComponents.LORE, List.of(
-                    MM.deserialize("<gray>Mystery Dust: </gray><aqua>1,078</aqua>"),
+                    c("&7Mystery Dust: &b0"),
                     Component.empty(),
-                    MM.deserialize("<gray>Collect fun cosmetic items! Unlock new items</gray>"),
-                    MM.deserialize("<gray>using </gray><aqua>Mystery Dust</aqua><gray> or hitting milestone</gray>"),
-                    MM.deserialize("<gray>rewards.</gray>"),
+                    c("&7Collect fun cosmetic items! Unlock new items"),
+                    c("&7using &bMystery Dust &7or hitting milestone"),
+                    c("&7rewards."),
                     Component.empty(),
-                    MM.deserialize("<aqua>Mystery Dust</aqua><gray> is randomly given after playing</gray>"),
-                    MM.deserialize("<gray>games.</gray>")
+                    c("&bMystery Dust &7is randomly given after playing"),
+                    c("&7games.")
             ))
             .build();
 
     private static final ItemStack PLAYERS_HIDDEN = ItemStack.builder(Material.GRAY_DYE)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<white>Players: </white><red>Hidden</red> <gray>(Right Click)</gray>"))
-            .set(DataComponents.LORE, List.of(MM.deserialize("<gray>Right-click to toggle player visibility!</gray>")))
+            .set(DataComponents.CUSTOM_NAME, c("&fPlayers: &cHidden &7(Right Click)"))
+            .set(DataComponents.LORE, List.of(c("&7Right-click to toggle player visibility!")))
             .build();
 
     private static final ItemStack PLAYERS_VISIBLE = ItemStack.builder(Material.LIME_DYE)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<white>Players: </white><green>Visible</green> <gray>(Right Click)</gray>"))
-            .set(DataComponents.LORE, List.of(MM.deserialize("<gray>Right-click to toggle player visibility!</gray>")))
+            .set(DataComponents.CUSTOM_NAME, c("&fPlayers: &aVisible &7(Right Click)"))
+            .set(DataComponents.LORE, List.of(c("&7Right-click to toggle player visibility!")))
             .build();
 
     private static final ItemStack LOBBY_SELECTOR = ItemStack.builder(Material.NETHER_STAR)
-            .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>Lobby Selector</green> <gray>(Right Click)</gray>"))
+            .set(DataComponents.CUSTOM_NAME, c("&aLobby Selector &7(Right Click)"))
             .set(DataComponents.LORE, List.of(
-                    MM.deserialize("<gray>Right-click to switch between different lobbies!</gray>"),
-                    MM.deserialize("<gray>Use this to stay with your friends.</gray>")
+                    c("&7Right-click to switch between different lobbies!"),
+                    c("&7Use this to stay with your friends.")
             ))
             .build();
 
@@ -95,23 +101,27 @@ public class LobbyItemManager {
 
         handler.addListener(InventoryPreClickEvent.class, event -> {
             event.setCancelled(true);
-            if (event.getInventory() instanceof Inventory inv && inv.getTitle().equals(MM.deserialize("Lobby Selector"))) {
+            if (event.getInventory() instanceof Inventory inv && inv.getTitle().equals(c("Lobby Selector"))) {
                 int slot = event.getSlot();
                 if (slot >= 11 && slot <= 15) {
-                    int lobbyNum = slot - 10;
-                    if (lobbyNum != 1) {
-                        event.getPlayer().sendMessage(MM.deserialize("<green>Connecting to Lobby " + lobbyNum + "...</green>"));
-                        fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), "lobby-" + lobbyNum);
-                    } else {
-                        event.getPlayer().sendMessage(MM.deserialize("<red>You are already connected to this lobby!</red>"));
+                    int lobbyIndex = slot - 11;
+                    // Look up live lobbies again to get the real server name
+                    List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
+                    if (lobbyIndex < lobbies.size()) {
+                        ServerPing target = lobbies.get(lobbyIndex);
+                        String currentName = Main.getServerName();
+                        if (target.serverName().equals(currentName)) {
+                            event.getPlayer().sendMessage(c("&cYou are already connected to this lobby!"));
+                        } else {
+                            event.getPlayer().sendMessage(c("&aConnecting to " + target.serverName() + "..."));
+                            fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), target.serverName());
+                        }
                     }
                 }
             }
         });
 
-        handler.addListener(ItemDropEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
     }
 
     private static void giveItems(Player player) {
@@ -138,34 +148,57 @@ public class LobbyItemManager {
             return true;
         });
         
-        player.sendMessage(MM.deserialize(newHiddenState ? "<red>Players are now hidden.</red>" : "<green>Players are now visible.</green>"));
+        player.sendMessage(c(newHiddenState ? "&cPlayers are now hidden." : "&aPlayers are now visible."));
     }
 
     private static void openLobbySelector(Player player) {
-        Inventory inventory = new Inventory(InventoryType.CHEST_2_ROW, MM.deserialize("Lobby Selector"));
-        
-        for (int i = 0; i <= 4; i++) {
-            boolean isCurrent = (i == 1);
-            ItemStack lobbyItem = ItemStack.builder(Material.RED_CONCRETE)
-                    .set(DataComponents.CUSTOM_NAME, MM.deserialize(isCurrent ? "<green>Lobby " + i + "</green>" : "<yellow>Lobby " + i + "</yellow>"))
-                    .set(DataComponents.LORE, List.of(
-                            MM.deserialize("<gray>Status: </gray>" + (isCurrent ? "<green>Connected</green>" : "<yellow>Online</yellow>")),
-                            Component.empty(),
-                            isCurrent ? MM.deserialize("<red>Already connected!</red>") : MM.deserialize("<gray>Click to connect!</gray>")
-                    ))
-                    .build();
-            inventory.setItemStack(i, lobbyItem);
+        Inventory inventory = new Inventory(InventoryType.CHEST_2_ROW, c("Lobby Selector"));
+
+        // Fetch live lobby servers from Redis
+        List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
+        String currentName = Main.getServerName();
+
+        for (int i = 0; i < MAX_LOBBY_SLOTS; i++) {
+            int slot = 11 + i; // center the items in the 2-row chest
+
+            if (i < lobbies.size()) {
+                ServerPing lobby = lobbies.get(i);
+                boolean isCurrent = lobby.serverName().equals(currentName);
+
+                Material mat = isCurrent ? Material.RED_CONCRETE : Material.WHITE_CONCRETE;
+                String title = isCurrent
+                        ? "&c" + lobby.serverName() + " &7(Current)"
+                        : "&a" + lobby.serverName();
+
+                ItemStack lobbyItem = ItemStack.builder(mat)
+                        .set(DataComponents.CUSTOM_NAME, c(title))
+                        .set(DataComponents.LORE, List.of(
+                                c("&7Players: &a" + lobby.onlinePlayers()),
+                                Component.empty(),
+                                isCurrent ? c("&cAlready connected!") : c("&7Click to connect!")
+                        ))
+                        .build();
+                inventory.setItemStack(slot, lobbyItem);
+            } else {
+                // Offline / no server in this slot
+                ItemStack offlineItem = ItemStack.builder(Material.BARRIER)
+                        .set(DataComponents.CUSTOM_NAME, c("&cOffline"))
+                        .set(DataComponents.LORE, List.of(c("&7This lobby is not available.")))
+                        .build();
+                inventory.setItemStack(slot, offlineItem);
+            }
         }
+
         player.openInventory(inventory);
     }
 
     private static void openGameMenu(Player player) {
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, MM.deserialize("Game Menu"));
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, c("Game Menu"));
         ItemStack sb = ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.CUSTOM_NAME, MM.deserialize("<green>SkyBlock</green>"))
+                .set(DataComponents.CUSTOM_NAME, c("&aSkyBlock"))
                 .set(DataComponents.LORE, List.of(
-                        MM.deserialize("<gray>Play the popular SkyBlock game mode!</gray>"),
-                        MM.deserialize("<gray>Complete quests, collect resources, and more!</gray>")
+                        c("&7Play the popular SkyBlock game mode!"),
+                        c("&7Complete quests, collect resources, and more!")
                 ))
                 .build();
         inventory.setItemStack(10, sb);

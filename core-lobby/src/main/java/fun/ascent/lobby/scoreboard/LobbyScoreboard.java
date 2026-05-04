@@ -1,6 +1,5 @@
 package fun.ascent.lobby.scoreboard;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.MinecraftServer;
@@ -10,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fun.ascent.common.util.CC.c;
+
 public class LobbyScoreboard {
 
     private final Player player;
@@ -18,48 +19,48 @@ public class LobbyScoreboard {
     private int tickCount = 0;
 
     private static final String[] TITLE_ANIMATION = {
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<white><bold>A</bold></white><yellow><bold>SCENT</bold></yellow>",
-            "<yellow><bold>A</bold></yellow><white><bold>S</bold></white><yellow><bold>CENT</bold></yellow>",
-            "<yellow><bold>AS</bold></yellow><white><bold>C</bold></white><yellow><bold>ENT</bold></yellow>",
-            "<yellow><bold>ASC</bold></yellow><white><bold>E</bold></white><yellow><bold>NT</bold></yellow>",
-            "<yellow><bold>ASCE</bold></yellow><white><bold>N</bold></white><yellow><bold>T</bold></yellow>",
-            "<yellow><bold>ASCEN</bold></yellow><white><bold>T</bold></white>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>",
-            "<yellow><bold>ASCENT</bold></yellow>"
+            "&e&lASCENT",
+            "&e&lASCENT",
+            "&e&lASCENT",
+            "&e&lASCENT",
+            "&e&lASCENT",
+            "&f&lA&e&lSCENT",
+            "&e&lA&f&lS&e&lCENT",
+            "&e&lAS&f&lC&e&lENT",
+            "&e&lASC&f&lE&e&lNT",
+            "&e&lASCE&f&lN&e&lT",
+            "&e&lASCEN&f&lT",
+            "&e&lASCENT",
+            "&e&lASCENT",
+            "&e&lASCENT"
     };
 
     public LobbyScoreboard(Player player) {
         this.player = player;
-        this.sidebar = new Sidebar(MiniMessage.miniMessage().deserialize(TITLE_ANIMATION[0]));
+        this.sidebar = new Sidebar(c(TITLE_ANIMATION[0]));
         this.sidebar.addViewer(player);
     }
 
     public void update() {
         tickCount++;
-        sidebar.setTitle(MiniMessage.miniMessage().deserialize(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
+        sidebar.setTitle(c(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
 
         List<String> renderedLines = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy");
 
-        renderedLines.add("<gray>" + LocalDate.now().format(formatter) + " <dark_gray>L1</dark_gray></gray>");
+        renderedLines.add("&7" + LocalDate.now().format(formatter) + " &8L1");
         renderedLines.add("");
-        renderedLines.add("<white>Rank:</white> <gray>Default</gray>");
-        renderedLines.add("<white>Achievements:</white> <yellow>0</yellow>");
-        renderedLines.add("<white>Ascent Level:</white> <aqua>0</aqua>");
+        renderedLines.add("&fRank: &7Default");
+        renderedLines.add("&fAchievements: &e0");
+        renderedLines.add("&fAscent Level: &b0");
         renderedLines.add(" ");
-        renderedLines.add("<white>Lobby:</white> <green>1</green>");
-        renderedLines.add("<white>Players:</white> <green>" + MinecraftServer.getConnectionManager().getOnlinePlayers().size() + "</green>");
+        renderedLines.add("&fLobby: &a1");
+        renderedLines.add("&fPlayers: &a" + MinecraftServer.getConnectionManager().getOnlinePlayers().size());
         renderedLines.add("  ");
-        renderedLines.add("<white>Friends Online:</white> <green>0</green>");
-        renderedLines.add("<white>Guild Online:</white> <gray>No guild!</gray>");
+        renderedLines.add("&fFriends Online: &a0");
+        renderedLines.add("&fGuild Online: &7No guild!");
         renderedLines.add("   ");
-        renderedLines.add("<yellow>play.ascent.fun</yellow>");
+        renderedLines.add("&eplay.ascent.fun");
 
         int score = renderedLines.size();
 
@@ -68,10 +69,10 @@ public class LobbyScoreboard {
             String content = renderedLines.get(i);
 
             if (i < lastLineCount) {
-                sidebar.updateLineContent(lineId, MiniMessage.miniMessage().deserialize(content));
+                sidebar.updateLineContent(lineId, c(content));
             } else {
                 sidebar.createLine(
-                        new Sidebar.ScoreboardLine(lineId, MiniMessage.miniMessage().deserialize(content), score));
+                        new Sidebar.ScoreboardLine(lineId, c(content), score));
             }
             score--;
         }

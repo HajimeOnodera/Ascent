@@ -1,6 +1,5 @@
 package fun.ascent.lobby.scoreboard;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
@@ -10,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static fun.ascent.common.util.CC.c;
+
 public class LobbyScoreboardManager {
     private static final Map<UUID, LobbyScoreboard> scoreboards = new HashMap<>();
 
     public static void init() {
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerDisconnectEvent.class, event -> {
-            remove(event.getPlayer());
-        });
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerDisconnectEvent.class, event -> remove(event.getPlayer()));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
             for (Player player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
@@ -40,8 +39,8 @@ public class LobbyScoreboardManager {
 
     private static void updateTablist(Player player) {
         player.sendPlayerListHeaderAndFooter(
-                MiniMessage.miniMessage().deserialize(" <aqua>You are playing on</aqua> <yellow><bold>PLAY.ASCENT.FUN</bold></yellow> \n"),
-                MiniMessage.miniMessage().deserialize("\n <green>Ranks, Boosters & MORE!</green> <red>STORE.ASCENT.FUN</red> ")
+                c(" &bYou are playing on &e&lPLAY.ASCENT.FUN \n"),
+                c("\n &aRanks, Boosters & MORE! &cSTORE.ASCENT.FUN ")
         );
     }
 }
