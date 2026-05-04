@@ -6,7 +6,7 @@ import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.StatBuilder;
 import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
-import fun.ascent.skyblock.utility.AlignUtils;
+import fun.ascent.common.ChatUtility;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -79,26 +79,26 @@ public class ProfilePlayer {
 
         //TODO: Send Level Up Message
         skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(AlignUtils.alignCenter(
-                LegacyComponentSerializer.legacySection().deserialize("§3§lSKYBLOCK LEVEL UP")
+        skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
+                ChatUtility.FontInfo.center("§3§lSKYBLOCK LEVEL UP")
         ));
         skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
-                center(newColour + "Level §8[" + oldColour + oldLevel + "§8] ➞ [" + newColour + curLevel + "§8]")));
+                ChatUtility.FontInfo.center(newColour + "Level §8[" + oldColour + oldLevel + "§8] ➞ [" + newColour + curLevel + "§8]")));
         skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(AlignUtils.alignCenter(LegacyComponentSerializer.legacySection().deserialize("§a§lREWARDS")));
+        skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(ChatUtility.FontInfo.center("§a§lREWARDS")));
 
         if (totalHealth > 0) {
-            skyblockPlayer.sendMessage(center("  §8+§c" + totalHealth + " §c❤ Health"));
+            skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalHealth + " §c❤ Health"));
             addToStat(Stats.HEALTH,totalHealth);
         }
         if (totalStrength > 0) {
-            skyblockPlayer.sendMessage(center("  §8+§c" + totalStrength + " §c❁ Strength"));
+            skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalStrength + " §c❁ Strength"));
             addToStat(Stats.STRENGTH,totalStrength);
         }
 
         if (!stringRewards.isEmpty()) {
             for (String rewardStr : stringRewards.keySet()) {
-                    skyblockPlayer.sendMessage(center("  §8+" + rewardStr));
+                    skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+" + rewardStr));
             }
         }
 
@@ -117,17 +117,5 @@ public class ProfilePlayer {
         stats.put(stat.id, stat.addCurValue(amount));
     }
 
-    public static String center(String message) {
-        String stripped = message.replaceAll("§[0-9a-fk-or]", "");
-        int chatWidth = 320;
-        int messageWidth = stripped.length() * 6;
-        int spaces = Math.max(0, (chatWidth - messageWidth) / 2) / 4;
 
-        StringBuilder padding = new StringBuilder();
-        for (int i = 0; i < spaces; i++) {
-            padding.append(" ");
-        }
-
-        return padding.toString() + message;
-    }
 }

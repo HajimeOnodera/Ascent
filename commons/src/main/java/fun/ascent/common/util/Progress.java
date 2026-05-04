@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.utility;
+package fun.ascent.common.util;
 
 public class Progress {
 

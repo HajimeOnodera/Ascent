@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.player.stats;
 
-import fun.ascent.common.util.ColorUtils;
+import fun.ascent.common.StringUtility;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class StatBuilder {
@@ -9,7 +9,7 @@ public class StatBuilder {
         return build(base,-1,-1);
     }
     public static Stat build(Stats base, int curValue, int maxValue) {
-        NamedTextColor color = ColorUtils.getNamedTextColor(base.getStatColor());
+        NamedTextColor color = StringUtility.getNamedTextColor(base.getStatColor());
         String colorName = color.toString();
         String name = "<" + colorName + ">" + base.getStatFormattedDisplay() + "</" + colorName + ">";
         String rawSymbol = base.getStatSymbol().replace(base.getStatColor(), "");

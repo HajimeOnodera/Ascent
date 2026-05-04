@@ -9,7 +9,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
-import static fun.ascent.common.util.CC.c;
+import static fun.ascent.common.StringUtility.color;
 
 public record SkyblockNPC(Instance instance) implements NpcDefinition {
 
@@ -50,10 +50,10 @@ public record SkyblockNPC(Instance instance) implements NpcDefinition {
     public void onInteract(Player player, AscentNpc npc) {
         String serverName = ServerLookup.findAnyByPrefix(TARGET_PREFIX);
         if (serverName == null) {
-            player.sendMessage(c("&cNo SkyBlock server is currently online!"));
+            player.sendMessage(color("&cNo SkyBlock server is currently online!"));
             return;
         }
-        player.sendMessage(c("&eSending you to &6SkyBlock&e..."));
+        player.sendMessage(color("&eSending you to &6SkyBlock&e..."));
         ProxyTransfer.send(player, serverName);
     }
 }

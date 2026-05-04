@@ -1,7 +1,7 @@
 package fun.ascent.skyblock.player.profiles;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.utility.RandomUtils;
+import java.util.concurrent.ThreadLocalRandom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +21,13 @@ public class SkyblockProfile {
 
     }
 
-    //WARN: Put Null Checks for All Variables Added
-    public void postLoad(){
-
-    }
-
     public String generateRandomProfileName(){
         List<String> names = List.of(
                 "Apple", "Banana", "Blueberry", "Coconut", "Cucumber",
                 "Grapes", "Kiwi", "Lemon", "Lime", "Mango", "Orange", "Papaya", "Peach",
                 "Pear", "Pineapple", "Pomegranate", "Raspberry", "Strawberry", "Tomato",
                 "Watermelon", "Zucchini");
-        int num = RandomUtils.getRandomInt(names.size() - 1);
+        int num = ThreadLocalRandom.current().nextInt(names.size());
         return names.get(num);
     }
 

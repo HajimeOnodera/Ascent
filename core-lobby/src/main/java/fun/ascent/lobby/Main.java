@@ -14,7 +14,7 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 
-import static fun.ascent.common.util.CC.c;
+import static fun.ascent.common.StringUtility.color;
 
 public final class Main {
     private static String currentServerName;
@@ -73,7 +73,7 @@ public final class Main {
             }
 
             event.getPlayer().teleport(world.spawn());
-            event.getPlayer().sendMessage(c("&eWelcome to &6Ascent&e! Pick a server to begin."));
+            event.getPlayer().sendMessage(color("&eWelcome to &6Ascent&e! Pick a server to begin."));
         });
 
         handler.addListener(PlayerMoveEvent.class, event -> {

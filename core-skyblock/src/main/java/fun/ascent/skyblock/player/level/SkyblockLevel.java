@@ -1,9 +1,7 @@
 package fun.ascent.skyblock.player.level;
 
-import fun.ascent.skyblock.utility.ItemBuilder;
-import fun.ascent.skyblock.utility.Progress;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
+import fun.ascent.common.item.ItemStackCreator;
+import fun.ascent.common.util.Progress;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -15,12 +13,10 @@ public class SkyblockLevel {
     public int curLevel = 0;
     public Progress progress = new Progress(0,100);
 
-    public boolean addExp(int amount){
+    public void addExp(int amount){
         if(progress.add(amount)){
             curLevel++;
-            return true;
         }
-        return false;
     }
 
     public static String getLevelColour(int level) {
@@ -45,12 +41,12 @@ public class SkyblockLevel {
 
             switch (level) {
                 case 3:
-                    rewards.put("§bAccess To Community Shop", ItemBuilder.getHead("4e495b103ddd47701449ad7a34d908e8d2f08e0bd9476653d433c3bfc7c1b055"));
+                    rewards.put("§bAccess To Community Shop", ItemStackCreator.getStackHead("4e495b103ddd47701449ad7a34d908e8d2f08e0bd9476653d433c3bfc7c1b055").build());
                     break;
 
                 case 5:
-                    rewards.put("§2Access To the Garden", ItemBuilder.getHead("4778b434a258f7991825cabc965a56403c4d772e9628ce60164927e94b79d17"));
-                    rewards.put("§aAccess To Wardrobe", new ItemBuilder(Material.LEATHER_CHESTPLATE).setGlowing(true).build());
+                    rewards.put("§2Access To the Garden", ItemStackCreator.getStackHead("4778b434a258f7991825cabc965a56403c4d772e9628ce60164927e94b79d17").build());
+                    rewards.put("§aAccess To Wardrobe", ItemStackCreator.enchant(ItemStackCreator.createNamedItemStack(Material.LEATHER_CHESTPLATE)).build());
                     break;
 
                 case 6:
@@ -58,11 +54,11 @@ public class SkyblockLevel {
                     break;
 
                 case 7:
-                    rewards.put("§6Access To Bazaar", ItemBuilder.getHead("c232e3820897429157619b0ee099fec0628f602fff12b695de54aef11d923ad7"));
+                    rewards.put("§6Access To Bazaar", ItemStackCreator.getStackHead("c232e3820897429157619b0ee099fec0628f602fff12b695de54aef11d923ad7").build());
                     break;
 
                 case 12:
-                    rewards.put("§dAccess To Wizard Portal", ItemBuilder.getHead("838564e28aba98301dbda5fafd86d1da4e2eaeef12ea94dcf440b883e559311c"));
+                    rewards.put("§dAccess To Wizard Portal", ItemStackCreator.getStackHead("838564e28aba98301dbda5fafd86d1da4e2eaeef12ea94dcf440b883e559311c").build());
                     break;
 
                 case 25:
@@ -75,7 +71,7 @@ public class SkyblockLevel {
 
                 case 50:
                     rewards.put("§610B Auction House Bid Limit", ItemStack.of(Material.GOLDEN_HORSE_ARMOR));
-                    rewards.put("§aDaily Coins Trading Limit of 1B", ItemBuilder.getHead("740d6e362bc7eee4f911dbd0446307e7458d1050d09aee538ebcb0273cf75742"));
+                    rewards.put("§aDaily Coins Trading Limit of 1B", ItemStackCreator.getStackHead("740d6e362bc7eee4f911dbd0446307e7458d1050d09aee538ebcb0273cf75742").build());
                     break;
 
                 case 80:
@@ -84,7 +80,7 @@ public class SkyblockLevel {
 
                 case 100:
                     rewards.put("§625B Auction House Bid Limit", ItemStack.of(Material.GOLDEN_HORSE_ARMOR));
-                    rewards.put("§aDaily Coins Trading Limit of 10B", ItemBuilder.getHead("c43f12c8369f9c3888a45aaf6d7761578402b4241958f7d4ae4eceb56a867d2a"));
+                    rewards.put("§aDaily Coins Trading Limit of 10B", ItemStackCreator.getStackHead("c43f12c8369f9c3888a45aaf6d7761578402b4241958f7d4ae4eceb56a867d2a").build());
                     break;
 
                 case 120:

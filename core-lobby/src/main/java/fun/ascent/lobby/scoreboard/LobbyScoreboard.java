@@ -9,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fun.ascent.common.util.CC.c;
+import static fun.ascent.common.StringUtility.color;
 
 public class LobbyScoreboard {
 
@@ -37,13 +37,13 @@ public class LobbyScoreboard {
 
     public LobbyScoreboard(Player player) {
         this.player = player;
-        this.sidebar = new Sidebar(c(TITLE_ANIMATION[0]));
+        this.sidebar = new Sidebar(color(TITLE_ANIMATION[0]));
         this.sidebar.addViewer(player);
     }
 
     public void update() {
         tickCount++;
-        sidebar.setTitle(c(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
+        sidebar.setTitle(color(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
 
         List<String> renderedLines = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy");
@@ -69,10 +69,10 @@ public class LobbyScoreboard {
             String content = renderedLines.get(i);
 
             if (i < lastLineCount) {
-                sidebar.updateLineContent(lineId, c(content));
+                sidebar.updateLineContent(lineId, color(content));
             } else {
                 sidebar.createLine(
-                        new Sidebar.ScoreboardLine(lineId, c(content), score));
+                        new Sidebar.ScoreboardLine(lineId, color(content), score));
             }
             score--;
         }
