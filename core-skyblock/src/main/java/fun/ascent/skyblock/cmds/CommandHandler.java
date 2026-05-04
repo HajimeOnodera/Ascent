@@ -2,6 +2,8 @@ package fun.ascent.skyblock.cmds;
 
 import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
 import fun.ascent.skyblock.item.command.ItemCommand;
+import fun.ascent.skyblock.item.command.SetReforgeCommand;
+import fun.ascent.skyblock.menus.command.GuiCommand;
 import fun.ascent.skyblock.minion.command.MinionCommand;
 import fun.ascent.skyblock.player.level.XpCommand;
 import fun.ascent.skyblock.player.skill.command.SkillsCommand;
@@ -19,9 +21,11 @@ public class CommandHandler {
         commandManager = MinecraftServer.getCommandManager();
         register(new SpawnMobCommand());
         register(new ItemCommand());
+        register(new SetReforgeCommand());
         register(new SkillsCommand());
         register(new MinionCommand());
         register(new XpCommand());
+        register(new GuiCommand());
 
         Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);

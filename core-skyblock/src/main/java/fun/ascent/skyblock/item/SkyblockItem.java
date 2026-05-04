@@ -6,6 +6,8 @@ import fun.ascent.skyblock.item.registries.ConsumableRegistry;
 import fun.ascent.skyblock.item.registries.FishingBaitRegistry;
 import fun.ascent.skyblock.item.registries.ShortbowRegistry;
 import fun.ascent.skyblock.player.stats.Stats;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -15,9 +17,11 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.color.Color;
 import net.minestom.server.item.component.AttributeList;
+import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.ResolvableProfile;
+import net.minestom.server.utils.Unit;
 
 import java.util.*;
 
@@ -26,6 +30,19 @@ public class SkyblockItem {
     public static final String ITEM_ID_TAG = "item_id";
 
     private static final LegacyComponentSerializer LEGACY = LegacyComponentSerializer.legacySection();
+
+    private static final Set<DataComponent<?>> HIDDEN_COMPONENTS = Set.of(
+            DataComponents.ATTRIBUTE_MODIFIERS,
+            DataComponents.DYED_COLOR,
+            DataComponents.UNBREAKABLE,
+            DataComponents.TRIM,
+            DataComponents.POTION_CONTENTS,
+            DataComponents.BANNER_PATTERNS,
+            DataComponents.FIREWORKS,
+            DataComponents.JUKEBOX_PLAYABLE
+    );
+
+    private static final TooltipDisplay TOOLTIP_DISPLAY = new TooltipDisplay(false, HIDDEN_COMPONENTS);
 
     private static final Stats[] LORE_STAT_ORDER = {
             Stats.DAMAGE, Stats.HEALTH, Stats.DEFENSE, Stats.TRUE_DEFENSE,
@@ -37,11 +54,12 @@ public class SkyblockItem {
             Stats.TREASURE_CHANCE, Stats.MINING_SPEED,
             Stats.MINING_FORTUNE, Stats.ORE_FORTUNE, Stats.BLOCK_FORTUNE,
             Stats.GEMSTONE_FORTUNE, Stats.DWARVEN_METAL_FORTUNE, Stats.PRISTINE,
+            Stats.MINING_WISDOM,
             Stats.FARMING_FORTUNE, Stats.BONUS_PEST_CHANCE, Stats.FORAGING_FORTUNE,
             Stats.COLD_RESISTANCE, Stats.HEAT_RESISTANCE, Stats.RESPIRATION,
+            Stats.FEAR,
     };
 
-    // Shot cooldown thresholds for shortbows based on attack speed
     private static String getShortbowCooldown(double attackSpeed) {
         if (attackSpeed >= 100) return "0.25s";
         if (attackSpeed >= 67) return "0.3s";
@@ -66,6 +84,10 @@ public class SkyblockItem {
     private final Color armorColor;
     private final List<GemstoneSlot> gemstoneSlots;
     private final boolean recombobulated;
+    private final int hotPotatoCount;
+    private final String modifier;
+    private final Map<Stats, Double> reforgeStats;
+    private final List<String> reforgeLore;
 
     // Lore fields
     private final Map<String, Integer> enchantments;
@@ -97,6 +119,10 @@ public class SkyblockItem {
         this.armorColor = builder.armorColor;
         this.gemstoneSlots = List.copyOf(builder.gemstoneSlots);
         this.recombobulated = builder.recombobulated;
+        this.hotPotatoCount = builder.hotPotatoCount;
+        this.modifier = builder.modifier;
+        this.reforgeStats = Collections.unmodifiableMap(new EnumMap<>(builder.reforgeStats));
+        this.reforgeLore = builder.reforgeLore == null ? List.of() : List.copyOf(builder.reforgeLore);
         this.enchantments = Collections.unmodifiableMap(new LinkedHashMap<>(builder.enchantments));
         this.ultimateEnchant = builder.ultimateEnchant;
         this.ultimateEnchantLevel = builder.ultimateEnchantLevel;
@@ -119,29 +145,22 @@ public class SkyblockItem {
         Rarity effectiveRarity = recombobulated && rarity.getNextRarity() != null
                 ? rarity.getNextRarity() : rarity;
 
-        // Display name
-//        String namePrefix = reforge != null ? reforge.getName() + " " : "";
-//        Component displayComponent = LEGACY.deserialize(effectiveRarity.getColorCode() + namePrefix + displayName)
-//                .decoration(TextDecoration.ITALIC, false);
+        String namePrefix = (modifier != null && !modifier.isEmpty()) ? modifier + " " : "";
+        Component displayComponent = LEGACY.deserialize(effectiveRarity.getColor() + namePrefix + displayName)
+                .decoration(TextDecoration.ITALIC, false);
 
         List<Component> loreComponents = new ArrayList<>();
         for (String line : buildLoreStrings(effectiveRarity, player)) {
             loreComponents.add(LEGACY.deserialize(line).decoration(TextDecoration.ITALIC, false));
         }
 
-        Component displayComponent = LEGACY.deserialize(effectiveRarity.getColor() + displayName)
-                .decoration(TextDecoration.ITALIC, false);
-
-        TooltipDisplay tooltipDisplay = new TooltipDisplay(false, Set.of(
-                DataComponents.ATTRIBUTE_MODIFIERS,
-                DataComponents.DYED_COLOR
-        ));
-
         ItemStack.Builder builder = ItemStack.builder(material)
                 .set(DataComponents.CUSTOM_NAME, displayComponent)
                 .set(DataComponents.LORE, loreComponents)
                 .set(DataComponents.ATTRIBUTE_MODIFIERS, AttributeList.EMPTY)
-                .set(DataComponents.TOOLTIP_DISPLAY, tooltipDisplay);
+                .set(DataComponents.TOOLTIP_DISPLAY, TOOLTIP_DISPLAY)
+                .set(DataComponents.CUSTOM_DATA, buildCustomData())
+                .set(DataComponents.UNBREAKABLE, Unit.INSTANCE);
 
         if (armorColor != null) {
             builder.set(DataComponents.DYED_COLOR, armorColor);
@@ -155,6 +174,36 @@ public class SkyblockItem {
         }
 
         return builder.build();
+    }
+
+    private CustomData buildCustomData() {
+        CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder()
+                .putString("id", itemId)
+                .putString("uuid", UUID.randomUUID().toString())
+                .putLong("timestamp", System.currentTimeMillis());
+
+        if (recombobulated) {
+            tag.putByte("rarity_upgrades", (byte) 1);
+        }
+        if (hotPotatoCount > 0) {
+            tag.putByte("hot_potato_count", (byte) hotPotatoCount);
+        }
+
+        if (modifier != null && !modifier.isEmpty()) {
+            tag.putString("modifier", modifier.toLowerCase(Locale.ROOT));
+        }
+
+        if (!enchantments.isEmpty() || (ultimateEnchant != null && !ultimateEnchant.isEmpty())) {
+            CompoundBinaryTag.Builder enchTag = CompoundBinaryTag.builder();
+            enchantments.forEach((name, level) ->
+                    enchTag.putInt(name.toLowerCase(Locale.ROOT).replace(' ', '_'), level));
+            if (ultimateEnchant != null && !ultimateEnchant.isEmpty()) {
+                enchTag.putInt("ultimate_" + ultimateEnchant.toLowerCase(Locale.ROOT).replace(' ', '_'), ultimateEnchantLevel);
+            }
+            tag.put("enchantments", enchTag.build());
+        }
+
+        return new CustomData(tag.build());
     }
 
     private List<String> buildLoreStrings(Rarity effectiveRarity, Player player) {
@@ -181,16 +230,35 @@ public class SkyblockItem {
             lore.add("");
         }
 
+        Map<Stats, Double> hpbStats = computeHotPotatoStats();
         boolean hasStats = false;
         for (Stats stat : LORE_STAT_ORDER) {
-            double value = baseStats.getOrDefault(stat, 0.0);
-            if (value != 0.0) {
+            double base    = baseStats.getOrDefault(stat, 0.0);
+            double reforge = reforgeStats.getOrDefault(stat, 0.0);
+            double hpb     = hpbStats.getOrDefault(stat, 0.0);
+            double total   = base + reforge + hpb;
+            if (total != 0.0) {
                 hasStats = true;
-                String sign = value > 0 ? "+" : "";
+                String sign = total > 0 ? "+" : "";
                 String formatted = stat.getStatIntType()
-                        ? sign + (int) value + "%"
-                        : sign + (int) value;
-                lore.add("§7" + stat.getStatFormattedDisplay() + ": " + stat.getStatColor() + formatted);
+                        ? sign + (int) total + "%"
+                        : sign + (int) total;
+                String line = "§7" + stat.getStatFormattedDisplay() + ": " + stat.getStatColor() + formatted;
+                if (reforge != 0.0) {
+                    String rSign = reforge > 0 ? "+" : "";
+                    String rFormatted = stat.getStatIntType()
+                            ? rSign + (int) reforge + "%"
+                            : rSign + (int) reforge;
+                    line += " §9(" + rFormatted + ")";
+                }
+                if (hpb != 0.0) {
+                    String hSign = hpb > 0 ? "+" : "";
+                    String hFormatted = stat.getStatIntType()
+                            ? hSign + (int) hpb + "%"
+                            : hSign + (int) hpb;
+                    line += " §e(" + hFormatted + ")";
+                }
+                lore.add(line);
             }
         }
 
@@ -226,7 +294,6 @@ public class SkyblockItem {
             lore.add("");
         }
 
-        // Enchantments
         if (!enchantments.isEmpty()) {
             StringBuilder enchLine = new StringBuilder();
             int count = 0;
@@ -241,7 +308,6 @@ public class SkyblockItem {
             if (!enchLine.toString().isBlank()) lore.add(enchLine.toString().trim());
         }
 
-        // Ultimate enchant
         if (ultimateEnchant != null && !ultimateEnchant.isEmpty()) {
             lore.add("§d§l" + ultimateEnchant + " " + ultimateEnchantLevel);
         }
@@ -250,7 +316,6 @@ public class SkyblockItem {
             lore.add("");
         }
 
-        // Abilities
         for (ItemAbility ability : abilities) {
             lore.addAll(ability.buildLore());
             lore.add("");
@@ -266,27 +331,88 @@ public class SkyblockItem {
             lore.add("");
         }
 
-        // Rune
         if (runeType != null && !runeType.isEmpty()) {
             lore.add("§dRune: " + runeType + " " + runeLevel);
             lore.add("");
         }
 
+        if (!reforgeLore.isEmpty()) {
+            lore.add("§9" + modifier + " Bonus");
+            for (String line : reforgeLore) {
+                lore.add(line);
+            }
+            lore.add("");
+        }
 
         if (soulbound)       lore.add("§8Soulbound");
         if (coopSoulbound)   lore.add("§8Co-op Soulbound");
         if (dyeName != null && !dyeName.isEmpty()) lore.add("§8Dye: " + dyeName);
         if (bookOfStats)     lore.add("§8Book of Stats Applied");
         if (kills > 0)       lore.add("§cKills: §f" + kills);
-        if (recombobulated)  lore.add("§dRecombobulated!");
 
-        // Rarity line
         String typeDisplay = dungeon && itemType != ItemType.NONE
                 ? "DUNGEON " + itemType.getDisplay()
                 : itemType.getDisplay();
-        lore.add(effectiveRarity.getDisplay() + (typeDisplay.isEmpty() ? "" : " " + typeDisplay));
+        String rarityLine = effectiveRarity.getDisplay() + (typeDisplay.isEmpty() ? "" : " " + typeDisplay);
+        lore.add(recombobulated ? effectiveRarity.getColor() + "§l§ka§r " + rarityLine + " §l§ka§r" : rarityLine);
 
         return lore;
+    }
+
+    private Map<Stats, Double> computeHotPotatoStats() {
+        if (hotPotatoCount == 0) return Collections.emptyMap();
+        Map<Stats, Double> result = new EnumMap<>(Stats.class);
+        if (itemType.isArmor()) {
+            result.put(Stats.DEFENSE, hotPotatoCount * 2.0);
+            result.put(Stats.HEALTH,  hotPotatoCount * 4.0);
+        } else if (itemType.isWeapon() || itemType == ItemType.FISHING_ROD) {
+            result.put(Stats.DAMAGE,   hotPotatoCount * 2.0);
+            result.put(Stats.STRENGTH, hotPotatoCount * 2.0);
+        }
+        return result;
+    }
+
+    public String getItemId() { return itemId; }
+    public String getDisplayName() { return displayName; }
+    public Material getMaterial() { return material; }
+    public ItemType getItemType() { return itemType; }
+    public Rarity getRarity() { return rarity; }
+    public Map<Stats, Double> getBaseStats() { return baseStats; }
+    public boolean isReforgeable() { return reforgeable; }
+    public boolean isEnchantable() { return enchantable; }
+    public String getModifier() { return modifier; }
+
+    public Builder toBuilder() {
+        Builder b = new Builder(itemId, material, rarity);
+        b.displayName = displayName;
+        b.itemType = itemType;
+        b.baseStats.putAll(baseStats);
+        b.description.addAll(description);
+        b.abilities.addAll(abilities);
+        b.enchantable = enchantable;
+        b.reforgeable = reforgeable;
+        b.glowing = glowing;
+        b.skinValue = skinValue;
+        b.armorColor = armorColor;
+        b.gemstoneSlots.addAll(gemstoneSlots);
+        b.recombobulated = recombobulated;
+        b.hotPotatoCount = hotPotatoCount;
+        b.modifier = modifier;
+        b.reforgeStats.putAll(reforgeStats);
+        b.reforgeLore = reforgeLore.isEmpty() ? null : new ArrayList<>(reforgeLore);
+        b.enchantments.putAll(enchantments);
+        b.ultimateEnchant = ultimateEnchant;
+        b.ultimateEnchantLevel = ultimateEnchantLevel;
+        b.runeType = runeType;
+        b.runeLevel = runeLevel;
+        b.consumable = consumable;
+        b.dungeon = dungeon;
+        b.soulbound = soulbound;
+        b.coopSoulbound = coopSoulbound;
+        b.dyeName = dyeName;
+        b.bookOfStats = bookOfStats;
+        b.kills = kills;
+        return b;
     }
 
     public static Builder builder(String itemId, Material material, Rarity rarity) {
@@ -309,6 +435,10 @@ public class SkyblockItem {
         private Color armorColor = null;
         private final List<GemstoneSlot> gemstoneSlots = new ArrayList<>();
         private boolean recombobulated = false;
+        private int hotPotatoCount = 0;
+        private String modifier = null;
+        private final Map<Stats, Double> reforgeStats = new EnumMap<>(Stats.class);
+        private List<String> reforgeLore = null;
         private final Map<String, Integer> enchantments = new LinkedHashMap<>();
         private String ultimateEnchant = null;
         private int ultimateEnchantLevel = 0;
@@ -340,6 +470,10 @@ public class SkyblockItem {
         public Builder armorColor(Color color) { this.armorColor = color; return this; }
         public Builder gemstoneSlot(GemstoneSlot slot) { this.gemstoneSlots.add(slot); return this; }
         public Builder recombobulated(boolean recombobulated) { this.recombobulated = recombobulated; return this; }
+        public Builder hotPotatoCount(int n) { this.hotPotatoCount = n; return this; }
+        public Builder modifier(String modifier) { this.modifier = modifier; return this; }
+        public Builder reforgeStat(Stats stat, double value) { this.reforgeStats.put(stat, value); return this; }
+        public Builder reforgeLore(List<String> lore) { this.reforgeLore = lore; return this; }
         public Builder enchantment(String name, int level) { this.enchantments.put(name, level); return this; }
         public Builder ultimateEnchant(String name, int level) { this.ultimateEnchant = name; this.ultimateEnchantLevel = level; return this; }
         public Builder rune(String type, int level) { this.runeType = type; this.runeLevel = level; return this; }
@@ -354,4 +488,3 @@ public class SkyblockItem {
         public SkyblockItem build() { return new SkyblockItem(this); }
     }
 }
-

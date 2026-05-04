@@ -26,6 +26,10 @@ public enum Rarity {
 
     }
 
+    public String getRarityColor() {
+        return color;
+    }
+
     public String getDisplay() {
         return color + "§l" + display;
     }

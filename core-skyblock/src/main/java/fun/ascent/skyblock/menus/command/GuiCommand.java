@@ -23,7 +23,9 @@ public class GuiCommand extends Command {
             String guiName = ctx.get(guiArg);
             String[] packages = {
                 "fun.ascent.skyblock.menus.",
-                "fun.ascent.skyblock.player.skill.gui."
+                "fun.ascent.skyblock.player.skill.gui.",
+                "fun.ascent.skyblock.menus.blockGui.",
+                "fun.ascent.skyblock.menus.command.blockGui."
             };
 
             boolean found = false;

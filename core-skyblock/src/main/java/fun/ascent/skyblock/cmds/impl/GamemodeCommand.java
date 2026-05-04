@@ -22,10 +22,10 @@ public class GamemodeCommand extends Command {
             String mode = args.get(gamemode);
             GameMode modeToSet = null;
             modeToSet = switch (mode.toLowerCase()){
-                case "spectator" -> GameMode.SPECTATOR;
-                case "survival" -> GameMode.SURVIVAL;
-                case "creative" -> GameMode.CREATIVE;
-                case "adventure" -> GameMode.ADVENTURE;
+                case "spectator" ,"2", "sp" -> GameMode.SPECTATOR;
+                case "survival", "0", "s" -> GameMode.SURVIVAL;
+                case "creative", "1", "c" -> GameMode.CREATIVE;
+                case "adventure", "3", "ad" -> GameMode.ADVENTURE;
                 default -> null;
             };
             if(modeToSet == null){
