@@ -209,16 +209,16 @@ public class ItemStackCreator {
                 .amount(stack.amount());
         
         // Copy components safely
-        if (stack.has(DataComponents.CUSTOM_NAME)) builder.set(DataComponents.CUSTOM_NAME, stack.get(DataComponents.CUSTOM_NAME));
-        if (stack.has(DataComponents.LORE)) builder.set(DataComponents.LORE, stack.get(DataComponents.LORE));
-        if (stack.has(DataComponents.PROFILE)) builder.set(DataComponents.PROFILE, stack.get(DataComponents.PROFILE));
-        if (stack.has(DataComponents.CUSTOM_DATA)) builder.set(DataComponents.CUSTOM_DATA, stack.get(DataComponents.CUSTOM_DATA));
-        if (stack.has(DataComponents.ENCHANTMENTS)) builder.set(DataComponents.ENCHANTMENTS, stack.get(DataComponents.ENCHANTMENTS));
-        if (stack.has(DataComponents.ATTRIBUTE_MODIFIERS)) builder.set(DataComponents.ATTRIBUTE_MODIFIERS, stack.get(DataComponents.ATTRIBUTE_MODIFIERS));
-        if (stack.has(DataComponents.TOOLTIP_DISPLAY)) builder.set(DataComponents.TOOLTIP_DISPLAY, stack.get(DataComponents.TOOLTIP_DISPLAY));
-        if (stack.has(DataComponents.DYED_COLOR)) builder.set(DataComponents.DYED_COLOR, stack.get(DataComponents.DYED_COLOR));
-        if (stack.has(DataComponents.POTION_CONTENTS)) builder.set(DataComponents.POTION_CONTENTS, stack.get(DataComponents.POTION_CONTENTS));
-        if (stack.has(DataComponents.UNBREAKABLE)) builder.set(DataComponents.UNBREAKABLE, stack.get(DataComponents.UNBREAKABLE));
+        if (stack.has(DataComponents.CUSTOM_NAME)) builder.set(DataComponents.CUSTOM_NAME, Objects.requireNonNull(stack.get(DataComponents.CUSTOM_NAME)));
+        if (stack.has(DataComponents.LORE)) builder.set(DataComponents.LORE, Objects.requireNonNull(stack.get(DataComponents.LORE)));
+        if (stack.has(DataComponents.PROFILE)) builder.set(DataComponents.PROFILE, Objects.requireNonNull(stack.get(DataComponents.PROFILE)));
+        if (stack.has(DataComponents.CUSTOM_DATA)) builder.set(DataComponents.CUSTOM_DATA, Objects.requireNonNull(stack.get(DataComponents.CUSTOM_DATA)));
+        if (stack.has(DataComponents.ENCHANTMENTS)) builder.set(DataComponents.ENCHANTMENTS, Objects.requireNonNull(stack.get(DataComponents.ENCHANTMENTS)));
+        if (stack.has(DataComponents.ATTRIBUTE_MODIFIERS)) builder.set(DataComponents.ATTRIBUTE_MODIFIERS, Objects.requireNonNull(stack.get(DataComponents.ATTRIBUTE_MODIFIERS)));
+        if (stack.has(DataComponents.TOOLTIP_DISPLAY)) builder.set(DataComponents.TOOLTIP_DISPLAY, Objects.requireNonNull(stack.get(DataComponents.TOOLTIP_DISPLAY)));
+        if (stack.has(DataComponents.DYED_COLOR)) builder.set(DataComponents.DYED_COLOR, Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)));
+        if (stack.has(DataComponents.POTION_CONTENTS)) builder.set(DataComponents.POTION_CONTENTS, Objects.requireNonNull(stack.get(DataComponents.POTION_CONTENTS)));
+        if (stack.has(DataComponents.UNBREAKABLE)) builder.set(DataComponents.UNBREAKABLE, Objects.requireNonNull(stack.get(DataComponents.UNBREAKABLE)));
         
         return builder;
     }
