@@ -62,6 +62,8 @@ public final class Main {
     private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
 
+        fun.ascent.common.gui.InventoryGUIListener.register(handler);
+
         handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(world.instance());
             event.getPlayer().setRespawnPoint(world.spawn());
@@ -83,6 +85,7 @@ public final class Main {
         });
 
         fun.ascent.lobby.item.LobbyItemManager.init(handler);
+        fun.ascent.lobby.listener.LobbyProtectionListener.register(handler);
         npcManager.registerListeners(handler);
     }
 }

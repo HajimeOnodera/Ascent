@@ -2,10 +2,10 @@ package fun.ascent.lobby.item;
 
 import fun.ascent.common.StringUtility;
 import fun.ascent.common.item.ItemStackCreator;
-import fun.ascent.common.redis.ServerLookup;
-import fun.ascent.common.redis.ServerPing;
-import fun.ascent.lobby.Main;
-import fun.ascent.lobby.game.GameType;
+import fun.ascent.lobby.gui.CollectiblesGUI;
+import fun.ascent.lobby.gui.GameMenuGUI;
+import fun.ascent.lobby.gui.LobbySelectorGUI;
+import fun.ascent.lobby.gui.ProfileGUI;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
@@ -14,7 +14,6 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -29,22 +28,21 @@ public class LobbyItemManager {
 
     private static final Map<UUID, Boolean> playerVisibility = new ConcurrentHashMap<>();
 
-    /** Maximum lobby slots to display in the selector. */
-    private static final int MAX_LOBBY_SLOTS = 5;
-
-    private static final String SKYBLOCK_TEXTURE = "686718d85e25b006f2c8f160f619b23c8fd6ae75ddf1c06308ec0f539d931703";
-
-    private static final ItemStack GAME_MENU = ItemStackCreator.createNamedItemStack(Material.COMPASS, color("&aGame Menu &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(color("&7Right Click to bring up the Game Menu!")))
+    private static final ItemStack GAME_MENU = ItemStackCreator
+            .createNamedItemStack(Material.COMPASS, color("&aGame Menu &7(Right Click)"))
+            .set(net.minestom.server.component.DataComponents.LORE,
+                    List.of(color("&7Right Click to bring up the Game Menu!")))
             .build();
 
-    private static final ItemStack MY_PROFILE = ItemStackCreator.createNamedItemStack(Material.PLAYER_HEAD, color("&aMy Profile &7(Right Click)"))
+    private static final ItemStack MY_PROFILE = ItemStackCreator
+            .createNamedItemStack(Material.PLAYER_HEAD, color("&aMy Profile &7(Right Click)"))
             .set(net.minestom.server.component.DataComponents.LORE, List.of(
                     color("&7Right-click to browse quests, view achievements,"),
                     color("&7activate Network Boosters and more!")))
             .build();
 
-    private static final ItemStack COLLECTIBLES = ItemStackCreator.createNamedItemStack(Material.CHEST, color("&aCollectibles &7(Right Click)"))
+    private static final ItemStack COLLECTIBLES = ItemStackCreator
+            .createNamedItemStack(Material.CHEST, color("&aCollectibles &7(Right Click)"))
             .set(net.minestom.server.component.DataComponents.LORE, List.of(
                     color("&7Mystery Dust: &b0"),
                     Component.empty(),
@@ -56,15 +54,20 @@ public class LobbyItemManager {
                     color("&7games.")))
             .build();
 
-    private static final ItemStack PLAYERS_HIDDEN = ItemStackCreator.createNamedItemStack(Material.GRAY_DYE, color("&fPlayers: &cHidden &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(color("&7Right-click to toggle player visibility!")))
+    private static final ItemStack PLAYERS_HIDDEN = ItemStackCreator
+            .createNamedItemStack(Material.GRAY_DYE, color("&fPlayers: &cHidden &7(Right Click)"))
+            .set(net.minestom.server.component.DataComponents.LORE,
+                    List.of(color("&7Right-click to toggle player visibility!")))
             .build();
 
-    private static final ItemStack PLAYERS_VISIBLE = ItemStackCreator.createNamedItemStack(Material.LIME_DYE, color("&fPlayers: &aVisible &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(color("&7Right-click to toggle player visibility!")))
+    private static final ItemStack PLAYERS_VISIBLE = ItemStackCreator
+            .createNamedItemStack(Material.LIME_DYE, color("&fPlayers: &aVisible &7(Right Click)"))
+            .set(net.minestom.server.component.DataComponents.LORE,
+                    List.of(color("&7Right-click to toggle player visibility!")))
             .build();
 
-    private static final ItemStack LOBBY_SELECTOR = ItemStackCreator.createNamedItemStack(Material.NETHER_STAR, color("&aLobby Selector &7(Right Click)"))
+    private static final ItemStack LOBBY_SELECTOR = ItemStackCreator
+            .createNamedItemStack(Material.NETHER_STAR, color("&aLobby Selector &7(Right Click)"))
             .set(net.minestom.server.component.DataComponents.LORE, List.of(
                     color("&7Right-click to switch between different lobbies!"),
                     color("&7Use this to stay with your friends.")))
@@ -84,47 +87,23 @@ public class LobbyItemManager {
                 toggleVisibility(player);
                 event.setCancelled(true);
             } else if (item.material() == Material.NETHER_STAR) {
-                openLobbySelector(player);
+                new LobbySelectorGUI().open(player);
                 event.setCancelled(true);
             } else if (item.material() == Material.COMPASS) {
-                openGameMenu(player);
+                new GameMenuGUI().open(player);
                 event.setCancelled(true);
-            } else if (item.material() == Material.CHEST || item.material() == Material.PLAYER_HEAD) {
+            } else if (item.material() == Material.CHEST) {
+                new CollectiblesGUI().open(player);
+                event.setCancelled(true);
+            } else if (item.material() == Material.PLAYER_HEAD) {
+                new ProfileGUI().open(player);
                 event.setCancelled(true);
             }
         });
 
         handler.addListener(InventoryPreClickEvent.class, event -> {
-            event.setCancelled(true);
-            if (event.getInventory() instanceof Inventory inv) {
-                if (inv.getTitle().equals(color("Lobby Selector"))) {
-                    int slot = event.getSlot();
-                    if (slot >= 0 && slot <= 4) {
-                        List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
-                        if (slot < lobbies.size()) {
-                            ServerPing target = lobbies.get(slot);
-                            String currentName = Main.getServerName();
-                            if (target.serverName().equals(currentName)) {
-                                event.getPlayer().sendMessage(color("&cYou are already connected to this lobby!"));
-                            } else {
-                                event.getPlayer().sendMessage(color("&aConnecting to Lobby " + (slot + 1) + "..."));
-                                fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), target.serverName());
-                            }
-                        }
-                    }
-                } else if (inv.getTitle().equals(color("Game Menu"))) {
-                    int slot = event.getSlot();
-                    if (slot == 10) {
-                        List<ServerPing> skyblocks = ServerLookup.findByPrefix("skyblock");
-                        if (!skyblocks.isEmpty()) {
-                            ServerPing target = skyblocks.getFirst();
-                            event.getPlayer().sendMessage(color("&aConnecting to Skyblock..."));
-                            fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), target.serverName());
-                        } else {
-                            event.getPlayer().sendMessage(color("&cSkyblock is currently offline!"));
-                        }
-                    }
-                }
+            if (event.getInventory() != null) {
+                event.setCancelled(true);
             }
         });
 
@@ -135,7 +114,7 @@ public class LobbyItemManager {
         player.getInventory().setItemStack(0, GAME_MENU);
         player.getInventory().setItemStack(1, MY_PROFILE);
         player.getInventory().setItemStack(4, COLLECTIBLES);
-        
+
         boolean hidden = playerVisibility.getOrDefault(player.getUuid(), false);
         player.getInventory().setItemStack(7, hidden ? PLAYERS_HIDDEN : PLAYERS_VISIBLE);
         player.getInventory().setItemStack(8, LOBBY_SELECTOR);
@@ -147,68 +126,14 @@ public class LobbyItemManager {
         playerVisibility.put(player.getUuid(), newHiddenState);
 
         player.getInventory().setItemStack(7, newHiddenState ? PLAYERS_HIDDEN : PLAYERS_VISIBLE);
-        
+
         player.updateViewableRule(entity -> {
             if (entity != player) {
                 return !newHiddenState;
             }
             return true;
         });
-        
+
         player.sendMessage(color(newHiddenState ? "&cPlayers are now hidden." : "&aPlayers are now visible."));
-    }
-
-    private static void openLobbySelector(Player player) {
-        Inventory inventory = new Inventory(InventoryType.CHEST_2_ROW, color("Lobby Selector"));
-
-        // Fetch live lobby servers from Redis
-        List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
-        String currentName = Main.getServerName();
-
-        for (int i = 0; i < MAX_LOBBY_SLOTS; i++) {
-            String lobbyDisplayName = "Lobby " + (i + 1);
-
-            if (i < lobbies.size()) {
-                ServerPing lobby = lobbies.get(i);
-                boolean isCurrent = lobby.serverName().equals(currentName);
-
-                Material mat = isCurrent ? Material.RED_CONCRETE : Material.WHITE_CONCRETE;
-                String title = isCurrent ? "&c" + lobbyDisplayName + " &7(Current)" : "&a" + lobbyDisplayName;
-
-                ItemStack lobbyItem = ItemStackCreator.createNamedItemStack(mat, color(title))
-                        .set(net.minestom.server.component.DataComponents.LORE, List.of(
-                                color("&7Players: &a" + StringUtility.commaify(lobby.onlinePlayers())),
-                                Component.empty(),
-                                isCurrent ? color("&cAlready connected!") : color("&7Click to connect!")))
-                        .build();
-                inventory.setItemStack(i, lobbyItem);
-            } else {
-                // Offline
-                ItemStack offlineItem = ItemStackCreator.createNamedItemStack(Material.BARRIER, color("&c" + lobbyDisplayName + " &8(Offline)"))
-                        .set(net.minestom.server.component.DataComponents.LORE, List.of(color("&7This lobby is not available.")))
-                        .build();
-                inventory.setItemStack(i, offlineItem);
-            }
-        }
-        player.openInventory(inventory);
-    }
-
-    private static void openGameMenu(Player player) {
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, color("Game Menu"));
-
-        List<ServerPing> skyblocks = ServerLookup.findByPrefix("skyblock");
-
-        ItemStack sbItem = ItemStackCreator.getStackHead(
-                color("&aSkyBlock"), SKYBLOCK_TEXTURE, 1,
-                color("&7Play the popular SkyBlock game mode!"),
-                color("&7Complete quests, collect resources, and more!"),
-                Component.empty(),
-                color("&7Players: &a" + StringUtility.commaify(GameType.SKYBLOCK.getPlayerCount())),
-                Component.empty(),
-                skyblocks.isEmpty() ? color("&cOffline!") : color("&eClick to play!")
-        ).build();
-
-        inventory.setItemStack(10, sbItem);
-        player.openInventory(inventory);
     }
 }

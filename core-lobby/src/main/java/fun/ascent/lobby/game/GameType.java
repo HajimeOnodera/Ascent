@@ -1,13 +1,10 @@
 package fun.ascent.lobby.game;
 
 import fun.ascent.common.item.ItemStackCreator;
-import fun.ascent.common.redis.ServerLookup;
-import fun.ascent.common.redis.ServerPing;
+import fun.ascent.lobby.cache.ServerInfoCache;
 import lombok.Getter;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-
-import java.util.List;
 
 @Getter
 public enum GameType {
@@ -54,10 +51,7 @@ public enum GameType {
      * Get the total player count for this game type using Redis server discovery.
      */
     public int getPlayerCount() {
-        if (!isImplemented()) return 0;
-
-        List<ServerPing> servers = ServerLookup.findByPrefix(serverPrefix);
-        return servers.stream().mapToInt(ServerPing::onlinePlayers).sum();
+        return ServerInfoCache.getTotalPlayersForType(this);
     }
 
     public enum Category {
