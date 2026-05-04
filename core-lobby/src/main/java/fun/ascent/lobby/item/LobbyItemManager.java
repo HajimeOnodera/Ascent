@@ -15,6 +15,11 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.network.player.ResolvableProfile;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import java.util.List;
 import java.util.Map;
@@ -101,20 +106,32 @@ public class LobbyItemManager {
 
         handler.addListener(InventoryPreClickEvent.class, event -> {
             event.setCancelled(true);
-            if (event.getInventory() instanceof Inventory inv && inv.getTitle().equals(c("Lobby Selector"))) {
-                int slot = event.getSlot();
-                if (slot >= 11 && slot <= 15) {
-                    int lobbyIndex = slot - 11;
-                    // Look up live lobbies again to get the real server name
-                    List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
-                    if (lobbyIndex < lobbies.size()) {
-                        ServerPing target = lobbies.get(lobbyIndex);
-                        String currentName = Main.getServerName();
-                        if (target.serverName().equals(currentName)) {
-                            event.getPlayer().sendMessage(c("&cYou are already connected to this lobby!"));
-                        } else {
-                            event.getPlayer().sendMessage(c("&aConnecting to " + target.serverName() + "..."));
+            if (event.getInventory() instanceof Inventory inv) {
+                if (inv.getTitle().equals(c("Lobby Selector"))) {
+                    int slot = event.getSlot();
+                    if (slot >= 0 && slot <= 4) {
+                        List<ServerPing> lobbies = ServerLookup.findByPrefix("lobby");
+                        if (slot < lobbies.size()) {
+                            ServerPing target = lobbies.get(slot);
+                            String currentName = Main.getServerName();
+                            if (target.serverName().equals(currentName)) {
+                                event.getPlayer().sendMessage(c("&cYou are already connected to this lobby!"));
+                            } else {
+                                event.getPlayer().sendMessage(c("&aConnecting to Lobby " + (slot + 1) + "..."));
+                                fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), target.serverName());
+                            }
+                        }
+                    }
+                } else if (inv.getTitle().equals(c("Game Menu"))) {
+                    int slot = event.getSlot();
+                    if (slot == 10) {
+                        List<ServerPing> skyblocks = ServerLookup.findByPrefix("skyblock");
+                        if (!skyblocks.isEmpty()) {
+                            ServerPing target = skyblocks.getFirst();
+                            event.getPlayer().sendMessage(c("&aConnecting to Skyblock..."));
                             fun.ascent.lobby.transfer.ProxyTransfer.send(event.getPlayer(), target.serverName());
+                        } else {
+                            event.getPlayer().sendMessage(c("&cSkyblock is currently offline!"));
                         }
                     }
                 }
@@ -159,49 +176,64 @@ public class LobbyItemManager {
         String currentName = Main.getServerName();
 
         for (int i = 0; i < MAX_LOBBY_SLOTS; i++) {
-            int slot = 11 + i; // center the items in the 2-row chest
+            String lobbyDisplayName = "Lobby " + (i + 1);
 
             if (i < lobbies.size()) {
                 ServerPing lobby = lobbies.get(i);
                 boolean isCurrent = lobby.serverName().equals(currentName);
 
                 Material mat = isCurrent ? Material.RED_CONCRETE : Material.WHITE_CONCRETE;
-                String title = isCurrent
-                        ? "&c" + lobby.serverName() + " &7(Current)"
-                        : "&a" + lobby.serverName();
+                String title = isCurrent ? "&c" + lobbyDisplayName + " &7(Current)" : "&a" + lobbyDisplayName;
 
                 ItemStack lobbyItem = ItemStack.builder(mat)
                         .set(DataComponents.CUSTOM_NAME, c(title))
                         .set(DataComponents.LORE, List.of(
                                 c("&7Players: &a" + lobby.onlinePlayers()),
                                 Component.empty(),
-                                isCurrent ? c("&cAlready connected!") : c("&7Click to connect!")
-                        ))
+                                isCurrent ? c("&cAlready connected!") : c("&7Click to connect!")))
                         .build();
-                inventory.setItemStack(slot, lobbyItem);
+                inventory.setItemStack(i, lobbyItem);
             } else {
-                // Offline / no server in this slot
+                // Offline
                 ItemStack offlineItem = ItemStack.builder(Material.BARRIER)
-                        .set(DataComponents.CUSTOM_NAME, c("&cOffline"))
+                        .set(DataComponents.CUSTOM_NAME, c("&c" + lobbyDisplayName + " &8(Offline)"))
                         .set(DataComponents.LORE, List.of(c("&7This lobby is not available.")))
                         .build();
-                inventory.setItemStack(slot, offlineItem);
+                inventory.setItemStack(i, offlineItem);
             }
         }
-
         player.openInventory(inventory);
     }
 
     private static void openGameMenu(Player player) {
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, c("Game Menu"));
-        ItemStack sb = ItemStack.builder(Material.PLAYER_HEAD)
+        
+        String textureHash = "686718d85e25b006f2c8f160f619b23c8fd6ae75ddf1c06308ec0f539d931703";
+        String url = "http://textures.minecraft.net/texture/" + textureHash;
+        String json = "{\"textures\":{\"SKIN\":{\"url\":\"" + url + "\"}}}";
+        String base64 = Base64.getEncoder().encodeToString(json.getBytes(StandardCharsets.UTF_8));
+        ResolvableProfile profile = new ResolvableProfile(
+                new ResolvableProfile.Partial(
+                        "", UUID.randomUUID(),
+                        List.of(new GameProfile.Property("textures", base64, ""))));
+
+        List<ServerPing> skyblocks = ServerLookup.findByPrefix("skyblock");
+        int totalPlayers = skyblocks.stream().mapToInt(ServerPing::onlinePlayers).sum();
+
+        ItemStack sbItem = ItemStack.builder(Material.PLAYER_HEAD)
                 .set(DataComponents.CUSTOM_NAME, c("&aSkyBlock"))
+                .set(DataComponents.PROFILE, profile)
                 .set(DataComponents.LORE, List.of(
                         c("&7Play the popular SkyBlock game mode!"),
-                        c("&7Complete quests, collect resources, and more!")
+                        c("&7Complete quests, collect resources, and more!"),
+                        Component.empty(),
+                        c("&7Players: &a" + totalPlayers),
+                        Component.empty(),
+                        skyblocks.isEmpty() ? c("&cOffline!") : c("&eClick to play!")
                 ))
                 .build();
-        inventory.setItemStack(10, sb);
+                
+        inventory.setItemStack(10, sbItem);
         player.openInventory(inventory);
     }
 }
