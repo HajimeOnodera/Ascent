@@ -19,7 +19,7 @@ public final class Main {
 
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
-    /** Host that Velocity uses to reach this server (Docker sets ASCENT_ADVERTISE_HOST). */
+    /** Host that Velocity uses to reach this server. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
     private Main() {

@@ -23,7 +23,7 @@ import net.minestom.server.MinecraftServer;
 
 public class Main {
 
-    /** Docker service name used by Velocity to reach this container. */
+    /** Host used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
     public static void main(String[] args) {
