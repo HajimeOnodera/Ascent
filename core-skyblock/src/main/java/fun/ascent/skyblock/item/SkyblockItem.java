@@ -138,10 +138,14 @@ public class SkyblockItem {
     }
 
     public ItemStack buildItemStack() {
-        return buildItemStack(null);
+        return buildItemStack(null, false);
     }
 
     public ItemStack buildItemStack(Player player) {
+        return buildItemStack(player, false);
+    }
+
+    public ItemStack buildItemStack(Player player, boolean preview) {
         Rarity effectiveRarity = recombobulated && rarity.getNextRarity() != null
                 ? rarity.getNextRarity() : rarity;
 
@@ -152,6 +156,11 @@ public class SkyblockItem {
         List<Component> loreComponents = new ArrayList<>();
         for (String line : buildLoreStrings(effectiveRarity, player)) {
             loreComponents.add(LEGACY.deserialize(line).decoration(TextDecoration.ITALIC, false));
+        }
+        if (preview) {
+            loreComponents.add(LEGACY.deserialize("§8§l--------------------").decoration(TextDecoration.ITALIC, false));
+            loreComponents.add(LEGACY.deserialize("§aThis is the item you will get.").decoration(TextDecoration.ITALIC, false));
+            loreComponents.add(LEGACY.deserialize("§aClick the §cANVIL BELOW§a to combine.").decoration(TextDecoration.ITALIC, false));
         }
 
         ItemStack.Builder builder = ItemStack.builder(material)
@@ -349,6 +358,12 @@ public class SkyblockItem {
         if (dyeName != null && !dyeName.isEmpty()) lore.add("§8Dye: " + dyeName);
         if (bookOfStats)     lore.add("§8Book of Stats Applied");
         if (kills > 0)       lore.add("§cKills: §f" + kills);
+
+        if (reforgeable && (modifier == null || modifier.isEmpty())
+                && (itemType.isArmor() || itemType.isWeapon()
+                    || itemType == ItemType.FISHING_ROD || itemType.isEquipment())) {
+            lore.add("§8This item can be reforged!");
+        }
 
         String typeDisplay = dungeon && itemType != ItemType.NONE
                 ? "DUNGEON " + itemType.getDisplay()

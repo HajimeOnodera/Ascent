@@ -14,10 +14,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -112,25 +114,8 @@ public class AnvilMenu {
                 MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateState(inv, player));
                 return;
             }
-
-            if (slot >= inv.getSize() && (event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift)) {
-                event.setCancelled(true);
-                ItemStack clicked = event.getClickedItem();
-                if (clicked.isAir()) return;
-
-                int target = -1;
-                if (inv.getItemStack(UPGRADE_INPUT).isAir()) {
-                    target = UPGRADE_INPUT;
-                } else if (inv.getItemStack(SACRIFICE_INPUT).isAir()) {
-                    target = SACRIFICE_INPUT;
-                }
-
-                if (target != -1) {
-                    inv.setItemStack(target, clicked);
-                    int playerSlot = toPlayerSlot(slot, inv.getSize());
-                    if (playerSlot >= 0) {
-                        player.getInventory().setItemStack(playerSlot, ItemStack.AIR);
-                    }
+            if (slot >= inv.getSize()) {
+                if (event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift) {
                     MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateState(inv, player));
                 }
                 return;
@@ -139,11 +124,30 @@ public class AnvilMenu {
             event.setCancelled(true);
 
             if (slot == OUTPUT_SLOT) {
-                handleOutputTake(inv, player);
+                MinecraftServer.getSchedulerManager().scheduleNextTick(() -> handleOutputTake(inv, player));
             } else if (slot == COMBINE_SLOT) {
-                handleCombine(inv, player);
+                if (!inv.getItemStack(UPGRADE_INPUT).isAir() && !inv.getItemStack(SACRIFICE_INPUT).isAir()) {
+                    handleCombine(inv, player);
+                } else {
+                    ItemStack output = inv.getItemStack(OUTPUT_SLOT);
+                    if (!output.equals(DEFAULT_OUTPUT) && !output.isAir()) {
+                        player.getInventory().addItemStack(output);
+                        inv.setItemStack(OUTPUT_SLOT, DEFAULT_OUTPUT);
+                        setDecoPanes(inv, false, false, false);
+                    }
+                }
             } else if (slot == CLOSE_SLOT) {
                 player.closeInventory();
+            }
+        });
+
+        inv.eventNode().addListener(InventoryClickEvent.class, event -> {
+            int slot = event.getSlot();
+            if (slot == UPGRADE_INPUT || slot == SACRIFICE_INPUT) {
+                updateState(inv, player);
+                MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateState(inv, player));
+            } else if (slot >= inv.getSize() && event.getClickType() == ClickType.SHIFT_CLICK) {
+                MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateState(inv, player));
             }
         });
 
@@ -159,15 +163,12 @@ public class AnvilMenu {
         player.openInventory(inv);
     }
 
-    private static int toPlayerSlot(int combinedSlot, int invSize) {
-        int offset = combinedSlot - invSize;
-        if (offset >= 27) return offset - 27;
-        return offset + 9;
-    }
 
     private static void handleOutputTake(Inventory inv, SkyblockPlayer player) {
         ItemStack output = inv.getItemStack(OUTPUT_SLOT);
         if (output.equals(DEFAULT_OUTPUT) || output.isAir()) return;
+        // Only allow taking after a combine — input slots must be empty
+        if (!inv.getItemStack(UPGRADE_INPUT).isAir() || !inv.getItemStack(SACRIFICE_INPUT).isAir()) return;
         player.getInventory().setCursorItem(output);
         inv.setItemStack(OUTPUT_SLOT, DEFAULT_OUTPUT);
         setDecoPanes(inv, false, false, false);
@@ -209,7 +210,7 @@ public class AnvilMenu {
         if (hasUpgrade && hasSacrifice) {
             AnvilAction action = resolveAction(upgrade, sacrifice);
             boolean compatible = action != null;
-            inv.setItemStack(OUTPUT_SLOT, compatible ? buildResult(upgrade, action, player) : DEFAULT_OUTPUT);
+            inv.setItemStack(OUTPUT_SLOT, compatible ? buildResult(upgrade, action, player, true) : DEFAULT_OUTPUT);
             setDecoPanes(inv, compatible, compatible, compatible);
         } else {
             inv.setItemStack(OUTPUT_SLOT, DEFAULT_OUTPUT);
@@ -248,6 +249,10 @@ public class AnvilMenu {
     }
 
     private static ItemStack buildResult(ItemStack upgradeItem, AnvilAction action, SkyblockPlayer player) {
+        return buildResult(upgradeItem, action, player, false);
+    }
+
+    private static ItemStack buildResult(ItemStack upgradeItem, AnvilAction action, SkyblockPlayer player, boolean preview) {
         SkyblockItem base = ItemRegistry.getItem(ItemNBT.getItemId(upgradeItem));
         boolean wasRecombobulated = ItemNBT.isRecombobulated(upgradeItem);
         int currentHpb = ItemNBT.getHotPotatoCount(upgradeItem);
@@ -296,7 +301,7 @@ public class AnvilMenu {
             }
         }
 
-        return builder.build().buildItemStack(player);
+        return builder.build().buildItemStack(player, preview);
     }
 
     private static void setDecoPanes(Inventory inv, boolean upgradeGreen, boolean sacrificeGreen, boolean bottomGreen) {
