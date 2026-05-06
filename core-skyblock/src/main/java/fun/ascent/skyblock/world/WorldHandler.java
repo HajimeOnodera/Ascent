@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.world;
 
+import fun.ascent.common.world.PolarWorlds;
 import fun.ascent.common.world.WorldRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.MinecraftServer;
@@ -52,7 +53,12 @@ public class WorldHandler {
     public static InstanceContainer createWorld(World world){
         InstanceContainer container = instanceManager.createInstanceContainer();
         try {
-            container.setChunkLoader(WorldLoaderUtils.setupTemplateWorld(world.templateFile.toPath(), world.worldFile.toPath()));
+            if (!world.save) {
+                int radius = world.name.equalsIgnoreCase("island") ? 3 : -1;
+                container.setChunkLoader(PolarWorlds.setupMemoryPolarWorld(world.templateFile.toPath(), radius));
+            } else {
+                container.setChunkLoader(WorldLoaderUtils.setupTemplateWorld(world.templateFile.toPath(), world.worldFile.toPath()));
+            }
             register(world, container);
             return container;
         } catch (IOException e) {

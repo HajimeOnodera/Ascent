@@ -3,6 +3,7 @@ package fun.ascent.skyblock.world;
 import net.hollowcube.polar.PolarLoader;
 import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.anvil.AnvilLoader;
+import org.jspecify.annotations.NonNull;
 
 import java.io.*;
 import java.nio.file.*;
@@ -44,13 +45,13 @@ public class WorldLoaderUtils {
     private static void copyDirectory(Path source, Path target) throws IOException {
         Files.walkFileTree(source, new SimpleFileVisitor<>() {
             @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+            public @NonNull FileVisitResult preVisitDirectory(@NonNull Path dir, @NonNull BasicFileAttributes attrs) throws IOException {
                 Files.createDirectories(target.resolve(source.relativize(dir)));
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            public @NonNull FileVisitResult visitFile(@NonNull Path file, @NonNull BasicFileAttributes attrs) throws IOException {
                 Files.copy(file, target.resolve(source.relativize(file)), StandardCopyOption.REPLACE_EXISTING);
                 return FileVisitResult.CONTINUE;
             }

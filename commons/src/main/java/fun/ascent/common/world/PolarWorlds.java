@@ -1,9 +1,12 @@
 package fun.ascent.common.world;
 
 import net.hollowcube.polar.AnvilPolar;
+import net.hollowcube.polar.ChunkSelector;
 import net.hollowcube.polar.PolarLoader;
+import net.hollowcube.polar.PolarReader;
 import net.hollowcube.polar.PolarWriter;
 import net.hollowcube.polar.PolarWorld;
+import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.InstanceContainer;
 
 import java.io.IOException;
@@ -13,6 +16,29 @@ import java.nio.file.Path;
 public final class PolarWorlds {
 
     private PolarWorlds() {
+    }
+
+    /**
+     * Loads a world into memory using Polar.
+     * Useful for transient instances like minigame maps or Skyblock islands.
+     */
+    public static ChunkLoader setupMemoryPolarWorld(Path templatePath, int radius) throws IOException {
+        PolarWorld world;
+        if (Files.isDirectory(templatePath)) {
+            // Convert Anvil directory to Polar world in memory
+            if (radius > 0) {
+                world = AnvilPolar.anvilToPolar(templatePath, ChunkSelector.radius(radius));
+            } else {
+                world = AnvilPolar.anvilToPolar(templatePath);
+            }
+        } else if (templatePath.toString().endsWith(".polar")) {
+            // Read Polar file directly into memory
+            world = PolarReader.read(Files.readAllBytes(templatePath));
+        } else {
+            throw new IllegalArgumentException("Unsupported template format for memory polar world: " + templatePath);
+        }
+        
+        return new PolarLoader(world);
     }
 
     public static boolean loadOrConvert(InstanceContainer instance, Path polarPath, Path anvilPath, String logPrefix) {
