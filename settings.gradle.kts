@@ -4,3 +4,6 @@ include("core-skyblock")
 include("core-lobby")
 include("core-proxy")
 include("loader")
+
+include("service.friend")
+include("service.generic")

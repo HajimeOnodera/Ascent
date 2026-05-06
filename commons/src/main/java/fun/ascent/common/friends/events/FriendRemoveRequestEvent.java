@@ -12,11 +12,15 @@ import java.util.UUID;
 public class FriendRemoveRequestEvent extends FriendEvent {
     private final UUID remover;
     private final UUID target;
+    private final String removerName;
+    private final String targetName;
 
-    public FriendRemoveRequestEvent(UUID remover, UUID target) {
+    public FriendRemoveRequestEvent(UUID remover, UUID target, String removerName, String targetName) {
         super();
         this.remover = remover;
         this.target = target;
+        this.removerName = removerName;
+        this.targetName = targetName;
     }
 
     @Override
@@ -32,6 +36,8 @@ public class FriendRemoveRequestEvent extends FriendEvent {
                 JSONObject json = new JSONObject();
                 json.put("remover", value.remover.toString());
                 json.put("target", value.target.toString());
+                json.put("removerName", value.removerName);
+                json.put("targetName", value.targetName);
                 return json.toString();
             }
 
@@ -40,13 +46,15 @@ public class FriendRemoveRequestEvent extends FriendEvent {
                 JSONObject jsonObject = new JSONObject(json);
                 return new FriendRemoveRequestEvent(
                         UUID.fromString(jsonObject.getString("remover")),
-                        UUID.fromString(jsonObject.getString("target"))
+                        UUID.fromString(jsonObject.getString("target")),
+                        jsonObject.getString("removerName"),
+                        jsonObject.getString("targetName")
                 );
             }
 
             @Override
             public FriendRemoveRequestEvent clone(FriendRemoveRequestEvent value) {
-                return new FriendRemoveRequestEvent(value.remover, value.target);
+                return new FriendRemoveRequestEvent(value.remover, value.target, value.removerName, value.targetName);
             }
         };
     }

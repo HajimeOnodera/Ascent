@@ -12,11 +12,13 @@ import java.util.UUID;
 public class FriendDenyRequestEvent extends FriendEvent {
     private final UUID denier;
     private final UUID requester;
+    private final String denierName;
 
-    public FriendDenyRequestEvent(UUID denier, UUID requester) {
+    public FriendDenyRequestEvent(UUID denier, UUID requester, String denierName) {
         super();
         this.denier = denier;
         this.requester = requester;
+        this.denierName = denierName;
     }
 
     @Override
@@ -32,6 +34,7 @@ public class FriendDenyRequestEvent extends FriendEvent {
                 JSONObject json = new JSONObject();
                 json.put("denier", value.denier.toString());
                 json.put("requester", value.requester.toString());
+                json.put("denierName", value.denierName);
                 return json.toString();
             }
 
@@ -40,13 +43,14 @@ public class FriendDenyRequestEvent extends FriendEvent {
                 JSONObject jsonObject = new JSONObject(json);
                 return new FriendDenyRequestEvent(
                         UUID.fromString(jsonObject.getString("denier")),
-                        UUID.fromString(jsonObject.getString("requester"))
+                        UUID.fromString(jsonObject.getString("requester")),
+                        jsonObject.getString("denierName")
                 );
             }
 
             @Override
             public FriendDenyRequestEvent clone(FriendDenyRequestEvent value) {
-                return new FriendDenyRequestEvent(value.denier, value.requester);
+                return new FriendDenyRequestEvent(value.denier, value.requester, value.denierName);
             }
         };
     }

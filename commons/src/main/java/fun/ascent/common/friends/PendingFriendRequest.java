@@ -3,9 +3,12 @@ package fun.ascent.common.friends;
 import fun.ascent.common.protocol.Serializer;
 import org.json.JSONObject;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class PendingFriendRequest {
     private final UUID from;
     private final UUID to;

@@ -10,4 +10,7 @@ dependencies {
     api("it.unimi.dsi:fastutil:8.5.12")
     api("redis.clients:jedis:5.1.5")
     api("com.google.code.gson:gson:2.11.0")
+    api("org.reflections:reflections:0.10.2")
+    api("org.json:json:20231013")
 }
+

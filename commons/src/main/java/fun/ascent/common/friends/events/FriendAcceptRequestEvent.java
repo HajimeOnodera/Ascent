@@ -12,11 +12,15 @@ import java.util.UUID;
 public class FriendAcceptRequestEvent extends FriendEvent {
     private final UUID accepter;
     private final UUID requester;
+    private final String accepterName;
+    private final String requesterName;
 
-    public FriendAcceptRequestEvent(UUID accepter, UUID requester) {
+    public FriendAcceptRequestEvent(UUID accepter, UUID requester, String accepterName, String requesterName) {
         super();
         this.accepter = accepter;
         this.requester = requester;
+        this.accepterName = accepterName;
+        this.requesterName = requesterName;
     }
 
     @Override
@@ -32,6 +36,8 @@ public class FriendAcceptRequestEvent extends FriendEvent {
                 JSONObject json = new JSONObject();
                 json.put("accepter", value.accepter.toString());
                 json.put("requester", value.requester.toString());
+                json.put("accepterName", value.accepterName);
+                json.put("requesterName", value.requesterName);
                 return json.toString();
             }
 
@@ -40,13 +46,15 @@ public class FriendAcceptRequestEvent extends FriendEvent {
                 JSONObject jsonObject = new JSONObject(json);
                 return new FriendAcceptRequestEvent(
                         UUID.fromString(jsonObject.getString("accepter")),
-                        UUID.fromString(jsonObject.getString("requester"))
+                        UUID.fromString(jsonObject.getString("requester")),
+                        jsonObject.getString("accepterName"),
+                        jsonObject.getString("requesterName")
                 );
             }
 
             @Override
             public FriendAcceptRequestEvent clone(FriendAcceptRequestEvent value) {
-                return new FriendAcceptRequestEvent(value.accepter, value.requester);
+                return new FriendAcceptRequestEvent(value.accepter, value.requester, value.accepterName, value.requesterName);
             }
         };
     }

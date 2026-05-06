@@ -82,6 +82,16 @@ public final class CoreProxy {
                 new ProxyAdminCommand(this, proxy)
         );
 
+        proxy.getCommandManager().register(
+                proxy.getCommandManager().metaBuilder("friend")
+                        .aliases("f")
+                        .plugin(this)
+                        .build(),
+                new FriendCommand(proxy)
+        );
+
+        fun.ascent.common.service.redis.ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
+
         for (ProxyRoute route : config.routes()) {
             List<String> commands = route.commands();
             if (commands.isEmpty()) {
