@@ -9,6 +9,8 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
+import fun.ascent.common.redis.RedisConfig;
+import fun.ascent.common.redis.RedisManager;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -38,6 +40,13 @@ public final class CoreProxy {
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
         reload();
+        
+        // Initialize Redis communication
+        if (!RedisManager.isInitialized()) {
+            RedisManager.connect(RedisConfig.fromEnv());
+        }
+        fun.ascent.common.service.redis.ServerOutboundMessage.init();
+
         registerCommands();
         logger.info("Ascent proxy loaded with {} server route(s).", config.routes().size());
 
@@ -56,17 +65,13 @@ public final class CoreProxy {
     @Subscribe
     public void onPlayerChooseInitialServer(PlayerChooseInitialServerEvent event) {
         String defaultServer = config.defaultServer();
-        RegisteredServer bestServer = proxy.getAllServers().stream()
+        proxy.getAllServers().stream()
                 .filter(s -> {
                     String name = s.getServerInfo().getName();
                     return name.equals(defaultServer) || name.startsWith(defaultServer + "-");
                 })
-                .min(java.util.Comparator.comparingInt(s -> s.getPlayersConnected().size()))
-                .orElse(null);
+                .min(java.util.Comparator.comparingInt(s -> s.getPlayersConnected().size())).ifPresent(event::setInitialServer);
 
-        if (bestServer != null) {
-            event.setInitialServer(bestServer);
-        }
     }
 
     public void reload() {
@@ -75,8 +80,8 @@ public final class CoreProxy {
 
     private void registerCommands() {
         proxy.getCommandManager().register(
-                proxy.getCommandManager().metaBuilder("ascentproxy")
-                        .aliases("aproxy", "network")
+                proxy.getCommandManager().metaBuilder("server")
+                        .aliases("network")
                         .plugin(this)
                         .build(),
                 new ProxyAdminCommand(this, proxy)

@@ -133,7 +133,7 @@ public final class Loader {
         if (!pluginsDir.isDirectory()) pluginsDir.mkdirs();
 
         File coreProxyJar = new File(pluginsDir, "CoreProxy.jar");
-        File builtProxy = Path.of("core-proxy", "target", "CoreProxy.jar").toFile();
+        File builtProxy = Path.of("core-proxy", "build", "libs", "CoreProxy.jar").toFile();
 
         if (builtProxy.isFile()) {
             try {

@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(project(":core-lobby"))
     implementation(project(":core-skyblock"))
+    implementation(project(":core-proxy"))
 }
 
 tasks.shadowJar {
