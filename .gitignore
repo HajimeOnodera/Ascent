@@ -7,3 +7,9 @@ lobby.properties
 forwarding.secret
 run-logs/
 proxy/logs/
+
+# Gradle
+.gradle/
+build/
+**/build/
+bin/
