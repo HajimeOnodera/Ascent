@@ -43,6 +43,10 @@ public final class RedisManager {
         instance = new RedisManager(config);
     }
 
+    public static boolean isInitialized() {
+        return instance != null;
+    }
+
     public static RedisManager get() {
         if (instance == null) {
             throw new IllegalStateException("RedisManager not initialised");

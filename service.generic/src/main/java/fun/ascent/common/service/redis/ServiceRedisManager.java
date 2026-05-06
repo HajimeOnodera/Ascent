@@ -14,7 +14,7 @@ public class ServiceRedisManager {
     private static JedisPubSub pubSub;
 
     public static void connect(RedisConfig config) {
-        if (RedisManager.get() == null) {
+        if (!RedisManager.isInitialized()) {
             RedisManager.connect(config);
         }
 

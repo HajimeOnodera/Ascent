@@ -4,15 +4,13 @@ import fun.ascent.common.service.SkyBlockService;
 import fun.ascent.common.service.ServiceType;
 import fun.ascent.common.service.redis.ServiceEndpoint;
 import fun.ascent.common.service.redis.ServiceToServerManager;
-import fun.ascent.common.service.ServiceInitializer;
-import org.tinylog.configuration.Configuration;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class FriendService implements SkyBlockService {
 
-    public static void main(String[] args) {
+    static void main() {
         String mongoUri = System.getenv("MONGODB_URI");
         if (mongoUri == null) mongoUri = "mongodb://127.0.0.1:27017";
         
