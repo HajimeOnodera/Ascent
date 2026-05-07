@@ -23,7 +23,7 @@ public class AdminMeCommand implements SimpleCommand {
         }
 
         User user = UserManager.getUser(player.getUniqueId());
-        user.setRank(Rank.STAFF); // The user's code had STAFF at the top
+        user.setRank(Rank.STAFF);
         user.setName(player.getUsername());
         UserManager.saveUser(user);
 

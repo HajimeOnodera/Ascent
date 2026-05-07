@@ -17,9 +17,6 @@ public class ServiceInitializer {
     public void init() {
         System.out.println("Initializing service " + service.getType().name() + "...");
 
-        /**
-         * Register Redis
-         */
         ServiceRedisManager.connect(RedisConfig.fromEnv());
 
         List<ServiceEndpoint> endpoints = service.getEndpoints();
@@ -29,7 +26,6 @@ public class ServiceInitializer {
             System.out.println("Registering channel " + protocolObject.channel());
 
             ServiceRedisManager.registerChannel(protocolObject.channel(), message -> {
-                // message format: requesterServer;requestId;messageData
                 String[] split = message.split(";");
                 if (split.length < 3) return;
 

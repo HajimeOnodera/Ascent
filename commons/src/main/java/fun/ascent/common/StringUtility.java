@@ -296,7 +296,6 @@ public class StringUtility {
     }
 
     public static String toNormalCase(String string) {
-        if (Acronym.isAcronym(string)) return string.toUpperCase();
         string = string.replace("_", " ");
         String[] spl = string.split(" ");
         StringBuilder sb = new StringBuilder();
