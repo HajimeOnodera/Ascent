@@ -21,6 +21,10 @@ public class UserManager {
         return getUser(uuid).getLegacyDisplayName();
     }
 
+    public static void init(String mongoUri) {
+        UserDatabase.connect(mongoUri);
+    }
+
     public static User getUser(UUID uuid) {
         if (userCache.containsKey(uuid)) {
             return userCache.get(uuid);
@@ -36,6 +40,17 @@ public class UserManager {
             }
         } catch (Exception ignored) {}
 
+        // Try MongoDB
+        User mongoUser = UserDatabase.loadUser(uuid);
+        if (mongoUser != null) {
+            userCache.put(uuid, mongoUser);
+            // Cache back to Redis
+            try (Jedis jedis = RedisManager.get().getResource()) {
+                jedis.set(REDIS_PREFIX + uuid, serialize(mongoUser));
+            } catch (Exception ignored) {}
+            return mongoUser;
+        }
+
         // Fallback or create new
         User user = new User(uuid, "Unknown", Rank.DEFAULT);
         userCache.put(uuid, user);
@@ -44,9 +59,14 @@ public class UserManager {
 
     public static void saveUser(User user) {
         userCache.put(user.getUuid(), user);
+        
+        // Save to Redis
         try (Jedis jedis = RedisManager.get().getResource()) {
             jedis.set(REDIS_PREFIX + user.getUuid(), serialize(user));
         } catch (Exception ignored) {}
+
+        // Save to MongoDB
+        UserDatabase.saveUser(user);
     }
 
     private static String serialize(User user) {

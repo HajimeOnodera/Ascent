@@ -3,6 +3,7 @@ package fun.ascent.skyblock;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
+import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.reforge.Reforge;
@@ -30,7 +31,8 @@ public class Main {
         ServerConfig config = ServerConfig.load();
         // ── Redis ───────────────────────────────────────────────────────────
         RedisManager.connect(RedisConfig.fromEnv());
-        System.out.println("[Skyblock] Connected to Redis");
+        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
+        System.out.println("[Skyblock] Connected to Redis & MongoDB");
 
         // ── Minestom ────────────────────────────────────────────────────────
         MinecraftServer server = MinecraftServer.init(config.auth());

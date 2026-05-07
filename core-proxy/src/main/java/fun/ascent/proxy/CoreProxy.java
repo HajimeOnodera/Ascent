@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
+import fun.ascent.common.user.UserManager;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -53,6 +54,8 @@ public final class CoreProxy {
         // Start dynamic Redis-based server discovery
         registryManager = new ServerRegistryManager(proxy, logger);
         registryManager.start();
+
+        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
 
         proxy.getEventManager().register(this, new ChatListener(proxy));
         proxy.getEventManager().register(this, new ConnectionListener());

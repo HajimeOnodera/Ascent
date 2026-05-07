@@ -3,6 +3,7 @@ package fun.ascent.lobby;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.common.redis.RedisConfig;
 import fun.ascent.common.redis.RedisManager;
+import fun.ascent.common.user.UserManager;
 import fun.ascent.lobby.command.ServerTransferCommand;
 import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.npc.LobbyNpcManager;
@@ -30,7 +31,8 @@ public final class Main {
 
         // ── Redis ───────────────────────────────────────────────────────────
         RedisManager.connect(RedisConfig.fromEnv());
-        System.out.println("[Lobby] Connected to Redis");
+        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
+        System.out.println("[Lobby] Connected to Redis & MongoDB");
 
         // ── Minestom ────────────────────────────────────────────────────────
         MinecraftServer server = MinecraftServer.init(config.auth());

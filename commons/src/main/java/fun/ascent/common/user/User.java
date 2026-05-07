@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
@@ -22,11 +21,7 @@ public class User {
 
     public Component getDisplayName() {
         Component prefix = rank.getFormattedPrefix();
-        TextColor nameColor = rank.getColor();
-        
-        if (rank == Rank.DEFAULT) {
-            return Component.text(name).color(NamedTextColor.GRAY);
-        }
+        TextColor nameColor = rank.getTextColor();
         
         return prefix.append(Component.text(name).color(nameColor));
     }
