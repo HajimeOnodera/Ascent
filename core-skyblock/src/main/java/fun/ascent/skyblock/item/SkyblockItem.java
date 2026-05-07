@@ -1,10 +1,7 @@
 package fun.ascent.skyblock.item;
 
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
-import fun.ascent.skyblock.item.registries.ArrowPoisonRegistry;
-import fun.ascent.skyblock.item.registries.ConsumableRegistry;
-import fun.ascent.skyblock.item.registries.FishingBaitRegistry;
-import fun.ascent.skyblock.item.registries.ShortbowRegistry;
+import fun.ascent.skyblock.item.registries.*;
 import fun.ascent.skyblock.player.stats.Stats;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
@@ -102,6 +99,7 @@ public class SkyblockItem {
     private final String dyeName;
     private final boolean bookOfStats;
     private final int kills;
+    private final boolean artOfPeace;
 
     private SkyblockItem(Builder builder) {
         this.itemId = builder.itemId;
@@ -135,6 +133,7 @@ public class SkyblockItem {
         this.dyeName = builder.dyeName;
         this.bookOfStats = builder.bookOfStats;
         this.kills = builder.kills;
+        this.artOfPeace = builder.artOfPeace;
     }
 
     public ItemStack buildItemStack() {
@@ -197,6 +196,9 @@ public class SkyblockItem {
         if (hotPotatoCount > 0) {
             tag.putByte("hot_potato_count", (byte) hotPotatoCount);
         }
+        if (artOfPeace) {
+            tag.putByte("art_of_peace", (byte) 1);
+        }
 
         if (modifier != null && !modifier.isEmpty()) {
             tag.putString("modifier", modifier.toLowerCase(Locale.ROOT));
@@ -220,32 +222,41 @@ public class SkyblockItem {
 
         if (ConsumableRegistry.isConsumable(itemId)) {
             lore.add("§8Consumable");
-            lore.add("");
         }
 
-        if (FishingBaitRegistry.isFishingBait(itemId)) {
+        if (BoosterRegistry.isBooster((itemId))) {
+            lore.add("§8Booster");
+
+        }
+
+        if (AnvilCombinableRegistry.isAnvilCombinable(itemId)) {
+            lore.add("§8Combinable in Anvil");
+        }
+
+        if (itemType == ItemType.BAIT) {
             lore.add("§8Fishing Bait");
             lore.add("§8Consumes on Cast");
-            lore.add("");
         }
 
-        if (ArrowPoisonRegistry.isArrowPoison(itemId)) {
+        if (itemType == ItemType.ARROW_POISON) {
             lore.add("§8Consumed on arrow shot");
         }
 
         double breakingPower = baseStats.getOrDefault(Stats.BREAKING_POWER, 0.0);
         if (breakingPower != 0.0) {
             lore.add("§8Breaking Power " + (int) breakingPower);
-            lore.add("");
+            lore.add(" ");
         }
 
         Map<Stats, Double> hpbStats = computeHotPotatoStats();
+        Map<Stats, Double> aopStats = computeArtOfPeaceStats();
         boolean hasStats = false;
         for (Stats stat : LORE_STAT_ORDER) {
             double base    = baseStats.getOrDefault(stat, 0.0);
             double reforge = reforgeStats.getOrDefault(stat, 0.0);
             double hpb     = hpbStats.getOrDefault(stat, 0.0);
-            double total   = base + reforge + hpb;
+            double aop     = aopStats.getOrDefault(stat, 0.0);
+            double total   = base + reforge + hpb + aop;
             if (total != 0.0) {
                 hasStats = true;
                 String sign = total > 0 ? "+" : "";
@@ -266,6 +277,13 @@ public class SkyblockItem {
                             ? hSign + (int) hpb + "%"
                             : hSign + (int) hpb;
                     line += " §e(" + hFormatted + ")";
+                }
+                if (aop != 0.0) {
+                    String aSign = aop > 0 ? "+" : "";
+                    String aFormatted = stat.getStatIntType()
+                            ? aSign + (int) aop + "%"
+                            : aSign + (int) aop;
+                    line += " §c[" + aFormatted + "]";
                 }
                 lore.add(line);
             }
@@ -374,6 +392,13 @@ public class SkyblockItem {
         return lore;
     }
 
+    private Map<Stats, Double> computeArtOfPeaceStats() {
+        if (!artOfPeace || !itemType.isArmor()) return Collections.emptyMap();
+        Map<Stats, Double> result = new EnumMap<>(Stats.class);
+        result.put(Stats.HEALTH, 40.0);
+        return result;
+    }
+
     private Map<Stats, Double> computeHotPotatoStats() {
         if (hotPotatoCount == 0) return Collections.emptyMap();
         Map<Stats, Double> result = new EnumMap<>(Stats.class);
@@ -396,6 +421,7 @@ public class SkyblockItem {
     public boolean isReforgeable() { return reforgeable; }
     public boolean isEnchantable() { return enchantable; }
     public String getModifier() { return modifier; }
+    public boolean hasArtOfPeace() { return artOfPeace; }
 
     public Builder toBuilder() {
         Builder b = new Builder(itemId, material, rarity);
@@ -427,6 +453,7 @@ public class SkyblockItem {
         b.dyeName = dyeName;
         b.bookOfStats = bookOfStats;
         b.kills = kills;
+        b.artOfPeace = artOfPeace;
         return b;
     }
 
@@ -466,6 +493,7 @@ public class SkyblockItem {
         private String dyeName = null;
         private boolean bookOfStats = false;
         private int kills = 0;
+        private boolean artOfPeace = false;
 
         private Builder(String itemId, Material material, Rarity rarity) {
             this.itemId = itemId;
@@ -499,6 +527,7 @@ public class SkyblockItem {
         public Builder dyeName(String dyeName) { this.dyeName = dyeName; return this; }
         public Builder bookOfStats(boolean bookOfStats) { this.bookOfStats = bookOfStats; return this; }
         public Builder kills(int kills) { this.kills = kills; return this; }
+        public Builder artOfPeace(boolean artOfPeace) { this.artOfPeace = artOfPeace; return this; }
 
         public SkyblockItem build() { return new SkyblockItem(this); }
     }

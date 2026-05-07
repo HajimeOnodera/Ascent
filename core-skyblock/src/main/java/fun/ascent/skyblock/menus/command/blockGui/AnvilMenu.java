@@ -174,10 +174,11 @@ public class AnvilMenu {
         setDecoPanes(inv, false, false, false);
     }
 
-    private sealed interface AnvilAction permits AnvilAction.Recombobulate, AnvilAction.ApplyReforge, AnvilAction.ApplyHotPotato {
+    private sealed interface AnvilAction permits AnvilAction.Recombobulate, AnvilAction.ApplyReforge, AnvilAction.ApplyHotPotato, AnvilAction.ApplyArtOfPeace {
         record Recombobulate() implements AnvilAction {}
         record ApplyReforge(Reforge reforge) implements AnvilAction {}
         record ApplyHotPotato() implements AnvilAction {}
+        record ApplyArtOfPeace() implements AnvilAction {}
     }
 
     private static void handleCombine(Inventory inv, SkyblockPlayer player) {
@@ -242,6 +243,12 @@ public class AnvilMenu {
             return null;
         }
 
+        if ("THE_ART_OF_PEACE".equals(sacrificeId)) {
+            if (!base.getItemType().isArmor()) return null;
+            if (ItemNBT.hasArtOfPeace(upgrade)) return null;
+            return new AnvilAction.ApplyArtOfPeace();
+        }
+
         if (!base.isReforgeable()) return null;
         Reforge reforge = ReforgeStoneRegistry.getReforgeForStone(sacrificeId);
         if (reforge == null || !reforge.canApplyTo(base.getItemType())) return null;
@@ -260,7 +267,7 @@ public class AnvilMenu {
 
         switch (action) {
             case AnvilAction.Recombobulate() -> {
-                builder.recombobulated(true).hotPotatoCount(currentHpb);
+                builder.recombobulated(true).hotPotatoCount(currentHpb).artOfPeace(ItemNBT.hasArtOfPeace(upgradeItem));
                 String existingModifier = ItemNBT.getModifier(upgradeItem);
                 if (existingModifier != null) {
                     Reforge r = Reforge.getById(existingModifier.toUpperCase(), base.getItemType());
@@ -278,6 +285,7 @@ public class AnvilMenu {
                         ? base.getRarity().getNextRarity() : base.getRarity();
                 builder.recombobulated(wasRecombobulated)
                         .hotPotatoCount(currentHpb)
+                        .artOfPeace(ItemNBT.hasArtOfPeace(upgradeItem))
                         .modifier(reforge.getName())
                         .reforgeLore(reforge.getLoreText());
                 for (Map.Entry<Stats, RarityStat> e : reforge.getStats().entrySet()) {
@@ -285,7 +293,23 @@ public class AnvilMenu {
                 }
             }
             case AnvilAction.ApplyHotPotato() -> {
-                builder.recombobulated(wasRecombobulated).hotPotatoCount(currentHpb + 1);
+                builder.recombobulated(wasRecombobulated).hotPotatoCount(currentHpb + 1)
+                        .artOfPeace(ItemNBT.hasArtOfPeace(upgradeItem));
+                String existingModifier = ItemNBT.getModifier(upgradeItem);
+                if (existingModifier != null) {
+                    Reforge r = Reforge.getById(existingModifier.toUpperCase(), base.getItemType());
+                    if (r != null) {
+                        Rarity effectiveRarity = wasRecombobulated && base.getRarity().getNextRarity() != null
+                                ? base.getRarity().getNextRarity() : base.getRarity();
+                        builder.modifier(r.getName()).reforgeLore(r.getLoreText());
+                        for (Map.Entry<Stats, RarityStat> e : r.getStats().entrySet()) {
+                            builder.reforgeStat(e.getKey(), e.getValue().fromRarity(effectiveRarity));
+                        }
+                    }
+                }
+            }
+            case AnvilAction.ApplyArtOfPeace() -> {
+                builder.recombobulated(wasRecombobulated).hotPotatoCount(currentHpb).artOfPeace(true);
                 String existingModifier = ItemNBT.getModifier(upgradeItem);
                 if (existingModifier != null) {
                     Reforge r = Reforge.getById(existingModifier.toUpperCase(), base.getItemType());
