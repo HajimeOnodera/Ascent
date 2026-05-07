@@ -74,4 +74,9 @@ public class Main {
         // ── Ping (must start AFTER server.start()) ─────────────────────
         PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
+
+    static void shutdown(){
+        WorldHandler.shutdown();
+        MinecraftServer.stopCleanly();
+    }
 }
