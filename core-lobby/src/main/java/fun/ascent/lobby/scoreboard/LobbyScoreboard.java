@@ -1,5 +1,7 @@
 package fun.ascent.lobby.scoreboard;
 
+import fun.ascent.common.StringUtility;
+import fun.ascent.common.user.UserManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.MinecraftServer;
@@ -50,7 +52,7 @@ public class LobbyScoreboard {
 
         renderedLines.add("&7" + LocalDate.now().format(formatter) + " &8L1");
         renderedLines.add("");
-        renderedLines.add("&fRank: " + fun.ascent.common.user.UserManager.getUser(player.getUuid()).getRank().name());
+        renderedLines.add("&fRank: &7" + StringUtility.toNormalCase(UserManager.getUser(player.getUuid()).getRank().name()));
         renderedLines.add("&fAchievements: &e0");
         renderedLines.add("&fAscent Level: &b0");
         renderedLines.add(" ");

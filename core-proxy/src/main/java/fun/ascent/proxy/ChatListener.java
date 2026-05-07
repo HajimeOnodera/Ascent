@@ -3,12 +3,13 @@ package fun.ascent.proxy;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.player.PlayerChatEvent;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.user.UserManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class ChatListener {
-    private final com.velocitypowered.api.proxy.ProxyServer proxy;
+    private final ProxyServer proxy;
 
     public ChatListener(com.velocitypowered.api.proxy.ProxyServer proxy) {
         this.proxy = proxy;

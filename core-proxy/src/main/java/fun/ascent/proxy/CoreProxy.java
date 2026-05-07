@@ -49,7 +49,6 @@ public final class CoreProxy {
         registryManager = new ServerRegistryManager(proxy, logger);
         registryManager.start();
 
-        proxy.getEventManager().register(this, new ChatListener(proxy));
         proxy.getEventManager().register(this, new ConnectionListener());
     }
 
