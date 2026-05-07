@@ -22,7 +22,7 @@ public class WorldHandler {
     public static HashMap<String, World> worlds = new HashMap<>();
     public static InstanceManager instanceManager;
     public static WorldRegistry WORLD_REGISTRY = new WorldRegistry();
-    private static final Pos STARTING_SPAWN = new Pos(0 , 77, -1);
+    private static final Pos STARTING_SPAWN = new Pos(0 , 77, -1,180,0);
     public static final Tag<String> worldID = Tag.String("world");
 
     public static void initialise() {
