@@ -9,12 +9,13 @@ import java.util.UUID;
 
 public final class ItemNBT {
 
-    private static final Tag<String> TAG_ID             = Tag.String("id");
-    private static final Tag<String> TAG_UUID            = Tag.String("uuid");
-    private static final Tag<Long>   TAG_TIMESTAMP       = Tag.Long("timestamp");
-    private static final Tag<String> TAG_MODIFIER        = Tag.String("modifier");
-    private static final Tag<Byte>   TAG_RARITY_UPGRADES  = Tag.Byte("rarity_upgrades");
-    private static final Tag<Byte>   TAG_HOT_POTATO_COUNT = Tag.Byte("hot_potato_count");
+    private static final Tag<String> TAG_ID = Tag.String("id");
+    private static final Tag<String> TAG_UUID = Tag.String("uuid");
+    private static final Tag<Long> TAG_TIMESTAMP = Tag.Long("timestamp");
+    private static final Tag<String> TAG_MODIFIER = Tag.String("modifier");
+    private static final Tag<Byte> TAG_RARITY_UPGRADES = Tag.Byte("rarity_upgrades");
+    private static final Tag<Byte> TAG_HOT_POTATO_COUNT = Tag.Byte("hot_potato_count");
+    private static final Tag<Byte> TAG_ART_OF_PEACE = Tag.Byte("art_of_peace");
 
     private ItemNBT() {}
 
@@ -57,6 +58,13 @@ public final class ItemNBT {
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
         if (data == null) return false;
         Byte val = data.getTag(TAG_RARITY_UPGRADES);
+        return val != null && val == 1;
+    }
+
+    public static boolean hasArtOfPeace(ItemStack stack) {
+        CustomData data = stack.get(DataComponents.CUSTOM_DATA);
+        if (data == null) return false;
+        Byte val = data.getTag(TAG_ART_OF_PEACE);
         return val != null && val == 1;
     }
 }
