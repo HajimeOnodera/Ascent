@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player;
 
+import com.google.gson.GsonBuilder;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
@@ -20,6 +21,7 @@ public class SkyblockPlayer extends Player {
     @Getter private ProfilePlayer activeProfileData;
 
     public static final Tag<UUID> sbProfileID = Tag.UUID("profile_id");
+
 
     public SkyblockPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
