@@ -1,12 +1,12 @@
 package fun.ascent.skyblock;
 
+import fun.ascent.common.Ascent;
 import fun.ascent.common.redis.PingService;
-import fun.ascent.common.redis.RedisConfig;
-import fun.ascent.common.redis.RedisManager;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.reforge.Reforge;
+import fun.ascent.skyblock.listeners.SkyblockChatListener;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
@@ -21,6 +21,8 @@ import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 
 public class Main {
 
@@ -29,10 +31,7 @@ public class Main {
 
     static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
-        // ── Redis ───────────────────────────────────────────────────────────
-        RedisManager.connect(RedisConfig.fromEnv());
-        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
-        System.out.println("[Skyblock] Connected to Redis & MongoDB");
+        Ascent.initialize();
 
         // ── Minestom ────────────────────────────────────────────────────────
         MinecraftServer server = MinecraftServer.init(config.auth());
@@ -55,11 +54,11 @@ public class Main {
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();
         CombatListener.register();
-        fun.ascent.skyblock.listeners.SkyblockChatListener.register();
+        SkyblockChatListener.register();
 
-        MinecraftServer.getGlobalEventHandler().addListener(net.minestom.server.event.player.PlayerSpawnEvent.class, event -> {
-            net.minestom.server.entity.Player player = event.getPlayer();
-            player.setDisplayName(fun.ascent.common.user.UserManager.getDisplayName(player.getUuid()));
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerSpawnEvent.class, event -> {
+            Player player = event.getPlayer();
+            player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
         });
 
         System.out.println("[Skyblock] Starting the Server");

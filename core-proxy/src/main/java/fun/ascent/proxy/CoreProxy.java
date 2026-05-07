@@ -9,9 +9,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import fun.ascent.common.redis.RedisConfig;
-import fun.ascent.common.redis.RedisManager;
-import fun.ascent.common.user.UserManager;
+import fun.ascent.common.Ascent;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -42,11 +40,7 @@ public final class CoreProxy {
     public void onProxyInitialize(ProxyInitializeEvent event) {
         reload();
         
-        // Initialize Redis communication
-        if (!RedisManager.isInitialized()) {
-            RedisManager.connect(RedisConfig.fromEnv());
-        }
-        fun.ascent.common.service.redis.ServerOutboundMessage.init();
+        Ascent.initialize();
 
         registerCommands();
         logger.info("Ascent proxy loaded with {} server route(s).", config.routes().size());
@@ -54,8 +48,6 @@ public final class CoreProxy {
         // Start dynamic Redis-based server discovery
         registryManager = new ServerRegistryManager(proxy, logger);
         registryManager.start();
-
-        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
 
         proxy.getEventManager().register(this, new ChatListener(proxy));
         proxy.getEventManager().register(this, new ConnectionListener());

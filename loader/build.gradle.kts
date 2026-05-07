@@ -6,6 +6,7 @@ dependencies {
     implementation(project(":core-lobby"))
     implementation(project(":core-skyblock"))
     implementation(project(":core-proxy"))
+    implementation("org.json:json:20231013")
 }
 
 tasks.shadowJar {

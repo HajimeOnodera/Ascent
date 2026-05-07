@@ -1,15 +1,19 @@
 package fun.ascent.lobby;
 
+import fun.ascent.common.Ascent;
+import fun.ascent.common.gui.InventoryGUIListener;
 import fun.ascent.common.redis.PingService;
-import fun.ascent.common.redis.RedisConfig;
-import fun.ascent.common.redis.RedisManager;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.lobby.command.ServerTransferCommand;
 import fun.ascent.lobby.config.LobbyConfig;
+import fun.ascent.lobby.item.LobbyItemManager;
+import fun.ascent.lobby.listener.LobbyChatListener;
+import fun.ascent.lobby.listener.LobbyProtectionListener;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
@@ -28,11 +32,7 @@ public final class Main {
 
     static void main() {
         LobbyConfig config = LobbyConfig.load();
-
-        // ── Redis ───────────────────────────────────────────────────────────
-        RedisManager.connect(RedisConfig.fromEnv());
-        UserManager.init(System.getenv().getOrDefault("MONGODB_URI", "mongodb://127.0.0.1:27017"));
-        System.out.println("[Lobby] Connected to Redis & MongoDB");
+        Ascent.initialize();
 
         // ── Minestom ────────────────────────────────────────────────────────
         MinecraftServer server = MinecraftServer.init(config.auth());
@@ -64,7 +64,7 @@ public final class Main {
     private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
 
-        fun.ascent.common.gui.InventoryGUIListener.register(handler);
+        InventoryGUIListener.register(handler);
 
         handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(world.instance());
@@ -72,8 +72,8 @@ public final class Main {
         });
 
         handler.addListener(PlayerSpawnEvent.class, event -> {
-            net.minestom.server.entity.Player player = event.getPlayer();
-            player.setDisplayName(fun.ascent.common.user.UserManager.getDisplayName(player.getUuid()));
+            Player player = event.getPlayer();
+            player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
             
             if (!event.isFirstSpawn()) {
                 return;
@@ -89,9 +89,9 @@ public final class Main {
             }
         });
 
-        fun.ascent.lobby.item.LobbyItemManager.init(handler);
-        fun.ascent.lobby.listener.LobbyProtectionListener.register(handler);
-        fun.ascent.lobby.listener.LobbyChatListener.register(handler);
+        LobbyItemManager.init(handler);
+        LobbyProtectionListener.register(handler);
+        LobbyChatListener.register(handler);
         npcManager.registerListeners(handler);
     }
 }

@@ -19,10 +19,13 @@ public final class Loader {
     private static final String DIM    = "\u001B[2m";
     
     private static final List<Process> children = new ArrayList<>();
+    private static LoaderConfig config;
 
     private Loader() {}
 
     static void main(String[] args) {
+        config = LoaderConfig.load();
+        
         // Kill all children when this loader is terminated
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             for (Process p : children) {
@@ -95,7 +98,9 @@ public final class Loader {
                     mainClass
             );
             pb.inheritIO();
-            pb.environment().putIfAbsent("REDIS_HOST", "127.0.0.1");
+            pb.environment().put("REDIS_HOST", config.getRedisHost());
+            pb.environment().put("REDIS_PORT", String.valueOf(config.getRedisPort()));
+            pb.environment().put("MONGODB_URI", config.getMongodbUri());
 
             Process process = pb.start();
             children.add(process);
@@ -155,7 +160,9 @@ public final class Loader {
             );
             pb.directory(proxyDir.toFile());
             pb.inheritIO();
-            pb.environment().putIfAbsent("REDIS_HOST", "127.0.0.1");
+            pb.environment().put("REDIS_HOST", config.getRedisHost());
+            pb.environment().put("REDIS_PORT", String.valueOf(config.getRedisPort()));
+            pb.environment().put("MONGODB_URI", config.getMongodbUri());
 
             Process process = pb.start();
             children.add(process);
