@@ -4,6 +4,7 @@ import fun.ascent.common.redis.RedisManager;
 import net.kyori.adventure.text.Component;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPubSub;
 
 import java.util.Map;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class UserManager {
     private static final Map<UUID, User> userCache = new ConcurrentHashMap<>();
     private static final String REDIS_PREFIX = "ascent:user:";
+    private static final String UPDATE_CHANNEL = "ascent:user:update";
 
     public static Component getDisplayName(UUID uuid) {
         return getUser(uuid).getDisplayName();
@@ -23,6 +25,27 @@ public class UserManager {
 
     public static void init(String mongoUri) {
         UserDatabase.connect(mongoUri);
+        startUpdateListener();
+    }
+
+    private static void startUpdateListener() {
+        Thread.startVirtualThread(() -> {
+            try (Jedis jedis = RedisManager.get().getResource()) {
+                jedis.subscribe(new JedisPubSub() {
+                    @Override
+                    public void onMessage(String channel, String message) {
+                        try {
+                            UUID uuid = UUID.fromString(message);
+                            userCache.remove(uuid);
+                            // Optionally reload immediately
+                            // getUser(uuid);
+                        } catch (Exception ignored) {}
+                    }
+                }, UPDATE_CHANNEL);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public static User getUser(UUID uuid) {
@@ -67,6 +90,11 @@ public class UserManager {
 
         // Save to MongoDB
         UserDatabase.saveUser(user);
+
+        // Notify all servers to invalidate cache
+        try (Jedis jedis = RedisManager.get().getResource()) {
+            jedis.publish(UPDATE_CHANNEL, user.getUuid().toString());
+        } catch (Exception ignored) {}
     }
 
     private static String serialize(User user) {

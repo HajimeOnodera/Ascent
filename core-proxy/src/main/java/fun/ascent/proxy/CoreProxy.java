@@ -99,6 +99,13 @@ public final class CoreProxy {
                 new RankCommand(proxy)
         );
 
+        proxy.getCommandManager().register(
+                proxy.getCommandManager().metaBuilder("adminme")
+                        .plugin(this)
+                        .build(),
+                new AdminMeCommand()
+        );
+
         fun.ascent.common.service.redis.ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
 
         for (ProxyRoute route : config.routes()) {

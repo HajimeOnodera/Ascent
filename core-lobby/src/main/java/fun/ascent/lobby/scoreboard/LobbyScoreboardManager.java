@@ -1,5 +1,6 @@
 package fun.ascent.lobby.scoreboard;
 
+import fun.ascent.common.user.UserManager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
@@ -38,6 +39,7 @@ public class LobbyScoreboardManager {
     }
 
     private static void updateTablist(Player player) {
+        player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
         player.sendPlayerListHeaderAndFooter(
                 color(" &bYou are playing on &e&lPLAY.ASCENT.FUN \n"),
                 color("\n &aRanks, Boosters & MORE! &cSTORE.ASCENT.FUN ")

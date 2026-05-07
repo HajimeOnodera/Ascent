@@ -21,8 +21,22 @@ public class RankCommand implements SimpleCommand {
     }
 
     @Override
+    public boolean hasPermission(Invocation invocation) {
+        if (invocation.source() instanceof Player player) {
+            return UserManager.getUser(player.getUniqueId()).getRank().isStaff();
+        }
+        return false; // Console is blocked
+    }
+
+    @Override
     public void execute(Invocation invocation) {
-        if (!invocation.source().hasPermission("ascent.admin.rank")) {
+        if (!(invocation.source() instanceof Player player)) {
+            invocation.source().sendMessage(Component.text("This command can only be used by players.", NamedTextColor.RED));
+            return;
+        }
+
+        User user = UserManager.getUser(player.getUniqueId());
+        if (!user.getRank().isStaff()) {
             invocation.source().sendMessage(Component.text("No permission.").color(NamedTextColor.RED));
             return;
         }
@@ -39,9 +53,9 @@ public class RankCommand implements SimpleCommand {
         proxy.getPlayer(targetName).ifPresentOrElse(target -> {
             try {
                 Rank rank = Rank.valueOf(rankName);
-                User user = UserManager.getUser(target.getUniqueId());
-                user.setRank(rank);
-                UserManager.saveUser(user);
+                User targetUser = UserManager.getUser(target.getUniqueId());
+                targetUser.setRank(rank);
+                UserManager.saveUser(targetUser);
 
                 invocation.source().sendMessage(Component.text("Set rank of ")
                         .append(Component.text(targetName).color(NamedTextColor.YELLOW))

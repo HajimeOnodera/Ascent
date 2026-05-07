@@ -1,7 +1,9 @@
 package fun.ascent.proxy;
 
 import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
+import fun.ascent.common.user.UserManager;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -16,6 +18,14 @@ final class ProxyAdminCommand implements SimpleCommand {
     ProxyAdminCommand(CoreProxy plugin, ProxyServer proxy) {
         this.plugin = plugin;
         this.proxy = proxy;
+    }
+
+    @Override
+    public boolean hasPermission(Invocation invocation) {
+        if (invocation.source() instanceof Player player) {
+            return UserManager.getUser(player.getUniqueId()).getRank().isStaff();
+        }
+        return false; // Console is blocked
     }
 
     @Override

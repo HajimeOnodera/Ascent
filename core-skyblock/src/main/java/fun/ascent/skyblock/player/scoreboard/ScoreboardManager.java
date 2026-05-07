@@ -34,6 +34,7 @@ public class ScoreboardManager {
                         scoreboards.put(sbPlayer.getUuid(), scoreboard);
                     }
                     scoreboard.update();
+                    sbPlayer.setDisplayName(fun.ascent.common.user.UserManager.getDisplayName(sbPlayer.getUuid()));
                 }
             }
         }).repeat(TaskSchedule.tick(4)).schedule();
