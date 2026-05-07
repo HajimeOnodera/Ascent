@@ -1,6 +1,13 @@
 plugins {
     id("java")
-    id("application")
+    id("io.github.goooler.shadow")
+}
+
+tasks.shadowJar {
+    archiveFileName.set("FriendService.jar")
+    manifest {
+        attributes("Main-Class" to "fun.ascent.service.friend.FriendService")
+    }
 }
 
 group = "fun.ascent"
@@ -20,6 +27,6 @@ dependencies {
     implementation("org.mongodb:mongodb-driver-sync:4.11.2")
 }
 
-application {
-    mainClass.set("fun.ascent.service.friend.FriendService")
+tasks.build {
+    dependsOn(tasks.shadowJar)
 }

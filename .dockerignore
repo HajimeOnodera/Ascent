@@ -1,0 +1,15 @@
+.gradle
+# Exclude all build directories
+build/**
+*/build/**
+# But allow JAR files in build/libs
+!build/libs/
+!build/libs/*.jar
+!*/build/libs/
+!*/build/libs/*.jar
+proxy/logs
+proxy/plugins/CoreProxy.jar
+.git
+.idea
+.vscode
+*.log
