@@ -26,7 +26,7 @@ public class Main {
     /** Host used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
         // ── Redis ───────────────────────────────────────────────────────────
         RedisManager.connect(RedisConfig.fromEnv());
@@ -53,6 +53,12 @@ public class Main {
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();
         CombatListener.register();
+        fun.ascent.skyblock.listeners.SkyblockChatListener.register();
+
+        MinecraftServer.getGlobalEventHandler().addListener(net.minestom.server.event.player.PlayerSpawnEvent.class, event -> {
+            net.minestom.server.entity.Player player = event.getPlayer();
+            player.setDisplayName(fun.ascent.common.user.UserManager.getDisplayName(player.getUuid()));
+        });
 
         System.out.println("[Skyblock] Starting the Server");
         server.start(config.host(), config.port());

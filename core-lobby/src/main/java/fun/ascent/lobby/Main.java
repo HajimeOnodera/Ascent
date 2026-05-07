@@ -70,12 +70,15 @@ public final class Main {
         });
 
         handler.addListener(PlayerSpawnEvent.class, event -> {
+            net.minestom.server.entity.Player player = event.getPlayer();
+            player.setDisplayName(fun.ascent.common.user.UserManager.getDisplayName(player.getUuid()));
+            
             if (!event.isFirstSpawn()) {
                 return;
             }
 
-            event.getPlayer().teleport(world.spawn());
-            event.getPlayer().sendMessage(color("&eWelcome to &6Ascent&e! Pick a server to begin."));
+            player.teleport(world.spawn());
+            player.sendMessage(color("&eWelcome to &6Ascent&e! Pick a server to begin."));
         });
 
         handler.addListener(PlayerMoveEvent.class, event -> {
@@ -86,6 +89,7 @@ public final class Main {
 
         fun.ascent.lobby.item.LobbyItemManager.init(handler);
         fun.ascent.lobby.listener.LobbyProtectionListener.register(handler);
+        fun.ascent.lobby.listener.LobbyChatListener.register(handler);
         npcManager.registerListeners(handler);
     }
 }

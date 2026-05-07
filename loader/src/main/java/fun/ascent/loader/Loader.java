@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public final class Loader {
-
-    // ANSI colour helpers
+    
     private static final String RESET  = "\u001B[0m";
     private static final String BOLD   = "\u001B[1m";
     private static final String CYAN   = "\u001B[36m";
@@ -18,21 +17,19 @@ public final class Loader {
     private static final String RED    = "\u001B[31m";
     private static final String PURPLE = "\u001B[35m";
     private static final String DIM    = "\u001B[2m";
-
-    /** All child processes we've spawned — cleaned up on shutdown. */
+    
     private static final List<Process> children = new ArrayList<>();
 
     private Loader() {}
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         // Kill all children when this loader is terminated
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             for (Process p : children) {
                 if (p.isAlive()) p.destroyForcibly();
             }
         }));
-
-        // Direct CLI mode: java -jar AscentLoader.jar LOBBY
+        
         if (args.length > 0) {
             launch(args[0].trim().toUpperCase());
             waitForChildren();
@@ -130,7 +127,9 @@ public final class Loader {
 
         // Copy the built plugin if needed
         File pluginsDir = proxyDir.resolve("plugins").toFile();
-        if (!pluginsDir.isDirectory()) pluginsDir.mkdirs();
+        if (!pluginsDir.isDirectory()) {
+            boolean mkdirs = pluginsDir.mkdirs();
+        }
 
         File coreProxyJar = new File(pluginsDir, "CoreProxy.jar");
         File builtProxy = Path.of("core-proxy", "build", "libs", "CoreProxy.jar").toFile();
