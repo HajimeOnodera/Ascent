@@ -50,7 +50,7 @@ public class LobbyScoreboard {
 
         renderedLines.add("&7" + LocalDate.now().format(formatter) + " &8L1");
         renderedLines.add("");
-        renderedLines.add("&fRank: &7Default");
+        renderedLines.add("&fRank: " + fun.ascent.common.user.UserManager.getUser(player.getUuid()).getRank().name());
         renderedLines.add("&fAchievements: &e0");
         renderedLines.add("&fAscent Level: &b0");
         renderedLines.add(" ");

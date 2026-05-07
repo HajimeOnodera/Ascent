@@ -53,6 +53,9 @@ public final class CoreProxy {
         // Start dynamic Redis-based server discovery
         registryManager = new ServerRegistryManager(proxy, logger);
         registryManager.start();
+
+        proxy.getEventManager().register(this, new ChatListener(proxy));
+        proxy.getEventManager().register(this, new ConnectionListener());
     }
 
     @Subscribe
@@ -93,6 +96,13 @@ public final class CoreProxy {
                         .plugin(this)
                         .build(),
                 new FriendCommand(proxy)
+        );
+
+        proxy.getCommandManager().register(
+                proxy.getCommandManager().metaBuilder("rank")
+                        .plugin(this)
+                        .build(),
+                new RankCommand(proxy)
         );
 
         fun.ascent.common.service.redis.ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
