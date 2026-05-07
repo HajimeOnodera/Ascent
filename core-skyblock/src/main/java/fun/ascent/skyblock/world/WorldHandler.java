@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.tag.Tag;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class WorldHandler {
     public static HashMap<String, World> worlds = new HashMap<>();
     public static InstanceManager instanceManager;
     public static WorldRegistry WORLD_REGISTRY = new WorldRegistry();
-    private static final Pos STARTING_SPAWN = new Pos(0.5, 79, 13);
+    private static final Pos STARTING_SPAWN = new Pos(0 , 77, -1);
+    public static final Tag<String> worldID = Tag.String("world");
 
     public static void initialise() {
         instanceManager = MinecraftServer.getInstanceManager();
@@ -52,6 +54,7 @@ public class WorldHandler {
 
     public static InstanceContainer createWorld(World world){
         InstanceContainer container = instanceManager.createInstanceContainer();
+        container.setTag(worldID,world.name);
         try {
             if (!world.save) {
                 int radius = world.name.equalsIgnoreCase("island") ? 3 : -1;

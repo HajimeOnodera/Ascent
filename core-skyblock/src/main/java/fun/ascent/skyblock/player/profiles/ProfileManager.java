@@ -27,11 +27,12 @@ public class ProfileManager {
         return player.getPlayerProfile(profile);
     }
 
-    public static void createProfile(SkyblockPlayer player) {
+    public static SkyblockProfile createProfile(SkyblockPlayer player) {
         SkyblockProfile profile = new SkyblockProfile(List.of(player));
         register(profile);
         player.setActiveProfile(profile.profileID);
         System.out.println("1: " + profile.profileName + " : " + profile.profileID);
+        return profile;
     }
 
     public static void register(SkyblockProfile profile){

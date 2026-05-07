@@ -1,6 +1,5 @@
 package fun.ascent.skyblock.player;
 
-import com.google.gson.GsonBuilder;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
@@ -28,9 +27,8 @@ public class SkyblockPlayer extends Player {
         loadProfiles();
 
         if (playerProfiles.isEmpty()) {
-            SkyblockProfile profile = new SkyblockProfile(List.of(this));
+            SkyblockProfile profile = ProfileManager.createProfile(this);
             addProfile(profile);
-            setActiveProfile(profile.profileID);
         }
     }
 
@@ -69,6 +67,7 @@ public class SkyblockPlayer extends Player {
     }
 
     public void updatePlayer(){
+        if(this.activeProfile == null) return;
         this.activeProfileData.updateStats();
     }
 

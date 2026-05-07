@@ -4,7 +4,11 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 import net.minestom.server.entity.GameMode;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamemodeCommand extends Command {
 
@@ -17,6 +21,16 @@ public class GamemodeCommand extends Command {
             sender.sendMessage(MiniMessage.miniMessage().deserialize("<red> Please include the gamemode name"));
         });
 
+        gamemode.setSuggestionCallback((_,_,suggestion) -> {
+            String input = suggestion.getInput();
+            List<String> mods = new ArrayList<>(List.of("Creative", "Adventure", "Survival", "Spectator"));
+            if(!input.isEmpty()) {
+                for (String mod : new ArrayList<>(mods)) {
+                    if(!mod.toLowerCase().startsWith(input.toLowerCase())) mods.remove(mod);
+                }
+            }
+            mods.forEach(m -> suggestion.addEntry(new SuggestionEntry(m)));
+        });
         addSyntax((sender,args) -> {
             if(!(sender instanceof SkyblockPlayer player)) return;
             String mode = args.get(gamemode);

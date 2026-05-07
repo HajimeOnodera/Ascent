@@ -1,7 +1,5 @@
 package fun.ascent.skyblock.world;
 
-
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 
 import java.io.File;

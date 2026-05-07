@@ -2,9 +2,8 @@ package fun.ascent.skyblock.player.profiles;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.World;
-import fun.ascent.skyblock.world.WorldHandler;
+import lombok.Getter;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.instance.InstanceContainer;
 
 import java.io.File;
 import java.util.concurrent.ThreadLocalRandom;
@@ -19,25 +18,27 @@ public class SkyblockProfile {
     public UUID profileID;
     public List<ProfilePlayer> profilePlayers;
     public World island;
+    @Getter
+    public Pos spawnPos;
 
     public SkyblockProfile(List<SkyblockPlayer> players) {
         this.profileID = UUID.randomUUID();
         this.profileName = generateRandomProfileName();
         this.profilePlayers = new ArrayList<>();
-        players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID,pl)));
-        generateIsland(players);
+        spawnPos = new Pos(7,100, 5);
+        players.forEach(pl -> {
+            profilePlayers.add(new ProfilePlayer(this.profileID, pl));
+        });
+        generateIsland();
     }
 
-    public void generateIsland(List<SkyblockPlayer> players) {
+    public void generateIsland() {
         island = new World(profileID.toString(),
-                new File("maps/players/"+profileID+".polar"),new File("maps/prv-island"),true);
-        InstanceContainer container = island.getInstance();
-        Pos spawnPos = new Pos(0,41,0);
-        players.forEach(p -> {
-            p.setInstance(container);
-            p.teleport(spawnPos);
-            p.updatePlayer();
-        });
+                new File("maps/players/" + profileID + ".polar"),
+                new File("maps/privisland.polar"),
+                true);
+
+        island.getInstance();
     }
 
     public String generateRandomProfileName(){
@@ -50,4 +51,11 @@ public class SkyblockProfile {
         return names.get(num);
     }
 
+
+    public ProfilePlayer getPlayer(SkyblockPlayer pl) {
+        for (ProfilePlayer player : this.profilePlayers) {
+            if(player.playerUUID.equals(pl.getUuid())) return player;
+        }
+        return null;
+    }
 }
