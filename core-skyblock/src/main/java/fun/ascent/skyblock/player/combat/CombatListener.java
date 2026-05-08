@@ -4,6 +4,8 @@ import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.actionbar.ActionBar;
+import fun.ascent.skyblock.player.stats.Stats;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.entity.damage.Damage;
@@ -16,8 +18,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class CombatListener {
 
-    private static final long PLAYER_ATTACK_COOLDOWN_MS = 500;
-    private static final Map<UUID, Long> playerAttackCooldowns = new ConcurrentHashMap<>();
+    private static final long ATTACK_COOLDOWN_MS = 500;
+    private static final Map<UUID, Long> attackCooldowns = new ConcurrentHashMap<>();
 
     public static void register() {
         EventManager.registerEvent(new SEvent<EntityAttackEvent>() {
@@ -27,7 +29,6 @@ public class CombatListener {
                         && event.getTarget() instanceof SkyblockMobEntity mob) {
                     handlePlayerHitsMob(player, mob);
                 }
-
                 if (event.getEntity() instanceof SkyblockMobEntity mob
                         && event.getTarget() instanceof SkyblockPlayer player) {
                     handleMobHitsPlayer(mob, player);
@@ -38,9 +39,8 @@ public class CombatListener {
 
     private static void handlePlayerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob) {
         long now = System.currentTimeMillis();
-        long last = playerAttackCooldowns.getOrDefault(player.getUuid(), 0L);
-        if (now - last < PLAYER_ATTACK_COOLDOWN_MS) return;
-        playerAttackCooldowns.put(player.getUuid(), now);
+        if (now - attackCooldowns.getOrDefault(player.getUuid(), 0L) < ATTACK_COOLDOWN_MS) return;
+        attackCooldowns.put(player.getUuid(), now);
 
         CombatCalculator.CombatResult result = CombatCalculator.playerHitsMob(player, mob);
 
@@ -49,9 +49,8 @@ public class CombatListener {
                 Sound.Source.PLAYER, 1f, 1f
         ), Sound.Emitter.self());
 
-        if (mob.getInstance() != null) {
+        if (mob.getInstance() != null)
             DamageIndicator.spawn(mob.getInstance(), mob.getPosition(), result.damage(), result.isCrit());
-        }
 
         mob.damage(new Damage(DamageType.PLAYER_ATTACK, player, player, player.getPosition(), result.damageFloat()));
     }
@@ -59,12 +58,25 @@ public class CombatListener {
     private static void handleMobHitsPlayer(SkyblockMobEntity mob, SkyblockPlayer player) {
         if (!mob.tryAttack()) return;
 
-        CombatCalculator.CombatResult result = CombatCalculator.mobHitsPlayer(mob, player);
+        double rawDamage = mob.baseStat(Stats.DAMAGE);
+        double defense = player.playerStat(Stats.DEFENSE);
+        double actualDamage = defense > 0
+                ? rawDamage * (1.0 - defense / (defense + 100.0))
+                : rawDamage;
+        actualDamage = Math.max(1, actualDamage);
 
-        if (player.getInstance() != null) {
-            DamageIndicator.spawn(player.getInstance(), player.getPosition(), result.damage(), false);
+        if (player.getInstance() != null)
+            DamageIndicator.spawn(player.getInstance(), player.getPosition(), actualDamage, false);
+
+        player.removeHealth(actualDamage);
+
+        double absorbed = rawDamage - actualDamage;
+        if (absorbed > 0) {
+            ActionBar.of(player.getUuid()).addReplacement(
+                    ActionBar.Section.DEFENSE,
+                    "§a+" + String.format("%,d", (long) Math.round(absorbed)) + "❈",
+                    20, 10
+            );
         }
-
-        player.damage(new Damage(DamageType.MOB_ATTACK, mob, mob, mob.getPosition(), result.damageFloat()));
     }
 }
