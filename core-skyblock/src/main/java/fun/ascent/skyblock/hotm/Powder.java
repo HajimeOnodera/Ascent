@@ -1,21 +1,22 @@
 package fun.ascent.skyblock.hotm;
 
 public enum Powder {
-    MITHRIL("mithril", "§2Mithril Powder", "§2"),
-    GEMSTONE("gemstone", "§dGemstone Powder", "§d"),
-    GLACIAL("glacial", "§bGlacial Powder", "§b");
+    MITHRIL("mithril", "<dark_green>Mithril Powder", "<dark_green>"),
+    GEMSTONE("gemstone", "<light_purple>Gemstone Powder", "<light_purple>"),
+    GLACIAL("glacial", "<aqua>Glacial Powder", "<aqua>");
 
     private final String id;
     private final String displayName;
-    private final String color;
+    private final String colorTag;
 
-    Powder(String id, String displayName, String color) {
+    Powder(String id, String displayName, String colorTag) {
         this.id = id;
         this.displayName = displayName;
-        this.color = color;
+        this.colorTag = colorTag;
     }
 
     public String id() { return id; }
     public String displayName() { return displayName; }
-    public String color() { return color; }
+    public String colorTag() { return colorTag; }
 }
+

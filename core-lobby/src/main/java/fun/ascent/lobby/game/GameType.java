@@ -12,10 +12,10 @@ public enum GameType {
             ItemStackCreator.getStackHead("686718d85e25b006f2c8f160f619b23c8fd6ae75ddf1c06308ec0f539d931703"),
             Category.PERSISTENT_GAME,
             "skyblock",
-            "§7SkyBlock has finally arrived on",
-            "§7Hypixel! Play with friends (or solo!),",
-            "§7build your private islands and",
-            "§7collect all the items!"),
+            "<gray>SkyBlock has finally arrived on",
+            "<gray>Hypixel! Play with friends (or solo!),",
+            "<gray>build your private islands and",
+            "<gray>collect all the items!"),
     ;
 
     private final String displayName;
@@ -63,3 +63,4 @@ public enum GameType {
         CASUAL_GAMES,
     }
 }
+

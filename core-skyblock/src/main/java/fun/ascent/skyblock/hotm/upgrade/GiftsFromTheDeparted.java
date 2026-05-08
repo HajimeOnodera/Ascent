@@ -12,6 +12,7 @@ public final class GiftsFromTheDeparted extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GLACIAL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 2.45); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Increases the chance of finding loot from §bCorpses §7in §bGlacite Mineshafts §7by §a" + l + "%§7.");
+        return List.of("<gray>Increases the chance of finding loot from <aqua>Corpses <gray>in <aqua>Glacite Mineshafts <gray>by <green>" + l + "%<gray>.");
     }
 }
+

@@ -16,10 +16,8 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.timer.TaskSchedule;
-import net.minestom.server.utils.Direction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -28,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static fun.ascent.common.StringUtility.text;
 
 public final class MinionManager {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
@@ -51,7 +51,7 @@ public final class MinionManager {
                 SkyblockProfile profile = player.getActiveProfile();
                 if(profile == null) return;
                 if (!minion.getOwnerUuid().equals(profile.profileID)) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>This minion belongs to someone else.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>This minion belongs to someone else.</red>")));
                     return;
                 }
                 MinionMenu.open(player, minion);
@@ -95,46 +95,41 @@ public final class MinionManager {
         placeMinionAt(player, type, tier, base.blockX(), base.blockY(), base.blockZ(), false);
     }
 
-    private static SkyblockMinion placeMinion(SkyblockPlayer player, MinionType type, int tier, int blockX, int blockY, int blockZ, BlockFace face, boolean consumeItem) {
-        Direction direction = face.toDirection();
-        return placeMinionAt(player, type, tier, blockX + direction.normalX(), blockY + direction.normalY(), blockZ + direction.normalZ(), consumeItem);
-    }
-
-    private static SkyblockMinion placeMinionAt(SkyblockPlayer player, MinionType type, int tier, int placeX, int placeY, int placeZ, boolean consumeItem) {
+    private static void placeMinionAt(SkyblockPlayer player, MinionType type, int tier, int placeX, int placeY, int placeZ, boolean consumeItem) {
         SkyblockProfile profile = player.getActiveProfile();
-        if(profile == null) return null;
+        if(profile == null) return;
         List<SkyblockMinion> owned = MINIONS_BY_OWNER.computeIfAbsent(profile.profileID, ignored -> new ArrayList<>());
 
         if (owned.size() >= profile.minionSlots) {
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>You already have the maximum number of placed minions.</red>"));
-            return null;
+            player.sendMessage(text(MINI_MESSAGE.deserialize("<red>You already have the maximum number of placed minions.</red>")));
+            return;
         }
 
         Instance instance = player.getInstance();
         if (instance == null) {
-            return null;
+            return;
         }
 
         Pos placeAt = new Pos(placeX + 0.5, placeY, placeZ + 0.5, snappedYaw(player), 0f);
 
         for (SkyblockMinion existing : MINIONS_BY_ID.values()) {
             if (existing.getInstance() == instance && existing.getPosition().distanceSquared(placeAt) < 1) {
-                player.sendMessage(MINI_MESSAGE.deserialize("<red>This block is already occupied.</red>"));
-                return null;
+                player.sendMessage(text(MINI_MESSAGE.deserialize("<red>This block is already occupied.</red>")));
+                return;
             }
         }
 
         Block feetBlock = instance.getBlock(placeX, placeY, placeZ);
         Block headBlock = instance.getBlock(placeX, placeY + 1, placeZ);
         if (!feetBlock.isAir() || !headBlock.isAir()) {
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>You need more space to place this minion.</red>"));
-            return null;
+            player.sendMessage(text(MINI_MESSAGE.deserialize("<red>You need more space to place this minion.</red>")));
+            return;
         }
 
         if (consumeItem) {
             ItemStack heldItem = player.getInventory().getItemStack(player.getHeldSlot());
             if (!MinionItems.isMinionItem(heldItem)) {
-                return null;
+                return;
             }
             int newAmount = heldItem.amount() - 1;
             player.getInventory().setItemStack(player.getHeldSlot(), newAmount <= 0 ? ItemStack.AIR : heldItem.withAmount(newAmount));
@@ -146,8 +141,7 @@ public final class MinionManager {
         MINIONS_BY_ID.put(minion.getId(), minion);
         owned.add(minion);
 
-        player.sendMessage(MINI_MESSAGE.deserialize("<aqua>You placed a minion! <gray>(" + owned.size() + "/" + profile.minionSlots + ")</gray>"));
-        return minion;
+        player.sendMessage(text(MINI_MESSAGE.deserialize("<aqua>You placed a minion! <gray>(" + owned.size() + "/" + profile.minionSlots + ")</gray>")));
     }
 
     public static void removeMinion(SkyblockMinion minion) {

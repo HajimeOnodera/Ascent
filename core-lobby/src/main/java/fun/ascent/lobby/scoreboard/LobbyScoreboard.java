@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.text;
 
 public class LobbyScoreboard {
 
@@ -21,66 +21,66 @@ public class LobbyScoreboard {
     private int tickCount = 0;
 
     private static final String[] TITLE_ANIMATION = {
-            "&e&lASCENT",
-            "&e&lASCENT",
-            "&e&lASCENT",
-            "&e&lASCENT",
-            "&e&lASCENT",
-            "&f&lA&e&lSCENT",
-            "&e&lA&f&lS&e&lCENT",
-            "&e&lAS&f&lC&e&lENT",
-            "&e&lASC&f&lE&e&lNT",
-            "&e&lASCE&f&lN&e&lT",
-            "&e&lASCEN&f&lT",
-            "&e&lASCENT",
-            "&e&lASCENT",
-            "&e&lASCENT"
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT",
+            "<white><bold>A<yellow><bold>SCENT",
+            "<yellow><bold>A<white><bold>S<yellow><bold>CENT",
+            "<yellow><bold>AS<white><bold>C<yellow><bold>ENT",
+            "<yellow><bold>ASC<white><bold>E<yellow><bold>NT",
+            "<yellow><bold>ASCE<white><bold>N<yellow><bold>T",
+            "<yellow><bold>ASCEN<white><bold>T",
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT",
+            "<yellow><bold>ASCENT"
     };
 
     public LobbyScoreboard(Player player) {
         this.player = player;
-        this.sidebar = new Sidebar(color(TITLE_ANIMATION[0]));
+        this.sidebar = new Sidebar(text(TITLE_ANIMATION[0]));
         this.sidebar.addViewer(player);
     }
 
     public void update() {
         tickCount++;
-        sidebar.setTitle(color(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
+        sidebar.setTitle(text(TITLE_ANIMATION[tickCount % TITLE_ANIMATION.length]));
 
         List<String> renderedLines = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy");
 
-        renderedLines.add("&7" + LocalDate.now().format(formatter) + " &8L1");
+        renderedLines.add("<gray>" + LocalDate.now().format(formatter) + " <dark_gray>L1");
         renderedLines.add("");
-        renderedLines.add("&fRank: &7" + StringUtility.toNormalCase(UserManager.getUser(player.getUuid()).getRank().name()));
-        renderedLines.add("&fAchievements: &e0");
-        renderedLines.add("&fAscent Level: &b0");
+        renderedLines.add("<white>Rank: <gray>" + StringUtility.toNormalCase(UserManager.getUser(player.getUuid()).getRank().name()));
+        renderedLines.add("<white>Achievements: <yellow>0");
+        renderedLines.add("<white>Ascent Level: <aqua>0");
         renderedLines.add(" ");
-        renderedLines.add("&fLobby: &a1");
-        renderedLines.add("&fPlayers: &a" + MinecraftServer.getConnectionManager().getOnlinePlayers().size());
+        renderedLines.add("<white>Lobby: <green>1");
+        renderedLines.add("<white>Players: <green>" + MinecraftServer.getConnectionManager().getOnlinePlayers().size());
         renderedLines.add("  ");
-        renderedLines.add("&fFriends Online: &a0");
-        renderedLines.add("&fGuild Online: &7No guild!");
+        renderedLines.add("<white>Friends Online: <green>0");
+        renderedLines.add("<white>Guild Online: <gray>No guild!");
         renderedLines.add("   ");
-        renderedLines.add("&eplay.ascent.fun");
+        renderedLines.add("<yellow>play.ascent.fun");
 
         int score = renderedLines.size();
 
         for (int i = 0; i < renderedLines.size(); i++) {
-            String lineId = "§7" + Integer.toHexString(i) + "§r";
+            String lineId = "<gray>" + Integer.toHexString(i) + "<reset>";
             String content = renderedLines.get(i);
 
             if (i < lastLineCount) {
-                sidebar.updateLineContent(lineId, color(content));
+                sidebar.updateLineContent(lineId, text(content));
             } else {
                 sidebar.createLine(
-                        new Sidebar.ScoreboardLine(lineId, color(content), score));
+                        new Sidebar.ScoreboardLine(lineId, text(content), score));
             }
             score--;
         }
 
         for (int i = renderedLines.size(); i < lastLineCount; i++) {
-            String lineId = "§7" + Integer.toHexString(i) + "§r";
+            String lineId = "<gray>" + Integer.toHexString(i) + "<reset>";
             sidebar.removeLine(lineId);
         }
 
@@ -91,3 +91,4 @@ public class LobbyScoreboard {
         sidebar.removeViewer(player);
     }
 }
+

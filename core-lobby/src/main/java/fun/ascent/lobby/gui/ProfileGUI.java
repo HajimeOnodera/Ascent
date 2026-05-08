@@ -4,7 +4,7 @@ import fun.ascent.common.gui.InventoryGUI;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.text;
 
 public class ProfileGUI extends InventoryGUI {
 
@@ -14,7 +14,7 @@ public class ProfileGUI extends InventoryGUI {
 
     @Override
     public void onOpen(InventoryGUIOpenEvent e) {
-        e.player().sendMessage(color("&cProfile menu is currently under development!"));
+        e.player().sendMessage(text(text("<red>Profile menu is currently under development!")));
     }
 
     @Override
@@ -27,3 +27,4 @@ public class ProfileGUI extends InventoryGUI {
         e.setCancelled(true);
     }
 }
+

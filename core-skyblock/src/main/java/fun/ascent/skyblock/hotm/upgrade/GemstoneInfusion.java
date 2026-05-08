@@ -12,11 +12,12 @@ public final class GemstoneInfusion extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Gemstone Infusion",
-            "§7Increases the effectiveness of §6every Gemstone",
-            "§7in your pick's Gemstone Slots by §a50% §7for §a16s§7.",
+            "<gold>Pickaxe Ability: Gemstone Infusion",
+            "<gray>Increases the effectiveness of <gold>every Gemstone",
+            "<gray>in your pick's Gemstone Slots by <green>50% <gray>for <green>16s<gray>.",
             " ",
-            "§8Cooldown: §a120s"
+            "<dark_gray>Cooldown: <green>120s"
         );
     }
 }
+

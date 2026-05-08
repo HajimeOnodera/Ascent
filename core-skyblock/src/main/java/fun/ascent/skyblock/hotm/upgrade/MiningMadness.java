@@ -12,6 +12,7 @@ public final class MiningMadness extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.MITHRIL; }
     @Override public int cost(int l) { return 8; }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+50 §6⸕ Mining Speed §7and §a+50 §6☘ Mining Fortune§7.");
+        return List.of("<gray>Grants <green>+50 <gold>⸕ Mining Speed <gray>and <green>+50 <gold>☘ Mining Fortune<gray>.");
     }
 }
+

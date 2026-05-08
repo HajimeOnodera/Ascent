@@ -4,7 +4,7 @@ import fun.ascent.common.gui.InventoryGUI;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.text;
 
 public class CollectiblesGUI extends InventoryGUI {
 
@@ -14,7 +14,7 @@ public class CollectiblesGUI extends InventoryGUI {
 
     @Override
     public void onOpen(InventoryGUIOpenEvent e) {
-        e.player().sendMessage(color("&cCollectibles menu is currently under development!"));
+        e.player().sendMessage(text(text("<red>Collectibles menu is currently under development!")));
     }
 
     @Override
@@ -27,3 +27,4 @@ public class CollectiblesGUI extends InventoryGUI {
         e.setCancelled(true);
     }
 }
+

@@ -3,8 +3,6 @@ package fun.ascent.common.item;
 import fun.ascent.common.StringUtility;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -17,12 +15,13 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static fun.ascent.common.StringUtility.*;
+import static net.minestom.server.component.DataComponents.*;
+
 public class ItemStackCreator {
     private static final TooltipDisplay DEFAULT_TOOLTIP_DISPLAY = new TooltipDisplay(false, Set.of(
-            DataComponents.UNBREAKABLE
+            UNBREAKABLE
     ));
-    private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
-
     /**
      * Creates an {@link ItemStack.Builder} with a specified material and custom name.
      *
@@ -32,8 +31,8 @@ public class ItemStackCreator {
      */
     public static ItemStack.Builder createNamedItemStack(Material material, String name) {
         return clearAttributes(ItemStack.builder(material)
-                .set(DataComponents.CUSTOM_NAME, Component.text(name).decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+                .set(CUSTOM_NAME, text(name))
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -45,8 +44,8 @@ public class ItemStackCreator {
      */
     public static ItemStack.Builder createNamedItemStack(Material material, Component name) {
         return clearAttributes(ItemStack.builder(material)
-                .set(DataComponents.CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+                .set(CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -56,8 +55,8 @@ public class ItemStackCreator {
      * @return the modified {@link ItemStack.Builder}
      */
     public static ItemStack.Builder clearAttributes(ItemStack.Builder builder) {
-        builder.set(DataComponents.ATTRIBUTE_MODIFIERS, new AttributeList(List.of()));
-        builder.set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY);
+        builder.set(ATTRIBUTE_MODIFIERS, new AttributeList(List.of()));
+        builder.set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY);
         return builder;
     }
 
@@ -83,7 +82,7 @@ public class ItemStackCreator {
      */
     public static ItemStack.Builder getSingleLoreStack(String name, String color, Material material, int amount, String lore) {
         List<String> l = new ArrayList<>();
-        for (String line : StringUtility.splitByWordAndLength(lore, 30)) {
+        for (String line : splitByWordAndLength(lore, 30)) {
             l.add(color + line);
         }
         return getStack(name, material, amount, l.toArray(new String[]{}));
@@ -125,7 +124,7 @@ public class ItemStackCreator {
     }
 
     public static ItemStack.Builder getStack(String name, Material material, int amount, Component... lore) {
-        return getStack(Component.text(name), material, amount, Arrays.asList(lore));
+        return getStack(text(name), material, amount, Arrays.asList(lore));
     }
 
     /**
@@ -154,10 +153,10 @@ public class ItemStackCreator {
             copiedLore.add(replaceColorCodes(s));
         }
 
-        return clearAttributes(builder.set(DataComponents.LORE, copiedLore.stream()
-                        .map(line -> Component.text(line).decoration(TextDecoration.ITALIC, false))
+        return clearAttributes(builder.set(LORE, copiedLore.stream()
+                        .map(StringUtility::text)
                         .collect(Collectors.toList()))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -168,13 +167,13 @@ public class ItemStackCreator {
      * @return the modified {@link ItemStack.Builder}
      */
     public static ItemStack.Builder appendLore(ItemStack.Builder builder, List<String> lore) {
-        List<Component> existingLore = new ArrayList<>(Objects.requireNonNull(builder.build().get(DataComponents.LORE)));
+        List<Component> existingLore = new ArrayList<>(Objects.requireNonNull(builder.build().get(LORE)));
         for (String s : lore) {
-            existingLore.add(Component.text(replaceColorCodes(s)).decoration(TextDecoration.ITALIC, false));
+            existingLore.add(text(s));
         }
 
-        return clearAttributes(builder.set(DataComponents.LORE, existingLore)
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+        return clearAttributes(builder.set(LORE, existingLore)
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -194,8 +193,8 @@ public class ItemStackCreator {
      * @return the modified {@link ItemStack.Builder}
      */
     public static ItemStack.Builder enchant(ItemStack.Builder builder) {
-        return clearAttributes(builder.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+        return clearAttributes(builder.set(ENCHANTMENT_GLINT_OVERRIDE, true)
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -209,16 +208,16 @@ public class ItemStackCreator {
                 .amount(stack.amount());
         
         // Copy components safely
-        if (stack.has(DataComponents.CUSTOM_NAME)) builder.set(DataComponents.CUSTOM_NAME, Objects.requireNonNull(stack.get(DataComponents.CUSTOM_NAME)));
-        if (stack.has(DataComponents.LORE)) builder.set(DataComponents.LORE, Objects.requireNonNull(stack.get(DataComponents.LORE)));
-        if (stack.has(DataComponents.PROFILE)) builder.set(DataComponents.PROFILE, Objects.requireNonNull(stack.get(DataComponents.PROFILE)));
-        if (stack.has(DataComponents.CUSTOM_DATA)) builder.set(DataComponents.CUSTOM_DATA, Objects.requireNonNull(stack.get(DataComponents.CUSTOM_DATA)));
-        if (stack.has(DataComponents.ENCHANTMENTS)) builder.set(DataComponents.ENCHANTMENTS, Objects.requireNonNull(stack.get(DataComponents.ENCHANTMENTS)));
-        if (stack.has(DataComponents.ATTRIBUTE_MODIFIERS)) builder.set(DataComponents.ATTRIBUTE_MODIFIERS, Objects.requireNonNull(stack.get(DataComponents.ATTRIBUTE_MODIFIERS)));
-        if (stack.has(DataComponents.TOOLTIP_DISPLAY)) builder.set(DataComponents.TOOLTIP_DISPLAY, Objects.requireNonNull(stack.get(DataComponents.TOOLTIP_DISPLAY)));
-        if (stack.has(DataComponents.DYED_COLOR)) builder.set(DataComponents.DYED_COLOR, Objects.requireNonNull(stack.get(DataComponents.DYED_COLOR)));
-        if (stack.has(DataComponents.POTION_CONTENTS)) builder.set(DataComponents.POTION_CONTENTS, Objects.requireNonNull(stack.get(DataComponents.POTION_CONTENTS)));
-        if (stack.has(DataComponents.UNBREAKABLE)) builder.set(DataComponents.UNBREAKABLE, Objects.requireNonNull(stack.get(DataComponents.UNBREAKABLE)));
+        if (stack.has(CUSTOM_NAME)) builder.set(CUSTOM_NAME, Objects.requireNonNull(stack.get(CUSTOM_NAME)));
+        if (stack.has(LORE)) builder.set(LORE, Objects.requireNonNull(stack.get(LORE)));
+        if (stack.has(PROFILE)) builder.set(PROFILE, Objects.requireNonNull(stack.get(PROFILE)));
+        if (stack.has(CUSTOM_DATA)) builder.set(CUSTOM_DATA, Objects.requireNonNull(stack.get(CUSTOM_DATA)));
+        if (stack.has(ENCHANTMENTS)) builder.set(ENCHANTMENTS, Objects.requireNonNull(stack.get(ENCHANTMENTS)));
+        if (stack.has(ATTRIBUTE_MODIFIERS)) builder.set(ATTRIBUTE_MODIFIERS, Objects.requireNonNull(stack.get(ATTRIBUTE_MODIFIERS)));
+        if (stack.has(TOOLTIP_DISPLAY)) builder.set(TOOLTIP_DISPLAY, Objects.requireNonNull(stack.get(TOOLTIP_DISPLAY)));
+        if (stack.has(DYED_COLOR)) builder.set(DYED_COLOR, Objects.requireNonNull(stack.get(DYED_COLOR)));
+        if (stack.has(POTION_CONTENTS)) builder.set(POTION_CONTENTS, Objects.requireNonNull(stack.get(POTION_CONTENTS)));
+        if (stack.has(UNBREAKABLE)) builder.set(UNBREAKABLE, Objects.requireNonNull(stack.get(UNBREAKABLE)));
         
         return builder;
     }
@@ -233,7 +232,7 @@ public class ItemStackCreator {
      * @return an {@link ItemStack.Builder} with the specified properties
      */
     public static ItemStack.Builder getStack(String name, Material material, int amount, List<?> lore) {
-        return getStack(Component.text(name), material, amount, literalLoreComponents(lore));
+        return getStack(text(name), material, amount, literalLoreComponents(lore));
     }
 
     /**
@@ -248,11 +247,11 @@ public class ItemStackCreator {
     public static ItemStack.Builder getStack(Component name, Material material, int amount, List<Component> lore) {
         List<Component> copiedLore = new ArrayList<>(lore);
 
-        return clearAttributes(ItemStack.builder(material).amount(amount).set(DataComponents.LORE, copiedLore.stream()
+        return clearAttributes(ItemStack.builder(material).amount(amount).set(LORE, copiedLore.stream()
                         .map(line -> line.decoration(TextDecoration.ITALIC, false))
                         .collect(Collectors.toList()))
-                .set(DataComponents.CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
+                .set(CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY));
     }
 
     /**
@@ -273,7 +272,7 @@ public class ItemStackCreator {
     }
 
     public static ItemStack.Builder getStackHead(String name, String texture, int amount, Component... lore) {
-        return getStackHead(Component.text(name), texture, amount, Arrays.asList(lore));
+        return getStackHead(text(name), texture, amount, Arrays.asList(lore));
     }
 
     public static ItemStack.Builder getStackHead(Component name, String texture, int amount, Component... lore) {
@@ -319,7 +318,7 @@ public class ItemStackCreator {
     }
 
     public static ItemStack.Builder getStackHead(String name, PlayerSkin skin, int amount, Component... lore) {
-        return getStackHead(Component.text(name), skin, amount, Arrays.asList(lore));
+        return getStackHead(text(name), skin, amount, Arrays.asList(lore));
     }
 
     public static ItemStack.Builder getStackHead(Component name, PlayerSkin skin, int amount, Component... lore) {
@@ -345,12 +344,12 @@ public class ItemStackCreator {
         String texturesEncoded = Base64.getEncoder().encodeToString(json.toString().getBytes());
 
         return ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.LORE, literalLoreComponents(lore).stream()
+                .set(LORE, literalLoreComponents(lore).stream()
                         .map(line -> line.decoration(TextDecoration.ITALIC, false))
                         .collect(Collectors.toList()))
-                .set(DataComponents.CUSTOM_NAME, Component.text(name).decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY)
-                .set(DataComponents.PROFILE, new ResolvableProfile(new PlayerSkin(texturesEncoded, null)))
+                .set(CUSTOM_NAME, text(name))
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY)
+                .set(PROFILE, new ResolvableProfile(new PlayerSkin(texturesEncoded, null)))
                 .amount(amount);
     }
 
@@ -364,12 +363,12 @@ public class ItemStackCreator {
         String texturesEncoded = Base64.getEncoder().encodeToString(json.toString().getBytes());
 
         return ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.LORE, new ArrayList<>(lore).stream()
+                .set(LORE, new ArrayList<>(lore).stream()
                         .map(line -> line.decoration(TextDecoration.ITALIC, false))
                         .collect(Collectors.toList()))
-                .set(DataComponents.CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY)
-                .set(DataComponents.PROFILE, new ResolvableProfile(new PlayerSkin(texturesEncoded, null)))
+                .set(CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
+                .set(TOOLTIP_DISPLAY, DEFAULT_TOOLTIP_DISPLAY)
+                .set(PROFILE, new ResolvableProfile(new PlayerSkin(texturesEncoded, null)))
                 .amount(amount);
     }
 
@@ -384,33 +383,33 @@ public class ItemStackCreator {
      */
     public static ItemStack.Builder getStackHead(String name, PlayerSkin skin, int amount, List<?> lore) {
         return clearAttributes(ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.LORE, literalLoreComponents(lore).stream()
+                .set(LORE, literalLoreComponents(lore).stream()
                         .map(line -> line.decoration(TextDecoration.ITALIC, false))
                         .collect(Collectors.toList()))
-                .set(DataComponents.CUSTOM_NAME, Component.text(name).decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(true, Set.of(
-                        DataComponents.CONSUMABLE,
-                        DataComponents.DAMAGE,
-                        DataComponents.BASE_COLOR,
-                        DataComponents.UNBREAKABLE
+                .set(CUSTOM_NAME, text(name))
+                .set(TOOLTIP_DISPLAY, new TooltipDisplay(true, Set.of(
+                        CONSUMABLE,
+                        DAMAGE,
+                        BASE_COLOR,
+                        UNBREAKABLE
                 )))
-                .set(DataComponents.PROFILE, new ResolvableProfile(skin))
+                .set(PROFILE, new ResolvableProfile(skin))
                 .amount(amount));
     }
 
     public static ItemStack.Builder getStackHead(Component name, PlayerSkin skin, int amount, List<Component> lore) {
         return clearAttributes(ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.LORE, new ArrayList<>(lore).stream()
+                .set(LORE, new ArrayList<>(lore).stream()
                         .map(line -> line.decoration(TextDecoration.ITALIC, false))
                         .collect(Collectors.toList()))
-                .set(DataComponents.CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
-                .set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(true, Set.of(
-                        DataComponents.CONSUMABLE,
-                        DataComponents.DAMAGE,
-                        DataComponents.BASE_COLOR,
-                        DataComponents.UNBREAKABLE
+                .set(CUSTOM_NAME, name.decoration(TextDecoration.ITALIC, false))
+                .set(TOOLTIP_DISPLAY, new TooltipDisplay(true, Set.of(
+                        CONSUMABLE,
+                        DAMAGE,
+                        BASE_COLOR,
+                        UNBREAKABLE
                 )))
-                .set(DataComponents.PROFILE, new ResolvableProfile(skin))
+                .set(PROFILE, new ResolvableProfile(skin))
                 .amount(amount));
     }
 
@@ -433,7 +432,7 @@ public class ItemStackCreator {
      * @return the string with color codes replaced
      */
     public static String replaceColorCodes(String string) {
-        return string.replace("&", "§");
+        return toMiniMessage(string);
     }
 
     public static List<Component> literalLoreComponents(List<?> lore) {
@@ -448,8 +447,9 @@ public class ItemStackCreator {
                 continue;
             }
 
-            loreComponents.add(LEGACY_SERIALIZER.deserialize(replaceColorCodes(String.valueOf(line))));
+            loreComponents.add(text(String.valueOf(line)));
         }
         return loreComponents;
     }
 }
+

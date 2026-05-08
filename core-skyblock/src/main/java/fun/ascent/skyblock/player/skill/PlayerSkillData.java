@@ -40,16 +40,16 @@ public class PlayerSkillData {
         if (reward == null || reward.xpRequired() <= 0) return 0.0;
 
         double progress = getXpIntoCurrentLevel(type) / reward.xpRequired();
-        return Math.max(0.0, Math.min(1.0, progress));
+        return Math.clamp(progress, 0.0, 1.0);
     }
 
     public String progressBar(SkillType type) {
         double progress = getProgressToNextLevel(type);
         int filled = (int) Math.floor(progress * PROGRESS_BAR_SEGMENTS);
 
-        String complete = "§2§m" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS));
-        String remaining = "§7§m" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0));
-        return complete + remaining + "§r";
+        String complete = "<dark_green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS));
+        String remaining = "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0));
+        return complete + remaining + "<reset>";
     }
 
     public void setRawXp(SkillType type, double xp) {
@@ -60,3 +60,4 @@ public class PlayerSkillData {
         setRawXp(type, getRawXp(type) + xp);
     }
 }
+

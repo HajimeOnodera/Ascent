@@ -15,11 +15,12 @@ public final class ManiacMiner extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Maniac Miner",
-            "§7Spends all your §bMana §7and grants §a+1 §6⸕ Mining",
-            "§7Speed §7for each §b1 Mana §7spent for §a15s§7.",
+            "<gold>Pickaxe Ability: Maniac Miner",
+            "<gray>Spends all your <aqua>Mana <gray>and grants <green>+1 <gold>⸕ Mining",
+            "<gray>Speed <gray>for each <aqua>1 Mana <gray>spent for <green>15s<gray>.",
             " ",
-            "§8Cooldown: §a60s"
+            "<dark_gray>Cooldown: <green>60s"
         );
     }
 }
+

@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 
-import java.lang.reflect.Method;
+import static fun.ascent.common.StringUtility.text;
 
 public class GuiCommand extends Command {
 
@@ -33,16 +33,16 @@ public class GuiCommand extends Command {
                     Class<?> clazz = Class.forName(pkg + guiName);
                     java.lang.reflect.Method openMethod = clazz.getMethod("open", SkyblockPlayer.class);
                     openMethod.invoke(null, player);
-                    player.sendMessage("§aOpened GUI: §f" + guiName);
+                    player.sendMessage(text("<green>Opened GUI: <white>" + guiName));
                     found = true;
                     break;
                 } catch (ClassNotFoundException ignored) {
                 } catch (NoSuchMethodException e) {
-                    player.sendMessage("§cGUI " + guiName + " does not have a static open(SkyblockPlayer) method.");
+                    player.sendMessage(text("<red>GUI " + guiName + " does not have a static open(SkyblockPlayer) method."));
                     found = true;
                     break;
                 } catch (Exception e) {
-                    player.sendMessage("§cError opening GUI: " + e.getMessage());
+                    player.sendMessage(text("<red>Error opening GUI: " + e.getMessage()));
                     e.printStackTrace();
                     found = true;
                     break;
@@ -50,8 +50,9 @@ public class GuiCommand extends Command {
             }
 
             if (!found) {
-                player.sendMessage("§cGUI " + guiName + " not found.");
+                player.sendMessage(text("<red>GUI " + guiName + " not found."));
             }
         }, guiArg);
     }
 }
+

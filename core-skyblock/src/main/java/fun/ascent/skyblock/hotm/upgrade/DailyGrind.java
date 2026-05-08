@@ -14,8 +14,9 @@ public final class DailyGrind extends HotmUpgrade {
     @Override public List<String> buildLore(int l) {
         int bonus = (200 + (l - 1) * 18) * 2;
         return List.of(
-            "§7Gain §a" + fmt(bonus) + " §bGlacial Powder §7from the first",
-            "§7ore you mine each day in §bGlacite Tunnels§7."
+            "<gray>Gain <green>" + fmt(bonus) + " <aqua>Glacial Powder <gray>from the first",
+            "<gray>ore you mine each day in <aqua>Glacite Tunnels<gray>."
         );
     }
 }
+

@@ -3,17 +3,17 @@ package fun.ascent.skyblock.item;
 import lombok.Getter;
 
 public enum Rarity {
-    COMMON("§f", "COMMON"),
-    UNCOMMON("§a", "UNCOMMON"),
-    RARE("§9", "RARE"),
-    EPIC("§5", "EPIC"),
-    LEGENDARY("§6", "LEGENDARY"),
-    MYTHIC("§d", "MYTHIC"),
-    DIVINE("§b", "DIVINE"),
-    SPECIAL("§c", "SPECIAL"),
-    VERY_SPECIAL("§c", "VERY SPECIAL"),
-    ULTIMATE("§4", "ULTIMATE"),
-    ADMIN("§4", "ADMIN");
+    COMMON("<white>", "COMMON"),
+    UNCOMMON("<green>", "UNCOMMON"),
+    RARE("<blue>", "RARE"),
+    EPIC("<dark_purple>", "EPIC"),
+    LEGENDARY("<gold>", "LEGENDARY"),
+    MYTHIC("<light_purple>", "MYTHIC"),
+    DIVINE("<aqua>", "DIVINE"),
+    SPECIAL("<red>", "SPECIAL"),
+    VERY_SPECIAL("<red>", "VERY SPECIAL"),
+    ULTIMATE("<dark_red>", "ULTIMATE"),
+    ADMIN("<dark_red>", "ADMIN");
 
     @Getter
     private final String color;
@@ -31,7 +31,7 @@ public enum Rarity {
     }
 
     public String getDisplay() {
-        return color + "§l" + display;
+        return color + "<bold>" + display;
     }
 
     public Rarity getNextRarity() {
@@ -48,4 +48,5 @@ public enum Rarity {
     }
 
 }
+
 

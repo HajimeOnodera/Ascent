@@ -12,12 +12,13 @@ public final class HazardousMiner extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Hazardous Miner",
-            "§7Explode the blocks around you, granting §a+1,000",
-            "§6⸕ Mining Speed §7and §a+1,000 §6☘ Mining Fortune §7to you",
-            "§7and any nearby miners for §a5s§7.",
+            "<gold>Pickaxe Ability: Hazardous Miner",
+            "<gray>Explode the blocks around you, granting <green>+1,000",
+            "<gold>⸕ Mining Speed <gray>and <green>+1,000 <gold>☘ Mining Fortune <gray>to you",
+            "<gray>and any nearby miners for <green>5s<gray>.",
             " ",
-            "§8Cooldown: §a120s"
+            "<dark_gray>Cooldown: <green>120s"
         );
     }
 }
+

@@ -12,6 +12,7 @@ public final class DeadMansChest extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GLACIAL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 3.1); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Increases the amount of loot you find from §bCorpses §7in §bGlacite Mineshafts §7by §a" + (l * 4) + "%§7.");
+        return List.of("<gray>Increases the amount of loot you find from <aqua>Corpses <gray>in <aqua>Glacite Mineshafts <gray>by <green>" + (l * 4) + "%<gray>.");
     }
 }
+

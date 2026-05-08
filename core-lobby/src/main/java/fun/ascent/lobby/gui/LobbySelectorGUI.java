@@ -1,12 +1,12 @@
 package fun.ascent.lobby.gui;
 
-import fun.ascent.common.StringUtility;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.redis.ServerPing;
 import fun.ascent.lobby.Main;
 import fun.ascent.lobby.cache.ServerInfoCache;
+import fun.ascent.lobby.transfer.ProxyTransfer;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -16,7 +16,9 @@ import net.minestom.server.item.Material;
 
 import java.util.List;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.*;
+import static fun.ascent.common.StringUtility.text;
+import static net.minestom.server.component.DataComponents.*;
 
 public class LobbySelectorGUI extends InventoryGUI {
 
@@ -47,22 +49,22 @@ public class LobbySelectorGUI extends InventoryGUI {
                         @Override
                         public ItemStack.Builder getItem(Player player) {
                             Material mat = isCurrent ? Material.RED_CONCRETE : Material.WHITE_CONCRETE;
-                            String title = isCurrent ? "&c" + "Main Lobby #" + (slot + 1) : "&a" + "Main Lobby #" + (slot + 1);
+                            String title = isCurrent ? "<red>" + "Main Lobby #" + (slot + 1) : "<green>" + "Main Lobby #" + (slot + 1);
 
-                            return ItemStackCreator.createNamedItemStack(mat, color(title))
-                                    .set(net.minestom.server.component.DataComponents.LORE, List.of(
-                                            color("&7Players: " + StringUtility.commaify(lobby.onlinePlayers()) + "/100"),
+                            return ItemStackCreator.createNamedItemStack(mat, text(title))
+                                    .set(LORE, List.of(
+                                            text("<gray>Players: " + commaify(lobby.onlinePlayers()) + "/100"),
                                             Component.empty(),
-                                            isCurrent ? color("&cAlready connected!") : color("&eClick to connect!")));
+                                            isCurrent ? text("<red>Already connected!") : text("<yellow>Click to connect!")));
                         }
 
                         @Override
                         public void run(InventoryPreClickEvent e, Player player) {
                             if (isCurrent) {
-                                player.sendMessage(color("&cYou are already connected to this lobby!"));
+                                player.sendMessage(text(text("<red>You are already connected to this lobby!")));
                             } else {
-                                player.sendMessage(color("&aConnecting to Main Lobby #" + (slot + 1) + "..."));
-                                fun.ascent.lobby.transfer.ProxyTransfer.send(player, lobby.serverName());
+                                player.sendMessage(text(text("<green>Connecting to Main Lobby #" + (slot + 1) + "...")));
+                                ProxyTransfer.send(player, lobby.serverName());
                             }
                         }
                     });
@@ -70,13 +72,13 @@ public class LobbySelectorGUI extends InventoryGUI {
                     set(new GUIClickableItem(slot) {
                         @Override
                         public ItemStack.Builder getItem(Player player) {
-                            return ItemStackCreator.createNamedItemStack(Material.BARRIER, color("&c" + "Main Lobby #" + (slot + 1)))
-                                    .set(net.minestom.server.component.DataComponents.LORE, List.of(color("&7This lobby is not available.")));
+                            return ItemStackCreator.createNamedItemStack(Material.BARRIER, text("<red>" + "Main Lobby #" + (slot + 1)))
+                                    .set(LORE, List.of(text("<gray>This lobby is not available.")));
                         }
 
                         @Override
                         public void run(InventoryPreClickEvent e, Player player) {
-                            player.sendMessage(color("&cThis lobby is currently offline!"));
+                            player.sendMessage(text(text("<red>This lobby is currently offline!")));
                         }
                     });
                 }
@@ -95,3 +97,5 @@ public class LobbySelectorGUI extends InventoryGUI {
         e.setCancelled(true);
     }
 }
+
+

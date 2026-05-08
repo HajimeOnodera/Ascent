@@ -3,11 +3,13 @@ package fun.ascent.lobby.listener;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
+
+import static fun.ascent.common.StringUtility.escapeMiniMessage;
+import static fun.ascent.common.StringUtility.text;
 
 public class LobbyChatListener {
 
@@ -17,12 +19,11 @@ public class LobbyChatListener {
             User user = UserManager.getUser(event.getPlayer().getUuid());
             Component displayName = user.getDisplayName();
             
-            TextColor messageColor = (user.getRank() == Rank.DEFAULT) ? NamedTextColor.GRAY : NamedTextColor.WHITE;
+            String messageColor = (user.getRank() == Rank.DEFAULT) ? "<gray>" : "<white>";
             
-            Component message = Component.text(": ").color(NamedTextColor.GRAY)
-                    .append(Component.text(event.getRawMessage()).color(messageColor));
+            Component message = text("<gray>: " + messageColor + escapeMiniMessage(event.getRawMessage()));
             
-            net.minestom.server.MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(displayName.append(message)));
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(displayName.append(message)));
         });
     }
 }

@@ -7,13 +7,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 @Getter
 public enum Rank {
-    STAFF("§c[§6ዞ§c] ", true, NamedTextColor.RED),
-    YOUTUBE("§c[§fYOUTUBE§c] ", false, NamedTextColor.RED),
-    MVP_PLUS("§b[MVP§c+§b] ", false, NamedTextColor.AQUA),
-    MVP("§b[MVP] ", false, NamedTextColor.AQUA),
-    VIP_PLUS("§a[VIP§6+§a] ", false, NamedTextColor.GREEN),
-    VIP("§a[VIP] ", false, NamedTextColor.GREEN),
-    DEFAULT("§7", false, NamedTextColor.GRAY);
+    STAFF("<red>[<gold>ዞ<red>] ", true, NamedTextColor.RED),
+    YOUTUBE("<red>[<white>YOUTUBE<red>] ", false, NamedTextColor.RED),
+    MVP_PLUS("<aqua>[MVP<red>+<aqua>] ", false, NamedTextColor.AQUA),
+    MVP("<aqua>[MVP] ", false, NamedTextColor.AQUA),
+    VIP_PLUS("<green>[VIP<gold>+<green>] ", false, NamedTextColor.GREEN),
+    VIP("<green>[VIP] ", false, NamedTextColor.GREEN),
+    DEFAULT("<gray>", false, NamedTextColor.GRAY);
 
     private final String prefix;
     private final boolean isStaff;
@@ -34,6 +34,7 @@ public enum Rank {
     }
 
     public Component getFormattedPrefix() {
-        return StringUtility.color(prefix);
+        return StringUtility.text(prefix);
     }
 }
+

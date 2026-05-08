@@ -15,12 +15,13 @@ public final class VeinSeekder extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Vein Seeker",
-            "§7Points in the direction of the nearest ore vein,",
-            "§7highlights all ores in the vein and grants §a+5",
-            "§6⸕ Mining Speed §7for each ore in the vein.",
+            "<gold>Pickaxe Ability: Vein Seeker",
+            "<gray>Points in the direction of the nearest ore vein,",
+            "<gray>highlights all ores in the vein and grants <green>+5",
+            "<gold>⸕ Mining Speed <gray>for each ore in the vein.",
             " ",
-            "§8Cooldown: §a10s"
+            "<dark_gray>Cooldown: <green>10s"
         );
     }
 }
+

@@ -17,7 +17,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
-import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
@@ -29,6 +28,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
+
+import static fun.ascent.skyblock.player.stats.Stats.*;
+import static net.minestom.server.entity.attribute.Attribute.*;
 
 @Getter
 public abstract class SkyblockMobEntity extends EntityCreature {
@@ -49,16 +51,16 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             applySkin(skin);
         }
 
-        currentNameplate = buildNameplateComponent(baseStat(Stats.HEALTH), baseStat(Stats.HEALTH));
+        currentNameplate = buildNameplateComponent(baseStat(HEALTH), baseStat(HEALTH));
         nameplate = new FloatingTextEntity(currentNameplate, meta -> {});
 
         onSetup();
     }
 
     private void setupBaseAttributes() {
-        getAttribute(Attribute.MAX_HEALTH).setBaseValue(baseStat(Stats.HEALTH));
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue((baseStat(Stats.SPEED) / 1000f) * 2.5f);
-        setHealth(baseStat(Stats.HEALTH));
+        getAttribute(MAX_HEALTH).setBaseValue(baseStat(HEALTH));
+        getAttribute(MOVEMENT_SPEED).setBaseValue((baseStat(SPEED) / 1000f) * 2.5f);
+        setHealth(baseStat(HEALTH));
     }
 
     private void applySkin(SkinOverride skin) {
@@ -98,7 +100,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             );
         }
 
-        currentNameplate = buildNameplateComponent(getHealth(), baseStat(Stats.HEALTH));
+        currentNameplate = buildNameplateComponent(getHealth(), baseStat(HEALTH));
         if (nameplate != null) {
             nameplate.editEntityMeta(TextDisplayMeta.class, meta -> meta.setText(currentNameplate));
         }
@@ -189,11 +191,11 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     private Component buildNameplateComponent(float hp, float max) {
         MobCategory primary = categories().getFirst();
         return Component.text(
-                "§8[§7Lv" + level() + "§8] "
-                        + primary.prefix() + " §c"
+                "<dark_gray>[<gray>Lv" + level() + "<dark_gray>] "
+                        + primary.prefix() + " <red>"
                         + displayName()
-                        + " §a" + Math.round(hp)
-                        + "§f/§a" + Math.round(max)
+                        + " <green>" + Math.round(hp)
+                        + "<white>/<green>" + Math.round(max)
         );
     }
 

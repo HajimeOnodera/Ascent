@@ -1,6 +1,5 @@
 package fun.ascent.common.npc;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
@@ -20,9 +19,10 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import static fun.ascent.common.StringUtility.*;
+
 public class AscentNpc {
 
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final Set<UUID> ALREADY_TALKING = new HashSet<>();
     private static final double HOLOGRAM_DELTA = 0.3;
 
@@ -77,9 +77,7 @@ public class AscentNpc {
             }
 
             int delayTicks = Math.max(1, delayMultiplier * 20);
-            MinecraftServer.getSchedulerManager().buildTask(() -> {
-                sendMessage(player, message);
-            }).delay(TaskSchedule.tick(delayTicks)).schedule();
+            MinecraftServer.getSchedulerManager().buildTask(() -> sendMessage(player, message)).delay(TaskSchedule.tick(delayTicks)).schedule();
 
             delayMultiplier++;
         }
@@ -187,7 +185,7 @@ public class AscentNpc {
             meta.setHasNoBasePlate(true);
             meta.setMarker(true);
 
-            armorStand.setCustomName(MINI_MESSAGE.deserialize(text));
+            armorStand.setCustomName(text(text));
             armorStand.setCustomNameVisible(true);
             armorStand.setNoGravity(true);
             armorStand.setInstance(definition.instance(), position.add(0, yOffset, 0));
@@ -199,6 +197,6 @@ public class AscentNpc {
 
     private void sendMessage(Player player, String message) {
         String npcName = definition.name() != null ? definition.name() : definition.id();
-        player.sendMessage(MINI_MESSAGE.deserialize("<yellow>[NPC] " + npcName + "<white>: " + message));
+        player.sendMessage(text("<yellow>[NPC] " + npcName + "<white>: " + message));
     }
 }

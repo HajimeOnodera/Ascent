@@ -12,7 +12,7 @@ public class XpBoostUnlock extends SkillUnlock {
 
     @Override
     public String display() {
-        return "§8+§b" + amount + " SkyBlock XP";
+        return "<dark_gray>+<aqua>" + amount + " SkyBlock XP";
     }
 
     @Override

@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.UUID;
+
+import static fun.ascent.common.StringUtility.*;
 
 @Getter
 @Setter
@@ -23,10 +24,6 @@ public class User {
         Component prefix = rank.getFormattedPrefix();
         TextColor nameColor = rank.getTextColor();
         
-        return prefix.append(Component.text(name).color(nameColor));
-    }
-
-    public String getLegacyDisplayName() {
-        return LegacyComponentSerializer.legacySection().serialize(getDisplayName());
+        return prefix.append(text("<" + nameColor.asHexString() + ">" + escapeMiniMessage(name)));
     }
 }

@@ -15,7 +15,8 @@ public final class Mole extends HotmUpgrade {
         int raw = 50 + (l - 1) * 5;
         int blocks = raw / 100 + 1;
         int chance = raw - (blocks - 1) * 100;
-        return List.of("§7When mining hard stone, you have a §a" + chance +
-            "%§7 chance to mine §a" + blocks + " §7adjacent hard stone block" + (blocks > 1 ? "s" : "") + "§7.");
+        return List.of("<gray>When mining hard stone, you have a <green>" + chance +
+            "%<gray> chance to mine <green>" + blocks + " <gray>adjacent hard stone block" + (blocks > 1 ? "s" : "") + "<gray>.");
     }
 }
+

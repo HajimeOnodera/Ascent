@@ -8,12 +8,13 @@ import fun.ascent.common.service.FromServiceChannels;
 import fun.ascent.common.service.redis.ServiceToClient;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.UUID;
+
+import static fun.ascent.common.StringUtility.text;
 
 public class RedisPropagatePartyEvent implements ServiceToClient {
     private final ProxyServer proxy;
@@ -59,89 +60,89 @@ public class RedisPropagatePartyEvent implements ServiceToClient {
     private void handleEventForPlayer(Player player, PartyEvent event, UUID participantUUID) {
         if (event instanceof PartyInviteResponseEvent e) {
             if (player.getUniqueId().equals(e.getInviter())) {
-                sendMessage(player, "§aParty invite sent to §e" + getPlayerName(e.getInvitee()) + "§a!");
+                sendMessage(player, "<green>Party invite sent to <yellow>" + getPlayerName(e.getInvitee()) + "<green>!");
             } else {
-                player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
-                player.sendMessage(Component.text("§aParty invite from §e" + getPlayerName(e.getInviter())));
+                player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
+                player.sendMessage(text("<green>Party invite from <yellow>" + getPlayerName(e.getInviter())));
                 
-                Component accept = Component.text(" §a§l[ACCEPT]")
-                        .hoverEvent(Component.text("§eClick to accept party invite"))
+                Component accept = text(" <green><bold>[ACCEPT]")
+                        .hoverEvent(text("<yellow>Click to accept party invite"))
                         .clickEvent(ClickEvent.runCommand("/party accept " + getPlayerName(e.getInviter())));
                 
-                Component deny = Component.text(" §c§l[IGNORE]")
-                        .hoverEvent(Component.text("§eClick to ignore"));
+                Component deny = text(" <red><bold>[IGNORE]")
+                        .hoverEvent(text("<yellow>Click to ignore"));
                 
-                player.sendMessage(Component.text("§eClick ").append(accept).append(Component.text(" §eor ")).append(deny));
-                player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
+                player.sendMessage(text("<yellow>Click ").append(accept).append(text(" <yellow>or ")).append(deny));
+                player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
             }
         } else if (event instanceof PartyMemberJoinResponseEvent e) {
             if (player.getUniqueId().equals(e.getJoiner())) {
-                sendMessage(player, "§aYou joined §e" + getPlayerName(e.getInviter()) + "§a's party!");
+                sendMessage(player, "<green>You joined <yellow>" + getPlayerName(e.getInviter()) + "<green>'s party!");
             } else {
-                sendMessage(player, "§e" + getPlayerName(e.getJoiner()) + " §ajoined the party!");
+                sendMessage(player, "<yellow>" + getPlayerName(e.getJoiner()) + " <green>joined the party!");
             }
         } else if (event instanceof PartyMemberLeaveResponseEvent e) {
             if (player.getUniqueId().equals(e.getLeaver())) {
-                sendMessage(player, "§cYou left the party.");
+                sendMessage(player, "<red>You left the party.");
             } else {
-                sendMessage(player, "§e" + getPlayerName(e.getLeaver()) + " §cleft the party.");
+                sendMessage(player, "<yellow>" + getPlayerName(e.getLeaver()) + " <red>left the party.");
             }
         } else if (event instanceof PartyDisbandResponseEvent e) {
-            sendMessage(player, "§cParty disbanded: §e" + e.getReason());
+            sendMessage(player, "<red>Party disbanded: <yellow>" + e.getReason());
         } else if (event instanceof PartyMemberKickResponseEvent e) {
             if (player.getUniqueId().equals(e.getKicked())) {
-                sendMessage(player, "§cYou were kicked from the party!");
+                sendMessage(player, "<red>You were kicked from the party!");
             } else {
-                sendMessage(player, "§e" + getPlayerName(e.getKicked()) + " §cwas kicked from the party.");
+                sendMessage(player, "<yellow>" + getPlayerName(e.getKicked()) + " <red>was kicked from the party.");
             }
         } else if (event instanceof PartyLeaderTransferResponseEvent e) {
             if (player.getUniqueId().equals(e.getNewLeader())) {
-                sendMessage(player, "§aYou are now the party leader!");
+                sendMessage(player, "<green>You are now the party leader!");
             } else if (player.getUniqueId().equals(e.getOldLeader())) {
-                sendMessage(player, "§eYou transferred leadership to §e" + getPlayerName(e.getNewLeader()) + "§e!");
+                sendMessage(player, "<yellow>You transferred leadership to <yellow>" + getPlayerName(e.getNewLeader()) + "<yellow>!");
             } else {
-                sendMessage(player, "§e" + getPlayerName(e.getOldLeader()) + " §etransferred leadership to §e" + getPlayerName(e.getNewLeader()) + "§e!");
+                sendMessage(player, "<yellow>" + getPlayerName(e.getOldLeader()) + " <yellow>transferred leadership to <yellow>" + getPlayerName(e.getNewLeader()) + "<yellow>!");
             }
         } else if (event instanceof PartyPromotionResponseEvent e) {
             if (player.getUniqueId().equals(e.getPromoted())) {
-                sendMessage(player, "§aYou were promoted to §e" + e.getNewRole() + "§a!");
+                sendMessage(player, "<green>You were promoted to <yellow>" + e.getNewRole() + "<green>!");
             } else {
-                sendMessage(player, "§e" + getPlayerName(e.getPromoted()) + " §awas promoted to §e" + e.getNewRole() + "§a!");
+                sendMessage(player, "<yellow>" + getPlayerName(e.getPromoted()) + " <green>was promoted to <yellow>" + e.getNewRole() + "<green>!");
             }
         } else if (event instanceof PartyChatMessageResponseEvent e) {
             if (!player.getUniqueId().equals(e.getSender())) {
                 String senderName = getPlayerName(e.getSender());
-                player.sendMessage(Component.text("§dParty > §e" + senderName + "§f: " + e.getMessage()));
+                player.sendMessage(text("<light_purple>Party > <yellow>" + senderName + "<white>: " + e.getMessage()));
             }
         } else if (event instanceof PartyListResponseEvent e) {
             if (player.getUniqueId().equals(e.getRequester())) {
-                player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
-                player.sendMessage(Component.text("§6Party Members:"));
+                player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
+                player.sendMessage(text("<gold>Party Members:"));
                 for (PartyListResponseEvent.MemberInfo member : e.getMembers()) {
-                    String status = member.online() ? "§a●" : "§c●";
+                    String status = member.online() ? "<green>●" : "<red>●";
                     String roleColor = switch (member.role()) {
-                        case LEADER -> "§c";
-                        case MODERATOR -> "§e";
-                        default -> "§7";
+                        case LEADER -> "<red>";
+                        case MODERATOR -> "<yellow>";
+                        default -> "<gray>";
                     };
-                    player.sendMessage(Component.text(status + " " + roleColor + member.name() + " §7(" + member.role() + ")"));
+                    player.sendMessage(text(status + " " + roleColor + member.name() + " <gray>(" + member.role() + ")"));
                 }
-                player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
+                player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
             }
         } else if (event instanceof PartyInviteExpiredResponseEvent e) {
             if (player.getUniqueId().equals(e.getInviter())) {
-                sendMessage(player, "§cYour party invite to §e" + getPlayerName(e.getInvitee()) + " §cexpired.");
+                sendMessage(player, "<red>Your party invite to <yellow>" + getPlayerName(e.getInvitee()) + " <red>expired.");
             } else {
-                sendMessage(player, "§cParty invite from §e" + getPlayerName(e.getInviter()) + " §cexpired.");
+                sendMessage(player, "<red>Party invite from <yellow>" + getPlayerName(e.getInviter()) + " <red>expired.");
             }
         } else if (event instanceof PartyWarpResponseEvent e) {
-            sendMessage(player, "§aWarping party members...");
+            sendMessage(player, "<green>Warping party members...");
         } else if (event instanceof PartyMemberDisconnectedResponseEvent e) {
-            sendMessage(player, "§e" + getPlayerName(e.getPlayer()) + " §cdisconnected. (5 min timeout)");
+            sendMessage(player, "<yellow>" + getPlayerName(e.getPlayer()) + " <red>disconnected. (5 min timeout)");
         } else if (event instanceof PartyMemberRejoinedResponseEvent e) {
-            sendMessage(player, "§e" + getPlayerName(e.getPlayer()) + " §areconnected to the party!");
+            sendMessage(player, "<yellow>" + getPlayerName(e.getPlayer()) + " <green>reconnected to the party!");
         } else if (event instanceof PartyPlayerSwitchedServerResponseEvent e) {
-            sendMessage(player, "§e" + getPlayerName(e.getPlayer()) + " §aswitched servers.");
+            sendMessage(player, "<yellow>" + getPlayerName(e.getPlayer()) + " <green>switched servers.");
         }
     }
 
@@ -150,8 +151,9 @@ public class RedisPropagatePartyEvent implements ServiceToClient {
     }
 
     private void sendMessage(Player player, String message) {
-        player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
-        player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
+        player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
+        player.sendMessage(text(message));
+        player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
     }
 }
+

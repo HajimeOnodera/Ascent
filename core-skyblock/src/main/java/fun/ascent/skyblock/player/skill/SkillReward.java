@@ -25,9 +25,9 @@ public record SkillReward(int level, int xpRequired, List<SkillUnlock> unlocks) 
 
     public List<String> toLore() {
         List<String> lore = new ArrayList<>();
-        lore.add("§7Level " + toRoman(level) + " Rewards:");
+        lore.add("<gray>Level " + toRoman(level) + " Rewards:");
         for (SkillUnlock unlock : unlocks) {
-            lore.add("§7  " + unlock.display());
+            lore.add("<gray>  " + unlock.display());
         }
         return lore;
     }
@@ -46,3 +46,4 @@ public record SkillReward(int level, int xpRequired, List<SkillUnlock> unlocks) 
                 + ones[num % 10];
     }
 }
+

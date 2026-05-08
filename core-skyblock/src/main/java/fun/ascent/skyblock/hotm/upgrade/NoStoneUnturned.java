@@ -12,6 +12,7 @@ public final class NoStoneUnturned extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GLACIAL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 3.05); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Increases the chance of finding §eRare §7drops in §bGlacite Tunnels §7by §a" + (l * 5) + "%§7.");
+        return List.of("<gray>Increases the chance of finding <yellow>Rare <gray>drops in <aqua>Glacite Tunnels <gray>by <green>" + (l * 5) + "%<gray>.");
     }
 }
+

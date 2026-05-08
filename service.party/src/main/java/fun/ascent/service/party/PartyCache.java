@@ -542,7 +542,7 @@ public class PartyCache {
     }
 
     private static void sendErrorToPlayer(UUID playerUUID, String message) {
-        sendMessageToPlayer(playerUUID, "§9§m-----------------------------------------------------\n§c" + message + "\n§9§m-----------------------------------------------------");
+        sendMessageToPlayer(playerUUID, "<blue><strikethrough>-----------------------------------------------------\n<red>" + message + "\n<blue><strikethrough>-----------------------------------------------------");
     }
 
     private static void sendMessageToPlayer(UUID playerUUID, String message) {
@@ -553,3 +553,4 @@ public class PartyCache {
         ServiceToServerManager.sendToAllServers(FromServiceChannels.SEND_MESSAGE, messageData);
     }
 }
+

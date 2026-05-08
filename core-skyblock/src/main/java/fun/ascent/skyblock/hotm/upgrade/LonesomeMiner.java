@@ -15,8 +15,9 @@ public final class LonesomeMiner extends HotmUpgrade {
         return List.of(GoblinKiller.class, MiningSpeed2.class, Professional.class);
     }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Increases §c❁ Strength§7, §9☣ Crit Chance§7, §9☠ Crit Damage§7, " +
-            "§a❈ Defense§7 and §c❤ Health §7stats gain by §a" +
-            String.format("%.1f", 5 + (l - 1) * 0.5) + "%§7 while in the §5Crystal Hollows§7.");
+        return List.of("<gray>Increases <red>❁ Strength<gray>, <blue>☣ Crit Chance<gray>, <blue>☠ Crit Damage<gray>, " +
+            "<green>❈ Defense<gray> and <red>❤ Health <gray>stats gain by <green>" +
+            String.format("%.1f", 5 + (l - 1) * 0.5) + "%<gray> while in the <dark_purple>Crystal Hollows<gray>.");
     }
 }
+

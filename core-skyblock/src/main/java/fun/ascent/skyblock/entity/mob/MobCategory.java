@@ -6,20 +6,20 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MobCategory {
-    UNDEAD("༕", "§2", "Undead"),
-    SKELETAL("🦴", "§f", "Skeletal"),
-    ANIMAL("☮", "§a", "Animal"),
-    ARTHROPOD("Ж", "§4", "Arthropod"),
-    AQUATIC("⚓", "§1", "Aquatic"),
-    CONSTRUCT("⚙", "§7", "Construct"),
-    ENDER("⊙", "§5", "Ender"),
-    GLACIAL("❄", "§b", "Glacial"),
-    HUMANOID("✰", "§e", "Humanoid"),
-    SUBTERRANEAN("⛏", "§6", "Subterranean"),
-    WITHER("☠", "§8", "Wither"),
-    ARCANE("♃", "§5", "Arcane"),
-    AERIAL("✈", "§7", "Aerial"),
-    WOODLAND("⸙", "§2", "Woodland");
+    UNDEAD("༕", "<dark_green>", "Undead"),
+    SKELETAL("🦴", "<white>", "Skeletal"),
+    ANIMAL("☮", "<green>", "Animal"),
+    ARTHROPOD("Ж", "<dark_red>", "Arthropod"),
+    AQUATIC("⚓", "<dark_blue>", "Aquatic"),
+    CONSTRUCT("⚙", "<gray>", "Construct"),
+    ENDER("⊙", "<dark_purple>", "Ender"),
+    GLACIAL("❄", "<aqua>", "Glacial"),
+    HUMANOID("✰", "<yellow>", "Humanoid"),
+    SUBTERRANEAN("⛏", "<gold>", "Subterranean"),
+    WITHER("☠", "<dark_gray>", "Wither"),
+    ARCANE("♃", "<dark_purple>", "Arcane"),
+    AERIAL("✈", "<gray>", "Aerial"),
+    WOODLAND("⸙", "<dark_green>", "Woodland");
 
     private final String symbol;
     private final String color;

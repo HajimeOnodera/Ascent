@@ -10,6 +10,8 @@ import net.minestom.server.command.builder.arguments.ArgumentWord;
 
 import java.util.Locale;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class SkillsCommand extends Command {
 
     public SkillsCommand() {
@@ -30,7 +32,7 @@ public class SkillsCommand extends Command {
             try {
                 type = SkillType.valueOf(input);
             } catch (IllegalArgumentException e) {
-                player.sendMessage("§cUnknown skill: §f" + ctx.get(skillArg));
+                player.sendMessage(text("<red>Unknown skill: <white>" + ctx.get(skillArg)));
                 return;
             }
 

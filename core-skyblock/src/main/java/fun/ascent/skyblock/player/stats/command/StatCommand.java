@@ -8,6 +8,8 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.suggestion.SuggestionEntry;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class StatCommand extends Command {
 
     public StatCommand() {
@@ -28,13 +30,13 @@ public class StatCommand extends Command {
         });
 
         setDefaultExecutor((sender, ctx) ->
-                sender.sendMessage("§cUsage: /stat <set/show> [stat] [value]"));
+                sender.sendMessage(text("<red>Usage: /stat <set/show> [stat] [value]")));
 
         addSyntax((sender, ctx) -> {
             if (!(sender instanceof SkyblockPlayer player)) return;
             String act = ctx.get(action);
             if (!act.equals("show")) {
-                sender.sendMessage("§cUsage: /stat set <stat> <value> or /stat show");
+                sender.sendMessage(text("<red>Usage: /stat set <stat> <value> or /stat show"));
                 return;
             }
             showStats(player);
@@ -44,7 +46,7 @@ public class StatCommand extends Command {
             if (!(sender instanceof SkyblockPlayer player)) return;
             String act = ctx.get(action);
             if (!act.equals("set")) {
-                sender.sendMessage("§cUsage: /stat set <stat> <value>");
+                sender.sendMessage(text("<red>Usage: /stat set <stat> <value>"));
                 return;
             }
             String statName = ctx.get(statArg);
@@ -54,12 +56,12 @@ public class StatCommand extends Command {
             try {
                 stat = Stats.valueOf(statName.toUpperCase());
             } catch (IllegalArgumentException e) {
-                sender.sendMessage("§cUnknown stat: " + statName);
+                sender.sendMessage(text("<red>Unknown stat: " + statName));
                 return;
             }
 
             if (player.getActiveProfileData() == null) {
-                sender.sendMessage("§cNo active profile.");
+                sender.sendMessage(text("<red>No active profile."));
                 return;
             }
 
@@ -68,20 +70,21 @@ public class StatCommand extends Command {
             built.setCurValue(value);
             player.getActiveProfileData().stats.put(built.id, built);
             player.updatePlayer();
-            sender.sendMessage("§aSet " + stat.getStatColor() + stat.getStatFormattedDisplay()
-                    + " §ato §f" + (int) value);
+            sender.sendMessage("<green>Set " + stat.getStatColor() + stat.getStatFormattedDisplay()
+                    + " <green>to <white>" + (int) value);
         }, action, statArg, valueArg);
     }
 
     private void showStats(SkyblockPlayer player) {
-        player.sendMessage("§6§l     Player Stats");
+        player.sendMessage(text("<gold><bold>     Player Stats"));
         player.sendMessage("");
         for (Stats stat : Stats.values()) {
             double value = player.playerStat(stat);
             String suffix = stat.getStatIntType() ? "%" : "";
             String symbol = stat.getStatSymbol();
-            player.sendMessage(" " + symbol + " §7" + stat.getStatFormattedDisplay()
+            player.sendMessage(" " + symbol + " <gray>" + stat.getStatFormattedDisplay()
                     + ": " + stat.getStatColor() + (int) value + suffix);
         }
     }
 }
+

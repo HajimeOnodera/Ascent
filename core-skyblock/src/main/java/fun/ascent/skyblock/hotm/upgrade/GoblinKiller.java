@@ -12,6 +12,7 @@ public final class GoblinKiller extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.MITHRIL; }
     @Override public int cost(int l) { return 8; }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Killing §6Goblins §7gives extra §2Mithril Powder§7.");
+        return List.of("<gray>Killing <gold>Goblins <gray>gives extra <dark_green>Mithril Powder<gray>.");
     }
 }
+

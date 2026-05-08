@@ -38,9 +38,9 @@ public class FarmingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.GOLDEN_HOE; }
     @Override public List<String> description() {
         return List.of(
-                "§7Harvest crops to gain Farming",
-                "§7XP. Grants §6Farming Fortune§7,",
-                "§7increasing your crop drops."
+                "<gray>Harvest crops to gain Farming",
+                "<gray>XP. Grants <gold>Farming Fortune<gray>,",
+                "<gray>increasing your crop drops."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

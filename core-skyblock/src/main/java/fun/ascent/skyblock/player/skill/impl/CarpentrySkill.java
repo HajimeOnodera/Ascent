@@ -33,10 +33,10 @@ public class CarpentrySkill extends SkillDefinition {
     @Override public Material icon() { return Material.CRAFTING_TABLE; }
     @Override public List<String> description() {
         return List.of(
-                "§7Craft items to gain Carpentry",
-                "§7XP. This skill has no direct",
-                "§7stat bonuses, but unlocks unique",
-                "§7cosmetic rewards."
+                "<gray>Craft items to gain Carpentry",
+                "<gray>XP. This skill has no direct",
+                "<gray>stat bonuses, but unlocks unique",
+                "<gray>cosmetic rewards."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

@@ -13,8 +13,9 @@ public final class FrontLoaded extends HotmUpgrade {
     @Override public int cost(int l) { return 8; }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7Grants §a+100 §6⸕ Mining Speed §7and §a+100 §6☘ Mining Fortune",
-            "§7for the first §a2,500 §7ores you mine in a day."
+            "<gray>Grants <green>+100 <gold>⸕ Mining Speed <gray>and <green>+100 <gold>☘ Mining Fortune",
+            "<gray>for the first <green>2,500 <gray>ores you mine in a day."
         );
     }
 }
+

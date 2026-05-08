@@ -12,6 +12,7 @@ public final class SeasonedMineman extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.MITHRIL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 2, 2.3); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+" + String.format("%.1f", 5 + l * 0.1) + " §3☯ Mining Wisdom§7.");
+        return List.of("<gray>Grants <green>+" + String.format("%.1f", 5 + l * 0.1) + " <dark_aqua>☯ Mining Wisdom<gray>.");
     }
 }
+

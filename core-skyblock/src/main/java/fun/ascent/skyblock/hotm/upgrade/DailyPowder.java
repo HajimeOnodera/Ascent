@@ -14,8 +14,9 @@ public final class DailyPowder extends HotmUpgrade {
     @Override public List<String> buildLore(int l) {
         int bonus = (200 + (l - 1) * 18) * 2;
         return List.of(
-            "§7Gain §a" + fmt(bonus) + " Powder §7from the first ore you",
-            "§7mine each day. Works for all Powder types."
+            "<gray>Gain <green>" + fmt(bonus) + " Powder <gray>from the first ore you",
+            "<gray>mine each day. Works for all Powder types."
         );
     }
 }
+

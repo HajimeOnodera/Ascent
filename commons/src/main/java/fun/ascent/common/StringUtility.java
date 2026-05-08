@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -23,7 +23,49 @@ public class StringUtility {
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z'
     };
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("#,###");
-    private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final Map<Character, String> LEGACY_COLOR_TAGS = Map.ofEntries(
+            Map.entry('0', "black"),
+            Map.entry('1', "dark_blue"),
+            Map.entry('2', "dark_green"),
+            Map.entry('3', "dark_aqua"),
+            Map.entry('4', "dark_red"),
+            Map.entry('5', "dark_purple"),
+            Map.entry('6', "gold"),
+            Map.entry('7', "gray"),
+            Map.entry('8', "dark_gray"),
+            Map.entry('9', "blue"),
+            Map.entry('a', "green"),
+            Map.entry('b', "aqua"),
+            Map.entry('c', "red"),
+            Map.entry('d', "light_purple"),
+            Map.entry('e', "yellow"),
+            Map.entry('f', "white"),
+            Map.entry('k', "obfuscated"),
+            Map.entry('l', "bold"),
+            Map.entry('m', "strikethrough"),
+            Map.entry('n', "underlined"),
+            Map.entry('o', "italic"),
+            Map.entry('r', "reset")
+    );
+    private static final Map<String, NamedTextColor> TEXT_COLORS = Map.ofEntries(
+            Map.entry("black", NamedTextColor.BLACK),
+            Map.entry("dark_blue", NamedTextColor.DARK_BLUE),
+            Map.entry("dark_green", NamedTextColor.DARK_GREEN),
+            Map.entry("dark_aqua", NamedTextColor.DARK_AQUA),
+            Map.entry("dark_red", NamedTextColor.DARK_RED),
+            Map.entry("dark_purple", NamedTextColor.DARK_PURPLE),
+            Map.entry("gold", NamedTextColor.GOLD),
+            Map.entry("gray", NamedTextColor.GRAY),
+            Map.entry("dark_gray", NamedTextColor.DARK_GRAY),
+            Map.entry("blue", NamedTextColor.BLUE),
+            Map.entry("green", NamedTextColor.GREEN),
+            Map.entry("aqua", NamedTextColor.AQUA),
+            Map.entry("red", NamedTextColor.RED),
+            Map.entry("light_purple", NamedTextColor.LIGHT_PURPLE),
+            Map.entry("yellow", NamedTextColor.YELLOW),
+            Map.entry("white", NamedTextColor.WHITE)
+    );
 
     public static String formatTimeAsAgo(long millis) {
         long timeDifference = System.currentTimeMillis() - millis;
@@ -64,17 +106,17 @@ public class StringUtility {
         return "Just now";
     }
 
-    public static String createLineProgressBar(int length, ChatColor progressColor, double current, double max) {
+    public static String createLineProgressBar(int length, String progressColor, double current, double max) {
         double percent = Math.min(current, max) / max;
         long completed = Math.round((double) length * percent);
         StringBuilder builder = new StringBuilder().append(progressColor);
         for (int i = 0; i < completed; i++)
             builder.append("-");
-        builder.append(ChatColor.WHITE);
+        builder.append("<white>");
         for (int i = 0; i < length - completed; i++)
             builder.append("-");
-        builder.append(" ").append(ChatColor.YELLOW).append(commaify(current)).append(ChatColor.GOLD).append("/")
-                .append(ChatColor.YELLOW).append(commaify(max));
+        builder.append(" ").append("<yellow>").append(commaify(current)).append("<gold>/")
+                .append("<yellow>").append(commaify(max));
         return builder.toString();
     }
 
@@ -85,8 +127,8 @@ public class StringUtility {
         else
             percent = 0.0;
         percent = roundTo(percent, 1);
-        return ChatColor.GRAY + text + ": " + (percent < 100.0 ? ChatColor.YELLOW + commaify(percent)
-                                                                 + ChatColor.GOLD + "%" : ChatColor.GREEN + "100.0%");
+        return "<gray>" + text + ": " + (percent < 100.0 ? "<yellow>" + commaify(percent)
+                                                                 + "<gold>%" : "<green>100.0%");
     }
 
     public static double roundTo(double d, int decimalPlaces) {
@@ -95,25 +137,50 @@ public class StringUtility {
 
     public static String stripColor(String s) {
         if (s == null) return "";
-        return s
-                .replaceAll("[&§][0-9a-fk-orA-FK-OR]", "")
-                .replaceAll("&#[0-9a-fA-F]{6}", "")
-                .replaceAll("§x(§[0-9a-fA-F]){6}", "");
+        return s.replaceAll("<[^>]+>", "");
     }
 
-    public static Component color(String legacy) {
-        if (legacy == null) return Component.empty();
-        return LEGACY_SERIALIZER.deserialize(legacy.replace("&", "§")).decoration(TextDecoration.ITALIC, false);
+    public static Component text(String miniMessage) {
+        if (miniMessage == null) return Component.empty();
+        return MINI_MESSAGE.deserialize(toMiniMessage(miniMessage)).decoration(TextDecoration.ITALIC, false);
     }
 
-    public static List<Component> color(List<String> legacy) {
-        return legacy.stream().map(StringUtility::color).collect(Collectors.toList());
+    public static Component text(Component component) {
+        return component == null ? Component.empty() : component.decoration(TextDecoration.ITALIC, false);
     }
 
-    public static NamedTextColor getNamedTextColor(String legacyColor) {
-        if (legacyColor == null || legacyColor.length() < 2) return NamedTextColor.WHITE;
-        ChatColor color = ChatColor.getByCode(legacyColor.charAt(1));
-        return (color != null && color.getNamedTextColor() != null) ? color.getNamedTextColor() : NamedTextColor.WHITE;
+    public static List<Component> text(List<String> messages) {
+        return messages.stream().map(StringUtility::text).collect(Collectors.toList());
+    }
+
+    public static String escapeMiniMessage(String value) {
+        return MINI_MESSAGE.escapeTags(value == null ? "" : value);
+    }
+
+    public static String toMiniMessage(String input) {
+        if (input == null || input.isEmpty()) return "";
+
+        StringBuilder output = new StringBuilder(input.length());
+        for (int i = 0; i < input.length(); i++) {
+            char current = input.charAt(i);
+            if (current == '&' && i + 1 < input.length()) {
+                char code = Character.toLowerCase(input.charAt(i + 1));
+                String tag = LEGACY_COLOR_TAGS.get(code);
+                if (tag != null) {
+                    output.append('<').append(tag).append('>');
+                    i++;
+                    continue;
+                }
+            }
+            output.append(current);
+        }
+        return output.toString();
+    }
+
+    public static NamedTextColor getNamedTextColor(String color) {
+        if (color == null || color.isBlank()) return NamedTextColor.WHITE;
+        String normalized = toMiniMessage(color).replace("<", "").replace(">", "").toLowerCase(Locale.ROOT);
+        return TEXT_COLORS.getOrDefault(normalized, NamedTextColor.WHITE);
     }
 
     public static String shortenNumber(double number) {
@@ -372,49 +439,6 @@ public class StringUtility {
         return result;
     }
 
-    public static List<String> splitByWordAndLengthKeepLegacyColor(String string, int splitLength) {
-        List<String> result = new ArrayList<>();
-        String lastColorCode = "";
-
-        for (String line : string.split("\n", -1)) {
-            if (line.isEmpty()) {
-                result.add("");
-                continue;
-            }
-
-            StringBuilder currentLine = new StringBuilder(lastColorCode);
-
-            for (String word : line.split(" ")) {
-                if (word.isEmpty()) continue;
-
-                int extraSpace = currentLine.length() == lastColorCode.length() ? 0 : 1;
-
-                if (currentLine.length() + extraSpace + word.length() > splitLength) {
-                    if (currentLine.length() > lastColorCode.length()) {
-                        result.add(currentLine.toString());
-                        currentLine = new StringBuilder(lastColorCode);
-                    }
-                } else if (extraSpace == 1) {
-                    currentLine.append(' ');
-                }
-
-                currentLine.append(word);
-
-                // this won't work with bold/italic and those but if you need those don't use this method
-                int colorIndex = word.lastIndexOf('§');
-                if (colorIndex != -1 && colorIndex < word.length() - 1) {
-                    lastColorCode = "§" + word.charAt(colorIndex + 1);
-                }
-            }
-
-            if (currentLine.length() > lastColorCode.length()) {
-                result.add(currentLine.toString());
-            }
-        }
-
-        return result;
-    }
-
     public static List<String> splitByNewLine(String string) {
         return new ArrayList<>(Arrays.asList(string.split("\n", -1)));
     }
@@ -470,3 +494,5 @@ public class StringUtility {
         return totalMillis;
     }
 }
+
+

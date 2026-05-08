@@ -36,9 +36,9 @@ public class EnchantingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.BOOKSHELF; }
     @Override public List<String> description() {
         return List.of(
-                "§7Enchant items and use anvils to",
-                "§7gain Enchanting XP. Grants",
-                "§b§7 §bIntelligence§7."
+                "<gray>Enchant items and use anvils to",
+                "<gray>gain Enchanting XP. Grants",
+                "<aqua><gray> <aqua>Intelligence<gray>."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

@@ -13,9 +13,10 @@ public final class PrecisionMining extends HotmUpgrade {
     @Override public int cost(int l) { return 8; }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7When mining ore, a particle indicator",
-            "§7appears showing the ore's §aweak point§7.",
-            "§7Hitting it grants §a+30 §6⸕ Mining Speed§7."
+            "<gray>When mining ore, a particle indicator",
+            "<gray>appears showing the ore's <green>weak point<gray>.",
+            "<gray>Hitting it grants <green>+30 <gold>⸕ Mining Speed<gray>."
         );
     }
 }
+

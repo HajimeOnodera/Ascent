@@ -1,7 +1,7 @@
 package fun.ascent.skyblock.hotm;
 
+import fun.ascent.common.StringUtility;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -28,11 +28,11 @@ public abstract class HotmUpgrade {
         boolean maxed = level >= maxLevel();
 
         Material mat = !unlocked ? Material.COAL : maxed ? Material.DIAMOND : Material.EMERALD;
-        String nameColor = !unlocked ? "§c" : maxed ? "§a" : "§e";
+        String nameColor = !unlocked ? "<red>" : maxed ? "<green>" : "<yellow>";
 
         List<Component> lore = new ArrayList<>();
         if (maxLevel() > 1) {
-            lore.add(c("§8Level " + (unlocked ? level : 0) + "§8/§7" + maxLevel()));
+            lore.add(c("<dark_gray>Level " + (unlocked ? level : 0) + "<dark_gray>/<gray>" + maxLevel()));
             lore.add(Component.empty());
         }
         buildLore(Math.max(level, 1)).forEach(line -> lore.add(c(line)));
@@ -40,32 +40,33 @@ public abstract class HotmUpgrade {
         if (!maxed) {
             lore.add(Component.empty());
             if (!unlocked) {
-                lore.add(c("§7Cost"));
-                lore.add(c("§51 Token of the Mountain"));
+                lore.add(c("<gray>Cost"));
+                lore.add(c("<dark_purple>1 Token of the Mountain"));
             } else {
                 Powder p = powder(level);
-                lore.add(c("§7Cost: " + p.color() + fmt(cost(level)) + " " + p.displayName()));
+                lore.add(c("<gray>Cost: " + p.colorTag() + fmt(cost(level)) + " " + p.displayName()));
             }
         }
 
         if (unlocked) {
             lore.add(Component.empty());
             lore.add(tree.isEnabled(this)
-                ? c("§7Right-click to §cdisable§7!")
-                : c("§7Right-click to §aenable§7!"));
+                ? c("<gray>Right-click to <red>disable<gray>!")
+                : c("<gray>Right-click to <green>enable<gray>!"));
         }
 
         return ItemStack.builder(mat)
-            .customName(c(nameColor + "§l" + name()))
+            .customName(c(nameColor + "<bold>" + name()))
             .lore(lore)
             .build();
     }
 
-    protected static Component c(String legacy) {
-        return LegacyComponentSerializer.legacySection().deserialize(legacy);
+    protected static Component c(String miniMessage) {
+        return StringUtility.text(miniMessage);
     }
 
     protected static String fmt(int n) {
         return String.format("%,d", n);
     }
 }
+

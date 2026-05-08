@@ -17,7 +17,8 @@ public final class Crystallized extends HotmUpgrade {
     @Override public List<String> buildLore(int l) {
         int speed = 20 + (l - 1) * 6;
         int fortune = 20 + (l - 1) * 5;
-        return List.of("§7Grants §a+" + speed + " §6⸕ Mining Speed §7and §a+" + fortune +
-            " §6☘ Mining Fortune §7near §5Fallen Stars§7.");
+        return List.of("<gray>Grants <green>+" + speed + " <gold>⸕ Mining Speed <gray>and <green>+" + fortune +
+            " <gold>☘ Mining Fortune <gray>near <dark_purple>Fallen Stars<gray>.");
     }
 }
+

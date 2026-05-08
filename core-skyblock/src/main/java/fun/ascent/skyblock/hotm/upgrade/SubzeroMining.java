@@ -12,6 +12,7 @@ public final class SubzeroMining extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GLACIAL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 2.3); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+" + l + " §6☘ Mining Fortune §7when mining §bGlacite§7.");
+        return List.of("<gray>Grants <green>+" + l + " <gold>☘ Mining Fortune <gray>when mining <aqua>Glacite<gray>.");
     }
 }
+

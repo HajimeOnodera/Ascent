@@ -26,7 +26,7 @@ public abstract class GUIClickableItem extends GUIItem {
 
             @Override
             public ItemStack.Builder getItem(Player player) {
-                return ItemStackCreator.createNamedItemStack(Material.BARRIER, "§cClose");
+                return ItemStackCreator.createNamedItemStack(Material.BARRIER, "<red>Close");
             }
         };
     }
@@ -40,15 +40,13 @@ public abstract class GUIClickableItem extends GUIItem {
 
             @Override
             public ItemStack.Builder getItem(Player player) {
-                return ItemStackCreator.getStack("§aGo Back",
-                        Material.ARROW, 1, "§7To " + gui.getTitle());
+                return ItemStackCreator.getStack("<green>Go Back",
+                        Material.ARROW, 1, "<gray>To " + gui.getTitle());
             }
         };
     }
 
-    static GUIClickableItem createGUIOpenerItem(InventoryGUI gui,
-                                                String name, int slot,
-                                                Material type, String... lore) {
+    static GUIClickableItem createGUIOpenerItem(InventoryGUI gui, String name, int slot, Material type, String... lore) {
         return new GUIClickableItem(slot) {
             @Override
             public ItemStack.Builder getItem(Player player) {
@@ -63,3 +61,4 @@ public abstract class GUIClickableItem extends GUIItem {
         };
     }
 }
+

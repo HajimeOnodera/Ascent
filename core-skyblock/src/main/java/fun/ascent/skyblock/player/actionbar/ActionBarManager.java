@@ -3,14 +3,15 @@ package fun.ascent.skyblock.player.actionbar;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.stats.Stats;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
+
+import static fun.ascent.common.StringUtility.text;
+import static fun.ascent.skyblock.player.stats.Stats.*;
 
 public final class ActionBarManager {
 
@@ -37,20 +38,20 @@ public final class ActionBarManager {
 
                 ActionBar bar = ActionBar.of(player.getUuid());
 
-                double hp      = player.getCurrentHealth();
-                double maxHp   = player.maxStat(Stats.HEALTH);
-                double def     = player.playerStat(Stats.DEFENSE);
-                double mana    = player.getCurrentMana();
-                double maxMana = player.maxStat(Stats.INTELLIGENCE);
+                double hp = player.getCurrentHealth();
+                double maxHp = player.maxStat(HEALTH);
+                double def = player.playerStat(DEFENSE);
+                double mana = player.getCurrentMana();
+                double maxMana = player.maxStat(INTELLIGENCE);
 
                 bar.setDefault(ActionBar.Section.HEALTH,
-                        "§c" + Math.round(hp) + "/" + Math.round(maxHp) + "❤");
+                        "<red>" + Math.round(hp) + "/" + Math.round(maxHp) + "❤");
                 bar.setDefault(ActionBar.Section.DEFENSE,
-                        def == 0 ? "" : "§a" + Math.round(def) + "❈ Defense");
+                        def == 0 ? "" : "<green>" + Math.round(def) + "❈ Defense");
                 bar.setDefault(ActionBar.Section.MANA,
-                        "§b" + Math.round(mana) + "/" + Math.round(maxMana) + "✎ Mana");
+                        "<aqua>" + Math.round(mana) + "/" + Math.round(maxMana) + "✎ Mana");
 
-                player.sendActionBar(Component.text(bar.build()));
+                player.sendActionBar(text(bar.build()));
             }
             return TaskSchedule.tick(4);
         }, ExecutionType.TICK_END);
@@ -63,7 +64,7 @@ public final class ActionBarManager {
                 if (!(online instanceof SkyblockPlayer player)) continue;
                 if (player.getActiveProfileData() == null) continue;
 
-                double max = player.maxStat(Stats.HEALTH);
+                double max = player.maxStat(HEALTH);
                 if (player.getCurrentHealth() >= max) continue;
 
                 player.addHealth(1.5 + (max * 0.01));
@@ -79,7 +80,7 @@ public final class ActionBarManager {
                 if (!(online instanceof SkyblockPlayer player)) continue;
                 if (player.getActiveProfileData() == null) continue;
 
-                double max = player.maxStat(Stats.INTELLIGENCE);
+                double max = player.maxStat(INTELLIGENCE);
                 if (player.getCurrentMana() >= max) continue;
 
                 player.addMana(max / 50.0);

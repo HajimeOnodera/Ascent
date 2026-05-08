@@ -12,6 +12,7 @@ public final class Professional extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GEMSTONE; }
     @Override public int cost(int l) { return (int) Math.pow(l + 2, 2.3); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+" + (l * 5) + " §6⸕ Mining Speed §7when mining §dGemstones§7.");
+        return List.of("<gray>Grants <green>+" + (l * 5) + " <gold>⸕ Mining Speed <gray>when mining <light_purple>Gemstones<gray>.");
     }
 }
+

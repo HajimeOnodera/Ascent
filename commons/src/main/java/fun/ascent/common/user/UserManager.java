@@ -19,10 +19,6 @@ public class UserManager {
         return getUser(uuid).getDisplayName();
     }
 
-    public static String getLegacyDisplayName(UUID uuid) {
-        return getUser(uuid).getLegacyDisplayName();
-    }
-
     public static void init(String mongoUri) {
         UserDatabase.connect(mongoUri);
         startUpdateListener();

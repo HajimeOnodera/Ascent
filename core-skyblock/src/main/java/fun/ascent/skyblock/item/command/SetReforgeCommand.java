@@ -15,12 +15,14 @@ import net.minestom.server.item.ItemStack;
 
 import java.util.Map;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class SetReforgeCommand extends Command {
 
     public SetReforgeCommand() {
         super("setreforge");
 
-        setDefaultExecutor((sender, ctx) -> sender.sendMessage("§cUsage: /setreforge <reforge>"));
+        setDefaultExecutor((sender, ctx) -> sender.sendMessage(text("<red>Usage: /setreforge <reforge>")));
 
         ArgumentWord reforgeArg = ArgumentType.Word("reforge");
 
@@ -29,36 +31,36 @@ public class SetReforgeCommand extends Command {
 
             ItemStack held = player.getEquipment(EquipmentSlot.MAIN_HAND);
             if (held.isAir()) {
-                player.sendMessage("§cYou must hold an item!");
+                player.sendMessage(text("<red>You must hold an item!"));
                 return;
             }
 
             String itemId = ItemNBT.getItemId(held);
             if (itemId == null) {
-                player.sendMessage("§cNot a Skyblock item!");
+                player.sendMessage(text("<red>Not a Skyblock item!"));
                 return;
             }
 
             SkyblockItem base = ItemRegistry.getItem(itemId);
             if (base == null) {
-                player.sendMessage("§cItem not found in registry!");
+                player.sendMessage(text("<red>Item not found in registry!"));
                 return;
             }
 
             if (!base.isReforgeable()) {
-                player.sendMessage("§cThis item cannot be reforged!");
+                player.sendMessage(text("<red>This item cannot be reforged!"));
                 return;
             }
 
             String reforgeName = ctx.get(reforgeArg).toUpperCase();
             Reforge reforge = Reforge.getById(reforgeName, base.getItemType());
             if (reforge == null) {
-                player.sendMessage("§cUnknown reforge: §f" + reforgeName);
+                player.sendMessage(text("<red>Unknown reforge: <white>" + reforgeName));
                 return;
             }
 
             if (!reforge.canApplyTo(base.getItemType())) {
-                player.sendMessage("§cCannot apply §f" + reforge.getName() + "§c to this item type!");
+                player.sendMessage(text("<red>Cannot apply <white>" + reforge.getName() + "<red> to this item type!"));
                 return;
             }
 
@@ -71,7 +73,8 @@ public class SetReforgeCommand extends Command {
             }
 
             player.setEquipment(EquipmentSlot.MAIN_HAND, builder.build().buildItemStack(player));
-            player.sendMessage("§aApplied §f" + reforge.getName() + "§a reforge.");
+            player.sendMessage(text("<green>Applied <white>" + reforge.getName() + "<green> reforge."));
         }, reforgeArg);
     }
 }
+

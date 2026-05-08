@@ -4,14 +4,13 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.service.ProxyService;
 import fun.ascent.common.service.ServiceType;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 
 import java.util.Optional;
 import java.util.function.Function;
 
-public final class ProxyServiceGateway<E> {
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+import static fun.ascent.common.StringUtility.*;
 
+public final class ProxyServiceGateway<E> {
     private final ServiceType serviceType;
     private final String displayName;
     private final ProxyService service;
@@ -47,6 +46,6 @@ public final class ProxyServiceGateway<E> {
     }
 
     public void sendError(Player player, String message) {
-        player.sendMessage(MINI_MESSAGE.deserialize("<red>" + message));
+        player.sendMessage(text("<red>" + message));
     }
 }

@@ -13,8 +13,9 @@ public final class MineshaftMayhem extends HotmUpgrade {
     @Override public int cost(int l) { return 0; }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7Increases the rate at which §bGlacite Mineshafts",
-            "§7spawn by §a10%§7."
+            "<gray>Increases the rate at which <aqua>Glacite Mineshafts",
+            "<gray>spawn by <green>10%<gray>."
         );
     }
 }
+

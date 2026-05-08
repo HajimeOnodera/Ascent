@@ -5,18 +5,18 @@ import lombok.Getter;
 
 @Getter
 public enum GemstoneType {
-    RUBY(Stats.HEALTH, "§c", "❤"),
-    AMBER(Stats.MINING_SPEED, "§6", "⸕"),
-    SAPPHIRE(Stats.INTELLIGENCE, "§b", "✎"),
-    JADE(Stats.MINING_FORTUNE, "§a", "☘"),
-    AMETHYST(Stats.DEFENSE, "§5", "❈"),
-    TOPAZ(Stats.PRISTINE, "§e", "✧"),
-    JASPER(Stats.STRENGTH, "§d", "❁"),
-    OPAL(Stats.TRUE_DEFENSE, "§f", "❂"),
-    AQUAMARINE(Stats.SEA_CREATURE_CHANCE, "§3", "α"),
-    CITRINE(Stats.FORAGING_FORTUNE, "§4", "☘"),
-    ONYX(Stats.CRITICAL_DAMAGE, "§9", "☠"),
-    PERIDOT(Stats.FARMING_FORTUNE, "§2", "☘");
+    RUBY(Stats.HEALTH, "<red>", "❤"),
+    AMBER(Stats.MINING_SPEED, "<gold>", "⸕"),
+    SAPPHIRE(Stats.INTELLIGENCE, "<aqua>", "✎"),
+    JADE(Stats.MINING_FORTUNE, "<green>", "☘"),
+    AMETHYST(Stats.DEFENSE, "<dark_purple>", "❈"),
+    TOPAZ(Stats.PRISTINE, "<yellow>", "✧"),
+    JASPER(Stats.STRENGTH, "<light_purple>", "❁"),
+    OPAL(Stats.TRUE_DEFENSE, "<white>", "❂"),
+    AQUAMARINE(Stats.SEA_CREATURE_CHANCE, "<dark_aqua>", "α"),
+    CITRINE(Stats.FORAGING_FORTUNE, "<dark_red>", "☘"),
+    ONYX(Stats.CRITICAL_DAMAGE, "<blue>", "☠"),
+    PERIDOT(Stats.FARMING_FORTUNE, "<dark_green>", "☘");
 
     private final Stats stat;
     private final String colorCode;
@@ -29,3 +29,4 @@ public enum GemstoneType {
     }
 
 }
+

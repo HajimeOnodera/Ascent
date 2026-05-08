@@ -8,13 +8,13 @@ import fun.ascent.common.service.FromServiceChannels;
 import fun.ascent.common.service.redis.ServiceToClient;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.UUID;
+
+import static fun.ascent.common.StringUtility.text;
 
 public class RedisPropagateFriendEvent implements ServiceToClient {
     private final ProxyServer proxy;
@@ -59,42 +59,43 @@ public class RedisPropagateFriendEvent implements ServiceToClient {
 
     private void handleEventForPlayer(Player player, FriendEvent event) {
         if (event instanceof FriendRequestSentResponseEvent e) {
-            sendMessage(player, "§aFriend request sent to §e" + e.getTargetName() + "§a!");
+            sendMessage(player, "<green>Friend request sent to <yellow>" + e.getTargetName() + "<green>!");
         } else if (event instanceof FriendRequestReceivedResponseEvent e) {
-            player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
-            player.sendMessage(Component.text("§aFriend request from §e" + e.getSenderName()));
+            player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
+            player.sendMessage(text("<green>Friend request from <yellow>" + e.getSenderName()));
             
-            Component accept = Component.text(" §a§l[ACCEPT]")
-                    .hoverEvent(Component.text("§eClick to accept friend request"))
+            Component accept = text(" <green><bold>[ACCEPT]")
+                    .hoverEvent(text("<yellow>Click to accept friend request"))
                     .clickEvent(ClickEvent.runCommand("/f accept " + e.getSenderName()));
             
-            Component deny = Component.text(" §c§l[DENY]")
-                    .hoverEvent(Component.text("§eClick to deny friend request"))
+            Component deny = text(" <red><bold>[DENY]")
+                    .hoverEvent(text("<yellow>Click to deny friend request"))
                     .clickEvent(ClickEvent.runCommand("/f deny " + e.getSenderName()));
             
-            player.sendMessage(Component.text("§eClick ").append(accept).append(Component.text(" §eor ")).append(deny));
-            player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
+            player.sendMessage(text("<yellow>Click ").append(accept).append(text(" <yellow>or ")).append(deny));
+            player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
         } else if (event instanceof FriendAddedResponseEvent e) {
             String otherName = player.getUniqueId().equals(e.getPlayer1()) ? e.getPlayer2Name() : e.getPlayer1Name();
-            sendMessage(player, "§aYou are now friends with §e" + otherName + "§a!");
+            sendMessage(player, "<green>You are now friends with <yellow>" + otherName + "<green>!");
         } else if (event instanceof FriendDeniedResponseEvent e) {
-            sendMessage(player, "§e" + e.getDenierName() + " §cdenied your friend request.");
+            sendMessage(player, "<yellow>" + e.getDenierName() + " <red>denied your friend request.");
         } else if (event instanceof FriendRemovedResponseEvent e) {
             if (player.getUniqueId().equals(e.getRemover())) {
-                sendMessage(player, "§cRemoved friend.");
+                sendMessage(player, "<red>Removed friend.");
             } else {
-                sendMessage(player, "§e" + e.getRemoverName() + " §cremoved you from their friends list.");
+                sendMessage(player, "<yellow>" + e.getRemoverName() + " <red>removed you from their friends list.");
             }
         } else if (event instanceof FriendJoinNotificationEvent e) {
-            player.sendMessage(Component.text("§aFriend > " + e.getFriendName() + " §7joined."));
+            player.sendMessage(text("<green>Friend > " + e.getFriendName() + " <gray>joined."));
         } else if (event instanceof FriendLeaveNotificationEvent e) {
-            player.sendMessage(Component.text("§aFriend > " + e.getFriendName() + " §7left."));
+            player.sendMessage(text("<green>Friend > " + e.getFriendName() + " <gray>left."));
         }
     }
 
     private void sendMessage(Player player, String message) {
-        player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
-        player.sendMessage(LegacyComponentSerializer.legacySection().deserialize(message));
-        player.sendMessage(Component.text("§9§m-----------------------------------------------------"));
+        player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
+        player.sendMessage(text(message));
+        player.sendMessage(text("<blue><strikethrough>-----------------------------------------------------"));
     }
 }
+

@@ -15,7 +15,8 @@ public final class TitaniumInsanium extends HotmUpgrade {
         return List.of(MiningFortune.class, MiningSpeedBoost.class);
     }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7When mining §fMithril§7, you have a §a" +
-            String.format("%.1f", 2 + l * 0.1) + "%§7 chance to convert it to §fTitanium§7.");
+        return List.of("<gray>When mining <white>Mithril<gray>, you have a <green>" +
+            String.format("%.1f", 2 + l * 0.1) + "%<gray> chance to convert it to <white>Titanium<gray>.");
     }
 }
+

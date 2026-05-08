@@ -6,12 +6,13 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static fun.ascent.common.StringUtility.escapeMiniMessage;
+import static fun.ascent.common.StringUtility.text;
 
 public class RankCommand implements SimpleCommand {
     private final ProxyServer proxy;
@@ -31,19 +32,19 @@ public class RankCommand implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         if (!(invocation.source() instanceof Player player)) {
-            invocation.source().sendMessage(Component.text("This command can only be used by players.", NamedTextColor.RED));
+            invocation.source().sendMessage(text(text("<red>This command can only be used by players.")));
             return;
         }
 
         User user = UserManager.getUser(player.getUniqueId());
         if (!user.getRank().isStaff()) {
-            invocation.source().sendMessage(Component.text("No permission.").color(NamedTextColor.RED));
+            invocation.source().sendMessage(text(text("<red>No permission.")));
             return;
         }
 
         String[] args = invocation.arguments();
         if (args.length < 2) {
-            invocation.source().sendMessage(Component.text("Usage: /rank <player> <rank>").color(NamedTextColor.RED));
+            invocation.source().sendMessage(text(text("<red>Usage: /rank <player> <rank>")));
             return;
         }
 
@@ -57,21 +58,15 @@ public class RankCommand implements SimpleCommand {
                 targetUser.setRank(rank);
                 UserManager.saveUser(targetUser);
 
-                invocation.source().sendMessage(Component.text("Set rank of ")
-                        .append(Component.text(targetName).color(NamedTextColor.YELLOW))
-                        .append(Component.text(" to "))
-                        .append(rank.getFormattedPrefix())
-                        .color(NamedTextColor.GREEN));
+                invocation.source().sendMessage(text("<green>Set rank of <yellow>" + escapeMiniMessage(targetName) + "<green> to ")
+                        .append(rank.getFormattedPrefix()));
                 
-                target.sendMessage(Component.text("Your rank has been updated to ")
-                        .append(rank.getFormattedPrefix())
-                        .color(NamedTextColor.GREEN));
+                target.sendMessage(text(text("<green>Your rank has been updated to ").append(rank.getFormattedPrefix())));
             } catch (IllegalArgumentException e) {
-                invocation.source().sendMessage(Component.text("Invalid rank. Available: " + 
-                        Arrays.stream(Rank.values()).map(Enum::name).collect(Collectors.joining(", ")))
-                        .color(NamedTextColor.RED));
+                invocation.source().sendMessage(text("<red>Invalid rank. Available: " +
+                        Arrays.stream(Rank.values()).map(Enum::name).collect(Collectors.joining(", "))));
             }
-        }, () -> invocation.source().sendMessage(Component.text("Player not found.").color(NamedTextColor.RED)));
+        }, () -> invocation.source().sendMessage(text(text("<red>Player not found."))));
     }
 
     @Override

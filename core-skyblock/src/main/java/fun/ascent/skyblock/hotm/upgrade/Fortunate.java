@@ -15,6 +15,7 @@ public final class Fortunate extends HotmUpgrade {
         return List.of(Mole.class, GreatExplorer.class);
     }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+" + (l * 5) + " §6☘ Mining Fortune §7when mining §dGemstones§7.");
+        return List.of("<gray>Grants <green>+" + (l * 5) + " <gold>☘ Mining Fortune <gray>when mining <light_purple>Gemstones<gray>.");
     }
 }
+

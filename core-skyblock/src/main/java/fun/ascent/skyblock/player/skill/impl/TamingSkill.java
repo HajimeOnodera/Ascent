@@ -36,9 +36,9 @@ public class TamingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.LEAD; }
     @Override public List<String> description() {
         return List.of(
-                "§7Tame pets and level them up",
-                "§7to gain Taming XP. Grants",
-                "§d§7 §dPet Luck§7 at higher levels."
+                "<gray>Tame pets and level them up",
+                "<gray>to gain Taming XP. Grants",
+                "<light_purple><gray> <light_purple>Pet Luck<gray> at higher levels."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

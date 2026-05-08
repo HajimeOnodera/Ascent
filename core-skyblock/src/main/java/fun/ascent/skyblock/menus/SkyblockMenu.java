@@ -1,12 +1,11 @@
 package fun.ascent.skyblock.menus;
 
 import fun.ascent.common.item.ItemStackCreator;
+import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -16,6 +15,8 @@ import net.minestom.server.item.Material;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.kyori.adventure.text.minimessage.MiniMessage.*;
+
 public class SkyblockMenu {
 
     private static final int INFO_SLOT = 13;
@@ -24,8 +25,7 @@ public class SkyblockMenu {
     private static final int COLLS_SLOT = 20;
     private static final int RECIPE_SLOT = 21;
     public static void open(SkyblockPlayer player) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW,
-                MiniMessage.miniMessage().deserialize("SkyBlock Menu"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, miniMessage().deserialize("SkyBlock Menu"));
 
         fill(inv);
 
@@ -39,7 +39,7 @@ public class SkyblockMenu {
 
         // Close button
         inv.setItemStack(CLOSE_SLOT, ItemStack.builder(Material.BARRIER)
-                .customName(MiniMessage.miniMessage().deserialize("<red>Close"))
+                .customName(miniMessage().deserialize("<red>Close"))
                 .build());
 
         inv.eventNode().addListener(InventoryPreClickEvent.class, event -> {
@@ -48,7 +48,7 @@ public class SkyblockMenu {
             if (slot == CLOSE_SLOT) {
                 player.closeInventory();
             } else if (slot == INFO_SLOT) {
-                player.sendMessage(MiniMessage.miniMessage()
+                player.sendMessage(miniMessage()
                         .deserialize("<red>If you see this message, the buttons are working!"));
             }
         });
@@ -58,64 +58,64 @@ public class SkyblockMenu {
 
     private static ItemStack getRecipeItem(ProfilePlayer plProfile) {
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>Through your adventure, you will").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>unlock recipes for all kinds of").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>special items! You can view how to").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>craft these items here."));
+        lore.add(miniMessage().deserialize("<gray>Through your adventure, you will").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>unlock recipes for all kinds of").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>special items! You can view how to").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>craft these items here."));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>Recipe Book Unlocked: <yellow>x.y<gold>%").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<white>────────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(MiniMessage.miniMessage().deserialize(
+        lore.add(miniMessage().deserialize("<gray>Recipe Book Unlocked: <yellow>x.y<gold>%").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<white>────────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(miniMessage().deserialize(
                 "<yellow> x<gold>/<yellow>y"
         ).decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,false)));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Also accessible via /recipes.").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /recipes.").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
 
         return ItemStackCreator.createNamedItemStack(Material.BOOK,
-                        MiniMessage.miniMessage().deserialize("<green>Recipe Book"))
+                        miniMessage().deserialize("<green>Recipe Book"))
                 .lore(lore).build();
     }
 
     private static ItemStack getCollectionItem(ProfilePlayer plProfile) {
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>View all of the items available in").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>SkyBlock. Collect more of an item to").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>unlock rewards on your way to").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>becoming a master of SkyBlock!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>View all of the items available in").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>SkyBlock. Collect more of an item to").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>unlock rewards on your way to").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>becoming a master of SkyBlock!").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>Collections unlocked: <yellow>x.yz<gold>%").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<white>───────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(MiniMessage.miniMessage().deserialize(
+        lore.add(miniMessage().deserialize("<gray>Collections unlocked: <yellow>x.yz<gold>%").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<white>───────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(miniMessage().deserialize(
                "<yellow> x<gold>/<yellow>y"
         ).decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,false)));
 
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Also accessible via /collection.").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /collection.").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
         return ItemStackCreator.createNamedItemStack(Material.PAINTING,
-                MiniMessage.miniMessage().deserialize("<green>Collections"))
+                miniMessage().deserialize("<green>Collections"))
                 .lore(lore).build();
     }
 
     private static ItemStack getSkillsItem() {
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>View your Skill progression and").decoration(TextDecoration.ITALIC,false));
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>rewards.").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>View your Skill progression and").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>rewards.").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Also accessible via /skills").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /skills").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<yellow> Click to view!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<yellow> Click to view!").decoration(TextDecoration.ITALIC,false));
         return ItemStackCreator.
                 createNamedItemStack(Material.DIAMOND_SWORD,
-                        Component.text("Your Skills").color(NamedTextColor.GREEN))
+                        StringUtility.text("<green>Your Skills"))
                 .lore(lore).build();
     }
 
     private static ItemStack getProfileItem(ProfilePlayer plProfile){
         List<Component> lore = new ArrayList<>();
         String[] stats = new String[]{"speed","strength","defense","critical_chance","critical_damage","health","intelligence"};
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>View your equipment, stats, and more!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<gray>View your equipment, stats, and more!").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
 //        for(String stat : stats) {
 //            Stat stat1 = plProfile.stats.get(stat);
@@ -123,13 +123,13 @@ public class SkyblockMenu {
 //            lore.add(stat1.getText(1));
 //        }
 
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_grey> and more...").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<dark_grey> and more...").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<dark_gray>Also accessible via /stats").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /stats").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
+        lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
         return ItemStack.builder(Material.PLAYER_HEAD)
-                .customName(MiniMessage.miniMessage().deserialize("<green>Your SkyBlock Profile").decoration(TextDecoration.ITALIC,false))
+                .customName(miniMessage().deserialize("<green>Your SkyBlock Profile").decoration(TextDecoration.ITALIC,false))
                 .lore(lore)
                 .build();
     }

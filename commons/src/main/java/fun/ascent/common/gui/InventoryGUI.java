@@ -17,6 +17,8 @@ import net.minestom.server.timer.TaskSchedule;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static fun.ascent.common.StringUtility.*;
+
 public abstract class InventoryGUI {
     public static final Map<UUID, InventoryGUI> GUI_MAP = new ConcurrentHashMap<>();
     public static final ItemStack.Builder FILLER_ITEM = ItemStack.builder(Material.BLACK_STAINED_GLASS_PANE)
@@ -332,11 +334,11 @@ public abstract class InventoryGUI {
                 updateItemStacks(inventory, player);
                 onOpen(openEvent);
                 if (player.getHeldSlot() != itemInHand) {
-                    player.sendMessage("§cYour item in hand cannot change in between opening GUIs");
+                    player.sendMessage(text("<red>Your item in hand cannot change in between opening GUIs"));
                     return;
                 }
             } catch (Exception e) {
-                player.sendMessage("§cAn error occurred while opening the GUI");
+                player.sendMessage(text("<red>An error occurred while opening the GUI"));
                 player.closeInventory();
                 e.printStackTrace();
                 return;
@@ -447,3 +449,4 @@ public abstract class InventoryGUI {
         SERVER_EXITED
     }
 }
+

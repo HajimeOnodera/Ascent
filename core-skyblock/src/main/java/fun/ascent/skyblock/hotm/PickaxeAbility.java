@@ -25,22 +25,23 @@ public abstract class PickaxeAbility extends HotmUpgrade {
         Material mat = level == 0 ? Material.COAL_BLOCK
             : selected ? Material.DIAMOND_BLOCK
             : Material.EMERALD_BLOCK;
-        String nameColor = level == 0 ? "§c" : selected ? "§a" : "§e";
+        String nameColor = level == 0 ? "<red>" : selected ? "<green>" : "<yellow>";
 
         List<Component> lore = new ArrayList<>();
         buildLore(1).forEach(line -> lore.add(c(line)));
         lore.add(Component.empty());
 
         if (level > 0) {
-            lore.add(selected ? c("§2§lSELECTED") : c("§eClick to select!"));
+            lore.add(selected ? c("<dark_green><bold>SELECTED") : c("<yellow>Click to select!"));
         } else {
-            lore.add(c("§7Cost"));
-            lore.add(c("§51 Token of the Mountain"));
+            lore.add(c("<gray>Cost"));
+            lore.add(c("<dark_purple>1 Token of the Mountain"));
         }
 
         return ItemStack.builder(mat)
-            .customName(c(nameColor + "§l" + name()))
+            .customName(c(nameColor + "<bold>" + name()))
             .lore(lore)
             .build();
     }
 }
+

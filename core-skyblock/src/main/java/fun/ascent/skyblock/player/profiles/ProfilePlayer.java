@@ -1,6 +1,5 @@
 package fun.ascent.skyblock.player.profiles;
 
-import fun.ascent.common.ChatUtility;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -11,12 +10,14 @@ import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.item.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import static fun.ascent.common.StringUtility.text;
+import static fun.ascent.skyblock.player.stats.Stats.*;
 
 public class ProfilePlayer {
 
@@ -70,25 +71,22 @@ public class ProfilePlayer {
         String oldColour = SkyblockLevel.getLevelColour(oldLevel);
 
         skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
-                ChatUtility.FontInfo.center("§3§lSKYBLOCK LEVEL UP")));
-        skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
-                ChatUtility.FontInfo.center(newColour + "Level §8[" + oldColour + oldLevel + "§8] ➞ [" + newColour + curLevel + "§8]")));
+        skyblockPlayer.sendMessage(text(text("<dark_aqua><bold>SKYBLOCK LEVEL UP")));
+        skyblockPlayer.sendMessage(text(text(newColour + "Level <dark_gray>[" + oldColour + oldLevel + "<dark_gray>] -> [" + newColour + curLevel + "<dark_gray>]")));
         skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(LegacyComponentSerializer.legacySection().deserialize(
-                ChatUtility.FontInfo.center("§a§lREWARDS")));
+        skyblockPlayer.sendMessage(text(text("<green><bold>REWARDS")));
 
         if (totalHealth > 0) {
-            skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalHealth + " §c❤ Health"));
-            addToStat(Stats.HEALTH, totalHealth);
+            skyblockPlayer.sendMessage(text(text("  <dark_gray>+<red>" + totalHealth + " <red>❤ Health")));
+            addToStat(HEALTH, totalHealth);
         }
         if (totalStrength > 0) {
-            skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalStrength + " §c❁ Strength"));
-            addToStat(Stats.STRENGTH, totalStrength);
+            skyblockPlayer.sendMessage(text(text("  <dark_gray>+<red>" + totalStrength + " <red>❁ Strength")));
+            addToStat(STRENGTH, totalStrength);
         }
 
         for (String rewardStr : stringRewards.keySet()) {
-            skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+" + rewardStr));
+            skyblockPlayer.sendMessage(text(text("  <dark_gray>+" + rewardStr)));
         }
 
         skyblockPlayer.playSound(Sound.sound(
@@ -104,3 +102,4 @@ public class ProfilePlayer {
         stats.put(stat.id, stat.addCurValue(amount));
     }
 }
+

@@ -5,10 +5,12 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.user.UserManager;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static fun.ascent.common.StringUtility.escapeMiniMessage;
+import static fun.ascent.common.StringUtility.text;
 
 final class ProxyAdminCommand implements SimpleCommand {
 
@@ -38,11 +40,11 @@ final class ProxyAdminCommand implements SimpleCommand {
 
         if (args[0].equalsIgnoreCase("reload")) {
             plugin.reload();
-            invocation.source().sendMessage(Component.text("Ascent proxy config reloaded. Restart the proxy to apply command alias changes.", NamedTextColor.GREEN));
+            invocation.source().sendMessage(text("<green>Ascent proxy config reloaded. Restart the proxy to apply command alias changes."));
             return;
         }
 
-        invocation.source().sendMessage(Component.text("Usage: /ascentproxy <servers|reload>", NamedTextColor.RED));
+        invocation.source().sendMessage(text("<red>Usage: /ascentproxy <servers|reload>"));
     }
 
     @Override
@@ -55,19 +57,16 @@ final class ProxyAdminCommand implements SimpleCommand {
 
     private void sendServers(Invocation invocation) {
         List<Component> lines = new ArrayList<>();
-        lines.add(Component.text("Ascent servers:", NamedTextColor.GOLD));
-        lines.add(Component.text("Default: ", NamedTextColor.GRAY)
-                .append(Component.text(plugin.config().defaultServer(), NamedTextColor.YELLOW)));
+        lines.add(text("<gold>Ascent servers:"));
+        lines.add(text("<gray>Default: <yellow>" + escapeMiniMessage(plugin.config().defaultServer())));
 
         for (ProxyRoute route : plugin.config().routes()) {
             boolean online = proxy.getServer(route.targetServer()).isPresent();
-            NamedTextColor stateColor = online ? NamedTextColor.GREEN : NamedTextColor.RED;
+            String stateColor = online ? "<green>" : "<red>";
             String state = online ? "registered" : "missing";
 
-            lines.add(Component.text("- ", NamedTextColor.GRAY)
-                    .append(Component.text(route.targetServer(), NamedTextColor.YELLOW))
-                    .append(Component.text(" [" + state + "] ", stateColor))
-                    .append(Component.text(route.commands().toString(), NamedTextColor.GRAY)));
+            lines.add(text("<gray>- <yellow>" + escapeMiniMessage(route.targetServer())
+                    + stateColor + " [" + state + "] <gray>" + escapeMiniMessage(route.commands().toString())));
         }
 
         lines.forEach(invocation.source()::sendMessage);

@@ -35,19 +35,20 @@ public record ItemAbility(String abilityName, AbilityType abilityType, List<Stri
 
     public List<String> buildLore() {
         List<String> lore = new ArrayList<>();
-        lore.add("§6Ability: " + abilityName + " §e§l" + abilityType.getDisplayName());
+        lore.add("<gold>Ability: " + abilityName + " <yellow><bold>" + abilityType.getDisplayName());
         for (String line : description) {
-            lore.add("§7" + line);
+            lore.add("<gray>" + line);
         }
         if (manaCost > 0) {
-            lore.add("§8Mana Cost: §b" + manaCost);
+            lore.add("<dark_gray>Mana Cost: <aqua>" + manaCost);
         }
         if (soulflowCost > 0) {
-            lore.add("§8Soulflow Cost: §3" + soulflowCost + "⸎");
+            lore.add("<dark_gray>Soulflow Cost: <dark_aqua>" + soulflowCost + "⸎");
         }
         if (cooldownSeconds > 0) {
-            lore.add("§8Cooldown: §a" + cooldownSeconds + "s");
+            lore.add("<dark_gray>Cooldown: <green>" + cooldownSeconds + "s");
         }
         return lore;
     }
 }
+

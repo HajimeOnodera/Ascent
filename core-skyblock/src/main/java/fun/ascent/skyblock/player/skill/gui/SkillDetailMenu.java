@@ -16,6 +16,8 @@ import net.minestom.server.item.Material;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class SkillDetailMenu {
 
     private static final int[] REWARD_SLOTS = {
@@ -34,7 +36,7 @@ public class SkillDetailMenu {
         PlayerSkillData skillData = profileData.skillData;
         int currentLevel = skillData.getLevel(type);
 
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "§a" + type.getDisplayName() + " Skill");
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "<green>" + type.getDisplayName() + " Skill");
 
         SkillMenuFormat.fill(inv);
 
@@ -84,7 +86,6 @@ public class SkillDetailMenu {
         if (slot == NEXT_PAGE_SLOT && hasNextPage) {
             player.closeInventory();
             open(player, type, page + 1);
-            return;
         }
     }
 
@@ -99,17 +100,17 @@ public class SkillDetailMenu {
         if (nextLevel != null) {
             SkillReward reward = def.rewardAt(nextLevel);
             SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(),
-                    "§7Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
+                    "<gray>Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
         } else {
-            lore.add(Component.text("§aMAX LEVEL REACHED!"));
+            lore.add(text("<green>MAX LEVEL REACHED!"));
         }
 
         lore.add(Component.text(" "));
-        lore.add(Component.text("§7View all rewards for this"));
-        lore.add(Component.text("§7Skill below."));
+        lore.add(text("<gray>View all rewards for this"));
+        lore.add(text("<gray>Skill below."));
 
         return ItemStack.builder(def.icon())
-                .customName(Component.text("§a" + def.name() + " Skill"))
+                .customName(text("<green>" + def.name() + " Skill"))
                 .lore(lore)
                 .build();
     }
@@ -122,7 +123,7 @@ public class SkillDetailMenu {
                 : isCurrent ? Material.YELLOW_STAINED_GLASS_PANE
                   : Material.RED_STAINED_GLASS_PANE;
 
-        String color = unlocked ? "§a" : isCurrent ? "§e" : "§c";
+        String color = unlocked ? "<green>" : isCurrent ? "<yellow>" : "<red>";
         String title = color + type.getDisplayName() + " Level " + SkillReward.toRoman(reward.level());
 
         List<Component> lore = new ArrayList<>();
@@ -130,10 +131,10 @@ public class SkillDetailMenu {
 
         if (unlocked) {
             lore.add(Component.text(" "));
-            lore.add(Component.text("§aUNLOCKED"));
+            lore.add(text("<green>UNLOCKED"));
         } else if (isCurrent) {
             lore.add(Component.text(" "));
-            SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(), "§7Progress: ");
+            SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(), "<gray>Progress: ");
         }
 
         return ItemStack.builder(glass)
@@ -143,3 +144,4 @@ public class SkillDetailMenu {
     }
 
 }
+

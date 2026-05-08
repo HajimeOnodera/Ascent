@@ -11,6 +11,8 @@ import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 
+import static fun.ascent.common.StringUtility.text;
+
 public final class MinionCommand extends Command {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
@@ -32,19 +34,19 @@ public final class MinionCommand extends Command {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>")));
                     return;
                 }
                 int targetTier = context.get(tier);
                 player.getInventory().addItemStack(MinionItems.createPlacementItem(minionType, targetTier));
-                player.sendMessage(MINI_MESSAGE.deserialize("<green>Given " + minionType.getDisplayName() + " " + targetTier + ".</green>"));
+                player.sendMessage(text(MINI_MESSAGE.deserialize("<green>Given " + minionType.getDisplayName() + " " + targetTier + ".</green>")));
                 return;
             }
             if (actionName.equalsIgnoreCase("place")) {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>")));
                     return;
                 }
                 MinionManager.placeMinion(player, minionType);
@@ -54,7 +56,7 @@ public final class MinionCommand extends Command {
             if (actionName.equalsIgnoreCase("menu")) {
                 SkyblockMinion minion = MinionManager.getNearestOwnedMinion(player, 4);
                 if (minion == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>No nearby minion found.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>No nearby minion found.</red>")));
                     return;
                 }
                 MinionMenu.open(player, minion);
@@ -63,7 +65,7 @@ public final class MinionCommand extends Command {
 
             if (actionName.equalsIgnoreCase("list")) {
                 int count = MinionManager.getOwnedMinions(player).size();
-                player.sendMessage(MINI_MESSAGE.deserialize("<yellow>You have <white>" + count + "</white> minions placed.</yellow>"));
+                player.sendMessage(text(MINI_MESSAGE.deserialize("<yellow>You have <white>" + count + "</white> minions placed.</yellow>")));
                 return;
             }
 
@@ -81,7 +83,7 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>")));
         }, action, type, tier);
 
         addSyntax((sender, context) -> {
@@ -95,7 +97,7 @@ public final class MinionCommand extends Command {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>")));
                     return;
                 }
                 MinionManager.placeMinion(player, minionType);
@@ -106,15 +108,15 @@ public final class MinionCommand extends Command {
                 String typeName = context.get(type);
                 MinionType minionType = MinionType.fromId(typeName);
                 if (minionType == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Unknown minion type.</red>")));
                     return;
                 }
                 player.getInventory().addItemStack(MinionItems.createPlacementItem(minionType, 1));
-                player.sendMessage(MINI_MESSAGE.deserialize("<green>Given " + minionType.getDisplayName() + " I.</green>"));
+                player.sendMessage(text(MINI_MESSAGE.deserialize("<green>Given " + minionType.getDisplayName() + " I.</green>")));
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>")));
         }, action, type);
 
         addSyntax((sender, context) -> {
@@ -127,7 +129,7 @@ public final class MinionCommand extends Command {
             if (actionName.equalsIgnoreCase("menu")) {
                 SkyblockMinion minion = MinionManager.getNearestOwnedMinion(player, 4);
                 if (minion == null) {
-                    player.sendMessage(MINI_MESSAGE.deserialize("<red>No nearby minion found.</red>"));
+                    player.sendMessage(text(MINI_MESSAGE.deserialize("<red>No nearby minion found.</red>")));
                     return;
                 }
                 MinionMenu.open(player, minion);
@@ -136,7 +138,7 @@ public final class MinionCommand extends Command {
 
             if (actionName.equalsIgnoreCase("list")) {
                 int count = MinionManager.getOwnedMinions(player).size();
-                player.sendMessage(MINI_MESSAGE.deserialize("<yellow>You have <white>" + count + "</white> minions placed.</yellow>"));
+                player.sendMessage(text(MINI_MESSAGE.deserialize("<yellow>You have <white>" + count + "</white> minions placed.</yellow>")));
                 return;
             }
 
@@ -154,10 +156,10 @@ public final class MinionCommand extends Command {
                 return;
             }
 
-            player.sendMessage(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>"));
+            player.sendMessage(text(MINI_MESSAGE.deserialize("<red>Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types</red>")));
         }, action);
 
-        setDefaultExecutor((sender, context) ->
-                sender.sendMessage("Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types"));
+        setDefaultExecutor((sender, _) ->
+                sender.sendMessage(text("Usage: /minion give|get <type> <tier>, /minion place <type>, /minion menu, /minion list, /minion types")));
     }
 }

@@ -15,11 +15,12 @@ public final class Pickobulus extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Pickobulus",
-            "§7Throw your pickaxe to create an explosion",
-            "§7that §bmines all ores §7in a §a3 block radius§7.",
+            "<gold>Pickaxe Ability: Pickobulus",
+            "<gray>Throw your pickaxe to create an explosion",
+            "<gray>that <aqua>mines all ores <gray>in a <green>3 block radius<gray>.",
             " ",
-            "§8Cooldown: §a110s"
+            "<dark_gray>Cooldown: <green>110s"
         );
     }
 }
+

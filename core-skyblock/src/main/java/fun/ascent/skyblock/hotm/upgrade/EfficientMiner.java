@@ -17,8 +17,9 @@ public final class EfficientMiner extends HotmUpgrade {
     @Override public List<String> buildLore(int l) {
         double pct = 10 + l * 0.4;
         int blocks = 1 + l / 20;
-        return List.of("§7When mining ores, you have a §a" +
-            String.format("%.1f", pct) + "%§7 chance to mine §a" + blocks +
-            " §7adjacent ore" + (blocks > 1 ? "s" : "") + "§7.");
+        return List.of("<gray>When mining ores, you have a <green>" +
+            String.format("%.1f", pct) + "%<gray> chance to mine <green>" + blocks +
+            " <gray>adjacent ore" + (blocks > 1 ? "s" : "") + "<gray>.");
     }
 }
+

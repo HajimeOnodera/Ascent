@@ -1,6 +1,5 @@
 package fun.ascent.lobby.gui;
 
-import fun.ascent.common.StringUtility;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.gui.RefreshingGUI;
 import fun.ascent.common.item.GUIClickableItem;
@@ -11,7 +10,6 @@ import fun.ascent.lobby.cache.ServerInfoCache;
 import fun.ascent.lobby.game.GameType;
 import fun.ascent.lobby.transfer.ProxyTransfer;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
@@ -23,6 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static fun.ascent.common.StringUtility.*;
+import static net.minestom.server.component.DataComponents.*;
 
 public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
     private static final int[] GAME_SLOTS = {
@@ -50,10 +51,10 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
 
             @Override
             public ItemStack.Builder getItem(Player player) {
-                return ItemStackCreator.getStack("§aMain Lobby",
+                return ItemStackCreator.getStack("<green>Main Lobby",
                         Material.BOOKSHELF, 1,
                         "",
-                        "§7Return to the Main Lobby.");
+                        "<gray>Return to the Main Lobby.");
             }
         });
 
@@ -64,7 +65,7 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
                 if (i >= GAME_SLOTS.length) break;
                 set(createGameItem(game, GAME_SLOTS[i++]));
             }
-            set(createRandomGameItem(49));
+            set(createRandomGameItem());
             updateItemStacks(getInventory(), player);
         });
 
@@ -75,66 +76,64 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
         return new GUIClickableItem(slot) {
             @Override
             public ItemStack.Builder getItem(Player player) {
-                String playerCount = StringUtility.commaify(game.getPlayerCount());
+                String playerCount = commaify(game.getPlayerCount());
                 ItemStack.Builder itemBuilder = ItemStackCreator.getFromStack(game.getItem().build());
 
                 List<String> lore = new ArrayList<>();
-                lore.add("§8" + StringUtility.toNormalCase(game.getCategory().name()));
+                lore.add("<dark_gray>" + toNormalCase(game.getCategory().name()));
                 lore.add("");
                 lore.addAll(Arrays.asList(game.getLore()));
                 lore.add("");
                 if (game.isImplemented()) {
                     if (cycleIndex % 2 == 0) {
-                        lore.add("§a  Click to Connect!");
+                        lore.add("<green>  Click to Connect!");
                     } else {
-                        lore.add("§a► Click to Connect!");
+                        lore.add("<green>► Click to Connect!");
                     }
-                    lore.add("§7" + playerCount + " currently playing!");
+                    lore.add("<gray>" + playerCount + " currently playing!");
                 }
 
                 return ItemStackCreator.appendLore(itemBuilder, lore).customName(
-                        Component.text("§a" + game.getDisplayName())
+                        text("<green>" + game.getDisplayName())
                 );
             }
 
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
                 if (!game.isImplemented()) {
-                    player.sendMessage("§cThis game is not yet available!");
+                    player.sendMessage(text("<red>This game is not yet available!"));
                     return;
                 }
                 
-                List<fun.ascent.common.redis.ServerPing> servers = fun.ascent.common.redis.ServerLookup.findByPrefix(game.getServerPrefix());
+                List<ServerPing> servers = ServerLookup.findByPrefix(game.getServerPrefix());
                 if (servers.isEmpty()) {
-                    player.sendMessage("§c" + game.getDisplayName() + " is currently offline!");
+                    player.sendMessage(text("<red>" + game.getDisplayName() + " is currently offline!"));
                     return;
                 }
                 
                 player.closeInventory();
-                fun.ascent.lobby.transfer.ProxyTransfer.send(player, servers.getFirst().serverName());
+                ProxyTransfer.send(player, servers.getFirst().serverName());
             }
         };
     }
 
-    private GUIClickableItem createRandomGameItem(int slot) {
+    private GUIClickableItem createRandomGameItem() {
         GameType displayGame = GameType.values()[cycleIndex % GameType.values().length];
-        return new GUIClickableItem(slot) {
+        return new GUIClickableItem(49) {
             @Override
             public ItemStack.Builder getItem(Player player) {
                 ItemStack base = displayGame.getItem().build();
                 ItemStack.Builder builder = ItemStack.builder(base.material())
                         .amount(1)
-                        .customName(Component.text("§aRandom Game"))
-                        .lore(
-                                Component.text("§7Join a random game."),
+                        .customName(text("<green>Random Game"))
+                        .lore(text("<gray>Join a random game."),
                                 Component.empty(),
-                                Component.text("§eClick to Play")
-                        );
+                                text("<yellow>Click to Play"));
 
                 // Copy head texture if present
-                ResolvableProfile profile = base.get(DataComponents.PROFILE);
+                ResolvableProfile profile = base.get(PROFILE);
                 if (profile != null) {
-                    builder.set(DataComponents.PROFILE, profile);
+                    builder.set(PROFILE, profile);
                 }
 
                 return builder;
@@ -146,7 +145,7 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
                         .filter(GameType::isImplemented)
                         .toList();
                 if (implemented.isEmpty()) {
-                    player.sendMessage("§cNo games available!");
+                    player.sendMessage(text("<red>No games available!"));
                     return;
                 }
                 GameType random = implemented.get(
@@ -155,7 +154,7 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
                 
                 List<ServerPing> servers = ServerLookup.findByPrefix(random.getServerPrefix());
                 if (servers.isEmpty()) {
-                    player.sendMessage("§c" + random.getDisplayName() + " is currently offline!");
+                    player.sendMessage(text("<red>" + random.getDisplayName() + " is currently offline!"));
                     return;
                 }
 
@@ -168,7 +167,7 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
     @Override
     public void refreshItems(Player player) {
         cycleIndex++;
-        set(createRandomGameItem(49));
+        set(createRandomGameItem());
     }
 
     @Override
@@ -186,3 +185,4 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
         e.setCancelled(true);
     }
 }
+

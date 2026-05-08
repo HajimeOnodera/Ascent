@@ -1,6 +1,5 @@
 package fun.ascent.lobby.item;
 
-import fun.ascent.common.StringUtility;
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.lobby.gui.CollectiblesGUI;
 import fun.ascent.lobby.gui.GameMenuGUI;
@@ -13,7 +12,6 @@ import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
@@ -22,55 +20,56 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.text;
+import static net.minestom.server.component.DataComponents.*;
 
 public class LobbyItemManager {
 
     private static final Map<UUID, Boolean> playerVisibility = new ConcurrentHashMap<>();
 
     private static final ItemStack GAME_MENU = ItemStackCreator
-            .createNamedItemStack(Material.COMPASS, color("&aGame Menu &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE,
-                    List.of(color("&7Right Click to bring up the Game Menu!")))
+            .createNamedItemStack(Material.COMPASS, text("<green>Game Menu <gray>(Right Click)"))
+            .set(LORE,
+                    List.of(text("<gray>Right Click to bring up the Game Menu!")))
             .build();
 
     private static final ItemStack MY_PROFILE = ItemStackCreator
-            .createNamedItemStack(Material.PLAYER_HEAD, color("&aMy Profile &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(
-                    color("&7Right-click to browse quests, view achievements,"),
-                    color("&7activate Network Boosters and more!")))
+            .createNamedItemStack(Material.PLAYER_HEAD, text("<green>My Profile <gray>(Right Click)"))
+            .set(LORE, List.of(
+                    text("<gray>Right-click to browse quests, view achievements,"),
+                    text("<gray>activate Network Boosters and more!")))
             .build();
 
     private static final ItemStack COLLECTIBLES = ItemStackCreator
-            .createNamedItemStack(Material.CHEST, color("&aCollectibles &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(
-                    color("&7Mystery Dust: &b0"),
+            .createNamedItemStack(Material.CHEST, text("<green>Collectibles <gray>(Right Click)"))
+            .set(LORE, List.of(
+                    text("<gray>Mystery Dust: <aqua>0"),
                     Component.empty(),
-                    color("&7Collect fun cosmetic items! Unlock new items"),
-                    color("&7using &bMystery Dust &7or hitting milestone"),
-                    color("&7rewards."),
+                    text("<gray>Collect fun cosmetic items! Unlock new items"),
+                    text("<gray>using <aqua>Mystery Dust <gray>or hitting milestone"),
+                    text("<gray>rewards."),
                     Component.empty(),
-                    color("&bMystery Dust &7is randomly given after playing"),
-                    color("&7games.")))
+                    text("<aqua>Mystery Dust <gray>is randomly given after playing"),
+                    text("<gray>games.")))
             .build();
 
     private static final ItemStack PLAYERS_HIDDEN = ItemStackCreator
-            .createNamedItemStack(Material.GRAY_DYE, color("&fPlayers: &cHidden &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE,
-                    List.of(color("&7Right-click to toggle player visibility!")))
+            .createNamedItemStack(Material.GRAY_DYE, text("<white>Players: <red>Hidden <gray>(Right Click)"))
+            .set(LORE,
+                    List.of(text("<gray>Right-click to toggle player visibility!")))
             .build();
 
     private static final ItemStack PLAYERS_VISIBLE = ItemStackCreator
-            .createNamedItemStack(Material.LIME_DYE, color("&fPlayers: &aVisible &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE,
-                    List.of(color("&7Right-click to toggle player visibility!")))
+            .createNamedItemStack(Material.LIME_DYE, text("<white>Players: <green>Visible <gray>(Right Click)"))
+            .set(LORE,
+                    List.of(text("<gray>Right-click to toggle player visibility!")))
             .build();
 
     private static final ItemStack LOBBY_SELECTOR = ItemStackCreator
-            .createNamedItemStack(Material.NETHER_STAR, color("&aLobby Selector &7(Right Click)"))
-            .set(net.minestom.server.component.DataComponents.LORE, List.of(
-                    color("&7Right-click to switch between different lobbies!"),
-                    color("&7Use this to stay with your friends.")))
+            .createNamedItemStack(Material.NETHER_STAR, text("<green>Lobby Selector <gray>(Right Click)"))
+            .set(LORE, List.of(
+                    text("<gray>Right-click to switch between different lobbies!"),
+                    text("<gray>Use this to stay with your friends.")))
             .build();
 
     public static void init(GlobalEventHandler handler) {
@@ -101,11 +100,7 @@ public class LobbyItemManager {
             }
         });
 
-        handler.addListener(InventoryPreClickEvent.class, event -> {
-            if (event.getInventory() != null) {
-                event.setCancelled(true);
-            }
-        });
+        handler.addListener(InventoryPreClickEvent.class, event -> event.setCancelled(true));
 
         handler.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
     }
@@ -134,6 +129,8 @@ public class LobbyItemManager {
             return true;
         });
 
-        player.sendMessage(color(newHiddenState ? "&cPlayers are now hidden." : "&aPlayers are now visible."));
+        player.sendMessage(text(text(newHiddenState ? "<red>Players are now hidden." : "<green>Players are now visible.")));
     }
 }
+
+

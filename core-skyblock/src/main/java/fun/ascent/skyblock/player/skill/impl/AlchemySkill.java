@@ -36,9 +36,9 @@ public class AlchemySkill extends SkillDefinition {
     @Override public Material icon() { return Material.BREWING_STAND; }
     @Override public List<String> description() {
         return List.of(
-                "§7Brew potions to gain Alchemy",
-                "§7XP. Grants §bIntelligence§7 and",
-                "§7improves potion effects."
+                "<gray>Brew potions to gain Alchemy",
+                "<gray>XP. Grants <aqua>Intelligence<gray> and",
+                "<gray>improves potion effects."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

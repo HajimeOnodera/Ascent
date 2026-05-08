@@ -48,9 +48,9 @@ public class CombatSkill extends SkillDefinition {
     @Override public Material icon() { return Material.DIAMOND_SWORD; }
     @Override public List<String> description() {
         return List.of(
-                "§7Increases your overall damage",
-                "§7output. Grants §9Crit Damage",
-                "§7and §9Crit Chance§7."
+                "<gray>Increases your overall damage",
+                "<gray>output. Grants <blue>Crit Damage",
+                "<gray>and <blue>Crit Chance<gray>."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

@@ -13,8 +13,9 @@ public final class GreatExplorer extends HotmUpgrade {
     @Override public int cost(int l) { return (int) Math.pow(l + 2, 4); }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7Increases the chance of finding treasure in §5Crystal",
-            "§5Hollows §7by §a" + (l * 6 + 14) + "%§7."
+            "<gray>Increases the chance of finding treasure in <dark_purple>Crystal",
+            "<dark_purple>Hollows <gray>by <green>" + (l * 6 + 14) + "%<gray>."
         );
     }
 }
+

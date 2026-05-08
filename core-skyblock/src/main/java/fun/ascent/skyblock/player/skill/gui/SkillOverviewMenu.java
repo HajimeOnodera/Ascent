@@ -14,6 +14,8 @@ import net.minestom.server.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class SkillOverviewMenu {
 
     private static final int[] SKILL_SLOTS = {
@@ -25,7 +27,7 @@ public class SkillOverviewMenu {
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "§aSkills");
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "<green>Skills");
 
         SkillMenuFormat.fill(inv);
         inv.setItemStack(INFO_SLOT, SkillMenuFormat.infoButton());
@@ -80,15 +82,15 @@ public class SkillOverviewMenu {
         if (nextLevel != null) {
             SkillReward reward = type.definition().rewardAt(nextLevel);
             SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(),
-                    "§7Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
+                    "<gray>Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
             lore.add(Component.text(" "));
             reward.toLore().forEach(s -> lore.add(Component.text(s)));
         } else {
-            lore.add(Component.text("§aMAXED OUT!"));
+            lore.add(text("<green>MAXED OUT!"));
         }
 
         lore.add(Component.text(" "));
-        lore.add(Component.text("§eClick to view!"));
+        lore.add(text("<yellow>Click to view!"));
 
         return ItemStack.builder(type.definition().icon())
                 .customName(Component.text(SkillMenuFormat.skillNameWithLevel(type, level)))
@@ -96,3 +98,4 @@ public class SkillOverviewMenu {
                 .build();
     }
 }
+

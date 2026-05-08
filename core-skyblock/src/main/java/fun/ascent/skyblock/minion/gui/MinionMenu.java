@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.minion.gui;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.minion.upgrade.MinionUpgradeCost;
@@ -58,30 +59,28 @@ public final class MinionMenu {
             if (event.getSlot() == COLLECT_SLOT) {
                 List<ItemStack> collected = minion.collectAll();
                 if (collected == null) {
-                    clickingPlayer.sendMessage(text("<red>This minion has nothing to collect yet.</red>"));
+                    clickingPlayer.sendMessage(StringUtility.text(text("<red>This minion has nothing to collect yet.</red>")));
                     return;
                 }
                 for (ItemStack stack : collected) {
                     clickingPlayer.getInventory().addItemStack(stack);
                 }
-                clickingPlayer.sendMessage(text("<green>Collected resources from your minion.</green>"));
+                clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);
                 return;
             }
 
             if (event.getSlot() == QUICK_UPGRADE_SLOT) {
                 if (!minion.canUpgrade()) {
-                    clickingPlayer.sendMessage(text("<red>This minion is already max tier.</red>"));
+                    clickingPlayer.sendMessage(StringUtility.text(text("<red>This minion is already max tier.</red>")));
                     return;
                 }
                 if (!MinionUpgradeManager.tryUpgrade(clickingPlayer, minion)) {
                     MinionUpgradeCost cost = MinionUpgradeManager.getUpgradeCost(minion);
-                    if (cost != null) {
-                        clickingPlayer.sendMessage(text("<red>You need " + cost.amount() + " " + prettify(cost.material().name()) + " to upgrade this minion.</red>"));
-                    }
+                    clickingPlayer.sendMessage(StringUtility.text(text("<red>You need " + cost.amount() + " " + prettify(cost.material().name()) + " to upgrade this minion.</red>")));
                     return;
                 }
-                clickingPlayer.sendMessage(text("<green>Your minion is now Tier " + minion.getTier() + ".</green>"));
+                clickingPlayer.sendMessage(StringUtility.text(text("<green>Your minion is now Tier " + minion.getTier() + ".</green>")));
                 render(inventory, minion);
                 return;
             }
@@ -90,17 +89,17 @@ public final class MinionMenu {
                 OPEN_MENUS.remove(inventory);
                 MinionManager.removeMinion(minion);
                 clickingPlayer.getInventory().addItemStack(minion.toPlacementItem());
-                clickingPlayer.sendMessage(text("<yellow>You picked up your minion.</yellow>"));
+                clickingPlayer.sendMessage(StringUtility.text(text("<yellow>You picked up your minion.</yellow>")));
                 clickingPlayer.closeInventory();
                 return;
             }
 
             if (event.getSlot() == NEXT_TIER_SLOT) {
                 if (!minion.canUpgrade()) {
-                    clickingPlayer.sendMessage(text("<red>This minion is already max tier.</red>"));
+                    clickingPlayer.sendMessage(StringUtility.text(text("<red>This minion is already max tier.</red>")));
                     return;
                 }
-                clickingPlayer.sendMessage(text("<yellow>Use Quick-Upgrade to upgrade this minion.</yellow>"));
+                clickingPlayer.sendMessage(StringUtility.text(text("<yellow>Use Quick-Upgrade to upgrade this minion.</yellow>")));
             }
         });
 
@@ -287,9 +286,6 @@ public final class MinionMenu {
 
     private static String formatUpgradeCost(SkyblockMinion minion) {
         MinionUpgradeCost cost = MinionUpgradeManager.getUpgradeCost(minion);
-        if (cost == null) {
-            return "Unavailable";
-        }
         return cost.amount() + " " + prettify(cost.material().name());
     }
 

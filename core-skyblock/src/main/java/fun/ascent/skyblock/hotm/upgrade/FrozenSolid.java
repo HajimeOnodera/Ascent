@@ -15,6 +15,7 @@ public final class FrozenSolid extends HotmUpgrade {
         return List.of(GiftsFromTheDeparted.class, DeadMansChest.class);
     }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Killing mobs in §bGlacite Tunnels §7gives §a+" + (l * 2) + " §bGlacial Powder§7.");
+        return List.of("<gray>Killing mobs in <aqua>Glacite Tunnels <gray>gives <green>+" + (l * 2) + " <aqua>Glacial Powder<gray>.");
     }
 }
+

@@ -37,9 +37,9 @@ public class FishingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.FISHING_ROD; }
     @Override public List<String> description() {
         return List.of(
-                "§7Fish to gain Fishing XP. Grants",
-                "§b§7 §bSea Creature Chance §7and",
-                "§bFishing Speed§7."
+                "<gray>Fish to gain Fishing XP. Grants",
+                "<aqua><gray> <aqua>Sea Creature Chance <gray>and",
+                "<aqua>Fishing Speed<gray>."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

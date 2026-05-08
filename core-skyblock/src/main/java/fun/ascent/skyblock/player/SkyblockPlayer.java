@@ -18,11 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+@Getter
 public class SkyblockPlayer extends Player {
 
-    @Getter private final Map<UUID, SkyblockProfile> playerProfiles = new HashMap<>();
-    @Getter private SkyblockProfile activeProfile;
-    @Getter private ProfilePlayer activeProfileData;
+    private final Map<UUID, SkyblockProfile> playerProfiles = new HashMap<>();
+    private SkyblockProfile activeProfile;
+    private ProfilePlayer activeProfileData;
 
     private double currentHealth;
     private double currentMana;
@@ -83,8 +84,6 @@ public class SkyblockPlayer extends Player {
         this.currentMana = maxStat(Stats.INTELLIGENCE);
     }
 
-    public double getCurrentHealth() { return currentHealth; }
-
     public void addHealth(double amount) {
         currentHealth = Math.min(currentHealth + amount, maxStat(Stats.HEALTH));
     }
@@ -93,8 +92,6 @@ public class SkyblockPlayer extends Player {
         currentHealth = Math.max(0, currentHealth - amount);
     }
 
-    public double getCurrentMana() { return currentMana; }
-
     public void addMana(double amount) {
         currentMana = Math.min(currentMana + amount, maxStat(Stats.INTELLIGENCE));
     }
@@ -102,7 +99,7 @@ public class SkyblockPlayer extends Player {
     public boolean consumeMana(double amount) {
         if (currentMana < amount) {
             ActionBar.of(getUuid()).addReplacement(
-                    ActionBar.Section.MANA, "§c§lNOT ENOUGH MANA", 40, 10);
+                    ActionBar.Section.MANA, "<red><bold>NOT ENOUGH MANA", 40, 10);
             return false;
         }
         currentMana -= amount;
@@ -133,3 +130,4 @@ public class SkyblockPlayer extends Player {
         return null;
     }
 }
+

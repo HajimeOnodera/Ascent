@@ -41,16 +41,16 @@ public final class PeakOfTheMountain extends HotmUpgrade {
     @Override
     public List<String> buildLore(int l) {
         List<String> lore = new ArrayList<>();
-        lore.add("§8+ §c1 Pickaxe Ability Level");
-        if (l > 1) lore.add("§8+ §a1 Forge Slot");
-        if (l > 2) lore.add("§8+ §a1 Commission Slot");
-        if (l > 3) lore.add("§8+ §21 Base §2Mithril Powder §7when mining §2Mithril");
-        if (l > 4) lore.add("§8+ §51 Token of the Mountain");
-        if (l > 5) lore.add("§8+ §d2 Base §dGemstone Powder §7when mining §dGemstones");
-        if (l > 6) lore.add("§8+ §51 Token of the Mountain");
-        if (l > 7) lore.add("§8+ §b3 Base §bGlacial Powder §7when mining §bGlacite");
-        if (l > 8) lore.add("§8+ §a+10% §7chance for §bGlacite Mineshafts §7to spawn");
-        if (l > 9) lore.add("§8+ §52 Tokens of the Mountain");
+        lore.add("<dark_gray>+ <red>1 Pickaxe Ability Level");
+        if (l > 1) lore.add("<dark_gray>+ <green>1 Forge Slot");
+        if (l > 2) lore.add("<dark_gray>+ <green>1 Commission Slot");
+        if (l > 3) lore.add("<dark_gray>+ <dark_green>1 Base <dark_green>Mithril Powder <gray>when mining <dark_green>Mithril");
+        if (l > 4) lore.add("<dark_gray>+ <dark_purple>1 Token of the Mountain");
+        if (l > 5) lore.add("<dark_gray>+ <light_purple>2 Base <light_purple>Gemstone Powder <gray>when mining <light_purple>Gemstones");
+        if (l > 6) lore.add("<dark_gray>+ <dark_purple>1 Token of the Mountain");
+        if (l > 7) lore.add("<dark_gray>+ <aqua>3 Base <aqua>Glacial Powder <gray>when mining <aqua>Glacite");
+        if (l > 8) lore.add("<dark_gray>+ <green>+10% <gray>chance for <aqua>Glacite Mineshafts <gray>to spawn");
+        if (l > 9) lore.add("<dark_gray>+ <dark_purple>2 Tokens of the Mountain");
         return lore;
     }
 
@@ -61,22 +61,23 @@ public final class PeakOfTheMountain extends HotmUpgrade {
         boolean maxed = level >= maxLevel();
 
         Material mat = maxed ? Material.DIAMOND : Material.EMERALD;
-        String nameColor = maxed ? "§a" : "§e";
+        String nameColor = maxed ? "<green>" : "<yellow>";
 
         List<net.kyori.adventure.text.Component> lore = new ArrayList<>();
-        lore.add(c("§8Level " + level + "§8/§7" + maxLevel()));
+        lore.add(c("<dark_gray>Level " + level + "<dark_gray>/<gray>" + maxLevel()));
         lore.add(net.kyori.adventure.text.Component.empty());
         buildLore(level).forEach(s -> lore.add(c(s)));
 
         if (!maxed) {
             lore.add(net.kyori.adventure.text.Component.empty());
             Powder p = powder(level);
-            lore.add(c("§7Cost: " + p.color() + fmt(cost(level)) + " " + p.displayName()));
+            lore.add(c("<gray>Cost: " + p.colorTag() + fmt(cost(level)) + " " + p.displayName()));
         }
 
         return ItemStack.builder(mat)
-            .customName(c(nameColor + "§lPeak of the Mountain"))
+            .customName(c(nameColor + "<bold>Peak of the Mountain"))
             .lore(lore)
             .build();
     }
 }
+

@@ -12,6 +12,7 @@ public final class Surveyor extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.GLACIAL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 4); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Increases the chance for §bGlacite Mineshafts §7to spawn by §a" + (l * 2) + "%§7.");
+        return List.of("<gray>Increases the chance for <aqua>Glacite Mineshafts <gray>to spawn by <green>" + (l * 2) + "%<gray>.");
     }
 }
+

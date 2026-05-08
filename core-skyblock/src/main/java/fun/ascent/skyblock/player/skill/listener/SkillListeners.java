@@ -14,6 +14,8 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 
 import java.util.Locale;
 
+import static fun.ascent.common.StringUtility.text;
+
 public class SkillListeners {
 
     public static void register() {
@@ -58,8 +60,8 @@ public class SkillListeners {
                 ? String.format("%.0f/%.0f", xpInLevel, (double) type.definition().rewardAt(nextLevel).xpRequired())
                 : "MAX";
 
-        player.sendActionBar(Component.text(
-                "§3+" + xpStr + " " + type.getDisplayName() + " XP §8(" + progressStr + ")"
+        player.sendActionBar(text(
+                "<dark_aqua>+" + xpStr + " " + type.getDisplayName() + " XP <dark_gray>(" + progressStr + ")"
         ));
     }
 
@@ -68,16 +70,16 @@ public class SkillListeners {
         SkillType type = event.skillType();
         int newLevel = event.newLevel();
 
-        String border = "§3§l" + "▬".repeat(38);
+        String border = "<dark_aqua><bold>" + "▬".repeat(38);
         String oldRoman = SkillReward.toRoman(event.oldLevel());
         String newRoman = SkillReward.toRoman(newLevel);
 
-        String arrow = oldRoman.isEmpty() ? "§e" + newRoman : oldRoman + "§8➜§e" + newRoman;
+        String arrow = oldRoman.isEmpty() ? "<yellow>" + newRoman : oldRoman + "<dark_gray>➜<yellow>" + newRoman;
 
         player.sendMessage(border);
 
-        Component levelMsg = Component.text("  §b§lSKILL LEVEL UP §3" + type.getDisplayName() + " §8" + arrow)
-                .hoverEvent(HoverEvent.showText(Component.text("§eClick to view your " + type.getDisplayName() + " progress")))
+        Component levelMsg = text("  <aqua><bold>SKILL LEVEL UP <dark_aqua>" + type.getDisplayName() + " <dark_gray>" + arrow)
+                .hoverEvent(HoverEvent.showText(text("<yellow>Click to view your " + type.getDisplayName() + " progress")))
                 .clickEvent(ClickEvent.runCommand("/skills " + type.name().toLowerCase(Locale.ROOT)));
 
         player.sendMessage(levelMsg);
@@ -85,10 +87,11 @@ public class SkillListeners {
         SkillReward reward = type.definition().rewardAt(newLevel);
         if (reward != null && !reward.unlocks().isEmpty()) {
             player.sendMessage(" ");
-            player.sendMessage("  §a§lREWARDS");
+            player.sendMessage(text("  <green><bold>REWARDS"));
             reward.unlocks().forEach(unlock -> player.sendMessage("    " + unlock.display()));
         }
 
         player.sendMessage(border);
     }
 }
+

@@ -13,8 +13,9 @@ public final class SkyMall extends HotmUpgrade {
     @Override public int cost(int l) { return 8; }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7Every day, you receive a random buff in",
-            "§2Dwarven Mines§7 and §bGlacite Tunnels§7."
+            "<gray>Every day, you receive a random buff in",
+            "<dark_green>Dwarven Mines<gray> and <aqua>Glacite Tunnels<gray>."
         );
     }
 }
+

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static fun.ascent.common.StringUtility.color;
+import static fun.ascent.common.StringUtility.text;
 
 public class LobbyScoreboardManager {
     private static final Map<UUID, LobbyScoreboard> scoreboards = new HashMap<>();
@@ -41,8 +41,10 @@ public class LobbyScoreboardManager {
     private static void updateTablist(Player player) {
         player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
         player.sendPlayerListHeaderAndFooter(
-                color(" &bYou are playing on &e&lPLAY.ASCENT.FUN \n"),
-                color("\n &aRanks, Boosters & MORE! &cSTORE.ASCENT.FUN ")
+                text(" <aqua>You are playing on <yellow><bold>PLAY.ASCENT.FUN \n"),
+                text("\n <green>Ranks, Boosters & MORE! <red>STORE.ASCENT.FUN ")
         );
     }
 }
+
+

@@ -36,9 +36,9 @@ public class ForagingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.IRON_AXE; }
     @Override public List<String> description() {
         return List.of(
-                "§7Chop wood to gain Foraging",
-                "§7XP. Grants §6Foraging Fortune",
-                "§7and §cStrength§7."
+                "<gray>Chop wood to gain Foraging",
+                "<gray>XP. Grants <gold>Foraging Fortune",
+                "<gray>and <red>Strength<gray>."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

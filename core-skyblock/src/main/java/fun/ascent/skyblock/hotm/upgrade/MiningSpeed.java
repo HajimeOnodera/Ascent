@@ -12,6 +12,7 @@ public final class MiningSpeed extends HotmUpgrade {
     @Override public Powder powder(int l) { return Powder.MITHRIL; }
     @Override public int cost(int l) { return (int) Math.pow(l + 1, 3); }
     @Override public List<String> buildLore(int l) {
-        return List.of("§7Grants §a+" + (l * 20) + " §6⸕ Mining Speed§7.");
+        return List.of("<gray>Grants <green>+" + (l * 20) + " <gold>⸕ Mining Speed<gray>.");
     }
 }
+

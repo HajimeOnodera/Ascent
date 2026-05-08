@@ -24,9 +24,9 @@ public class RunecraftingSkill extends SkillDefinition {
     @Override public Material icon() { return Material.MAGMA_CREAM; }
     @Override public List<String> description() {
         return List.of(
-                "§7Sacrifice runes at the Runic",
-                "§7Pedestal to gain Runecrafting",
-                "§7XP and unlock higher tier runes."
+                "<gray>Sacrifice runes at the Runic",
+                "<gray>Pedestal to gain Runecrafting",
+                "<gray>XP and unlock higher tier runes."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

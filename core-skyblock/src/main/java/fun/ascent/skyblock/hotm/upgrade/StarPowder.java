@@ -16,8 +16,9 @@ public final class StarPowder extends HotmUpgrade {
     }
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§7Mining §5Fallen Stars §7gives §a+3 §2Mithril Powder",
-            "§7per §5Fallen Star §7piece."
+            "<gray>Mining <dark_purple>Fallen Stars <gray>gives <green>+3 <dark_green>Mithril Powder",
+            "<gray>per <dark_purple>Fallen Star <gray>piece."
         );
     }
 }
+

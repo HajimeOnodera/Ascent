@@ -15,10 +15,11 @@ public final class MiningSpeedBoost extends PickaxeAbility {
     @Override public void activate(SkyblockPlayer player) {}
     @Override public List<String> buildLore(int l) {
         return List.of(
-            "§6Pickaxe Ability: Mining Speed Boost",
-            "§7Grants §a+300% §6⸕ Mining Speed §7for §a20s§7.",
+            "<gold>Pickaxe Ability: Mining Speed Boost",
+            "<gray>Grants <green>+300% <gold>⸕ Mining Speed <gray>for <green>20s<gray>.",
             " ",
-            "§8Cooldown: §a120s"
+            "<dark_gray>Cooldown: <green>120s"
         );
     }
 }
+

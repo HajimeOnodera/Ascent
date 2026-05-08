@@ -4,8 +4,9 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+
+import static fun.ascent.common.StringUtility.escapeMiniMessage;
+import static fun.ascent.common.StringUtility.text;
 
 final class ServerSwitchCommand implements SimpleCommand {
 
@@ -22,7 +23,7 @@ final class ServerSwitchCommand implements SimpleCommand {
     @Override
     public void execute(Invocation invocation) {
         if (!(invocation.source() instanceof Player player)) {
-            invocation.source().sendMessage(Component.text("Only players can switch servers.", NamedTextColor.RED));
+            invocation.source().sendMessage(text("<red>Only players can switch servers."));
             return;
         }
 
@@ -35,14 +36,14 @@ final class ServerSwitchCommand implements SimpleCommand {
                 .orElse(null);
 
         if (server == null) {
-            player.sendMessage(Component.text("That server is not registered on the proxy.", NamedTextColor.RED));
+            player.sendMessage(text("<red>That server is not registered on the proxy."));
             return;
         }
 
-        player.sendMessage(Component.text("Sending you to " + displayName + "...", NamedTextColor.YELLOW));
+        player.sendMessage(text("<yellow>Sending you to " + escapeMiniMessage(displayName) + "..."));
         player.createConnectionRequest(server).connect().thenAccept(result -> {
             if (!result.isSuccessful()) {
-                player.sendMessage(Component.text("Could not connect to " + displayName + ".", NamedTextColor.RED));
+                player.sendMessage(text("<red>Could not connect to " + escapeMiniMessage(displayName) + "."));
             }
         });
     }

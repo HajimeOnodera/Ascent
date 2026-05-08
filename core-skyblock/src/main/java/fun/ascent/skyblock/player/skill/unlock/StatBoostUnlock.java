@@ -22,7 +22,7 @@ public class StatBoostUnlock extends SkillUnlock {
     @Override
     public String display() {
         String suffix = percentage ? "%" : "";
-        return "§8+§a" + amount + suffix + " " + stat.getStatColor() + stat.getStatFormattedDisplay();
+        return "<dark_gray>+<green>" + amount + suffix + " " + stat.getStatColor() + stat.getStatFormattedDisplay();
     }
 
     @Override

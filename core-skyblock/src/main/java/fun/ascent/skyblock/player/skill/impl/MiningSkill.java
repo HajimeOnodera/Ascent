@@ -41,9 +41,9 @@ public class MiningSkill extends SkillDefinition {
     @Override public Material icon() { return Material.IRON_PICKAXE; }
     @Override public List<String> description() {
         return List.of(
-                "§7Mine ores and stone to gain",
-                "§7Mining XP. Grants §6Mining",
-                "§6Speed §7and §6Mining Fortune§7."
+                "<gray>Mine ores and stone to gain",
+                "<gray>Mining XP. Grants <gold>Mining",
+                "<gold>Speed <gray>and <gold>Mining Fortune<gray>."
         );
     }
     @Override public SkillReward[] rewards() { return REWARDS; }

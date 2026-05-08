@@ -74,7 +74,7 @@ public class CombatListener {
         if (absorbed > 0) {
             ActionBar.of(player.getUuid()).addReplacement(
                     ActionBar.Section.DEFENSE,
-                    "§a+" + String.format("%,d", (long) Math.round(absorbed)) + "❈",
+                    "<green>+" + String.format("%,d", Math.round(absorbed)) + "❈",
                     20, 10
             );
         }

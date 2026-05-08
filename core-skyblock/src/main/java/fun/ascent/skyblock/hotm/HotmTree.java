@@ -3,10 +3,7 @@ package fun.ascent.skyblock.hotm;
 import fun.ascent.skyblock.hotm.upgrade.*;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
-import fun.ascent.skyblock.player.stats.Stats;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
@@ -19,6 +16,10 @@ import net.minestom.server.network.player.ResolvableProfile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static fun.ascent.common.StringUtility.text;
+import static fun.ascent.skyblock.player.stats.Stats.*;
+import static net.minestom.server.component.DataComponents.*;
 
 public class HotmTree {
 
@@ -121,11 +122,11 @@ public class HotmTree {
 
     private void unlock(HotmUpgrade u) {
         if (!canUnlock(u)) {
-            player.sendMessage(c("§cYou need HOTM Level " + u.tierRequirement() + " to unlock this!"));
+            player.sendMessage(text(c("<red>You need HOTM Level " + u.tierRequirement() + " to unlock this!")));
             return;
         }
         if (data.tokens < 1) {
-            player.sendMessage(c("§cYou don't have any Tokens of the Mountain!"));
+            player.sendMessage(text(c("<red>You don't have any Tokens of the Mountain!")));
             return;
         }
         data.tokens--;
@@ -133,7 +134,7 @@ public class HotmTree {
         if (u instanceof PickaxeAbility && data.activeAbilityId == null) {
             data.activeAbilityId = u.id();
         }
-        player.sendMessage(c("§aUnlocked §l" + u.name() + "§a!"));
+        player.sendMessage(text(c("<green>Unlocked <bold>" + u.name() + "<green>!")));
     }
 
     private void upgrade(HotmUpgrade u, int levels) {
@@ -141,7 +142,7 @@ public class HotmTree {
 
         int current = getLevel(u);
         int remaining = u.maxLevel() - current;
-        if (remaining <= 0) { player.sendMessage(c("§cAlready maxed!")); return; }
+        if (remaining <= 0) { player.sendMessage(text(c("<red>Already maxed!"))); return; }
 
         int toBuy = Math.min(levels, remaining);
         int bought = 0;
@@ -155,28 +156,28 @@ public class HotmTree {
         }
 
         if (bought == 0) {
-            player.sendMessage(c("§cNot enough " + u.powder(current).displayName() + "§c!"));
+            player.sendMessage(text(c("<red>Not enough " + u.powder(current).displayName() + "<red>!")));
             return;
         }
         data.upgradeLevels.put(u.id(), current + bought);
-        player.sendMessage(c("§aUpgraded §l" + u.name() + " §ato level §l" + (current + bought) + "§a!"));
+        player.sendMessage(text(c("<green>Upgraded <bold>" + u.name() + " <green>to level <bold>" + (current + bought) + "<green>!")));
     }
 
     private void toggleEnabled(HotmUpgrade u) {
         if (getLevel(u) == 0) return;
         boolean now = !isEnabled(u);
         data.upgradeEnabled.put(u.id(), now);
-        player.sendMessage(c(now ? "§aEnabled §l" + u.name() : "§cDisabled §l" + u.name()));
+        player.sendMessage(text(c(now ? "<green>Enabled <bold>" + u.name() : "<red>Disabled <bold>" + u.name())));
     }
 
     private void selectAbility(PickaxeAbility ability) {
         if (getLevel(ability) == 0) return;
         data.activeAbilityId = ability.id();
-        player.sendMessage(c("§aSelected §l" + ability.name() + " §aas your active Pickaxe Ability!"));
+        player.sendMessage(text(c("<green>Selected <bold>" + ability.name() + " <green>as your active Pickaxe Ability!")));
     }
 
     public void openMenu(int page) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, c("§5Heart of the Mountain"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, c("<dark_purple>Heart of the Mountain"));
         Map<Integer, HotmUpgrade> slotMap = new HashMap<>();
 
         buildContent(inv, page, slotMap);
@@ -199,9 +200,13 @@ public class HotmTree {
                     else selectAbility(ability);
                 }
             } else {
-                if (click instanceof Click.Left) upgrade(upgrade, 1);
-                else if (click instanceof Click.LeftShift) upgrade(upgrade, 10);
-                else if (click instanceof Click.Right) toggleEnabled(upgrade);
+                switch (click) {
+                    case Click.Left left -> upgrade(upgrade, 1);
+                    case Click.LeftShift leftShift -> upgrade(upgrade, 10);
+                    case Click.Right right -> toggleEnabled(upgrade);
+                    default -> {
+                    }
+                }
             }
 
             slotMap.clear();
@@ -224,7 +229,7 @@ public class HotmTree {
                     ? Material.LIME_STAINED_GLASS_PANE
                     : Material.RED_STAINED_GLASS_PANE;
             inv.setItemStack(row * 9, ItemStack.builder(paneMat)
-                    .customName(c("§7Tier " + tierNum)).build());
+                    .customName(c("<gray>Tier " + tierNum)).build());
 
             int[] cols = TIER_COLS[tierIdx];
             for (int i = 0; i < cols.length; i++) {
@@ -238,37 +243,37 @@ public class HotmTree {
         inv.setItemStack(45, buildInfoItem());
         inv.setItemStack(46, buildPowderItem());
         if (page > 0) inv.setItemStack(48, ItemStack.builder(Material.ARROW)
-                .customName(c("§aTiers 6-10")).build());
+                .customName(c("<green>Tiers 6-10")).build());
         if (page < 1) inv.setItemStack(50, ItemStack.builder(Material.ARROW)
-                .customName(c("§aTiers 1-5")).build());
+                .customName(c("<green>Tiers 1-5")).build());
         inv.setItemStack(53, ItemStack.builder(Material.BARRIER)
-                .customName(c("§cClose")).build());
+                .customName(c("<red>Close")).build());
     }
 
     private ItemStack buildInfoItem() {
         String xpLine = data.level < 10
-                ? "§7XP: §a" + fmt(data.xp) + "§8/§a" + fmt(XP_THRESHOLDS[data.level])
-                : "§7XP: §aMAX";
+                ? "<gray>XP: <green>" + fmt(data.xp) + "<dark_gray>/<green>" + fmt(XP_THRESHOLDS[data.level])
+                : "<gray>XP: <green>MAX";
 
         return ItemStack.builder(Material.PLAYER_HEAD)
-                .set(DataComponents.PROFILE, new ResolvableProfile(new PlayerSkin(HOTM_SKULL_TEXTURE, "")))
-                .customName(c("§5Heart of the Mountain"))
+                .set(PROFILE, new ResolvableProfile(new PlayerSkin(HOTM_SKULL_TEXTURE, "")))
+                .customName(c("<dark_purple>Heart of the Mountain"))
                 .lore(List.of(
-                        c("§8Level " + data.level + "§8/§710"),
+                        c("<dark_gray>Level " + data.level + "<dark_gray>/<gray>10"),
                         c(xpLine),
                         Component.empty(),
-                        c("§7Tokens of the Mountain: §5" + data.tokens)
+                        c("<gray>Tokens of the Mountain: <dark_purple>" + data.tokens)
                 ))
                 .build();
     }
 
     private ItemStack buildPowderItem() {
         return ItemStack.builder(Material.EMERALD)
-                .customName(c("§aPowder"))
+                .customName(c("<green>Powder"))
                 .lore(List.of(
-                        c("§2Mithril Powder: §a" + fmt(getPowder(Powder.MITHRIL))),
-                        c("§dGemstone Powder: §d" + fmt(getPowder(Powder.GEMSTONE))),
-                        c("§bGlacial Powder: §b" + fmt(getPowder(Powder.GLACIAL)))
+                        c("<dark_green>Mithril Powder: <green>" + fmt(getPowder(Powder.MITHRIL))),
+                        c("<light_purple>Gemstone Powder: <light_purple>" + fmt(getPowder(Powder.GEMSTONE))),
+                        c("<aqua>Glacial Powder: <aqua>" + fmt(getPowder(Powder.GLACIAL)))
                 ))
                 .build();
     }
@@ -292,14 +297,14 @@ public class HotmTree {
         int mw = (int) (5 + getLevel(get(SeasonedMineman.class)) * 0.1);
         int cr = (int) (getLevel(get(WarmHearted.class)) * 0.2);
 
-        if (ms > 0) profile.addToStat(Stats.MINING_SPEED, ms);
-        if (mf > 0) profile.addToStat(Stats.MINING_FORTUNE, mf);
-        if (mw > 0) profile.addToStat(Stats.MINING_WISDOM, mw);
-        if (cr > 0) profile.addToStat(Stats.COLD_RESISTANCE, cr);
+        if (ms > 0) profile.addToStat(MINING_SPEED, ms);
+        if (mf > 0) profile.addToStat(MINING_FORTUNE, mf);
+        if (mw > 0) profile.addToStat(MINING_WISDOM, mw);
+        if (cr > 0) profile.addToStat(COLD_RESISTANCE, cr);
     }
 
     private static Component c(String s) {
-        return LegacyComponentSerializer.legacySection().deserialize(s);
+        return text(s);
     }
 
     private static String fmt(int n) {

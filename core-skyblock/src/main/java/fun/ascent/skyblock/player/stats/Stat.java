@@ -2,9 +2,9 @@ package fun.ascent.skyblock.player.stats;
 
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+
+import static fun.ascent.common.StringUtility.*;
 
 public class Stat {
 
@@ -23,8 +23,8 @@ public class Stat {
     public Stat(String id,String name,String symbol,StatCategory category,TextColor color,String suffix,double baseStat,double statCap){
         this.id = id;
         this.suffix = suffix;
-        this.parsedName = MiniMessage.miniMessage().deserialize(name);
-        this.parsedSymbol = MiniMessage.miniMessage().deserialize(symbol);
+        this.parsedName = text(name);
+        this.parsedSymbol = text(symbol);
         this.category = category;
         this.statColor = color.asHexString();
         this.baseStat = baseStat;
@@ -39,9 +39,8 @@ public class Stat {
         return this;
     }
 
-    public Stat setMaxValue(double newVal){
+    public void setMaxValue(double newVal){
         this.maxValue = applyCap(newVal);
-        return this;
     }
 
     public Stat addCurValue(double amount){
@@ -50,13 +49,14 @@ public class Stat {
     public Component getText(int type){
         Component name = parsedName;
         Component symbol = parsedSymbol;
-        Component joiner = Component.text(": ").color(NamedTextColor.WHITE);
-        Component stat = Component.text(this.curValue).color(getStatColor());
+        String color = getStatColor().asHexString();
+        Component joiner = text("<white>: ");
+        Component stat = text("<" + color + ">" + this.curValue);
         if(!isSingleValue){
-            stat = stat.append(Component.text("/").color(NamedTextColor.WHITE).append(
-                    Component.text(this.maxValue).color(getStatColor())));
+            stat = stat.append(text("<white>/").append(
+                    text("<" + color + ">" + this.maxValue)));
         }
-        Component suffix =  Component.text(this.suffix).color(getStatColor());
+        Component suffix =  text("<" + color + ">" + this.suffix);
         return switch (type){
             case 0 -> symbol.append(name).append(joiner).append(stat).append(suffix);
             case 1 -> symbol.append(name);

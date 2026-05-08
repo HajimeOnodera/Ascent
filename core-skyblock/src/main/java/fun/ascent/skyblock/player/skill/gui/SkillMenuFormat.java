@@ -12,6 +12,8 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import static fun.ascent.common.StringUtility.text;
+
 final class SkillMenuFormat {
 
     private static final int PROGRESS_BAR_SEGMENTS = 17;
@@ -32,63 +34,64 @@ final class SkillMenuFormat {
 
     static void addProgress(List<Component> lore, PlayerSkillData data, SkillType type, double requirement, String prefix) {
         double current = data.getXpIntoCurrentLevel(type);
-        double progress = requirement <= 0 ? 1.0 : Math.max(0.0, Math.min(1.0, current / requirement));
+        double progress = requirement <= 0 ? 1.0 : Math.clamp(current / requirement, 0.0, 1.0);
         int filled = (int) Math.round(progress * PROGRESS_BAR_SEGMENTS);
 
-        lore.add(Component.text(prefix + "§e" + String.format(Locale.US, "%.2f", progress * 100) + "§6%"));
+        lore.add(text(prefix + "<yellow>" + String.format(Locale.US, "%.2f", progress * 100) + "<gold>%"));
         lore.add(Component.text(
-                "§2§m" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
-                        + "§7§m" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
-                        + "§r §e" + formatNumber(current)
-                        + "§6/§e" + formatNumber(requirement)
+                "<dark_green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
+                        + "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
+                        + "<reset> <yellow>" + formatNumber(current)
+                        + "<gold>/<yellow>" + formatNumber(requirement)
         ));
     }
 
     static ItemStack closeButton() {
         return ItemStack.builder(Material.BARRIER)
-                .customName(Component.text("§cClose"))
+                .customName(text("<red>Close"))
                 .build();
     }
 
     static ItemStack backButton() {
         return ItemStack.builder(Material.ARROW)
-                .customName(Component.text("§aGo Back"))
-                .lore(List.of(Component.text("§7To Skills Menu")))
+                .customName(text("<green>Go Back"))
+                .lore(List.of(text("<gray>To Skills Menu")))
                 .build();
     }
 
     static ItemStack infoButton() {
         return ItemStack.builder(Material.DIAMOND_SWORD)
-                .customName(Component.text("§aSkills"))
+                .customName(text("<green>Skills"))
                 .lore(List.of(
-                        Component.text("§7View your Skill progression"),
-                        Component.text("§7and rewards."),
+                        text("<gray>View your Skill progression"),
+                        text("<gray>and rewards."),
                         Component.text(" "),
-                        Component.text("§eClick a Skill to view rewards!")
+                        text("<yellow>Click a Skill to view rewards!")
                 ))
                 .build();
     }
 
     static ItemStack nextPageButton() {
         return ItemStack.builder(Material.ARROW)
-                .customName(Component.text("§aNext Page"))
-                .lore(List.of(Component.text("§7View the next page of rewards.")))
+                .customName(text("<green>Next Page"))
+                .lore(List.of(text("<gray>View the next page of rewards.")))
                 .build();
     }
 
     static ItemStack previousPageButton() {
         return ItemStack.builder(Material.ARROW)
-                .customName(Component.text("§aPrevious Page"))
-                .lore(List.of(Component.text("§7View the previous page of rewards.")))
+                .customName(text("<green>Previous Page"))
+                .lore(List.of(text("<gray>View the previous page of rewards.")))
                 .build();
     }
 
     static String skillNameWithLevel(SkillType type, int level) {
         String roman = SkillReward.toRoman(level);
-        return "§a" + type.definition().name() + (roman.isEmpty() ? "" : " " + roman);
+        return "<green>" + type.definition().name() + (roman.isEmpty() ? "" : " " + roman);
     }
 
     private static String formatNumber(double value) {
         return NUMBER_FORMAT.format((long) Math.floor(value));
     }
 }
+

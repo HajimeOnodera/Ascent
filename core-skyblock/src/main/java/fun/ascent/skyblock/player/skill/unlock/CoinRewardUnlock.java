@@ -12,7 +12,7 @@ public class CoinRewardUnlock extends SkillUnlock {
 
     @Override
     public String display() {
-        return "§8+§6" + coins + " §7Coins";
+        return "<dark_gray>+<gold>" + coins + " <gray>Coins";
     }
 
     @Override
