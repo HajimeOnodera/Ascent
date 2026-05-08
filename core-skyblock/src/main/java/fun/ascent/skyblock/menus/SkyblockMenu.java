@@ -3,7 +3,6 @@ package fun.ascent.skyblock.menus;
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
-import fun.ascent.skyblock.player.stats.Stat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -118,11 +117,11 @@ public class SkyblockMenu {
         String[] stats = new String[]{"speed","strength","defense","critical_chance","critical_damage","health","intelligence"};
         lore.add(MiniMessage.miniMessage().deserialize("<gray>View your equipment, stats, and more!").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        for(String stat : stats) {
-            Stat stat1 = plProfile.stats.get(stat);
-            if(stat1 == null)continue;
-            lore.add(stat1.getText(1));
-        }
+//        for(String stat : stats) {
+//            Stat stat1 = plProfile.stats.get(stat);
+//            if(stat1 == null)continue;
+//            lore.add(stat1.getText(1));
+//        }
 
         lore.add(MiniMessage.miniMessage().deserialize("<dark_grey> and more...").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
