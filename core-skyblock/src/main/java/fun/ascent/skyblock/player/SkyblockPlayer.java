@@ -93,12 +93,8 @@ public class SkyblockPlayer extends Player {
         this.currentMana = stat(Stats.INTELLIGENCE);
     }
 
-    public ItemStack getSlot(PlayerSlots slot) {
-        return equipmentSlots[slot.ordinal()];
-    }
 
     public void setSlot(PlayerSlots slot, ItemStack stack) {
-        equipmentSlots[slot.ordinal()] = stack == null ? ItemStack.AIR : stack;
         recalculateItemStats();
     }
 

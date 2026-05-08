@@ -5,9 +5,5 @@ public enum PlayerSlots {
     Chestplate,
     Leggings,
     Boots,
-    HeldItem,
-    Necklace,
-    Cloak,
-    Belt,
-    Gloves
+    HeldItem
 }
