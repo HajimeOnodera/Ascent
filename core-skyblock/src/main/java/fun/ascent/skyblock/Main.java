@@ -8,6 +8,7 @@ import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.reforge.Reforge;
 import fun.ascent.skyblock.listeners.SkyblockChatListener;
 import fun.ascent.skyblock.minion.service.MinionManager;
+import fun.ascent.skyblock.player.actionbar.ActionBarManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
 import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
@@ -24,7 +25,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 
-public class    Main {
+public class Main {
 
     /** Host used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
@@ -39,18 +40,16 @@ public class    Main {
 
         ItemRegistry.init();
         Reforge.init();
-
         WorldHandler.initialise();
         EventManager.initialise();
         SkyblockNPCManager.init();
         Calendar.startTimeUpdates();
         ScoreboardManager.init();
+        ActionBarManager.init();
         MinionManager.init();
-
         SkillRegistry.init();
         SkillListeners.register();
         CommandHandler.initialise();
-
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         ZonePopulationTicker.start();
         CombatListener.register();
@@ -75,7 +74,7 @@ public class    Main {
         PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 
-    static void shutdown(){
+    static void shutdown() {
         WorldHandler.shutdown();
         MinecraftServer.stopCleanly();
     }
