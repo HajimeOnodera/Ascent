@@ -4,6 +4,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 
 public class Stat {
@@ -48,18 +49,18 @@ public class Stat {
         return setCurValue(getCurValue() + amount);
     }
     public Component getText(int type){
-        Component name = MiniMessage.miniMessage().deserialize(miniMessageName);
-        Component symbol = MiniMessage.miniMessage().deserialize(miniMessageSymbol);
-        Component joiner = Component.text(": ").color(NamedTextColor.WHITE);
-        Component stat = Component.text(this.curValue).color(getStatColor());
+        Component name = MiniMessage.miniMessage().deserialize(miniMessageName + " ").color(this.getStatColor()).decoration(TextDecoration.ITALIC,false);
+        Component symbol = MiniMessage.miniMessage().deserialize(" " + miniMessageSymbol + " ").color(this.getStatColor()).decoration(TextDecoration.ITALIC,false);
+        Component joiner = Component.text(": ").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC,false);
+        Component stat = Component.text(this.curValue).color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC,false);
+        Component suffix =  Component.text(this.suffix).color(NamedTextColor.WHITE).decoration(TextDecoration.ITALIC,false);
         if(!isSingleValue){
             stat = stat.append(Component.text("/").color(NamedTextColor.WHITE).append(
-                    Component.text(this.maxValue).color(getStatColor())));
+                    Component.text(this.maxValue).color(NamedTextColor.WHITE))).decoration(TextDecoration.ITALIC,false);
         }
-        Component suffix =  Component.text(this.suffix).color(getStatColor());
         return switch (type){
             case 0 -> symbol.append(name).append(joiner).append(stat).append(suffix);
-            case 1 -> symbol.append(name);
+            case 1 -> symbol.append(name).append(stat).append(Component.text(" ")).append(suffix);
             case 2 -> name.append(joiner).append(stat).append(suffix);
             case 3 -> symbol.append(joiner).append(stat).append(suffix);
             case 4 -> stat.append(suffix);

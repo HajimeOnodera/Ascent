@@ -34,6 +34,13 @@ public class ProfilePlayer {
         this.profileID = profileID;
         this.playerUUID = player.getUuid();
         this.skyblockPlayer = player;
+        loadDefaultStats();
+    }
+
+    public void loadDefaultStats() {
+        for(Stats stat : Stats.values()) {
+            addToStat(stat,0);
+        }
     }
 
     public void postLoad() {
