@@ -7,6 +7,7 @@ import fun.ascent.skyblock.minion.gui.MinionMenu;
 import fun.ascent.skyblock.minion.model.MinionType;
 import fun.ascent.skyblock.minion.visual.MinionItems;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -30,7 +31,6 @@ import java.util.UUID;
 
 public final class MinionManager {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-    private static final int MAX_MINIONS_PER_PLAYER = 5;
     private static final Map<UUID, SkyblockMinion> MINIONS_BY_ID = new HashMap<>();
     private static final Map<UUID, List<SkyblockMinion>> MINIONS_BY_OWNER = new HashMap<>();
 
@@ -48,7 +48,9 @@ public final class MinionManager {
                 if (minion == null) {
                     return;
                 }
-                if (!minion.getOwnerUuid().equals(player.getUuid())) {
+                SkyblockProfile profile = player.getActiveProfile();
+                if(profile == null) return;
+                if (!minion.getOwnerUuid().equals(profile.profileID)) {
                     player.sendMessage(MINI_MESSAGE.deserialize("<red>This minion belongs to someone else.</red>"));
                     return;
                 }
@@ -99,8 +101,11 @@ public final class MinionManager {
     }
 
     private static SkyblockMinion placeMinionAt(SkyblockPlayer player, MinionType type, int tier, int placeX, int placeY, int placeZ, boolean consumeItem) {
-        List<SkyblockMinion> owned = MINIONS_BY_OWNER.computeIfAbsent(player.getUuid(), ignored -> new ArrayList<>());
-        if (owned.size() >= MAX_MINIONS_PER_PLAYER) {
+        SkyblockProfile profile = player.getActiveProfile();
+        if(profile == null) return null;
+        List<SkyblockMinion> owned = MINIONS_BY_OWNER.computeIfAbsent(profile.profileID, ignored -> new ArrayList<>());
+
+        if (owned.size() >= profile.minionSlots) {
             player.sendMessage(MINI_MESSAGE.deserialize("<red>You already have the maximum number of placed minions.</red>"));
             return null;
         }
@@ -135,13 +140,13 @@ public final class MinionManager {
             player.getInventory().setItemStack(player.getHeldSlot(), newAmount <= 0 ? ItemStack.AIR : heldItem.withAmount(newAmount));
         }
 
-        SkyblockMinion minion = MinionFactory.create(player.getUuid(), type, tier, instance, placeAt);
+        SkyblockMinion minion = MinionFactory.create(profile.profileID, type, tier, instance, placeAt);
         minion.spawn();
 
         MINIONS_BY_ID.put(minion.getId(), minion);
         owned.add(minion);
 
-        player.sendMessage(MINI_MESSAGE.deserialize("<aqua>You placed a minion! <gray>(" + owned.size() + "/" + MAX_MINIONS_PER_PLAYER + ")</gray>"));
+        player.sendMessage(MINI_MESSAGE.deserialize("<aqua>You placed a minion! <gray>(" + owned.size() + "/" + profile.minionSlots + ")</gray>"));
         return minion;
     }
 
@@ -173,7 +178,7 @@ public final class MinionManager {
     }
 
     public static SkyblockMinion getNearestOwnedMinion(SkyblockPlayer player, double maxDistance) {
-        List<SkyblockMinion> owned = MINIONS_BY_OWNER.get(player.getUuid());
+        List<SkyblockMinion> owned = MINIONS_BY_OWNER.get(player.getActiveProfile().profileID);
         if (owned == null || owned.isEmpty()) {
             return null;
         }
@@ -186,7 +191,9 @@ public final class MinionManager {
     }
 
     public static Collection<SkyblockMinion> getOwnedMinions(SkyblockPlayer player) {
-        return MINIONS_BY_OWNER.getOrDefault(player.getUuid(), List.of());
+        SkyblockProfile profile = player.getActiveProfile();
+        if(profile == null) return List.of();
+        return MINIONS_BY_OWNER.getOrDefault(profile.profileID, List.of());
     }
 
     private static void tickAll() {

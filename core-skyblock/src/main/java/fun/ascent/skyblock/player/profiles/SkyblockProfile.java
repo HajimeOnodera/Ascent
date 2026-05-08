@@ -3,6 +3,7 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.World;
 import lombok.Getter;
+import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
 
 import java.io.File;
@@ -20,6 +21,9 @@ public class SkyblockProfile {
     public World island;
     @Getter
     public Pos spawnPos;
+    @Getter
+    @Setter
+    public int minionSlots = 5;
 
     public SkyblockProfile(List<SkyblockPlayer> players) {
         this.profileID = UUID.randomUUID();
