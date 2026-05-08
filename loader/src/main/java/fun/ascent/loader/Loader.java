@@ -1,5 +1,7 @@
 package fun.ascent.loader;
 
+import lombok.NonNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,7 +25,7 @@ public final class Loader {
 
     private Loader() {}
 
-    static void main(String[] args) {
+    static void main(String @NonNull [] args) {
         config = LoaderConfig.load();
         
         // Kill all children when this loader is terminated

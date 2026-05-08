@@ -17,7 +17,7 @@ public class AdminMeCommand implements SimpleCommand {
             return;
         }
 
-        if (!player.getUsername().equalsIgnoreCase("Codris")) {
+        if (!player.getUsername().equalsIgnoreCase("Rigsoul")) {
             player.sendMessage(Component.text("You do not have permission to use this command.", NamedTextColor.RED));
             return;
         }

@@ -400,7 +400,7 @@ public class StringUtility {
 
                 currentLine.append(word);
 
-                // this wont work with bold/italic and those but if you need those don't use this method
+                // this won't work with bold/italic and those but if you need those don't use this method
                 int colorIndex = word.lastIndexOf('§');
                 if (colorIndex != -1 && colorIndex < word.length() - 1) {
                     lastColorCode = "§" + word.charAt(colorIndex + 1);

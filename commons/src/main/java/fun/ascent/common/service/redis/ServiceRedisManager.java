@@ -46,4 +46,8 @@ public class ServiceRedisManager {
             jedis.publish(channel, message);
         }
     }
+
+    public static RedisManager getRedisManager() {
+        return RedisManager.get();
+    }
 }

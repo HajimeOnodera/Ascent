@@ -10,6 +10,7 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import fun.ascent.common.Ascent;
+import fun.ascent.common.service.redis.ServerOutboundMessage;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -28,12 +29,15 @@ public final class CoreProxy {
     private final Path dataDirectory;
     private ProxyConfig config;
     private ServerRegistryManager registryManager;
+    private ServiceRegistryManager serviceRegistryManager;
+    private static CoreProxy instance;
 
     @Inject
     public CoreProxy(ProxyServer proxy, Logger logger, @DataDirectory Path dataDirectory) {
         this.proxy = proxy;
         this.logger = logger;
         this.dataDirectory = dataDirectory;
+        instance = this;
     }
 
     @Subscribe
@@ -49,6 +53,10 @@ public final class CoreProxy {
         registryManager = new ServerRegistryManager(proxy, logger);
         registryManager.start();
 
+        // Start service registry for tracking service health
+        serviceRegistryManager = new ServiceRegistryManager(proxy, logger);
+        serviceRegistryManager.start();
+
         proxy.getEventManager().register(this, new ConnectionListener());
     }
 
@@ -56,6 +64,9 @@ public final class CoreProxy {
     public void onProxyShutdown(ProxyShutdownEvent event) {
         if (registryManager != null) {
             registryManager.stop();
+        }
+        if (serviceRegistryManager != null) {
+            serviceRegistryManager.stop();
         }
     }
 
@@ -106,7 +117,17 @@ public final class CoreProxy {
                 new AdminMeCommand()
         );
 
-        fun.ascent.common.service.redis.ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
+        ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
+
+        proxy.getCommandManager().register(
+                proxy.getCommandManager().metaBuilder("party")
+                        .aliases("p")
+                        .plugin(this)
+                        .build(),
+                new PartyCommand(proxy)
+        );
+
+        ServerOutboundMessage.registerClientListener(new RedisPropagatePartyEvent(proxy));
 
         for (ProxyRoute route : config.routes()) {
             List<String> commands = route.commands();
@@ -144,5 +165,9 @@ public final class CoreProxy {
 
     public RegisteredServer requireServer(String serverName) {
         return proxy.getServer(serverName).orElseThrow();
+    }
+
+    public static ServiceRegistryManager getServiceRegistry() {
+        return instance != null ? instance.serviceRegistryManager : null;
     }
 }

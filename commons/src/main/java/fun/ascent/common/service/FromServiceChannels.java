@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum FromServiceChannels {
     PROPAGATE_FRIEND_EVENT("propagate_friend_event"),
+    PROPAGATE_PARTY_EVENT("propagate_party_event"),
     SEND_MESSAGE("send_message"),
     GET_SKYBLOCK_DATA("get_skyblock_data"),
     UPDATE_PLAYER_DATA("update_player_data"),
