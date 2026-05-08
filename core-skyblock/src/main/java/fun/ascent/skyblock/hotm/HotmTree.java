@@ -292,10 +292,10 @@ public class HotmTree {
         int mw = (int) (5 + getLevel(get(SeasonedMineman.class)) * 0.1);
         int cr = (int) (getLevel(get(WarmHearted.class)) * 0.2);
 
-        if (ms > 0) profile.addToStat(Stats.MINING_SPEED, ms);
-        if (mf > 0) profile.addToStat(Stats.MINING_FORTUNE, mf);
-        if (mw > 0) profile.addToStat(Stats.MINING_WISDOM, mw);
-        if (cr > 0) profile.addToStat(Stats.COLD_RESISTANCE, cr);
+        if (ms > 0) profile.addToBaseStat(Stats.MINING_SPEED, ms);
+        if (mf > 0) profile.addToBaseStat(Stats.MINING_FORTUNE, mf);
+        if (mw > 0) profile.addToBaseStat(Stats.MINING_WISDOM, mw);
+        if (cr > 0) profile.addToBaseStat(Stats.COLD_RESISTANCE, cr);
     }
 
     private static Component c(String s) {
