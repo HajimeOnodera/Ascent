@@ -1,14 +1,14 @@
 package fun.ascent.service.friend;
 
-import fun.ascent.common.service.SkyBlockService;
+import fun.ascent.common.service.AbstractSkyBlockService;
 import fun.ascent.common.service.ServiceType;
-import fun.ascent.common.service.redis.ServiceEndpoint;
+import fun.ascent.common.service.SkyBlockService;
 import fun.ascent.common.service.redis.ServiceToServerManager;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class FriendService implements SkyBlockService {
+public class FriendService extends AbstractSkyBlockService {
+    public FriendService() {
+        super(ServiceType.FRIEND, "fun.ascent.service.friend.endpoints");
+    }
 
     static void main() {
         String mongoUri = System.getenv("MONGODB_URI");
@@ -21,15 +21,5 @@ public class FriendService implements SkyBlockService {
         ServiceToServerManager.initialize(ServiceType.FRIEND);
 
         SkyBlockService.init(new FriendService());
-    }
-
-    @Override
-    public ServiceType getType() {
-        return ServiceType.FRIEND;
-    }
-
-    @Override
-    public List<ServiceEndpoint> getEndpoints() {
-        return loopThroughPackage("fun.ascent.service.friend.endpoints", ServiceEndpoint.class).collect(Collectors.toList());
     }
 }

@@ -1,14 +1,14 @@
 package fun.ascent.service.party;
 
-import fun.ascent.common.service.SkyBlockService;
+import fun.ascent.common.service.AbstractSkyBlockService;
 import fun.ascent.common.service.ServiceType;
-import fun.ascent.common.service.redis.ServiceEndpoint;
+import fun.ascent.common.service.SkyBlockService;
 import fun.ascent.common.service.redis.ServiceToServerManager;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class PartyService implements SkyBlockService {
+public class PartyService extends AbstractSkyBlockService {
+    public PartyService() {
+        super(ServiceType.PARTY, "fun.ascent.service.party.endpoints");
+    }
 
     static void main() {
         String mongoUri = System.getenv("MONGODB_URI");
@@ -21,15 +21,5 @@ public class PartyService implements SkyBlockService {
         ServiceToServerManager.initialize(ServiceType.PARTY);
 
         SkyBlockService.init(new PartyService());
-    }
-
-    @Override
-    public ServiceType getType() {
-        return ServiceType.PARTY;
-    }
-
-    @Override
-    public List<ServiceEndpoint> getEndpoints() {
-        return loopThroughPackage("fun.ascent.service.party.endpoints", ServiceEndpoint.class).collect(Collectors.toList());
     }
 }

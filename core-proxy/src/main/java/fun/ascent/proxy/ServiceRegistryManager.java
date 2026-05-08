@@ -49,8 +49,8 @@ public class ServiceRegistryManager {
 
     public boolean isServiceOnline(ServiceType type) {
         Instant last = lastSeen.get(type);
-        if (last == null) return true;
-        return Duration.between(last, Instant.now()).getSeconds() >= SERVICE_TIMEOUT_SECONDS;
+        if (last == null) return false;
+        return Duration.between(last, Instant.now()).getSeconds() < SERVICE_TIMEOUT_SECONDS;
     }
 
     private void sync() {
