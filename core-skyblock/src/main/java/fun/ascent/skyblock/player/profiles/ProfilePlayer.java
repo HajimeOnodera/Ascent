@@ -5,8 +5,7 @@ import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
-import fun.ascent.skyblock.player.stats.Stat;
-import fun.ascent.skyblock.player.stats.StatBuilder;
+import fun.ascent.skyblock.player.stats.StatMap;
 import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
@@ -25,7 +24,7 @@ public class ProfilePlayer {
 
     public transient SkyblockPlayer skyblockPlayer;
 
-    public HashMap<String, Stat> stats = new HashMap<>();
+    public StatMap stats = new StatMap();
     public PlayerSkillData skillData = new PlayerSkillData();
     public SkyblockLevel level = new SkyblockLevel();
     public HotmData hotmData = new HotmData();
@@ -34,21 +33,16 @@ public class ProfilePlayer {
         this.profileID = profileID;
         this.playerUUID = player.getUuid();
         this.skyblockPlayer = player;
-        loadDefaultStats();
-    }
-
-    public void loadDefaultStats() {
-        for(Stats stat : Stats.values()) {
-            addToStat(stat,0);
-        }
+        stats.initDefaults();
     }
 
     public void postLoad() {
-        if (stats == null) stats = new HashMap<>();
+        if (stats == null) stats = new StatMap();
         if (skillData == null) skillData = new PlayerSkillData();
         if (level == null) level = new SkyblockLevel();
         if (hotmData == null) hotmData = new HotmData();
         hotmData.postLoad();
+        stats.initDefaults();
         if (playerUUID != null) {
             this.skyblockPlayer = WorldHandler.getPlayer(playerUUID);
         }
@@ -87,11 +81,11 @@ public class ProfilePlayer {
 
         if (totalHealth > 0) {
             skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalHealth + " §c❤ Health"));
-            addToStat(Stats.HEALTH, totalHealth);
+            addToBaseStat(Stats.HEALTH, totalHealth);
         }
         if (totalStrength > 0) {
             skyblockPlayer.sendMessage(ChatUtility.FontInfo.center("  §8+§c" + totalStrength + " §c❁ Strength"));
-            addToStat(Stats.STRENGTH, totalStrength);
+            addToBaseStat(Stats.STRENGTH, totalStrength);
         }
 
         for (String rewardStr : stringRewards.keySet()) {
@@ -103,11 +97,7 @@ public class ProfilePlayer {
                 Sound.Source.PLAYER, 1f, 1f));
     }
 
-    public void addToStat(Stats base, int amount) {
-        Stat stat = StatBuilder.build(base);
-        if (stats.containsKey(stat.id)) {
-            stat = stats.get(stat.id);
-        }
-        stats.put(stat.id, stat.addCurValue(amount));
+    public void addToBaseStat(Stats stat, double amount) {
+        stats.addBase(stat, amount);
     }
 }

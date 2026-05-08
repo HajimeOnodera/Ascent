@@ -127,6 +127,10 @@ public enum Stats {
     OVERFLOW_MANA(false,"Overflow Mana","§3⸎",StatCategory.PLAYER ,"§c",0,0),
     ;
 
+    public static final int SIZE = values().length;
+
+    private static final Stats[] BY_ORDINAL = values();
+
     private final boolean isPercentage;
     private final String formattedDisplay;
     private final String symbol;
@@ -143,6 +147,10 @@ public enum Stats {
         this.statColor = statColor;
         this.baseStat = baseStat;
         this.statCap = statCap;
+    }
+
+    public static Stats byOrdinal(int ordinal) {
+        return BY_ORDINAL[ordinal];
     }
 
     public boolean getStatIntType() {
