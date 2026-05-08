@@ -28,6 +28,6 @@ public class StatBoostUnlock extends SkillUnlock {
     @Override
     public void apply(SkyblockPlayer player) {
         if (player.getActiveProfileData() == null) return;
-        player.getActiveProfileData().addToBaseStat(stat, amount);
+        player.getActiveProfileData().addToStat(stat, amount);
     }
 }

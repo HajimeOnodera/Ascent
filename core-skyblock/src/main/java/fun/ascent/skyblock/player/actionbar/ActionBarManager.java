@@ -38,10 +38,10 @@ public final class ActionBarManager {
                 ActionBar bar = ActionBar.of(player.getUuid());
 
                 double hp      = player.getCurrentHealth();
-                double maxHp   = player.stat(Stats.HEALTH);
-                double def     = player.stat(Stats.DEFENSE);
+                double maxHp   = player.maxStat(Stats.HEALTH);
+                double def     = player.playerStat(Stats.DEFENSE);
                 double mana    = player.getCurrentMana();
-                double maxMana = player.stat(Stats.INTELLIGENCE);
+                double maxMana = player.maxStat(Stats.INTELLIGENCE);
 
                 bar.setDefault(ActionBar.Section.HEALTH,
                         "§c" + Math.round(hp) + "/" + Math.round(maxHp) + "❤");
@@ -63,7 +63,7 @@ public final class ActionBarManager {
                 if (!(online instanceof SkyblockPlayer player)) continue;
                 if (player.getActiveProfileData() == null) continue;
 
-                double max = player.stat(Stats.HEALTH);
+                double max = player.maxStat(Stats.HEALTH);
                 if (player.getCurrentHealth() >= max) continue;
 
                 player.addHealth(1.5 + (max * 0.01));
@@ -79,7 +79,7 @@ public final class ActionBarManager {
                 if (!(online instanceof SkyblockPlayer player)) continue;
                 if (player.getActiveProfileData() == null) continue;
 
-                double max = player.stat(Stats.INTELLIGENCE);
+                double max = player.maxStat(Stats.INTELLIGENCE);
                 if (player.getCurrentMana() >= max) continue;
 
                 player.addMana(max / 50.0);

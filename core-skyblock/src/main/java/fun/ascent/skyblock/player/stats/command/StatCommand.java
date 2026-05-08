@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.player.stats.command;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.stats.Stat;
+import fun.ascent.skyblock.player.stats.StatBuilder;
 import fun.ascent.skyblock.player.stats.Stats;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -61,7 +63,9 @@ public class StatCommand extends Command {
                 return;
             }
 
-            player.getActiveProfileData().stats.setBase(stat, value);
+            Stat built = StatBuilder.build(stat);
+            built.setCurValue(value).setMaxValue(value);
+            player.getActiveProfileData().stats.put(built.id, built);
             player.updatePlayer();
             sender.sendMessage("§aSet " + stat.getStatColor() + stat.getStatFormattedDisplay()
                     + " §ato §f" + (int) value);
@@ -72,8 +76,7 @@ public class StatCommand extends Command {
         player.sendMessage("§6§l     Player Stats");
         player.sendMessage("");
         for (Stats stat : Stats.values()) {
-            double value = player.stat(stat);
-            if (value == 0) continue;
+            double value = player.playerStat(stat);
             String suffix = stat.getStatIntType() ? "%" : "";
             String symbol = stat.getStatSymbol();
             player.sendMessage(" " + symbol + " §7" + stat.getStatFormattedDisplay()

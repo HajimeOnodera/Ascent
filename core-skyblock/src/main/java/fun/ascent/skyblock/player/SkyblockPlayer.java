@@ -1,22 +1,15 @@
 package fun.ascent.skyblock.player;
 
-import fun.ascent.skyblock.item.ItemRegistry;
-import fun.ascent.skyblock.item.PlayerSlots;
-import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
-import fun.ascent.skyblock.player.stats.StatMap;
+import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
-import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.component.CustomData;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
@@ -33,8 +26,6 @@ public class SkyblockPlayer extends Player {
 
     private double currentHealth;
     private double currentMana;
-
-    private final StatMap itemStats = new StatMap();
 
     public static final Tag<UUID> sbProfileID = Tag.UUID("profile_id");
 
@@ -87,59 +78,15 @@ public class SkyblockPlayer extends Player {
 
     public void updatePlayer() {
         if (this.activeProfile == null) return;
-        recalculateItemStats();
         this.activeProfileData.updateStats();
-        this.currentHealth = stat(Stats.HEALTH);
-        this.currentMana = stat(Stats.INTELLIGENCE);
-    }
-
-
-    public void setSlot(PlayerSlots slot, ItemStack stack) {
-        recalculateItemStats();
-    }
-
-    public void recalculateItemStats() {
-        itemStats.clearAdditive();
-        for (PlayerSlots slot : PlayerSlots.values()) {
-            ItemStack stack = resolveSlotItem(slot);
-            applyEquipmentStats(stack);
-        }
-    }
-
-    private ItemStack resolveSlotItem(PlayerSlots slot) {
-        return switch (slot) {
-            case Helmet -> getEquipment(EquipmentSlot.HELMET);
-            case Chestplate -> getEquipment(EquipmentSlot.CHESTPLATE);
-            case Leggings -> getEquipment(EquipmentSlot.LEGGINGS);
-            case Boots -> getEquipment(EquipmentSlot.BOOTS);
-            case HeldItem -> getEquipment(EquipmentSlot.MAIN_HAND);
-        };
-    }
-
-    private void applyEquipmentStats(ItemStack stack) {
-        if (stack.isAir()) return;
-        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-        if (customData == null) return;
-        String itemId = customData.nbt().getString("id");
-        if (itemId.isEmpty()) return;
-
-        SkyblockItem sbItem = ItemRegistry.getItem(itemId);
-        if (sbItem == null) return;
-
-        itemStats.applyItemStats(sbItem.getBaseStats());
-    }
-
-    public double stat(Stats stat) {
-        if (activeProfileData == null) return stat.getBaseStat();
-        double base = activeProfileData.stats.get(stat);
-        double item = itemStats.getAdditive(stat);
-        return stat.applyCap(base + item);
+        this.currentHealth = maxStat(Stats.HEALTH);
+        this.currentMana = maxStat(Stats.INTELLIGENCE);
     }
 
     public double getCurrentHealth() { return currentHealth; }
 
     public void addHealth(double amount) {
-        currentHealth = Math.min(currentHealth + amount, stat(Stats.HEALTH));
+        currentHealth = Math.min(currentHealth + amount, maxStat(Stats.HEALTH));
     }
 
     public void removeHealth(double amount) {
@@ -149,7 +96,7 @@ public class SkyblockPlayer extends Player {
     public double getCurrentMana() { return currentMana; }
 
     public void addMana(double amount) {
-        currentMana = Math.min(currentMana + amount, stat(Stats.INTELLIGENCE));
+        currentMana = Math.min(currentMana + amount, maxStat(Stats.INTELLIGENCE));
     }
 
     public boolean consumeMana(double amount) {
@@ -162,14 +109,16 @@ public class SkyblockPlayer extends Player {
         return true;
     }
 
-    @Deprecated
     public double maxStat(Stats stat) {
-        return stat(stat);
+        if (activeProfileData == null) return stat.getBaseStat();
+        Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
+        return entry != null ? stat.applyCap(entry.getCurValue()) : stat.getBaseStat();
     }
 
-    @Deprecated
     public double playerStat(Stats stat) {
-        return stat(stat);
+        if (activeProfileData == null) return stat.getBaseStat();
+        Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
+        return entry != null ? entry.getCurValue() : stat.getBaseStat();
     }
 
     @Nullable

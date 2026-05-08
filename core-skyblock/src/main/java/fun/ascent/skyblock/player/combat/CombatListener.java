@@ -59,7 +59,7 @@ public class CombatListener {
         if (!mob.tryAttack()) return;
 
         double rawDamage = mob.baseStat(Stats.DAMAGE);
-        double defense = player.stat(Stats.DEFENSE);
+        double defense = player.playerStat(Stats.DEFENSE);
         double actualDamage = defense > 0
                 ? rawDamage * (1.0 - defense / (defense + 100.0))
                 : rawDamage;
