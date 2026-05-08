@@ -10,8 +10,8 @@ public class Stat {
 
     public final String id;
     private final String suffix;
-    private final String miniMessageName;
-    private final String miniMessageSymbol;
+    private final Component parsedName;
+    private final Component parsedSymbol;
     @Getter private final StatCategory category;
     private final String statColor;
     @Getter private final double baseStat;
@@ -23,8 +23,8 @@ public class Stat {
     public Stat(String id,String name,String symbol,StatCategory category,TextColor color,String suffix,double baseStat,double statCap){
         this.id = id;
         this.suffix = suffix;
-        this.miniMessageName = name;
-        this.miniMessageSymbol = symbol;
+        this.parsedName = MiniMessage.miniMessage().deserialize(name);
+        this.parsedSymbol = MiniMessage.miniMessage().deserialize(symbol);
         this.category = category;
         this.statColor = color.asHexString();
         this.baseStat = baseStat;
@@ -48,8 +48,8 @@ public class Stat {
         return setCurValue(getCurValue() + amount);
     }
     public Component getText(int type){
-        Component name = MiniMessage.miniMessage().deserialize(miniMessageName);
-        Component symbol = MiniMessage.miniMessage().deserialize(miniMessageSymbol);
+        Component name = parsedName;
+        Component symbol = parsedSymbol;
         Component joiner = Component.text(": ").color(NamedTextColor.WHITE);
         Component stat = Component.text(this.curValue).color(getStatColor());
         if(!isSingleValue){

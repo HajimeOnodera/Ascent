@@ -64,7 +64,8 @@ public class StatCommand extends Command {
             }
 
             Stat built = StatBuilder.build(stat);
-            built.setCurValue(value).setMaxValue(value);
+            built.setMaxValue(value);
+            built.setCurValue(value);
             player.getActiveProfileData().stats.put(built.id, built);
             player.updatePlayer();
             sender.sendMessage("§aSet " + stat.getStatColor() + stat.getStatFormattedDisplay()
