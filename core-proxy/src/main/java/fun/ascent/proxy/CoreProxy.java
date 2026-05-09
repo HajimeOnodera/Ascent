@@ -54,7 +54,7 @@ public final class CoreProxy {
         registryManager.start();
 
         // Start service registry for tracking service health
-        serviceRegistryManager = new ServiceRegistryManager(proxy, logger);
+        serviceRegistryManager = new ServiceRegistryManager(logger);
         serviceRegistryManager.start();
 
         proxy.getEventManager().register(this, new ConnectionListener());

@@ -23,6 +23,12 @@ public final class ProxyServiceGateway<E> {
         this.requestFactory = requestFactory;
     }
 
+    /**
+     * Checks service availability. If offline, blocks the command and shows
+     * an error to the player.
+     *
+     * @return true if the service is unavailable (command should be aborted)
+     */
     public boolean ensureAvailable(Player player) {
         ServiceRegistryManager registry = CoreProxy.getServiceRegistry();
         if (registry != null && registry.isServiceOnline(serviceType)) {

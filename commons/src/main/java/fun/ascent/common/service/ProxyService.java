@@ -7,15 +7,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 public record ProxyService(ServiceType type) {
-    public CompletableFuture<Boolean> isOnline() {
-        return CompletableFuture.completedFuture(true); // Simplified for now
-    }
+
+    private static final int REQUEST_TIMEOUT_SECONDS = 15;
 
     public <T, R> void handleRequest(T request) {
         ProtocolObject<T, R> protocolObject = (ProtocolObject<T, R>) ServerOutboundMessage.protocolObjects.get(request.getClass().getSimpleName());
 
         if (protocolObject == null) {
-            CompletableFuture.failedFuture(new IllegalArgumentException("Unknown protocol object for " + request.getClass().getSimpleName()));
+            System.err.println("[ProxyService] Unknown protocol object for " + request.getClass().getSimpleName());
             return;
         }
 
@@ -27,6 +26,11 @@ public record ProxyService(ServiceType type) {
             (s) -> future.complete(protocolObject.translateReturnFromString(s))
         );
 
-        future.orTimeout(5, TimeUnit.SECONDS);
+        future.orTimeout(REQUEST_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+              .exceptionally(ex -> {
+                  System.err.println("[ProxyService] Request timed out for "
+                          + request.getClass().getSimpleName() + " (" + type + "): " + ex.getMessage());
+                  return null;
+              });
     }
 }
