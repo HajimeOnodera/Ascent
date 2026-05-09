@@ -1,5 +1,6 @@
 rootProject.name = "ascent"
 include(":commons")
+include(":database")
 include(":core-skyblock")
 include(":core-lobby")
 include(":core-proxy")

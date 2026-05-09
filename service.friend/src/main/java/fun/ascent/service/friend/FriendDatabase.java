@@ -1,13 +1,12 @@
 package fun.ascent.service.friend;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import fun.ascent.common.friends.FriendData;
 import fun.ascent.common.friends.PendingFriendRequest;
 import fun.ascent.common.service.MongoDB;
+import fun.ascent.database.MongoProvider;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -15,18 +14,16 @@ import java.util.List;
 import java.util.UUID;
 
 public record FriendDatabase(String playerId) implements MongoDB {
-    public static MongoClient client;
-    public static MongoDatabase database;
     public static MongoCollection<Document> friendDataCollection;
     public static MongoCollection<Document> pendingRequestsCollection;
 
     @Override
     public void connect(String connectionString) {
-        ConnectionString cs = new ConnectionString(connectionString);
-        MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(cs).build();
-        client = MongoClients.create(settings);
+        if (MongoProvider.isInitialized()) {
+            MongoProvider.connect(connectionString);
+        }
 
-        database = client.getDatabase("Minestom");
+        MongoDatabase database = MongoProvider.getDatabase();
         friendDataCollection = database.getCollection("friend-data");
         pendingRequestsCollection = database.getCollection("pending-friend-requests");
     }

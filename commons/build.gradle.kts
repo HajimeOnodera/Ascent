@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    api(project(":database"))
     api("net.kyori:adventure-api:4.26.1")
     api("net.kyori:adventure-text-minimessage:4.26.1")
     api("net.minestom:minestom:2026.04.13-1.21.11")
@@ -12,6 +13,6 @@ dependencies {
     api("com.google.code.gson:gson:2.11.0")
     api("org.reflections:reflections:0.10.2")
     api("org.json:json:20231013")
-    api("org.mongodb:mongodb-driver-sync:5.1.4")
 }
+
 

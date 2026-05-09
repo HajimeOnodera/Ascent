@@ -1,13 +1,12 @@
 package fun.ascent.service.party;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
 import com.mongodb.client.*;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import fun.ascent.common.party.FullParty;
 import fun.ascent.common.party.PendingParty;
 import fun.ascent.common.service.MongoDB;
+import fun.ascent.database.MongoProvider;
 import org.bson.Document;
 
 import java.util.ArrayList;
@@ -15,18 +14,16 @@ import java.util.List;
 import java.util.UUID;
 
 public record PartyDatabase(String playerId) implements MongoDB {
-    public static MongoClient client;
-    public static MongoDatabase database;
     public static MongoCollection<Document> partyDataCollection;
     public static MongoCollection<Document> pendingInvitesCollection;
 
     @Override
     public void connect(String connectionString) {
-        ConnectionString cs = new ConnectionString(connectionString);
-        MongoClientSettings settings = MongoClientSettings.builder().applyConnectionString(cs).build();
-        client = MongoClients.create(settings);
+        if (MongoProvider.isInitialized()) {
+            MongoProvider.connect(connectionString);
+        }
 
-        database = client.getDatabase("Minestom");
+        MongoDatabase database = MongoProvider.getDatabase();
         partyDataCollection = database.getCollection("party-data");
         pendingInvitesCollection = database.getCollection("party-pending-invites");
     }
