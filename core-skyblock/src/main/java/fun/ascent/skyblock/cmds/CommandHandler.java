@@ -2,6 +2,7 @@ package fun.ascent.skyblock.cmds;
 
 import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
 import fun.ascent.skyblock.hotm.command.HotmCommand;
+import fun.ascent.skyblock.item.command.GetItemDataCommand;
 import fun.ascent.skyblock.item.command.ItemCommand;
 import fun.ascent.skyblock.item.command.SetReforgeCommand;
 import fun.ascent.skyblock.menus.command.GuiCommand;
@@ -31,6 +32,7 @@ public class CommandHandler {
         register(new GuiCommand());
         register(new HotmCommand());
         register(new StatCommand());
+        register(new GetItemDataCommand());
 
         Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);

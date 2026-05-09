@@ -424,6 +424,21 @@ public class SkyblockItem {
 
     public boolean hasArtOfPeace() { return artOfPeace; }
 
+    public Map<Stats, Double> getTotalStats() {
+        Map<Stats, Double> total = new EnumMap<>(Stats.class);
+        Map<Stats, Double> hpb = computeHotPotatoStats();
+        Map<Stats, Double> aop = computeArtOfPeaceStats();
+        for (Stats stat : Stats.values()) {
+            double base = baseStats.getOrDefault(stat, 0.0);
+            double reforge = reforgeStats.getOrDefault(stat, 0.0);
+            double h = hpb.getOrDefault(stat, 0.0);
+            double a = aop.getOrDefault(stat, 0.0);
+            double sum = base + reforge + h + a;
+            if (sum != 0.0) total.put(stat, sum);
+        }
+        return total;
+    }
+
     public Builder toBuilder() {
         Builder b = new Builder(itemId, material, rarity);
         b.displayName = displayName;
