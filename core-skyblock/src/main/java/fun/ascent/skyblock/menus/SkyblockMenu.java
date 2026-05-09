@@ -2,6 +2,7 @@ package fun.ascent.skyblock.menus;
 
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.StringUtility;
+import fun.ascent.skyblock.menus.command.skyblockMenu.EquipmentMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.stats.Stat;
@@ -49,8 +50,7 @@ public class SkyblockMenu {
             if (slot == CLOSE_SLOT) {
                 player.closeInventory();
             } else if (slot == INFO_SLOT) {
-                player.sendMessage(miniMessage()
-                        .deserialize("<red>If you see this message, the buttons are working!"));
+                EquipmentMenu.open(player);
             }
         });
 
