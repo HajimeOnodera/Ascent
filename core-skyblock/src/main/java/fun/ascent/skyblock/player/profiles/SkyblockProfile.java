@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.player.profiles;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.collections.CollData;
+import fun.ascent.skyblock.player.collections.CollectionMap;
 import fun.ascent.skyblock.world.World;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +20,7 @@ public class SkyblockProfile {
     public String profileName;
     public UUID profileID;
     public List<ProfilePlayer> profilePlayers;
+    public CollectionMap collectionMap;
     public World island;
     @Getter
     public Pos spawnPos;
@@ -25,14 +28,26 @@ public class SkyblockProfile {
     @Setter
     public int minionSlots = 5;
 
+    public void postLoad(){
+        if(island == null){
+            generateIsland();
+            //TODO: Notify Players of island corruption
+        }
+        if(spawnPos == null){spawnPos = new Pos(7,100, 5);}
+        if(minionSlots <= 0){minionSlots = 5;}
+        if(collectionMap == null){
+            collectionMap = new CollectionMap();
+            //TODO: Notify Players of Collection Corruption
+        }
+    }
+
     public SkyblockProfile(List<SkyblockPlayer> players) {
         this.profileID = UUID.randomUUID();
         this.profileName = generateRandomProfileName();
         this.profilePlayers = new ArrayList<>();
         spawnPos = new Pos(7,100, 5);
-        players.forEach(pl -> {
-            profilePlayers.add(new ProfilePlayer(this.profileID, pl));
-        });
+        players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID, pl)));
+        this.collectionMap = new CollectionMap();
         generateIsland();
     }
 
@@ -62,4 +77,21 @@ public class SkyblockProfile {
         }
         return null;
     }
+
+
+    public void updateCollection(String itemId, int amount) {
+        this.collectionMap.collectionMap.forEach((category,data) -> {
+            for(CollData collData : data) {
+                if(collData.collection.ITEM_ID.equals(itemId)) {
+                    List<CollData> dataa = new ArrayList<>();
+                    dataa.remove(collData);
+                    CollData dataNew = new CollData(collData.collection,collData.progress + amount);
+                    collData.collection.checkForRewards(this,collData.progress,dataNew.progress);
+                    dataa.add(dataNew);
+                    collectionMap.collectionMap.put(category,dataa);
+                }
+            }
+        });
+    }
+
 }

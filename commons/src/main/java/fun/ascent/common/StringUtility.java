@@ -493,6 +493,16 @@ public class StringUtility {
         }
         return totalMillis;
     }
+
+    public static Component createLine(char c, int i, NamedTextColor color) {
+        StringBuilder text = new StringBuilder();
+        int index = 0;
+        while (index < i){
+            text.append(c);
+            index++;
+        }
+        return Component.text(text.toString()).color(color);
+    }
 }
 
 

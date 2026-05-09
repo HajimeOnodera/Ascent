@@ -148,6 +148,15 @@ public class SkyblockItem {
         this.artOfPeace = builder.artOfPeace;
     }
 
+    public static SkyblockItem fromStack(ItemStack itemStack) {
+        //TODO: Make Method
+        return null;
+    }
+
+    public SkyblockItemData convertToItemData(){
+        return null;
+    }
+
     public ItemStack buildItemStack() {
         return buildItemStack(null, false);
     }
