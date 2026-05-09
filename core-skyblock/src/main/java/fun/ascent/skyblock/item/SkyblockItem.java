@@ -519,6 +519,7 @@ public class SkyblockItem {
         public void reforgeStat(Stats stat, double value) { this.reforgeStats.put(stat, value);}
         public Builder reforgeLore(List<String> lore) { this.reforgeLore = lore; return this; }
         public Builder enchantment(String name, int level) { this.enchantments.put(name, level); return this; }
+        public Builder clearEnchantments() { this.enchantments.clear(); return this; }
         public Builder ultimateEnchant(String name, int level) { this.ultimateEnchant = name; this.ultimateEnchantLevel = level; return this; }
         public Builder rune(String type, int level) { this.runeType = type; this.runeLevel = level; return this; }
         public Builder consumable(boolean consumable) { this.consumable = consumable; return this; }
