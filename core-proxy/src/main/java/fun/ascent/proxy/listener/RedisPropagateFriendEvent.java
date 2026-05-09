@@ -1,5 +1,7 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.listener;
 
+import fun.ascent.proxy.manager.*;
+import fun.ascent.proxy.config.*;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.friends.FriendEvent;
@@ -10,7 +12,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.List;
 import java.util.UUID;
 

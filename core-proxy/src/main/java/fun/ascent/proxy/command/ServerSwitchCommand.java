@@ -1,5 +1,8 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.command;
 
+import fun.ascent.proxy.manager.*;
+import fun.ascent.proxy.config.*;
+import fun.ascent.proxy.service.*;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -8,13 +11,13 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import static fun.ascent.common.StringUtility.escapeMiniMessage;
 import static fun.ascent.common.StringUtility.text;
 
-final class ServerSwitchCommand implements SimpleCommand {
+public final class ServerSwitchCommand implements SimpleCommand {
 
     private final ProxyServer proxy;
     private final String targetServer;
     private final String displayName;
 
-    ServerSwitchCommand(ProxyServer proxy, String targetServer, String displayName) {
+    public ServerSwitchCommand(ProxyServer proxy, String targetServer, String displayName) {
         this.proxy = proxy;
         this.targetServer = targetServer;
         this.displayName = displayName;

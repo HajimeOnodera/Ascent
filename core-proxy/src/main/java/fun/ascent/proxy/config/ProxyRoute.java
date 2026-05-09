@@ -1,10 +1,10 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.config;
 
 import java.util.List;
 
-record ProxyRoute(String targetServer, List<String> commands) {
+public record ProxyRoute(String targetServer, List<String> commands) {
 
-    String displayName() {
+    public String displayName() {
         if (targetServer.isBlank()) {
             return targetServer;
         }

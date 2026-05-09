@@ -1,5 +1,7 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.listener;
 
+import fun.ascent.proxy.manager.*;
+import fun.ascent.proxy.config.*;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.party.PartyEvent;
@@ -10,7 +12,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.List;
 import java.util.UUID;
 
@@ -42,7 +43,7 @@ public class RedisPropagatePartyEvent implements ServiceToClient {
         if (event == null) return new JSONObject().put("success", false);
 
         for (UUID participantUUID : participants) {
-            proxy.getPlayer(participantUUID).ifPresent(player -> handleEventForPlayer(player, event, participantUUID));
+            proxy.getPlayer(participantUUID).ifPresent(player -> handleEventForPlayer(player, event));
         }
 
         return new JSONObject().put("success", true);
@@ -57,7 +58,7 @@ public class RedisPropagatePartyEvent implements ServiceToClient {
         }
     }
 
-    private void handleEventForPlayer(Player player, PartyEvent event, UUID participantUUID) {
+    private void handleEventForPlayer(Player player, PartyEvent event) {
         if (event instanceof PartyInviteResponseEvent e) {
             if (player.getUniqueId().equals(e.getInviter())) {
                 sendMessage(player, "<green>Party invite sent to <yellow>" + getPlayerName(e.getInvitee()) + "<green>!");
@@ -135,7 +136,7 @@ public class RedisPropagatePartyEvent implements ServiceToClient {
             } else {
                 sendMessage(player, "<red>Party invite from <yellow>" + getPlayerName(e.getInviter()) + " <red>expired.");
             }
-        } else if (event instanceof PartyWarpResponseEvent e) {
+        } else if (event instanceof PartyWarpResponseEvent) {
             sendMessage(player, "<green>Warping party members...");
         } else if (event instanceof PartyMemberDisconnectedResponseEvent e) {
             sendMessage(player, "<yellow>" + getPlayerName(e.getPlayer()) + " <red>disconnected. (5 min timeout)");

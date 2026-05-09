@@ -1,4 +1,4 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.config;
 
 import org.slf4j.Logger;
 
@@ -12,11 +12,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 
-record ProxyConfig(List<ProxyRoute> routes, String defaultServer) {
+public record ProxyConfig(List<ProxyRoute> routes, String defaultServer) {
 
     private static final String CONFIG_FILE = "ascent-proxy.properties";
 
-    static ProxyConfig load(Path dataDirectory, Logger logger) {
+    public static ProxyConfig load(Path dataDirectory, Logger logger) {
         Path configFile = dataDirectory.resolve(CONFIG_FILE);
         createDefaultConfig(configFile, logger);
 

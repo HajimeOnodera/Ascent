@@ -11,6 +11,10 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 import fun.ascent.common.Ascent;
 import fun.ascent.common.service.redis.ServerOutboundMessage;
+import fun.ascent.proxy.command.*;
+import fun.ascent.proxy.config.*;
+import fun.ascent.proxy.listener.*;
+import fun.ascent.proxy.manager.*;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
@@ -62,6 +66,9 @@ public final class CoreProxy {
 
     @Subscribe
     public void onProxyShutdown(ProxyShutdownEvent event) {
+        // Flush all active playtime sessions before shutdown
+        PlaytimeTracker.flushAll();
+
         if (registryManager != null) {
             registryManager.stop();
         }
@@ -128,6 +135,14 @@ public final class CoreProxy {
         );
 
         ServerOutboundMessage.registerClientListener(new RedisPropagatePartyEvent(proxy));
+
+        proxy.getCommandManager().register(
+                proxy.getCommandManager().metaBuilder("playtime")
+                        .aliases("pt")
+                        .plugin(this)
+                        .build(),
+                new PlaytimeCommand()
+        );
 
         for (ProxyRoute route : config.routes()) {
             List<String> commands = route.commands();

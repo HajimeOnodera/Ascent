@@ -1,4 +1,8 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.command;
+import fun.ascent.proxy.CoreProxy;
+import fun.ascent.proxy.manager.*;
+import fun.ascent.proxy.config.*;
+import fun.ascent.proxy.service.*;
 
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -12,12 +16,12 @@ import java.util.List;
 import static fun.ascent.common.StringUtility.escapeMiniMessage;
 import static fun.ascent.common.StringUtility.text;
 
-final class ProxyAdminCommand implements SimpleCommand {
+public final class ProxyAdminCommand implements SimpleCommand {
 
     private final CoreProxy plugin;
     private final ProxyServer proxy;
 
-    ProxyAdminCommand(CoreProxy plugin, ProxyServer proxy) {
+    public ProxyAdminCommand(CoreProxy plugin, ProxyServer proxy) {
         this.plugin = plugin;
         this.proxy = proxy;
     }

@@ -1,5 +1,7 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.manager;
 
+import fun.ascent.proxy.config.*;
+import fun.ascent.proxy.service.*;
 import com.google.gson.Gson;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -9,7 +11,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisException;
-
 import java.net.InetSocketAddress;
 import java.time.Duration;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-final class ServerRegistryManager {
+public final class ServerRegistryManager {
 
     private static final String KEY_PREFIX = "ascent:servers:";
     private static final Gson GSON = new Gson();
@@ -33,18 +34,18 @@ final class ServerRegistryManager {
                 return t;
             });
 
-    ServerRegistryManager(ProxyServer proxy, Logger logger) {
+    public ServerRegistryManager(ProxyServer proxy, Logger logger) {
         this.proxy = proxy;
         this.logger = logger;
         this.jedisPool = buildPool();
     }
 
-    void start() {
+    public void start() {
         scheduler.scheduleAtFixedRate(this::sync, 0, 1, TimeUnit.SECONDS);
         logger.info("ServerRegistryManager started – polling Redis every 1 s");
     }
 
-    void stop() {
+    public void stop() {
         scheduler.shutdownNow();
         jedisPool.close();
     }

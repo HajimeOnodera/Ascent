@@ -1,12 +1,14 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.command;
 
+import fun.ascent.proxy.manager.*;
+import fun.ascent.proxy.config.*;
+import fun.ascent.proxy.service.*;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

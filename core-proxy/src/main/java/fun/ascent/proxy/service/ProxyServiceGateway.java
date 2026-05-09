@@ -1,9 +1,11 @@
-package fun.ascent.proxy;
+package fun.ascent.proxy.service;
 
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.service.ProxyService;
 import fun.ascent.common.service.ServiceType;
+import fun.ascent.proxy.CoreProxy;
+import fun.ascent.proxy.manager.ServiceRegistryManager;
 
 import java.util.Optional;
 import java.util.function.Function;
