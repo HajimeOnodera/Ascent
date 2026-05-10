@@ -6,6 +6,7 @@ import fun.ascent.lobby.gui.GameMenuGUI;
 import fun.ascent.lobby.gui.LobbySelectorGUI;
 import fun.ascent.lobby.gui.ProfileGUI;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -31,13 +32,6 @@ public class LobbyItemManager {
             .createNamedItemStack(Material.COMPASS, text("<green>Game Menu <gray>(Right Click)"))
             .set(LORE,
                     List.of(text("<gray>Right Click to bring up the Game Menu!")))
-            .build();
-
-    private static final ItemStack MY_PROFILE = ItemStackCreator
-            .createNamedItemStack(Material.PLAYER_HEAD, text("<green>My Profile <gray>(Right Click)"))
-            .set(LORE, List.of(
-                    text("<gray>Right-click to browse quests, view achievements,"),
-                    text("<gray>activate Network Boosters and more!")))
             .build();
 
     private static final ItemStack COLLECTIBLES = ItemStackCreator
@@ -107,7 +101,27 @@ public class LobbyItemManager {
 
     private static void giveItems(Player player) {
         player.getInventory().setItemStack(0, GAME_MENU);
-        player.getInventory().setItemStack(1, MY_PROFILE);
+
+        // Build profile item with the player's own skin
+        PlayerSkin skin = player.getSkin();
+        ItemStack profileItem;
+        if (skin != null) {
+            profileItem = ItemStackCreator.getStackHead(
+                    "<green>My Profile <gray>(Right Click)",
+                    skin, 1,
+                    "<gray>Right-click to browse quests, view achievements,",
+                    "<gray>activate Network Boosters and more!"
+            ).build();
+        } else {
+            profileItem = ItemStackCreator.getStack(
+                    "<green>My Profile <gray>(Right Click)",
+                    Material.PLAYER_HEAD, 1,
+                    "<gray>Right-click to browse quests, view achievements,",
+                    "<gray>activate Network Boosters and more!"
+            ).build();
+        }
+        player.getInventory().setItemStack(1, profileItem);
+
         player.getInventory().setItemStack(4, COLLECTIBLES);
 
         boolean hidden = playerVisibility.getOrDefault(player.getUuid(), false);
