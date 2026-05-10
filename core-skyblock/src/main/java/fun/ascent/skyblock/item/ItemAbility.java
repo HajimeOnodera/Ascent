@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int cooldownSeconds) {
+public record ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int healthCost, int cooldownSeconds) {
 
     @Getter
     public enum AbilityType {
@@ -22,12 +22,13 @@ public record ItemAbility(String abilityName, AbilityType abilityType, List<Stri
 
     }
 
-    public ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int cooldownSeconds) {
+    public ItemAbility(String abilityName, AbilityType abilityType, List<String> description, int manaCost, int soulflowCost, int healthCost, int cooldownSeconds) {
         this.abilityName = abilityName;
         this.abilityType = abilityType;
         this.description = new ArrayList<>(description);
         this.manaCost = manaCost;
         this.soulflowCost = soulflowCost;
+        this.healthCost = healthCost;
         this.cooldownSeconds = cooldownSeconds;
 
     }
@@ -44,6 +45,9 @@ public record ItemAbility(String abilityName, AbilityType abilityType, List<Stri
         }
         if (soulflowCost > 0) {
             lore.add("<dark_gray>Soulflow Cost: <dark_aqua>" + soulflowCost + "⸎");
+        }
+        if (healthCost > 0) {
+            lore.add("<dark_gray>Health Cost: <red>" + healthCost + "% of max HP");
         }
         if (cooldownSeconds > 0) {
             lore.add("<dark_gray>Cooldown: <green>" + cooldownSeconds + "s");

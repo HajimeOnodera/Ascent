@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.item;
 
 import fun.ascent.skyblock.item.api.HypixelItemFetcher;
+import fun.ascent.skyblock.item.items.ItemDefinition;
+import fun.ascent.skyblock.item.items.ItemDefinitions;
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
 import fun.ascent.skyblock.item.gemstone.GemstoneSlotType;
 import fun.ascent.skyblock.player.stats.Stats;
@@ -71,6 +73,11 @@ public class ItemRegistry {
                 GemstoneSlotType type = GemstoneSlotType.valueOf(slotType);
                 builder.gemstoneSlot(new GemstoneSlot(type, false));
             } catch (IllegalArgumentException ignored) {}
+        }
+
+        ItemDefinition def = ItemDefinitions.get(data.id());
+        if (def != null) {
+            builder = def.apply(builder);
         }
 
         return builder.build();

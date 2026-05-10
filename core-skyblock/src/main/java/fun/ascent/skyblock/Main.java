@@ -5,6 +5,7 @@ import fun.ascent.common.redis.PingService;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
+import fun.ascent.skyblock.item.items.ItemDefinitions;
 import fun.ascent.skyblock.item.reforge.Reforge;
 import fun.ascent.skyblock.listeners.SkyblockChatListener;
 import fun.ascent.skyblock.minion.service.MinionManager;
@@ -38,6 +39,7 @@ public class Main {
         MinecraftServer server = MinecraftServer.init(config.auth());
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
 
+        ItemDefinitions.init();
         ItemRegistry.init();
         Reforge.init();
         WorldHandler.initialise();

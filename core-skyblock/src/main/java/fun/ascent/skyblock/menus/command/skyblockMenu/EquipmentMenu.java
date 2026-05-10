@@ -130,24 +130,50 @@ public class EquipmentMenu {
                 "<dark_aqua>Wisdom Stats", Material.BOOK));
     }
 
+    private static String getCategoryDescription(StatCategory category) {
+        return switch (category) {
+            case COMBAT -> "Stats that influence how much\ndamage you take and deal when in\ncombat.";
+            case MINING -> "Stats that influence what you can\nbreak, how quickly you can break it,\nand how many drops you receive\nwhen mining.";
+            case FARMING -> "Stats that influence how many drops\nyou receive and how many pests\nspawn when farming.";
+            case FORAGING -> "Stats that include how many drops\nyou receive when foraging.";
+            case FISHING -> "Stats that influence what you catch\nand how quickly you catch it while\nfishing.";
+            case MISC -> "Stats augment various aspects\nof your gameplay.";
+            case HUNTING -> "Stats that affect your hunting\nabilities and loot from\nhunting creatures.";
+            case WISDOM -> "Stats that influence how quickly you\nhunt mobs and how many shards you\nget for doing so.";
+            default -> "";
+        };
+    }
+
     private static ItemStack buildStatItem(SkyblockPlayer player, StatCategory category,
                                            String title, Material material) {
         List<Component> lore = new ArrayList<>();
 
+        String desc = getCategoryDescription(category);
+        if (!desc.isEmpty()) {
+            for (String line : desc.split("\n")) {
+                lore.add(t("<gray>" + line));
+            }
+            lore.add(Component.empty());
+        }
+
+        List<Component> statLines = new ArrayList<>();
         for (Stats stat : Stats.values()) {
             if (stat.getStatCategory() != category) continue;
             double value = player.playerStat(stat);
             if (value == 0 && stat.getBaseStat() == 0) continue;
             String suffix = stat.getStatIntType() ? "%" : "";
-            lore.add(t(" " + stat.getStatSymbol() + " " + stat.getStatFormattedDisplay()
+            statLines.add(t(" " + stat.getStatSymbol() + " " + stat.getStatFormattedDisplay()
                     + "<white> " + (int) value + suffix));
         }
 
-        if (lore.isEmpty()) {
+        if (statLines.isEmpty()) {
             lore.add(t(" <dark_gray>You do not have any stats to show in"));
             lore.add(t(" <dark_gray>this category!"));
+        } else {
+            lore.addAll(statLines);
+            lore.add(Component.empty());
+            lore.add(t("<yellow>Click for details!"));
         }
-
         return ItemStack.builder(material)
                 .customName(t(title))
                 .lore(lore)

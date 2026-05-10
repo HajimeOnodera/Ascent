@@ -63,15 +63,15 @@ public enum Stats {
      * Fishing Stats
      */
     FISHING_SPEED(false,"Fishing Speed","<aqua>☂",StatCategory.FISHING ,"<aqua>",0,300),
-    SEA_CREATURE_CHANCE(false,"Sea Creature Chance","<dark_aqua>α",StatCategory.FISHING ,"<dark_aqua>",20,0),
-    DOUBLE_HOOK_CHANCE(false,"Double Hook Chance","<blue>⚓",StatCategory.FISHING ,"<blue>",0,0),
-    TROPHY_FISH_CHANCE(false,"Trophy Fish Chance","<gold>♔",StatCategory.FISHING ,"<gold>",0,150),
-    TREASURE_CHANCE(false,"Treasure Chance","<gold>⛃",StatCategory.FISHING ,"<gold>",0,100),
+    SEA_CREATURE_CHANCE(true,"Sea Creature Chance","<dark_aqua>α",StatCategory.FISHING ,"<dark_aqua>",20,0),
+    DOUBLE_HOOK_CHANCE(true,"Double Hook Chance","<blue>⚓",StatCategory.FISHING ,"<blue>",0,0),
+    TROPHY_FISH_CHANCE(true,"Trophy Fish Chance","<gold>♔",StatCategory.FISHING ,"<gold>",0,150),
+    TREASURE_CHANCE(true,"Treasure Chance","<gold>⛃",StatCategory.FISHING ,"<gold>",0,100),
     /**
      * Hunting Stats
      */
     PULL(false,"Pull","<aqua>ᛷ",StatCategory.HUNTING ,"<aqua>",0,0),
-    HUNTER_FORTUNE(false,"Hunter Fortune","<light_purple>☘",StatCategory.HUNTING ,"<light_purple>",20,0),
+    HUNTER_FORTUNE(false,"Hunter Fortune","<light_purple>☘",StatCategory.HUNTING ,"<light_purple>",0,0),
     /**
      * Misc Stats
      */
