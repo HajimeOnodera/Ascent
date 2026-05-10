@@ -19,6 +19,10 @@ public class FriendManager {
             SendFriendEventToServiceProtocolObject.SendFriendEventToServiceMessage::new
     );
 
+    public static boolean ensureAvailable(Player player) {
+        return FRIEND_SERVICE.ensureAvailable(player);
+    }
+
     public static void addFriend(Player player, String targetName, ProxyServer proxy) {
         if (FRIEND_SERVICE.ensureAvailable(player)) return;
         Player target = FRIEND_SERVICE.findOnlinePlayer(proxy, player, targetName, "Couldn't find an online player with that name! (Offline support coming soon)")

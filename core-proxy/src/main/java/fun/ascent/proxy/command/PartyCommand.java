@@ -24,6 +24,10 @@ public class PartyCommand implements SimpleCommand {
             return;
         }
 
+        if (PartyManager.ensureAvailable(player)) {
+            return;
+        }
+
         String[] args = invocation.arguments();
         if (args.length == 0) {
             showHelp(player);

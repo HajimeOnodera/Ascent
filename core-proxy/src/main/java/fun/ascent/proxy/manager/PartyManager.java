@@ -17,6 +17,10 @@ public class PartyManager {
             SendPartyEventToServiceProtocolObject.SendPartyEventToServiceMessage::new
     );
 
+    public static boolean ensureAvailable(Player player) {
+        return PARTY_SERVICE.ensureAvailable(player);
+    }
+
     public static void invitePlayer(Player player, String targetName, ProxyServer proxy) {
         if (PARTY_SERVICE.ensureAvailable(player)) return;
         Player target = PARTY_SERVICE.findOnlinePlayer(proxy, player, targetName, "Couldn't find an online player with that name!")

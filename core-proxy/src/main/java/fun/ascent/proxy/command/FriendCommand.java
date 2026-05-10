@@ -22,6 +22,10 @@ public class FriendCommand implements SimpleCommand {
             return;
         }
 
+        if (FriendManager.ensureAvailable(player)) {
+            return;
+        }
+
         String[] args = invocation.arguments();
         if (args.length == 0) {
             showHelp(player);
