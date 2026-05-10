@@ -4,7 +4,6 @@ import fun.ascent.common.Ascent;
 import fun.ascent.common.gui.InventoryGUIListener;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.common.user.UserManager;
-import fun.ascent.lobby.command.ServerTransferCommand;
 import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.item.LobbyItemManager;
 import fun.ascent.lobby.listener.LobbyChatListener;
@@ -42,7 +41,6 @@ public final class Main {
         npcManager.spawnDefaults();
 
         registerEvents(world, npcManager);
-        MinecraftServer.getCommandManager().register(new ServerTransferCommand("skyblock", "sb", "island"));
 
         LobbyScoreboardManager.init();
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());

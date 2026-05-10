@@ -60,4 +60,46 @@ public final class FriendLookup {
             return Collections.emptyList();
         }
     }
+
+    /**
+     * Lightweight record holding friend entry data for GUI display.
+     */
+    public record FriendEntry(UUID uuid, String nickname, boolean bestFriend, long addedTimestamp) {}
+
+    /**
+     * Returns full friend entries (UUID, nickname, bestFriend flag, addedTimestamp)
+     * for the given player. Returns an empty list if no data exists.
+     */
+    public static List<FriendEntry> getFriendEntries(UUID playerUuid) {
+        try {
+            MongoCollection<Document> collection = MongoProvider.getCollection(COLLECTION_NAME);
+            Document doc = collection.find(Filters.eq("_id", playerUuid.toString())).first();
+            if (doc == null) return Collections.emptyList();
+
+            String data = doc.getString("data");
+            if (data == null) return Collections.emptyList();
+
+            JsonObject json = JsonParser.parseString(data).getAsJsonObject();
+            JsonArray friendsArray = json.getAsJsonArray("friends");
+            if (friendsArray == null) return Collections.emptyList();
+
+            List<FriendEntry> entries = new ArrayList<>(friendsArray.size());
+            for (JsonElement element : friendsArray) {
+                JsonObject obj = element.getAsJsonObject();
+                if (!obj.has("uuid")) continue;
+
+                UUID uuid = UUID.fromString(obj.get("uuid").getAsString());
+                String nickname = obj.has("nickname") && !obj.get("nickname").isJsonNull()
+                        ? obj.get("nickname").getAsString() : null;
+                boolean bestFriend = obj.has("bestFriend") && obj.get("bestFriend").getAsBoolean();
+                long addedTimestamp = obj.has("addedTimestamp") ? obj.get("addedTimestamp").getAsLong() : 0;
+
+                entries.add(new FriendEntry(uuid, nickname, bestFriend, addedTimestamp));
+            }
+            return entries;
+        } catch (Exception e) {
+            System.err.println("[FriendLookup] Failed to load friend entries for " + playerUuid + ": " + e.getMessage());
+            return Collections.emptyList();
+        }
+    }
 }

@@ -74,7 +74,7 @@ public class ProfileGUI extends InventoryGUI {
         set(new GUIClickableItem(3) {
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
-                player.sendMessage(StringUtility.text("<gold>Friends browser coming soon!"));
+                new FriendsGUI().open(player);
             }
 
             @Override
@@ -95,7 +95,7 @@ public class ProfileGUI extends InventoryGUI {
         set(new GUIClickableItem(4) {
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
-                player.sendMessage(StringUtility.text("<gold>Party management coming soon!"));
+                new PartyGUI().open(player);
             }
 
             @Override
