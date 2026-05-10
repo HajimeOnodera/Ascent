@@ -2,6 +2,7 @@ package fun.ascent.lobby.scoreboard;
 
 import fun.ascent.common.StringUtility;
 import fun.ascent.common.user.UserManager;
+import fun.ascent.database.FriendLookup;
 import net.minestom.server.entity.Player;
 import net.minestom.server.scoreboard.Sidebar;
 import net.minestom.server.MinecraftServer;
@@ -10,6 +11,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static fun.ascent.common.StringUtility.text;
 
@@ -19,6 +23,11 @@ public class LobbyScoreboard {
     private final Sidebar sidebar;
     private int lastLineCount = 0;
     private int tickCount = 0;
+
+    // Cached friend UUIDs – refreshed every ~10 seconds to avoid constant MongoDB queries
+    private List<UUID> cachedFriendUuids = List.of();
+    private long friendCacheExpiry = 0;
+    private static final long FRIEND_CACHE_MS = 10_000;
 
     private static final String[] TITLE_ANIMATION = {
             "<yellow><bold>ASCENT",
@@ -59,7 +68,19 @@ public class LobbyScoreboard {
         renderedLines.add("<white>Lobby: <green>1");
         renderedLines.add("<white>Players: <green>" + MinecraftServer.getConnectionManager().getOnlinePlayers().size());
         renderedLines.add("  ");
-        renderedLines.add("<white>Friends Online: <green>0");
+
+        // Refresh cached friend list every 10 seconds
+        long now = System.currentTimeMillis();
+        if (now >= friendCacheExpiry) {
+            cachedFriendUuids = FriendLookup.getFriendUuids(player.getUuid());
+            friendCacheExpiry = now + FRIEND_CACHE_MS;
+        }
+
+        Set<UUID> onlineUuids = MinecraftServer.getConnectionManager().getOnlinePlayers()
+                .stream().map(Player::getUuid).collect(Collectors.toSet());
+        long friendsOnline = cachedFriendUuids.stream().filter(onlineUuids::contains).count();
+
+        renderedLines.add("<white>Friends Online: <green>" + friendsOnline);
         renderedLines.add("<white>Guild Online: <gray>No guild!");
         renderedLines.add("   ");
         renderedLines.add("<yellow>play.ascent.fun");
