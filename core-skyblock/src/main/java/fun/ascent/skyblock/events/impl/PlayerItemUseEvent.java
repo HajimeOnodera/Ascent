@@ -9,7 +9,8 @@ public class PlayerItemUseEvent extends SEvent<PlayerUseItemEvent> {
 
     @Override
     public void onEvent(PlayerUseItemEvent event) {
-        if(event.getItemStack().getTag(PlayerJoinPostEvent.menuTag)){
+        var value = event.getItemStack().getTag(PlayerJoinPostEvent.menuTag);
+        if(value != null && value){
             if(event.getPlayer() instanceof SkyblockPlayer pl){
                 if(pl.getActiveProfile() != null && pl.getActiveProfileData() != null) {
                     SkyblockMenu.open(pl);

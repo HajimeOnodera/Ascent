@@ -74,7 +74,7 @@ public class AdvancedScoreboard {
         int score = renderedLines.size();
 
         for (int i = 0; i < renderedLines.size(); i++) {
-            String lineId = "\u00A7" + Integer.toHexString(i) + "\u00A7r";
+            String lineId = "§" + Integer.toHexString(i) + "§r";
             String content = renderedLines.get(i);
 
             if (i < lastLineCount) {
@@ -87,7 +87,7 @@ public class AdvancedScoreboard {
         }
 
         for (int i = renderedLines.size(); i < lastLineCount; i++) {
-            String lineId = "\u00A7" + Integer.toHexString(i) + "\u00A7r";
+            String lineId = "§" + Integer.toHexString(i) + "§r";
             sidebar.removeLine(lineId);
         }
 
@@ -137,7 +137,7 @@ public class AdvancedScoreboard {
         @Override
         public List<String> render(SkyblockPlayer player) {
             return List.of(
-                    "<white>Purse:</white> <gold>0</gold>",
+                    "<white>Purse:</white> <gold>" + player.getActiveProfileData().playerCoins + "</gold>",
                     "");
         }
     }

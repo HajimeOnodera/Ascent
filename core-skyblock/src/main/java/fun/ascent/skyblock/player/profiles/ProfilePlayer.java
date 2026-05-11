@@ -24,6 +24,10 @@ public class ProfilePlayer {
     public UUID profileID;
     public UUID playerUUID;
 
+    public double playerCoins = 0;
+    public double playerBits = 0;
+    public double playerGold = 0;
+
     public transient SkyblockPlayer skyblockPlayer;
 
     public HashMap<String, Stat> stats = new HashMap<>();
@@ -36,6 +40,8 @@ public class ProfilePlayer {
         this.playerUUID = player.getUuid();
         this.skyblockPlayer = player;
     }
+
+
 
     public void postLoad() {
         if (stats == null) stats = new HashMap<>();
@@ -50,6 +56,19 @@ public class ProfilePlayer {
 
     public void updateStats() {
         // TODO: Update player stats
+    }
+
+
+    public double getCoins() {
+        return playerCoins;
+    }
+
+    public double getBits() {
+        return playerBits;
+    }
+
+    public double getGold() {
+        return playerGold;
     }
 
     public void addSkyblockXp(int xp) {
@@ -101,5 +120,6 @@ public class ProfilePlayer {
         }
         stats.put(stat.id, stat.addCurValue(amount));
     }
+
 }
 

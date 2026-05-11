@@ -29,7 +29,7 @@ public record BankerNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public Pos position() {
-        return new Pos(5.5, 41, 5.5);
+        return new Pos(-29.5, 72, -38.5,-90,0);
     }
 
     @Override

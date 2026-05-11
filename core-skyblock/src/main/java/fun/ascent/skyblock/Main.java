@@ -2,12 +2,13 @@ package fun.ascent.skyblock;
 
 import fun.ascent.common.Ascent;
 import fun.ascent.common.redis.PingService;
-import fun.ascent.common.user.UserManager;
+import fun.ascent.skyblock.blocks.BlockManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.items.ItemDefinitions;
 import fun.ascent.skyblock.item.reforge.Reforge;
 import fun.ascent.skyblock.listeners.SkyblockChatListener;
+import fun.ascent.skyblock.menus.shop.ShopRegistry;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.player.actionbar.ActionBarManager;
 import fun.ascent.skyblock.player.combat.CombatListener;
@@ -23,15 +24,13 @@ import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerSpawnEvent;
 
 public class Main {
 
     /** Host used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
-    static void main(String[] args) {
+    static void main() {
         ServerConfig config = ServerConfig.load();
         Ascent.initialize();
 
@@ -45,6 +44,8 @@ public class Main {
         WorldHandler.initialise();
         EventManager.initialise();
         SkyblockNPCManager.init();
+        BlockManager.initialize();
+        ShopRegistry.initialise();
         Calendar.startTimeUpdates();
         ScoreboardManager.init();
         ActionBarManager.init();
@@ -72,7 +73,7 @@ public class Main {
         PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 
-    static void shutdown() {
+    public static void shutdown() {
         WorldHandler.shutdown();
         MinecraftServer.stopCleanly();
     }
