@@ -8,6 +8,7 @@ import net.hollowcube.polar.PolarWriter;
 import net.hollowcube.polar.PolarWorld;
 import net.minestom.server.instance.ChunkLoader;
 import net.minestom.server.instance.InstanceContainer;
+import fun.ascent.database.MapRepository;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,19 +44,70 @@ public final class PolarWorlds {
 
     public static boolean loadOrConvert(InstanceContainer instance, Path polarPath, Path anvilPath, String logPrefix) {
         try {
+            String worldId = polarPath.getFileName().toString().replace(".polar", "");
+            
+            // 1. Try to load from MongoDB first
+            byte[] mongoData = MapRepository.loadWorld(worldId);
+            if (mongoData != null) {
+                PolarWorld world = PolarReader.read(mongoData);
+                stripEntities(world); // Extra safeguard
+                instance.setChunkLoader(new PolarLoader(world).setLoadLighting(true));
+                System.out.println(logPrefix + " Loaded Polar world '" + worldId + "' from MongoDB");
+                return true;
+            }
+
+            // 2. Fallback to local file or conversion
             ensurePolarWorld(polarPath, anvilPath, logPrefix);
             if (!Files.isRegularFile(polarPath)) {
                 System.err.println(logPrefix + " No Polar world found at " + polarPath.toAbsolutePath());
                 return false;
             }
 
-            instance.setChunkLoader(new PolarLoader(polarPath).setLoadLighting(true));
-            System.out.println(logPrefix + " Loaded Polar world from " + polarPath.toAbsolutePath());
+            byte[] fileData = Files.readAllBytes(polarPath);
+            PolarWorld world = PolarReader.read(fileData);
+            
+            // 3. Strip entities and save to MongoDB for future use
+            stripEntities(world);
+            byte[] strippedData = PolarWriter.write(world);
+            MapRepository.saveWorld(worldId, strippedData);
+            
+            instance.setChunkLoader(new PolarLoader(world).setLoadLighting(true));
+            System.out.println(logPrefix + " Loaded, stripped entities, and saved Polar world '" + worldId + "' to MongoDB");
             return true;
         } catch (Exception e) {
-            System.err.println(logPrefix + " Failed to load Polar world from " + polarPath.toAbsolutePath());
+            System.err.println(logPrefix + " Failed to load/convert Polar world from " + polarPath.toAbsolutePath());
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public static void stripEntities(PolarWorld world) {
+        try {
+            // Polar API varies between versions (getChunks vs chunks, entities() vs getEntities())
+            // Using reflection to stay compatible and avoid compilation failures.
+            java.lang.reflect.Method getChunks = world.getClass().getMethod("chunks");
+            Iterable<?> chunks = (Iterable<?>) getChunks.invoke(world);
+            
+            for (Object chunk : chunks) {
+                try {
+                    java.lang.reflect.Method entitiesMethod = chunk.getClass().getMethod("entities");
+                    java.util.Collection<?> entities = (java.util.Collection<?>) entitiesMethod.invoke(chunk);
+                    entities.clear();
+                } catch (Exception ignored) {}
+            }
+        } catch (Exception e) {
+            // Fallback for different method names
+            try {
+                java.lang.reflect.Method getChunks = world.getClass().getMethod("getChunks");
+                Iterable<?> chunks = (Iterable<?>) getChunks.invoke(world);
+                for (Object chunk : chunks) {
+                    try {
+                        java.lang.reflect.Method entitiesMethod = chunk.getClass().getMethod("getEntities");
+                        java.util.Collection<?> entities = (java.util.Collection<?>) entitiesMethod.invoke(chunk);
+                        entities.clear();
+                    } catch (Exception ignored) {}
+                }
+            } catch (Exception ignored) {}
         }
     }
 

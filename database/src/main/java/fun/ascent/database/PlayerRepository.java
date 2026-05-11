@@ -176,4 +176,14 @@ public final class PlayerRepository {
                 Updates.pull(field, value)
         );
     }
+
+    /**
+     * Gets the top players sorted by a specific field in descending order.
+     */
+    public static List<Document> getTopPlayers(String field, int limit) {
+        return collection().find()
+                .sort(new Document(field, -1))
+                .limit(limit)
+                .into(new ArrayList<>());
+    }
 }

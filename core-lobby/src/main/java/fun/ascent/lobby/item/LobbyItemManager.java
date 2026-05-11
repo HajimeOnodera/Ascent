@@ -1,11 +1,9 @@
 package fun.ascent.lobby.item;
 
 import fun.ascent.common.item.ItemStackCreator;
-import fun.ascent.lobby.gui.CollectiblesGUI;
 import fun.ascent.lobby.gui.GameMenuGUI;
 import fun.ascent.lobby.gui.LobbySelectorGUI;
 import fun.ascent.lobby.gui.ProfileGUI;
-import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
@@ -32,19 +30,6 @@ public class LobbyItemManager {
             .createNamedItemStack(Material.COMPASS, text("<green>Game Menu <gray>(Right Click)"))
             .set(LORE,
                     List.of(text("<gray>Right Click to bring up the Game Menu!")))
-            .build();
-
-    private static final ItemStack COLLECTIBLES = ItemStackCreator
-            .createNamedItemStack(Material.CHEST, text("<green>Collectibles <gray>(Right Click)"))
-            .set(LORE, List.of(
-                    text("<gray>Mystery Dust: <aqua>0"),
-                    Component.empty(),
-                    text("<gray>Collect fun cosmetic items! Unlock new items"),
-                    text("<gray>using <aqua>Mystery Dust <gray>or hitting milestone"),
-                    text("<gray>rewards."),
-                    Component.empty(),
-                    text("<aqua>Mystery Dust <gray>is randomly given after playing"),
-                    text("<gray>games.")))
             .build();
 
     private static final ItemStack PLAYERS_HIDDEN = ItemStackCreator
@@ -85,9 +70,6 @@ public class LobbyItemManager {
             } else if (item.material() == Material.COMPASS) {
                 new GameMenuGUI().open(player);
                 event.setCancelled(true);
-            } else if (item.material() == Material.CHEST) {
-                new CollectiblesGUI().open(player);
-                event.setCancelled(true);
             } else if (item.material() == Material.PLAYER_HEAD) {
                 new ProfileGUI().open(player);
                 event.setCancelled(true);
@@ -121,8 +103,6 @@ public class LobbyItemManager {
             ).build();
         }
         player.getInventory().setItemStack(1, profileItem);
-
-        player.getInventory().setItemStack(4, COLLECTIBLES);
 
         boolean hidden = playerVisibility.getOrDefault(player.getUuid(), false);
         player.getInventory().setItemStack(7, hidden ? PLAYERS_HIDDEN : PLAYERS_VISIBLE);

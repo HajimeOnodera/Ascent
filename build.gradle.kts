@@ -5,7 +5,7 @@ plugins {
 
 allprojects {
     group = "fun.ascent"
-    version = "1.0.0"
+    version = "1.0.6"
 
     repositories {
         mavenCentral()

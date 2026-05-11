@@ -9,6 +9,7 @@ import fun.ascent.lobby.item.LobbyItemManager;
 import fun.ascent.lobby.listener.LobbyChatListener;
 import fun.ascent.lobby.listener.LobbyProtectionListener;
 import fun.ascent.lobby.npc.LobbyNpcManager;
+import fun.ascent.lobby.leaderboard.LeaderboardManager;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
 import net.minestom.server.MinecraftServer;
@@ -40,7 +41,10 @@ public final class Main {
         LobbyNpcManager npcManager = new LobbyNpcManager(world.instance());
         npcManager.spawnDefaults();
 
-        registerEvents(world, npcManager);
+        LeaderboardManager leaderboardManager = new LeaderboardManager();
+        leaderboardManager.init(world.instance());
+
+        registerEvents(world, npcManager, leaderboardManager);
 
         LobbyScoreboardManager.init();
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
@@ -59,7 +63,7 @@ public final class Main {
         PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 
-    private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager) {
+    private static void registerEvents(LobbyWorld world, LobbyNpcManager npcManager, LeaderboardManager leaderboardManager) {
         GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
 
         InventoryGUIListener.register(handler);
@@ -91,6 +95,7 @@ public final class Main {
         LobbyProtectionListener.register(handler);
         LobbyChatListener.register(handler);
         npcManager.registerListeners(handler);
+        leaderboardManager.registerListeners(handler);
     }
 }
 
