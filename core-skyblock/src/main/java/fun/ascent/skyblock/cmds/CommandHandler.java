@@ -10,6 +10,7 @@ import fun.ascent.skyblock.minion.command.MinionCommand;
 import fun.ascent.skyblock.player.level.XpCommand;
 import fun.ascent.skyblock.player.skill.command.SkillsCommand;
 import fun.ascent.skyblock.player.stats.command.StatCommand;
+import fun.ascent.common.command.RestartCommand;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
@@ -33,6 +34,7 @@ public class CommandHandler {
         register(new HotmCommand());
         register(new StatCommand());
         register(new GetItemDataCommand());
+        register(new RestartCommand());
 
         Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);

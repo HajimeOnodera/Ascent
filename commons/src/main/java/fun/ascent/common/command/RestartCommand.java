@@ -1,4 +1,4 @@
-package fun.ascent.lobby.command;
+package fun.ascent.common.command;
 
 import fun.ascent.common.restart.RestartManager;
 import fun.ascent.common.user.Rank;

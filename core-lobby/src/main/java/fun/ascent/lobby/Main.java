@@ -10,7 +10,7 @@ import fun.ascent.lobby.listener.LobbyConnectionListener;
 import fun.ascent.lobby.listener.LobbyProtectionListener;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.leaderboard.LeaderboardManager;
-import fun.ascent.lobby.command.RestartCommand;
+import fun.ascent.common.command.RestartCommand;
 import fun.ascent.lobby.command.FlyCommand;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
