@@ -57,10 +57,6 @@ public class Main {
         CombatListener.register();
         SkyblockChatListener.register();
 
-        MinecraftServer.getGlobalEventHandler().addListener(PlayerSpawnEvent.class, event -> {
-            Player player = event.getPlayer();
-            player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
-        });
 
         System.out.println("[Skyblock] Starting the Server");
         server.start(config.host(), config.port());

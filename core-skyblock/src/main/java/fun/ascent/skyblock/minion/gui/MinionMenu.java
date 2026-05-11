@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.minion.gui;
 
 import fun.ascent.common.StringUtility;
+import fun.ascent.skyblock.events.definitions.InventoryItemAddEvent;
+import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.minion.upgrade.MinionUpgradeCost;
@@ -64,6 +66,7 @@ public final class MinionMenu {
                 }
                 for (ItemStack stack : collected) {
                     clickingPlayer.getInventory().addItemStack(stack);
+                    MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(SkyblockItem.fromStack(stack),clickingPlayer,stack.amount()));
                 }
                 clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);

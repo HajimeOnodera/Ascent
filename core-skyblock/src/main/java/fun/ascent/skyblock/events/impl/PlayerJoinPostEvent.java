@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.events.impl;
 
 import fun.ascent.common.item.ItemStackCreator;
+import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.events.SEvent;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -27,6 +28,7 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
     @Override
     public void onEvent(PlayerSpawnEvent e) {
         if(e.isFirstSpawn()){
+            e.getPlayer().setDisplayName(UserManager.getDisplayName(e.getPlayer().getUuid()));
             e.getPlayer().sendMessage(text(miniMessage().deserialize("<yellow>Welcome to <green>Hypixel SkyBlock</green><yellow>!</yellow>")));
             e.getPlayer().getInventory().setItemStack(8,menuItem.build());
         }

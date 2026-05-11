@@ -1,26 +1,23 @@
 package fun.ascent.skyblock.player.profiles;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.collections.CollData;
-import fun.ascent.skyblock.player.collections.CollectionMap;
+import fun.ascent.skyblock.player.collections.Collection;
+import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.world.World;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
 
 import java.io.File;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
 public class SkyblockProfile {
 
     public String profileName;
     public UUID profileID;
     public List<ProfilePlayer> profilePlayers;
-    public CollectionMap collectionMap;
+    public Map<String, Integer> unlockedCollections = new HashMap<>();
     public World island;
     @Getter
     public Pos spawnPos;
@@ -35,9 +32,9 @@ public class SkyblockProfile {
         }
         if(spawnPos == null){spawnPos = new Pos(7,100, 5);}
         if(minionSlots <= 0){minionSlots = 5;}
-        if(collectionMap == null){
-            collectionMap = new CollectionMap();
-            //TODO: Notify Players of Collection Corruption
+        if (unlockedCollections == null) {
+            unlockedCollections = new HashMap<>();
+            //TODO: Notify Players of Collections corruption
         }
     }
 
@@ -47,8 +44,18 @@ public class SkyblockProfile {
         this.profilePlayers = new ArrayList<>();
         spawnPos = new Pos(7,100, 5);
         players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID, pl)));
-        this.collectionMap = new CollectionMap();
+        this.unlockedCollections = new HashMap<>();
         generateIsland();
+    }
+
+    public void updateCollection(String itemId, int amount) {
+        Collection collectionDef = CollectionRegistry.get(itemId);
+        if (collectionDef == null) return;
+        int currentProgress = this.unlockedCollections.getOrDefault(itemId, 0);
+        int newProgress = currentProgress + amount;
+        this.unlockedCollections.put(itemId, newProgress);
+
+        collectionDef.checkForRewards(this, currentProgress, newProgress);
     }
 
     public void generateIsland() {
@@ -78,20 +85,5 @@ public class SkyblockProfile {
         return null;
     }
 
-
-    public void updateCollection(String itemId, int amount) {
-        this.collectionMap.collectionMap.forEach((category,data) -> {
-            for(CollData collData : data) {
-                if(collData.collection.ITEM_ID.equals(itemId)) {
-                    List<CollData> dataa = new ArrayList<>();
-                    dataa.remove(collData);
-                    CollData dataNew = new CollData(collData.collection,collData.progress + amount);
-                    collData.collection.checkForRewards(this,collData.progress,dataNew.progress);
-                    dataa.add(dataNew);
-                    collectionMap.collectionMap.put(category,dataa);
-                }
-            }
-        });
-    }
 
 }
