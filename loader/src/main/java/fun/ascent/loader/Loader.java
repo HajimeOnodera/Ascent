@@ -84,36 +84,61 @@ public final class Loader {
      * process, re-using this same fat jar's classpath.
      */
     private static void spawnServer(String mainClass, String label) {
-        System.out.println();
-        System.out.println(GREEN + " ▶ Launching " + label + " in a new process..." + RESET);
+        // Start the monitoring loop in a separate thread
+        new Thread(() -> {
+            int exitCode = 3;
+            while (exitCode == 3) {
+                System.out.println();
+                System.out.println(GREEN + " ▶ Launching " + label + " in a new process..." + RESET);
 
-        try {
-            // Resolve our own jar / classpath
-            String classpath = System.getProperty("java.class.path");
-            String javaHome  = System.getProperty("java.home");
-            String javaBin   = Path.of(javaHome, "bin", "java").toString();
+                try {
+                    // Resolve our own jar / classpath
+                    String classpath = System.getProperty("java.class.path");
+                    String javaHome  = System.getProperty("java.home");
+                    String javaBin   = Path.of(javaHome, "bin", "java").toString();
 
-            ProcessBuilder pb = new ProcessBuilder(
-                    javaBin,
-                    "-cp", classpath,
-                    "--enable-native-access=ALL-UNNAMED",
-                    mainClass
-            );
-            pb.inheritIO();
-            pb.environment().put("REDIS_HOST", config.getRedisHost());
-            pb.environment().put("REDIS_PORT", String.valueOf(config.getRedisPort()));
-            pb.environment().put("MONGODB_URI", config.getMongodbUri());
+                    ProcessBuilder pb = new ProcessBuilder(
+                            javaBin,
+                            "-cp", classpath,
+                            "--enable-native-access=ALL-UNNAMED",
+                            mainClass
+                    );
+                    pb.inheritIO();
+                    pb.environment().put("REDIS_HOST", config.getRedisHost());
+                    pb.environment().put("REDIS_PORT", String.valueOf(config.getRedisPort()));
+                    pb.environment().put("MONGODB_URI", config.getMongodbUri());
 
-            Process process = pb.start();
-            children.add(process);
+                    Process process = pb.start();
+                    synchronized (children) {
+                        children.add(process);
+                    }
 
-            long pid = process.pid();
-            System.out.println(GREEN + " ✓ " + label + " started" + RESET
-                    + DIM + "  (PID " + pid + ")" + RESET);
-            System.out.println();
-        } catch (IOException e) {
-            System.out.println(RED + " ✗ Failed to start " + label + ": " + e.getMessage() + RESET);
-        }
+                    long pid = process.pid();
+                    System.out.println(GREEN + " ✓ " + label + " started" + RESET
+                            + DIM + "  (PID " + pid + ")" + RESET);
+                    
+                    exitCode = process.waitFor();
+                    synchronized (children) {
+                        children.remove(process);
+                    }
+
+                    if (exitCode == 3) {
+                        System.out.println(YELLOW + " ↻ " + label + " requested restart (Exit 3). Rebooting..." + RESET);
+                        Thread.sleep(1000); // Small delay before restart
+                    } else if (exitCode != 0) {
+                        System.out.println(RED + " ✗ " + label + " crashed (Exit " + exitCode + ")" + RESET);
+                    } else {
+                        System.out.println(GREEN + " ✓ " + label + " shut down normally." + RESET);
+                    }
+                } catch (IOException | InterruptedException e) {
+                    System.out.println(RED + " ✗ Error in " + label + " loop: " + e.getMessage() + RESET);
+                    break;
+                }
+            }
+        }, label + "-Monitor").start();
+        
+        // Give the thread a moment to actually start the process and add it to the list
+        try { Thread.sleep(500); } catch (InterruptedException ignored) {}
     }
 
     /**
@@ -134,9 +159,6 @@ public final class Loader {
 
         // Copy the built plugin if needed
         File pluginsDir = proxyDir.resolve("plugins").toFile();
-        if (!pluginsDir.isDirectory()) {
-            boolean mkdirs = pluginsDir.mkdirs();
-        }
 
         File coreProxyJar = new File(pluginsDir, "CoreProxy.jar");
         File builtProxy = Path.of("core-proxy", "build", "libs", "CoreProxy.jar").toFile();
@@ -180,9 +202,16 @@ public final class Loader {
 
     /** Block until all children exit (used in CLI mode). */
     private static void waitForChildren() {
-        for (Process p : children) {
-            try { p.waitFor(); } catch (InterruptedException e) {
+        while (true) {
+            boolean anyAlive;
+            synchronized (children) {
+                anyAlive = !children.isEmpty();
+            }
+            if (!anyAlive) break;
+            
+            try { Thread.sleep(1000); } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
+                break;
             }
         }
     }

@@ -10,6 +10,7 @@ import fun.ascent.lobby.listener.LobbyConnectionListener;
 import fun.ascent.lobby.listener.LobbyProtectionListener;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.leaderboard.LeaderboardManager;
+import fun.ascent.lobby.command.RestartCommand;
 import fun.ascent.lobby.command.FlyCommand;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
@@ -42,6 +43,7 @@ public final class Main {
 
         registerEvents(world, npcManager, leaderboardManager);
         MinecraftServer.getCommandManager().register(new FlyCommand());
+        MinecraftServer.getCommandManager().register(new RestartCommand());
 
         LobbyScoreboardManager.init();
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
