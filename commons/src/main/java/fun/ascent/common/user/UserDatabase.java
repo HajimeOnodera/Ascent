@@ -4,6 +4,8 @@ import fun.ascent.database.MongoProvider;
 import fun.ascent.database.PlayerProfile;
 import fun.ascent.database.PlayerRepository;
 
+import org.bson.Document;
+
 import java.util.UUID;
 
 /**
@@ -25,11 +27,18 @@ public class UserDatabase {
         User user = new User();
         user.setUuid(uuid);
         user.setName(profile.getName());
+        user.setLevel(profile.getLevel());
 
         try {
             user.setRank(Rank.valueOf(profile.getRank()));
         } catch (IllegalArgumentException e) {
             user.setRank(Rank.DEFAULT);
+        }
+
+        // Load achievement points
+        Document achievements = PlayerRepository.getSection(uuid, "achievements");
+        if (achievements != null) {
+            user.setAchievementPoints(achievements.getInteger("points", 0));
         }
 
         return user;
@@ -42,6 +51,7 @@ public class UserDatabase {
                     user.getUuid(),
                     user.getName(),
                     user.getRank().name(),
+                    1,
                     System.currentTimeMillis(),
                     System.currentTimeMillis()
             );
