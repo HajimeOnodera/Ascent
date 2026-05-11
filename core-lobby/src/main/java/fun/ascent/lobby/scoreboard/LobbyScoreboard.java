@@ -62,8 +62,8 @@ public class LobbyScoreboard {
         renderedLines.add("<gray>" + LocalDate.now().format(formatter) + " <dark_gray>L1");
         renderedLines.add("");
         renderedLines.add("<white>Rank: <gray>" + StringUtility.toNormalCase(UserManager.getUser(player.getUuid()).getRank().name()));
-        renderedLines.add("<white>Achievements: <yellow>0");
-        renderedLines.add("<white>Ascent Level: <aqua>0");
+        renderedLines.add("<white>Achievements: <yellow>" + UserManager.getUser(player.getUuid()).getAchievementPoints());
+        renderedLines.add("<white>Ascent Level: <aqua>" + UserManager.getUser(player.getUuid()).getLevel());
         renderedLines.add(" ");
         renderedLines.add("<white>Lobby: <green>1");
         renderedLines.add("<white>Players: <green>" + MinecraftServer.getConnectionManager().getOnlinePlayers().size());

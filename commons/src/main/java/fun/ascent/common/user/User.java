@@ -19,6 +19,8 @@ public class User {
     private UUID uuid;
     private String name;
     private Rank rank = Rank.DEFAULT;
+    private int level = 1;
+    private int achievementPoints = 0;
 
     public Component getDisplayName() {
         Component prefix = rank.getFormattedPrefix();

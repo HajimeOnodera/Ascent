@@ -71,7 +71,7 @@ public class UserManager {
         }
 
         // Fallback or create new
-        User user = new User(uuid, "Unknown", Rank.DEFAULT);
+        User user = new User(uuid, "Unknown", Rank.DEFAULT, 1, 0);
         userCache.put(uuid, user);
         return user;
     }
@@ -98,6 +98,8 @@ public class UserManager {
         json.put("uuid", user.getUuid().toString());
         json.put("name", user.getName());
         json.put("rank", user.getRank().name());
+        json.put("level", user.getLevel());
+        json.put("achievementPoints", user.getAchievementPoints());
         return json.toString();
     }
 
@@ -106,7 +108,9 @@ public class UserManager {
         return new User(
                 UUID.fromString(json.getString("uuid")),
                 json.getString("name"),
-                Rank.valueOf(json.getString("rank"))
+                Rank.valueOf(json.getString("rank")),
+                json.optInt("level", 1),
+                json.optInt("achievementPoints", 0)
         );
     }
 }

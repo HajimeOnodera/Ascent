@@ -36,6 +36,7 @@ public class PlayerProfile {
     private UUID uuid;
     private String name;
     private String rank = "DEFAULT";
+    private int level = 1;
     private long firstJoin;
     private long lastSeen;
 
@@ -52,6 +53,7 @@ public class PlayerProfile {
         profile.uuid = uuid;
         profile.name = section.getString("name");
         profile.rank = section.getString("rank");
+        profile.level = section.getInteger("level", 1);
         profile.firstJoin = section.getLong("firstJoin");
         profile.lastSeen = section.getLong("lastSeen");
         return profile;
@@ -64,6 +66,7 @@ public class PlayerProfile {
         Document doc = new Document()
                 .append("name", name)
                 .append("rank", rank)
+                .append("level", level)
                 .append("firstJoin", firstJoin)
                 .append("lastSeen", lastSeen);
 
@@ -81,7 +84,7 @@ public class PlayerProfile {
         }
 
         long now = System.currentTimeMillis();
-        profile = new PlayerProfile(uuid, name, "DEFAULT", now, now);
+        profile = new PlayerProfile(uuid, name, "DEFAULT", 1, now, now);
         profile.save();
         return profile;
     }
