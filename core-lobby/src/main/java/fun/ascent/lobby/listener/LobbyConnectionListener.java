@@ -34,7 +34,7 @@ public class LobbyConnectionListener {
             player.sendMessage(text("<yellow>Welcome to <gold>Ascent<yellow>! Pick a server to begin."));
 
             AchievementManager.registerFirstJoin(player);
-            AchievementManager.unlock(player, AchievementCategory.GENERAL, "Achievement Get! Hypixel Server!");
+            AchievementManager.unlock(player, AchievementCategory.GENERAL, "Achievement Get! Ascent Server!");
 
             Rank rank = UserManager.getUser(player.getUuid()).getRank();
             if (rank.isEqualOrHigherThan(Rank.VIP)) {
