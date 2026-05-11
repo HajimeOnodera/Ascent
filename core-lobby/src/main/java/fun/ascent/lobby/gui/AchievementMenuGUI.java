@@ -1,5 +1,6 @@
 package fun.ascent.lobby.gui;
 
+import fun.ascent.common.achievement.AchievementCategory;
 import fun.ascent.common.gui.GUIItem;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;

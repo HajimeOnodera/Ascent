@@ -7,8 +7,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 @Getter
 public enum Rank {
+    OWNER("<red>[OWNER] ", true, NamedTextColor.RED),
+    ADMIN("<red>[ADMIN] ", true, NamedTextColor.RED),
     STAFF("<red>[<gold>ዞ<red>] ", true, NamedTextColor.RED),
     YOUTUBE("<red>[<white>YOUTUBE<red>] ", false, NamedTextColor.RED),
+    MVP_PLUS_PLUS("<gold>[MVP<black>++<gold>] ", false, NamedTextColor.GOLD),
     MVP_PLUS("<aqua>[MVP<red>+<aqua>] ", false, NamedTextColor.AQUA),
     MVP("<aqua>[MVP] ", false, NamedTextColor.AQUA),
     VIP_PLUS("<green>[VIP<gold>+<green>] ", false, NamedTextColor.GREEN),
@@ -29,12 +32,7 @@ public enum Rank {
         return this.ordinal() <= rank.ordinal();
     }
 
-    public char getPriorityCharacter() {
-        return StringUtility.ALPHABET[ordinal()];
-    }
-
     public Component getFormattedPrefix() {
         return StringUtility.text(prefix);
     }
 }
-

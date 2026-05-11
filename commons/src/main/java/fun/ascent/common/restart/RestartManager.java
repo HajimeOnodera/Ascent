@@ -31,6 +31,9 @@ public class RestartManager {
     private static Task restartTask;
     private static final AtomicInteger secondsLeft = new AtomicInteger(-1);
     private static RestartType currentType;
+    
+    @Getter
+    private static int exitCode = 0;
 
     public static void startRestart(RestartType type, int seconds) {
         if (restartTask != null) {
@@ -73,9 +76,11 @@ public class RestartManager {
             player.kick(text("<red>Server is restarting for " + currentType.getDisplayName() + "!\n<gray>Please rejoin in a moment."));
         }
         
+        // Signal that we want a restart
+        exitCode = 3;
+        
+        // Stop the server cleanly. This will cause MinecraftServer.start() to return in Main.
         MinecraftServer.stopCleanly();
-        // Exit with code 3 to signal a restart to the loader
-        System.exit(3);
     }
 
     private static String formatTime(int seconds) {

@@ -1,5 +1,7 @@
 package fun.ascent.lobby.gui;
 
+import fun.ascent.common.achievement.AchievementCategory;
+import fun.ascent.common.achievement.AchievementManager;
 import fun.ascent.common.gui.GUIItem;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;
@@ -43,6 +45,9 @@ public class ChallengeAchievementsGUI extends InventoryGUI {
             int slot = ACHIEVEMENT_SLOTS[i];
             boolean completed = completedNames.contains(ach.name().toLowerCase().replace(" ", "_"));
 
+            double globalPercent = AchievementManager.getUnlockPercentage(ach.name());
+            String globalPercentStr = String.format("%.2f", globalPercent);
+
             if (completed) {
                 set(slot, ItemStackCreator.enchant(ItemStackCreator.getStack(
                         "<green>" + ach.name(),
@@ -52,6 +57,8 @@ public class ChallengeAchievementsGUI extends InventoryGUI {
                         "<gray>" + ach.description(),
                         "",
                         "<gray>Points: <yellow>" + ach.points(),
+                        "",
+                        "<gray>Unlocked by <white>" + globalPercentStr + "% <gray>of players!",
                         "",
                         "<green>Unlocked!"
                 )));
@@ -64,6 +71,8 @@ public class ChallengeAchievementsGUI extends InventoryGUI {
                         "<gray>" + ach.description(),
                         "",
                         "<gray>Points: <yellow>" + ach.points(),
+                        "",
+                        "<gray>Unlocked by <white>" + globalPercentStr + "% <gray>of players!",
                         "",
                         "<red>Not Unlocked"
                 ));

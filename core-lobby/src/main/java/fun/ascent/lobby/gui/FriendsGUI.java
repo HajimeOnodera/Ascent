@@ -120,7 +120,7 @@ public class FriendsGUI extends InventoryGUI {
                     return ItemStackCreator.getStackHead(
                             rank.getPrefix() + player.getUsername(),
                             skin, 1,
-                            "<gray>Hypixel Level: <gold>" + level,
+                            "<gray>Ascent Level: <gold>" + level,
                             "<gray>Achievement Points: <yellow>" + StringUtility.commaify(achievementPoints),
                             "<gray>Guild: <aqua>None",
                             "",
@@ -130,7 +130,7 @@ public class FriendsGUI extends InventoryGUI {
                     return ItemStackCreator.getStack(
                             rank.getPrefix() + player.getUsername(),
                             Material.PLAYER_HEAD, 1,
-                            "<gray>Hypixel Level: <gold>" + level,
+                            "<gray>Ascent Level: <gold>" + level,
                             "<yellow>Click to go back!"
                     );
                 }
@@ -145,7 +145,7 @@ public class FriendsGUI extends InventoryGUI {
                         "<green>Friends",
                         "e063eedb2184354bd43a19deffba51b53dd6b7222f8388caa239cabcdce84",
                         1,
-                        "<gray>View your Hypixel friends' profiles,",
+                        "<gray>View your Ascent friends' profiles,",
                         "<gray>and interact with your online friends!",
                         "",
                         "<yellow>Currently viewing!"
@@ -153,10 +153,15 @@ public class FriendsGUI extends InventoryGUI {
             }
         });
 
-        // ── Party Tab (slot 4) ───────────────────────────────────────────
-        set(new GUIItem(4) {
+        // ── Party Tab (slot 4) ─────────────────────────────────────────────
+        set(new GUIClickableItem(4) {
             @Override
-            public ItemStack.Builder getItem(Player p) {
+            public void run(InventoryPreClickEvent e, Player player) {
+                new PartyGUI().open(player);
+            }
+
+            @Override
+            public ItemStack.Builder getItem(Player player) {
                 return ItemStackCreator.getStackHead(
                         "<green>Party",
                         "667963ca1ffdc24a10b397ff8161d0da82d6a3f4788d5f67f1a9f9bfbc1eb1",
@@ -178,9 +183,9 @@ public class FriendsGUI extends InventoryGUI {
                         "<green>Guild",
                         "fe8b59f8cce510809427c3843cf575fae8fe6a8b7d1560dd46958d148563815",
                         1,
-                        "<gray>Form a guild with other Hypixel",
+                        "<gray>Form a guild with other Ascent",
                         "<gray>players to conquer game modes and",
-                        "<gray>work towards common Hypixel",
+                        "<gray>work towards common Ascent",
                         "<gray>rewards."
                 );
             }
@@ -417,7 +422,7 @@ public class FriendsGUI extends InventoryGUI {
                 // Level and achievement points
                 int friendLevel = getPlayerLevel(entry.uuid);
                 int friendPoints = getPlayerAchievementPoints(entry.uuid);
-                lore.add("<gray>Hypixel Level: <gold>" + friendLevel);
+                lore.add("<gray>Ascent Level: <gold>" + friendLevel);
                 lore.add("<gray>Achievement Points: <yellow>" + StringUtility.commaify(friendPoints));
                 lore.add("<gray>Guild: <aqua>None");
                 lore.add("");

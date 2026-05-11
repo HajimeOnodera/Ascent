@@ -1,4 +1,4 @@
-package fun.ascent.lobby.gui;
+package fun.ascent.common.achievement;
 
 import lombok.Getter;
 import net.minestom.server.item.Material;
@@ -7,7 +7,8 @@ import net.minestom.server.item.Material;
 public enum AchievementCategory {
 
     GENERAL("General", Material.GRASS_BLOCK, new AchievementDef[]{
-            new AchievementDef("First Join", "Join the server for the first time.", 5),
+            new AchievementDef("Achievement Get! Hypixel Server!", "Join the server for the first time.", 5),
+            new AchievementDef("Let the world hear your voice!", "Use chat for the first time.", 5),
             new AchievementDef("First Friend", "Add your first friend.", 5),
             new AchievementDef("Social Butterfly", "Have 10 friends.", 10),
             new AchievementDef("Veteran", "Play for 100 hours.", 15),
@@ -18,6 +19,7 @@ public enum AchievementCategory {
 
     COMBAT("Combat", Material.DIAMOND_SWORD, new AchievementDef[]{
             new AchievementDef("First Kill", "Kill your first mob.", 5),
+            new AchievementDef("Wrong Weapon", "Kill a mob with the wrong weapon.", 5),
             new AchievementDef("Monster Hunter", "Kill 100 mobs.", 10),
             new AchievementDef("Slayer", "Kill 1,000 mobs.", 15),
             new AchievementDef("Dragon Slayer", "Defeat the Ender Dragon.", 25),

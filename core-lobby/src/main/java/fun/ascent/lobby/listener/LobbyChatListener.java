@@ -1,5 +1,7 @@
 package fun.ascent.lobby.listener;
 
+import fun.ascent.common.achievement.AchievementCategory;
+import fun.ascent.common.achievement.AchievementManager;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
@@ -24,6 +26,8 @@ public class LobbyChatListener {
             Component message = text("<gray>: " + messageColor + escapeMiniMessage(event.getRawMessage()));
             
             MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(displayName.append(message)));
+            
+            AchievementManager.unlock(event.getPlayer(), AchievementCategory.GENERAL, "Let the world hear your voice!");
         });
     }
 }
