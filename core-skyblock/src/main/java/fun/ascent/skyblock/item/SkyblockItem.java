@@ -486,6 +486,10 @@ public class SkyblockItem {
         return new Builder(itemId, material, rarity);
     }
 
+    public boolean hasEnchant(String enchant) {
+        return this.enchantments.containsKey(enchant) || this.ultimateEnchant.equals(enchant);
+    }
+
     public static class Builder {
         private final String itemId;
         private String displayName = "";
