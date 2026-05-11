@@ -3,23 +3,19 @@ package fun.ascent.lobby;
 import fun.ascent.common.Ascent;
 import fun.ascent.common.gui.InventoryGUIListener;
 import fun.ascent.common.redis.PingService;
-import fun.ascent.common.user.UserManager;
 import fun.ascent.lobby.config.LobbyConfig;
 import fun.ascent.lobby.item.LobbyItemManager;
 import fun.ascent.lobby.listener.LobbyChatListener;
+import fun.ascent.lobby.listener.LobbyConnectionListener;
 import fun.ascent.lobby.listener.LobbyProtectionListener;
 import fun.ascent.lobby.npc.LobbyNpcManager;
 import fun.ascent.lobby.leaderboard.LeaderboardManager;
+import fun.ascent.lobby.command.FlyCommand;
 import fun.ascent.lobby.world.LobbyWorld;
 import fun.ascent.lobby.scoreboard.LobbyScoreboardManager;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
-
-import static fun.ascent.common.StringUtility.text;
 
 public final class Main {
     private static String currentServerName;
@@ -45,6 +41,7 @@ public final class Main {
         leaderboardManager.init(world.instance());
 
         registerEvents(world, npcManager, leaderboardManager);
+        MinecraftServer.getCommandManager().register(new FlyCommand());
 
         LobbyScoreboardManager.init();
         System.out.println("[Lobby] Starting the Server on " + config.host() + ":" + config.port());
@@ -68,22 +65,7 @@ public final class Main {
 
         InventoryGUIListener.register(handler);
 
-        handler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            event.setSpawningInstance(world.instance());
-            event.getPlayer().setRespawnPoint(world.spawn());
-        });
-
-        handler.addListener(PlayerSpawnEvent.class, event -> {
-            Player player = event.getPlayer();
-            player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
-            
-            if (!event.isFirstSpawn()) {
-                return;
-            }
-
-            player.teleport(world.spawn());
-            player.sendMessage(text(text("<yellow>Welcome to <gold>Ascent<yellow>! Pick a server to begin.")));
-        });
+        LobbyConnectionListener.register(handler, world);
 
         handler.addListener(PlayerMoveEvent.class, event -> {
             if (event.getNewPosition().y() < 0) {
