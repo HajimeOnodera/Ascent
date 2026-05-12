@@ -4,6 +4,7 @@ import fun.ascent.common.Ascent;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.skyblock.blocks.BlockManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
+import fun.ascent.skyblock.dungeon.DungeonManager;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.items.ItemDefinitions;
 import fun.ascent.skyblock.item.reforge.Reforge;
@@ -57,6 +58,7 @@ public class Main {
         ZonePopulationTicker.start();
         CombatListener.register();
         SkyblockChatListener.register();
+        DungeonManager.get().initialize();
 
 
         System.out.println("[Skyblock] Starting the Server");

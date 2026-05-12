@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.item;
 
 import fun.ascent.skyblock.item.gemstone.GemstoneSlot;
+import fun.ascent.skyblock.item.reforge.RarityStat;
+import fun.ascent.skyblock.item.reforge.Reforge;
 import fun.ascent.skyblock.item.registries.*;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
@@ -149,12 +151,85 @@ public class SkyblockItem {
     }
 
     public static SkyblockItem fromStack(ItemStack itemStack) {
-        //TODO: Make Method
-        return null;
+        if (itemStack == null || itemStack.isAir()) return null;
+
+        String id = ItemNBT.getItemId(itemStack);
+        if (id == null) return null;
+
+        SkyblockItem base = ItemRegistry.getItem(id);
+        if (base == null) return null;
+
+        Builder builder = base.toBuilder();
+
+        if (ItemNBT.isRecombobulated(itemStack)) {
+            builder.recombobulated(true);
+        }
+
+        int hpb = ItemNBT.getHotPotatoCount(itemStack);
+        if (hpb > 0) builder.hotPotatoCount(hpb);
+
+        if (ItemNBT.hasArtOfPeace(itemStack)) {
+            builder.artOfPeace(true);
+        }
+
+        String modifier = ItemNBT.getModifier(itemStack);
+        if (modifier != null) {
+            Rarity effectiveRarity = base.getRarity();
+            if (ItemNBT.isRecombobulated(itemStack) && effectiveRarity.getNextRarity() != null) {
+                effectiveRarity = effectiveRarity.getNextRarity();
+            }
+
+            Reforge reforge = Reforge.getById(modifier.toUpperCase(), base.getItemType());
+            if (reforge != null) {
+                builder.modifier(reforge.getName());
+                for (Map.Entry<Stats, RarityStat> entry : reforge.getStats().entrySet()) {
+                    double bonus = entry.getValue().fromRarity(effectiveRarity);
+                    builder.reforgeStat(entry.getKey(), bonus);
+                }
+            }
+        }
+
+        return builder.build();
     }
 
-    public SkyblockItemData convertToItemData(){
-        return null;
+    public SkyblockItemData convertToItemData() {
+        Map<String, Double> statMap = new LinkedHashMap<>();
+        for (Map.Entry<Stats, Double> entry : baseStats.entrySet()) {
+            statMap.put(entry.getKey().name(), entry.getValue());
+        }
+
+        List<String> gemSlotTypes = new ArrayList<>();
+        for (GemstoneSlot slot : gemstoneSlots) {
+            gemSlotTypes.add(slot.getType().name());
+        }
+
+        String soulboundValue = null;
+        if (soulbound) soulboundValue = "SOLO";
+        else if (coopSoulbound) soulboundValue = "COOP";
+
+        String colorStr = null;
+        if (armorColor != null) {
+            colorStr = armorColor.red() + "," + armorColor.green() + "," + armorColor.blue();
+        }
+
+        return new SkyblockItemData(
+                itemId,
+                displayName,
+                material,
+                rarity,
+                itemType,
+                skinValue,
+                0,
+                statMap,
+                gemSlotTypes,
+                soulboundValue,
+                dungeon,
+                glowing,
+                false,
+                colorStr,
+                description.isEmpty() ? null : String.join("\n", description),
+                null
+        );
     }
 
     public ItemStack buildItemStack() {
