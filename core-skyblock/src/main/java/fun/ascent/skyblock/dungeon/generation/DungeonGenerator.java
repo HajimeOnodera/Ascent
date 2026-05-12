@@ -117,7 +117,7 @@ public class DungeonGenerator {
             }
         }
 
-        if (candidates.isEmpty()) throw new RuntimeException("No fairy room candidates");
+        if (candidates.isEmpty()) throw new RuntimeException("No fairy room");
         candidates.get(random.nextInt(candidates.size())).setType(RoomType.FAIRY);
     }
 
@@ -295,7 +295,7 @@ public class DungeonGenerator {
         }
 
         if (deadEnds.size() < required) {
-            throw new RuntimeException("Not enough dead-end rooms for special room placement");
+            throw new RuntimeException("Not enough special rooms. please fix me");
         }
 
         Collections.shuffle(deadEnds, random);

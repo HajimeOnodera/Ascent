@@ -48,7 +48,7 @@ public class DungeonInstance {
         processDoors(grid, gridSize, templates, random);
 
         long elapsed = System.nanoTime() - start;
-        System.out.printf("[Dungeon] Built world for %s in %.2fms%n", floor.shortName(), elapsed / 1_000_000.0);
+        System.out.printf("[Dungeon] Built world in %.2fms%n", floor.shortName(), elapsed / 1_000_000.0);
     }
 
     private void pasteRooms(Random random, Room[][] grid, int gridSize, RoomTemplateLoader templates) {
@@ -466,6 +466,7 @@ public class DungeonInstance {
         return switch (room.type()) {
             case SPAWN -> templates.get("Special-Spawn");
             case BLOOD -> pickFromNames(random, templates, used,
+                    //Temporary
                     "Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red");
             case FAIRY -> templates.get("Special-Fairy");
             case MINIBOSS -> templates.pickForType(random, RoomType.MINIBOSS, used);

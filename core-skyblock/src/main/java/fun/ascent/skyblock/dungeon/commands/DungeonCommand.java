@@ -31,7 +31,7 @@ public class DungeonCommand extends Command {
             }
             DungeonInstance dungeon = DungeonManager.get().createDungeon(floor);
             DungeonManager.get().addPlayer(player, dungeon);
-            player.sendMessage("§aGenerated " + floor.displayName() + ". Teleporting...");
+            player.sendMessage("§aTest dungeon " + floor.displayName() + ". Teleporting...");
         }, floorArg);
     }
 }
