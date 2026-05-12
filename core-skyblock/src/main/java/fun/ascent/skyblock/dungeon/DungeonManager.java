@@ -49,7 +49,9 @@ public class DungeonManager {
 
         DungeonConfig config = new DungeonConfig(floor);
         DungeonGenerator generator = new DungeonGenerator(config);
-        generator.generate(System.nanoTime());
+        long seed = System.nanoTime();
+        generator.generate(seed);
+        generator.printGrid(seed);
 
         InstanceContainer container = acquireInstance();
         container.setTag(WorldHandler.worldID, "dungeon_" + id.toString().substring(0, 8));

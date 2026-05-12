@@ -48,7 +48,7 @@ public class DungeonInstance {
         processDoors(grid, gridSize, templates, random);
 
         long elapsed = System.nanoTime() - start;
-        System.out.printf("[Dungeon] Built world in %.2fms%n", floor.shortName(), elapsed / 1_000_000.0);
+        System.out.printf("[Dungeon] Built world for %s in %.2fms%n", floor.shortName(), elapsed / 1_000_000.0);
     }
 
     private void pasteRooms(Random random, Room[][] grid, int gridSize, RoomTemplateLoader templates) {
@@ -65,11 +65,16 @@ public class DungeonInstance {
                 RoomTemplate template = null;
                 int pasteRotation = 0;
 
+                boolean isSingle = handler == null || handler.shape() == RoomShape.SINGLE;
+                int connectionCount = isSingle ? countConnections(room) : 0;
+
                 Set<String> triedNames = new HashSet<>();
-                for (int attempt = 0; attempt < 20; attempt++) {
+                for (int attempt = 0; attempt < 30; attempt++) {
                     RoomTemplate candidate = pickTemplate(random, room, handler, templates, usedSchems);
                     if (candidate == null) break;
                     if (!triedNames.add(candidate.name())) continue;
+
+                    if (isSingle && countTemplateMarkers(candidate) < connectionCount) continue;
 
                     int rot = computePasteRotation(handler, room, candidate);
                     if (validateRotation(room, candidate, rot)) {
@@ -80,10 +85,43 @@ public class DungeonInstance {
                 }
 
                 if (template == null) {
-                    RoomTemplate fallback = pickTemplate(random, room, handler, templates, usedSchems);
-                    if (fallback != null) {
-                        template = fallback;
-                        pasteRotation = computePasteRotation(handler, room, fallback);
+                    List<RoomTemplate> allCandidates = getAllTemplates(room, handler, templates);
+                    if (allCandidates.isEmpty()) {
+                        allCandidates = templates.getByShape(RoomShape.SINGLE);
+                    }
+                    int bestScore = Integer.MIN_VALUE;
+                    for (RoomTemplate candidate : allCandidates) {
+                        for (int rot = 0; rot < (isSingle ? 4 : 1); rot++) {
+                            int effectiveRot = isSingle ? rot : computePasteRotation(handler, room, candidate);
+                            if (!validateRotation(room, candidate, effectiveRot)) continue;
+                            int coverage = countMarkerCoverage(room, candidate, effectiveRot);
+                            int markerCount = countTemplateMarkers(candidate);
+                            int score = coverage * 100 + markerCount;
+                            if (score > bestScore) {
+                                bestScore = score;
+                                template = candidate;
+                                pasteRotation = effectiveRot;
+                            }
+                        }
+                    }
+                }
+
+                if (template == null) {
+                    List<RoomTemplate> allCandidates = getAllTemplates(room, handler, templates);
+                    if (allCandidates.isEmpty()) {
+                        allCandidates = templates.getByShape(RoomShape.SINGLE);
+                    }
+                    int bestCoverage = -1;
+                    for (RoomTemplate candidate : allCandidates) {
+                        for (int rot = 0; rot < (isSingle ? 4 : 1); rot++) {
+                            int effectiveRot = isSingle ? rot : computePasteRotation(handler, room, candidate);
+                            int coverage = countMarkerCoverage(room, candidate, effectiveRot);
+                            if (coverage > bestCoverage) {
+                                bestCoverage = coverage;
+                                template = candidate;
+                                pasteRotation = effectiveRot;
+                            }
+                        }
                     }
                 }
 
@@ -120,14 +158,64 @@ public class DungeonInstance {
         int[] markers = template.doorMarkers();
         if (markers == null) return true;
 
-        boolean[] connections = getConnectionDirections(room);
+        boolean[] connections = getEffectiveConnections(room);
+
+        int[] rotatedMarkers = new int[4];
+        for (int dir = 0; dir < 4; dir++) {
+            rotatedMarkers[(dir + rotation) % 4] = markers[dir];
+        }
 
         for (int dir = 0; dir < 4; dir++) {
-            if (markers[dir] != RoomTemplate.DOOR_REQUIRED) continue;
-            int rotatedDir = (dir + rotation) % 4;
-            if (!connections[rotatedDir]) return false;
+            if (rotatedMarkers[dir] == RoomTemplate.DOOR_REQUIRED && !connections[dir]) return false;
         }
         return true;
+    }
+
+    private int countConnections(Room room) {
+        int count = 0;
+        for (boolean c : getConnectionDirections(room)) {
+            if (c) count++;
+        }
+        return count;
+    }
+
+    private int countTemplateMarkers(RoomTemplate template) {
+        int[] markers = template.doorMarkers();
+        if (markers == null) return 0;
+        int count = 0;
+        for (int m : markers) {
+            if (m != RoomTemplate.DOOR_NONE) count++;
+        }
+        return count;
+    }
+
+    private int countMarkerCoverage(Room room, RoomTemplate template, int rotation) {
+        int[] markers = template.doorMarkers();
+        if (markers == null) return 0;
+
+        boolean[] connections = getEffectiveConnections(room);
+        int covered = 0;
+        for (int dir = 0; dir < 4; dir++) {
+            int rotatedDir = (dir + rotation) % 4;
+            if (connections[rotatedDir] && markers[dir] != RoomTemplate.DOOR_NONE) {
+                covered++;
+            }
+        }
+        return covered;
+    }
+
+    private boolean[] getEffectiveConnections(Room room) {
+        LinkedHashMap<Room, RoomShapeHandler> handlers = generator.shapeHandlers();
+        RoomShapeHandler handler = handlers.get(room);
+        if (handler != null && handler.rooms().size() > 1) {
+            boolean[] connections = new boolean[4];
+            for (Room cell : handler.rooms()) {
+                boolean[] cellDirs = getConnectionDirections(cell);
+                for (int i = 0; i < 4; i++) connections[i] |= cellDirs[i];
+            }
+            return connections;
+        }
+        return getConnectionDirections(room);
     }
 
     private int computePasteRotation(RoomShapeHandler handler, Room room, RoomTemplate template) {
@@ -166,16 +254,22 @@ public class DungeonInstance {
             int score = 0;
             boolean valid = true;
 
+            int[] rotatedMarkers = new int[4];
             for (int dir = 0; dir < 4; dir++) {
-                int rotatedDir = (dir + rot) % 4;
-                int marker = markers[dir];
+                rotatedMarkers[(dir + rot) % 4] = markers[dir];
+            }
+
+            for (int dir = 0; dir < 4; dir++) {
+                int marker = rotatedMarkers[dir];
 
                 if (marker == RoomTemplate.DOOR_REQUIRED) {
-                    if (connections[rotatedDir]) score += 10;
+                    if (connections[dir]) score += 10;
                     else { valid = false; break; }
                 } else if (marker == RoomTemplate.DOOR_OPTIONAL) {
-                    if (connections[rotatedDir]) score += 3;
-                    else if (onEdge[rotatedDir]) score -= 5;
+                    if (connections[dir]) score += 5;
+                    else if (onEdge[dir]) score -= 3;
+                } else if (marker == RoomTemplate.DOOR_NONE) {
+                    if (connections[dir]) score -= 50;
                 }
             }
 
@@ -202,7 +296,6 @@ public class DungeonInstance {
         return dirs;
     }
 
-
     private void processDoors(Room[][] grid, int gridSize, RoomTemplateLoader templates, Random random) {
         Set<Long> processed = new HashSet<>();
 
@@ -212,116 +305,123 @@ public class DungeonInstance {
                 int cellX = GRID_ORIGIN_X + gx * CELL_STRIDE;
                 int cellZ = GRID_ORIGIN_Z + gy * CELL_STRIDE;
 
-                int[][] wallChecks = {
-                        {cellX + WALL_CENTER, cellZ, 0, -1},
-                        {cellX + ROOM_SIZE - 1, cellZ + WALL_CENTER, 1, 0},
-                        {cellX + WALL_CENTER, cellZ + ROOM_SIZE - 1, 0, 1},
-                        {cellX, cellZ + WALL_CENTER, -1, 0}
+                int[][] neighbors = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
+                int[][] markerPos = {
+                        {cellX + WALL_CENTER, cellZ},
+                        {cellX + ROOM_SIZE - 1, cellZ + WALL_CENTER},
+                        {cellX + WALL_CENTER, cellZ + ROOM_SIZE - 1},
+                        {cellX, cellZ + WALL_CENTER}
                 };
 
                 for (int dir = 0; dir < 4; dir++) {
-                    int mx = wallChecks[dir][0];
-                    int mz = wallChecks[dir][1];
-                    int neighborDx = wallChecks[dir][2];
-                    int neighborDy = wallChecks[dir][3];
-
-                    int ngx = gx + neighborDx;
-                    int ngy = gy + neighborDy;
+                    int ngx = gx + neighbors[dir][0];
+                    int ngy = gy + neighbors[dir][1];
 
                     long key = pairKey(gx, gy, ngx, ngy, gridSize);
                     if (!processed.add(key)) continue;
 
                     boolean hasNeighbor = ngx >= 0 && ngx < gridSize && ngy >= 0 && ngy < gridSize;
-                    boolean isConnected = hasNeighbor && isConnected(room, grid[ngx][ngy]);
-
-                    Block markerBlock = instance.getBlock(mx, MARKER_DETECT_Y, mz);
-                    boolean isRequired = isMarkerRequired(markerBlock);
-                    boolean isOptional = isMarkerOptional(markerBlock);
-                    boolean hasMarker = isRequired || isOptional;
-
-                    boolean neighborHasMarker = false;
-                    boolean neighborRequired = false;
-                    if (hasNeighbor) {
-                        int nCellX = GRID_ORIGIN_X + ngx * CELL_STRIDE;
-                        int nCellZ = GRID_ORIGIN_Z + ngy * CELL_STRIDE;
-                        int oppositeDir = (dir + 2) % 4;
-                        int nmx, nmz;
-                        switch (oppositeDir) {
-                            case 0 -> { nmx = nCellX + WALL_CENTER; nmz = nCellZ; }
-                            case 1 -> { nmx = nCellX + ROOM_SIZE - 1; nmz = nCellZ + WALL_CENTER; }
-                            case 2 -> { nmx = nCellX + WALL_CENTER; nmz = nCellZ + ROOM_SIZE - 1; }
-                            default -> { nmx = nCellX; nmz = nCellZ + WALL_CENTER; }
-                        }
-                        Block neighborMarker = instance.getBlock(nmx, MARKER_DETECT_Y, nmz);
-                        neighborRequired = isMarkerRequired(neighborMarker);
-                        neighborHasMarker = neighborRequired || isMarkerOptional(neighborMarker);
-
-                        if (neighborHasMarker) {
-                            instance.setBlock(nmx, MARKER_DETECT_Y, nmz, Block.STONE_BRICKS);
-                        }
+                    if (!hasNeighbor || !isConnected(room, grid[ngx][ngy])) {
+                        clearMarker(markerPos[dir][0], markerPos[dir][1]);
+                        continue;
                     }
 
-                    boolean shouldCarve = false;
-                    if (isConnected) {
-                        if (isRequired || neighborRequired) {
-                            shouldCarve = true;
-                        } else if (!hasMarker && !neighborHasMarker) {
-                            shouldCarve = true;
-                        } else if (hasMarker && neighborHasMarker) {
-                            shouldCarve = true;
-                        }
-                    }
+                    int nCellX = GRID_ORIGIN_X + ngx * CELL_STRIDE;
+                    int nCellZ = GRID_ORIGIN_Z + ngy * CELL_STRIDE;
+                    int oppositeDir = (dir + 2) % 4;
+                    int[][] nMarkerPos = {
+                            {nCellX + WALL_CENTER, nCellZ},
+                            {nCellX + ROOM_SIZE - 1, nCellZ + WALL_CENTER},
+                            {nCellX + WALL_CENTER, nCellZ + ROOM_SIZE - 1},
+                            {nCellX, nCellZ + WALL_CENTER}
+                    };
 
-                    if (shouldCarve) {
+                    Block thisMarker = instance.getBlock(markerPos[dir][0], MARKER_DETECT_Y, markerPos[dir][1]);
+                    Block otherMarker = instance.getBlock(nMarkerPos[oppositeDir][0], MARKER_DETECT_Y, nMarkerPos[oppositeDir][1]);
+                    boolean thisHasMarker = isMarkerRequired(thisMarker) || isMarkerOptional(thisMarker);
+                    boolean otherHasMarker = isMarkerRequired(otherMarker) || isMarkerOptional(otherMarker);
+
+                    if (thisHasMarker && otherHasMarker) {
                         carveDoor(gx, gy, dir);
 
-                        Room neighbor = hasNeighbor ? grid[ngx][ngy] : null;
+                        Room neighbor = grid[ngx][ngy];
                         DoorType doorType = classifyDoor(room, neighbor);
-
                         pasteDoorSchematic(templates, random, gx, gy, dir, doorType);
 
                         if (doorType == DoorType.WITHER && shouldPlaceWitherBlock(room, neighbor)) {
                             placeDoorBlock(gx, gy, dir, Block.COAL_BLOCK);
                         } else if (doorType == DoorType.BLOOD) {
                             placeDoorBlock(gx, gy, dir, Block.RED_CONCRETE);
+                        } else if (doorType == DoorType.STARTER) {
+                            placeDoorBlock(gx, gy, dir, Block.CHISELED_STONE_BRICKS);
                         }
                     }
 
-                    if (hasMarker) {
-                        instance.setBlock(mx, MARKER_DETECT_Y, mz, Block.STONE_BRICKS);
-                    }
+                    clearMarker(markerPos[dir][0], markerPos[dir][1]);
+                    clearMarker(nMarkerPos[oppositeDir][0], nMarkerPos[oppositeDir][1]);
                 }
             }
+        }
+    }
+
+    private void clearMarker(int mx, int mz) {
+        Block block = instance.getBlock(mx, MARKER_DETECT_Y, mz);
+        if (isMarkerRequired(block) || isMarkerOptional(block)) {
+            instance.setBlock(mx, MARKER_DETECT_Y, mz, Block.STONE_BRICKS);
         }
     }
 
     private boolean shouldPlaceWitherBlock(Room roomA, Room roomB) {
         if (roomA.type() == RoomType.FAIRY || roomB.type() == RoomType.FAIRY) {
             List<Room> mainPath = generator.mainPath();
-            int fairyIndex = mainPath.indexOf(roomA.type() == RoomType.FAIRY ? roomA : roomB);
-            int otherIndex = mainPath.indexOf(roomA.type() == RoomType.FAIRY ? roomB : roomA);
-            return otherIndex > fairyIndex;
+            Room fairy = roomA.type() == RoomType.FAIRY ? roomA : roomB;
+            Room other = roomA.type() == RoomType.FAIRY ? roomB : roomA;
+            int fairyIdx = mainPathIndex(fairy);
+            int otherIdx = mainPathIndex(other);
+            return otherIdx > fairyIdx;
         }
         return true;
+    }
+
+    private int mainPathIndex(Room room) {
+        List<Room> mainPath = generator.mainPath();
+        int idx = mainPath.indexOf(room);
+        if (idx >= 0) return idx;
+
+        LinkedHashMap<Room, RoomShapeHandler> handlers = generator.shapeHandlers();
+        RoomShapeHandler handler = handlers.get(room);
+        if (handler != null) {
+            for (Room cell : handler.rooms()) {
+                idx = mainPath.indexOf(cell);
+                if (idx >= 0) return idx;
+            }
+        }
+        return -1;
     }
 
     private DoorType classifyDoor(Room roomA, Room roomB) {
         if (roomA == null || roomB == null) return DoorType.NORMAL;
 
-        boolean aIsSpawn = roomA.type() == RoomType.SPAWN;
-        boolean bIsSpawn = roomB.type() == RoomType.SPAWN;
-        if (aIsSpawn || bIsSpawn) return DoorType.STARTER;
+        if (roomA.type() == RoomType.SPAWN || roomB.type() == RoomType.SPAWN) return DoorType.STARTER;
+        if (roomA.type() == RoomType.BLOOD || roomB.type() == RoomType.BLOOD) return DoorType.BLOOD;
 
-        boolean aIsBlood = roomA.type() == RoomType.BLOOD;
-        boolean bIsBlood = roomB.type() == RoomType.BLOOD;
-        if (aIsBlood || bIsBlood) return DoorType.BLOOD;
-
-        List<Room> mainPath = generator.mainPath();
-        boolean aOnPath = mainPath.contains(roomA);
-        boolean bOnPath = mainPath.contains(roomB);
-        if (aOnPath && bOnPath) return DoorType.WITHER;
+        if (areConsecutiveOnMainPath(roomA, roomB)
+                && isWitherEligible(roomA.type()) && isWitherEligible(roomB.type())) {
+            return DoorType.WITHER;
+        }
 
         return DoorType.NORMAL;
+    }
+
+    private boolean areConsecutiveOnMainPath(Room roomA, Room roomB) {
+        int idxA = mainPathIndex(roomA);
+        int idxB = mainPathIndex(roomB);
+        if (idxA < 0 || idxB < 0) return false;
+        return Math.abs(idxA - idxB) == 1;
+    }
+
+    private boolean isWitherEligible(RoomType type) {
+        return type == RoomType.NORMAL || type == RoomType.FAIRY;
     }
 
     private void pasteDoorSchematic(RoomTemplateLoader templates, Random random,
@@ -333,30 +433,13 @@ public class DungeonInstance {
         int cellZ = GRID_ORIGIN_Z + gy * CELL_STRIDE;
         int halfW = doorTemplate.width() / 2;
         int halfL = doorTemplate.length() / 2;
-        int center = WALL_CENTER;
 
         int doorX, doorZ, rotation;
         switch (dir) {
-            case 0 -> {
-                doorX = cellX + center - halfW;
-                doorZ = cellZ - GAP - halfL;
-                rotation = 3;
-            }
-            case 1 -> {
-                doorX = cellX + ROOM_SIZE - halfL;
-                doorZ = cellZ + center - halfW;
-                rotation = 0;
-            }
-            case 2 -> {
-                doorX = cellX + center - halfW;
-                doorZ = cellZ + ROOM_SIZE - halfL;
-                rotation = 1;
-            }
-            default -> {
-                doorX = cellX - GAP - halfL;
-                doorZ = cellZ + center - halfW;
-                rotation = 2;
-            }
+            case 0 -> { doorX = cellX + WALL_CENTER - halfW; doorZ = cellZ - GAP - halfL; rotation = 3; }
+            case 1 -> { doorX = cellX + ROOM_SIZE - halfL; doorZ = cellZ + WALL_CENTER - halfW; rotation = 0; }
+            case 2 -> { doorX = cellX + WALL_CENTER - halfW; doorZ = cellZ + ROOM_SIZE - halfL; rotation = 1; }
+            default -> { doorX = cellX - GAP - halfL; doorZ = cellZ + WALL_CENTER - halfW; rotation = 2; }
         }
 
         doorTemplate.paste(instance, doorX, FLOOR_Y + 2, doorZ, rotation);
@@ -460,13 +543,40 @@ public class DungeonInstance {
         return Math.min(ka, kb) * 10000L + Math.max(ka, kb);
     }
 
+    private List<RoomTemplate> getAllTemplates(Room room, RoomShapeHandler handler,
+                                              RoomTemplateLoader templates) {
+        return switch (room.type()) {
+            case SPAWN -> {
+                RoomTemplate t = templates.get("Special-Spawn");
+                yield t != null ? List.of(t) : List.of();
+            }
+            case BLOOD -> {
+                List<RoomTemplate> list = new ArrayList<>();
+                for (String name : new String[]{"Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red"}) {
+                    RoomTemplate t = templates.get(name);
+                    if (t != null) list.add(t);
+                }
+                yield list;
+            }
+            case FAIRY -> {
+                RoomTemplate t = templates.get("Special-Fairy");
+                yield t != null ? List.of(t) : List.of();
+            }
+            case MINIBOSS -> templates.getByType(RoomType.MINIBOSS);
+            case TRAP -> templates.getByType(RoomType.TRAP);
+            case PUZZLE -> templates.getByType(RoomType.PUZZLE);
+            case NORMAL -> {
+                RoomShape shape = handler != null ? handler.shape() : RoomShape.SINGLE;
+                yield templates.getByShape(shape);
+            }
+        };
+    }
 
     private RoomTemplate pickTemplate(Random random, Room room, RoomShapeHandler handler,
                                       RoomTemplateLoader templates, Set<String> used) {
         return switch (room.type()) {
             case SPAWN -> templates.get("Special-Spawn");
             case BLOOD -> pickFromNames(random, templates, used,
-                    //Temporary
                     "Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red");
             case FAIRY -> templates.get("Special-Fairy");
             case MINIBOSS -> templates.pickForType(random, RoomType.MINIBOSS, used);
@@ -493,8 +603,6 @@ public class DungeonInstance {
         used.add(picked);
         return templates.get(picked);
     }
-
-    // --- Accessors ---
 
     public Pos spawnPosition() {
         Room spawn = generator.spawnRoom();

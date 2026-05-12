@@ -395,6 +395,69 @@ public class DungeonGenerator {
         return visited.size() == points.length;
     }
 
+    public void printGrid(long seed) {
+        System.out.printf("Rooms seed %d%n", seed);
+        Map<Room, String> labels = new HashMap<>();
+        Set<RoomShapeHandler> seen = new HashSet<>();
+
+        for (int y = 0; y < gridSize; y++) {
+            for (int x = 0; x < gridSize; x++) {
+                Room room = grid[x][y];
+                if (labels.containsKey(room)) continue;
+                RoomShapeHandler handler = shapeHandlers.get(room);
+
+                String label;
+                if (room.type() != RoomType.NORMAL) {
+                    label = room.type().name().substring(0, 1).toLowerCase()
+                            + room.type().name().substring(1).toLowerCase();
+                } else if (handler != null && !seen.contains(handler)) {
+                    seen.add(handler);
+                    label = handler.shape().prefix();
+                    for (Room r : handler.rooms()) labels.put(r, label);
+                    continue;
+                } else if (handler != null) {
+                    continue;
+                } else {
+                    label = "1x1";
+                }
+                labels.put(room, label);
+            }
+        }
+
+        for (int y = 0; y < gridSize; y++) {
+            StringBuilder roomLine = new StringBuilder();
+            StringBuilder connLine = new StringBuilder();
+
+            for (int x = 0; x < gridSize; x++) {
+                Room room = grid[x][y];
+                String label = labels.getOrDefault(room, "???");
+                String padded = String.format("%-7s", "[" + label + "]");
+                roomLine.append(padded);
+
+                if (x < gridSize - 1) {
+                    Room right = grid[x + 1][y];
+                    boolean sameShape = shapeHandlers.get(room) != null
+                            && shapeHandlers.get(room) == shapeHandlers.get(right);
+                    boolean connected = room.connections().contains(right) || sameShape;
+                    roomLine.append(connected ? "---" : "   ");
+                }
+
+                if (y < gridSize - 1) {
+                    Room below = grid[x][y + 1];
+                    boolean sameShape = shapeHandlers.get(room) != null
+                            && shapeHandlers.get(room) == shapeHandlers.get(below);
+                    boolean connected = room.connections().contains(below) || sameShape;
+                    String pad = connected ? "  |  " : "     ";
+                    connLine.append(String.format("%-7s", pad));
+                    if (x < gridSize - 1) connLine.append("   ");
+                }
+            }
+
+            System.out.println(roomLine);
+            if (connLine.length() > 0) System.out.println(connLine);
+        }
+    }
+
     // --- Accessors ---
 
     public Room[][] grid() { return grid; }

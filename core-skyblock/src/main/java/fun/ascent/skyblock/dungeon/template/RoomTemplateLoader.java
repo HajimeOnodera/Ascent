@@ -50,18 +50,18 @@ public class RoomTemplateLoader {
     private void categorize(RoomTemplate template) {
         String name = template.name();
 
-        if (name.startsWith("Puzzle-"))         { byType.get(RoomType.PUZZLE).add(template); return; }
-        if (name.startsWith("Miniboss-"))       { byType.get(RoomType.MINIBOSS).add(template); return; }
-        if (name.startsWith("Special-Trap"))    { byType.get(RoomType.TRAP).add(template); return; }
+        if (name.startsWith("Puzzle-")) { byType.get(RoomType.PUZZLE).add(template); return; }
+        if (name.startsWith("Miniboss-")) { byType.get(RoomType.MINIBOSS).add(template); return; }
+        if (name.startsWith("Special-Trap")) { byType.get(RoomType.TRAP).add(template); return; }
         if (name.startsWith("Special-") || name.startsWith("Fairy")) return;
         if (name.endsWith("Door") || name.contains("Door-")) return;
 
-        if (name.startsWith("1x1-"))      byShape.get(RoomShape.SINGLE).add(template);
+        if (name.startsWith("1x1-")) byShape.get(RoomShape.SINGLE).add(template);
         else if (name.startsWith("1x2-")) byShape.get(RoomShape.DOUBLE).add(template);
         else if (name.startsWith("1x3-")) byShape.get(RoomShape.TRIPLE).add(template);
         else if (name.startsWith("1x4-")) byShape.get(RoomShape.QUAD).add(template);
         else if (name.startsWith("2x2-")) byShape.get(RoomShape.SQUARE).add(template);
-        else if (name.startsWith("L-"))    byShape.get(RoomShape.L_SHAPE).add(template);
+        else if (name.startsWith("L-")) byShape.get(RoomShape.L_SHAPE).add(template);
     }
 
     public RoomTemplate get(String name) {
@@ -78,6 +78,10 @@ public class RoomTemplateLoader {
 
     public List<RoomTemplate> getByShape(RoomShape shape) {
         return byShape.getOrDefault(shape, List.of());
+    }
+
+    public List<RoomTemplate> getByType(RoomType type) {
+        return byType.getOrDefault(type, List.of());
     }
 
     private RoomTemplate pickUnique(Random random, List<RoomTemplate> pool, Set<String> used) {

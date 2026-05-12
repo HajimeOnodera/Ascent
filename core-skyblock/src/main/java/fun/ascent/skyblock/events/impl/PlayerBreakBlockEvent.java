@@ -2,6 +2,7 @@ package fun.ascent.skyblock.events.impl;
 
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 
 public class PlayerBreakBlockEvent extends SEvent<PlayerBlockBreakEvent> {
@@ -9,6 +10,8 @@ public class PlayerBreakBlockEvent extends SEvent<PlayerBlockBreakEvent> {
     @Override
     public void onEvent(PlayerBlockBreakEvent event) {
         if(event.getPlayer() instanceof SkyblockPlayer pl){
+            if (pl.getGameMode() == GameMode.CREATIVE) return;
+
             event.setCancelled(true);
 
             fun.ascent.skyblock.blocks.BlockManager.handleBlockBreak(
@@ -17,7 +20,6 @@ public class PlayerBreakBlockEvent extends SEvent<PlayerBlockBreakEvent> {
                     event.getBlockPosition().asPos(),
                     event.getBlock()
             );
-
         }
     }
 }
