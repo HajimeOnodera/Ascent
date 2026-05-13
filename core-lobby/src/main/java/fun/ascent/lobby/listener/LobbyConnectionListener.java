@@ -31,7 +31,6 @@ public class LobbyConnectionListener {
             }
 
             player.teleport(world.spawn());
-            player.sendMessage(text("<yellow>Welcome to <gold>Ascent<yellow>! Pick a server to begin."));
 
             AchievementManager.registerFirstJoin(player);
             AchievementManager.unlock(player, AchievementCategory.GENERAL, "Achievement Get! Ascent Server!");

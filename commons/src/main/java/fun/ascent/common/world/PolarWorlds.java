@@ -25,18 +25,28 @@ public final class PolarWorlds {
      */
     public static ChunkLoader setupMemoryPolarWorld(Path templatePath, int radius) throws IOException {
         PolarWorld world;
-        if (Files.isDirectory(templatePath)) {
-            // Convert Anvil directory to Polar world in memory
-            if (radius > 0) {
-                world = AnvilPolar.anvilToPolar(templatePath, ChunkSelector.radius(radius));
+        try {
+            if (Files.isDirectory(templatePath)) {
+                // Convert Anvil directory to Polar world in memory
+                if (radius > 0) {
+                    world = AnvilPolar.anvilToPolar(templatePath, ChunkSelector.radius(radius));
+                } else {
+                    world = AnvilPolar.anvilToPolar(templatePath);
+                }
+            } else if (templatePath.toString().endsWith(".polar")) {
+                // Read Polar file directly into memory
+                world = PolarReader.read(Files.readAllBytes(templatePath));
             } else {
-                world = AnvilPolar.anvilToPolar(templatePath);
+                throw new IllegalArgumentException("Unsupported template format for memory polar world: " + templatePath);
             }
-        } else if (templatePath.toString().endsWith(".polar")) {
-            // Read Polar file directly into memory
-            world = PolarReader.read(Files.readAllBytes(templatePath));
-        } else {
-            throw new IllegalArgumentException("Unsupported template format for memory polar world: " + templatePath);
+        } catch (Exception e) {
+            System.err.println("[PolarWorlds] CRITICAL ERROR: Failed to convert/load world from " + templatePath);
+            System.err.println("[PolarWorlds] Error detail: " + e.getMessage());
+            if (e instanceof IllegalArgumentException && e.getMessage().contains("grindstone")) {
+                System.err.println("[PolarWorlds] DETECTED GRINDSTONE PROPERTY ERROR. This is likely a world compatibility issue.");
+            }
+            // Fallback to empty world to prevent crash
+            world = new PolarWorld();
         }
         
         return new PolarLoader(world);

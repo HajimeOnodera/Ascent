@@ -24,6 +24,7 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
+import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
 
@@ -61,6 +62,7 @@ public class Main {
         SkyblockChatListener.register();
         ProfileListener.register(MinecraftServer.getGlobalEventHandler());
         DungeonManager.get().initialize();
+        IslandManager.runVacantLoop();
 
 
         System.out.println("[Skyblock] Starting the Server");
@@ -78,6 +80,7 @@ public class Main {
     }
 
     public static void shutdown() {
+        IslandManager.saveAll();
         WorldHandler.shutdown();
         MinecraftServer.stopCleanly();
     }

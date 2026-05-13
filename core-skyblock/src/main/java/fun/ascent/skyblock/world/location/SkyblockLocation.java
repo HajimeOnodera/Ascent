@@ -56,6 +56,8 @@ public enum SkyblockLocation {
 
     VOID_SEPULTURE("<light_purple>Void Sepulture", new Point(-574, -320, 7), new Point(-563, -315, 9)),
 
+    PRIVATE_ISLAND("<green>Private Island", new Point(0, 0), new Point(0, 0)),
+
     NONE("<gray>None", new Point(0, 0), new Point(0, 0));
 
     @Getter private final String name;
@@ -114,6 +116,10 @@ public enum SkyblockLocation {
 
         if (worldName.contains("garden")) {
             return GARDEN;
+        }
+
+        if (instance.getTag(fun.ascent.skyblock.island.Island.WORLD_ID_TAG) != null) {
+            return PRIVATE_ISLAND;
         }
         
         int x = pos.blockX();

@@ -1,14 +1,14 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.skyblock.island.Island;
+import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.Collection;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
-import fun.ascent.skyblock.world.World;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -18,7 +18,7 @@ public class SkyblockProfile {
     public UUID profileID;
     public List<ProfilePlayer> profilePlayers;
     public Map<String, Integer> unlockedCollections = new HashMap<>();
-    public World island;
+    public Island island;
     @Getter
     public Pos spawnPos;
     @Getter
@@ -59,12 +59,8 @@ public class SkyblockProfile {
     }
 
     public void generateIsland() {
-        island = new World(profileID.toString(),
-                new File("maps/players/" + profileID + ".polar"),
-                new File("maps/privisland.polar"),
-                true);
-
-        island.getInstance();
+        island = IslandManager.getIsland(profileID);
+        island.load();
     }
 
     public String generateRandomProfileName(){

@@ -44,7 +44,7 @@ public record ProxyConfig(List<ProxyRoute> routes, String defaultServer) {
                 });
 
         if (routes.isEmpty()) {
-            routes.add(new ProxyRoute("lobby", List.of("lobby", "hub")));
+            routes.add(new ProxyRoute("lobby", List.of("lobby", "l")));
             routes.add(new ProxyRoute("skyblock", List.of("skyblock", "sb", "island")));
         }
 
@@ -69,7 +69,7 @@ public record ProxyConfig(List<ProxyRoute> routes, String defaultServer) {
     private static Properties defaults() {
         Properties properties = new Properties();
         properties.setProperty("default-server", "lobby");
-        properties.setProperty("server.lobby", "lobby,hub");
+        properties.setProperty("server.lobby", "lobby,l");
         properties.setProperty("server.skyblock", "skyblock,sb,island");
         return properties;
     }

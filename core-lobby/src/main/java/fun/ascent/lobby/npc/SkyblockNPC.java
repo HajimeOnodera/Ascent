@@ -4,7 +4,7 @@ import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
 import fun.ascent.common.redis.ServerLookup;
-import fun.ascent.lobby.transfer.ProxyTransfer;
+import fun.ascent.common.util.ProxyTransfer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;

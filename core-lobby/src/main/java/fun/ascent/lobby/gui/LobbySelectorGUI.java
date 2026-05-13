@@ -6,7 +6,7 @@ import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.redis.ServerPing;
 import fun.ascent.lobby.Main;
 import fun.ascent.lobby.cache.ServerInfoCache;
-import fun.ascent.lobby.transfer.ProxyTransfer;
+import fun.ascent.common.util.ProxyTransfer;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;

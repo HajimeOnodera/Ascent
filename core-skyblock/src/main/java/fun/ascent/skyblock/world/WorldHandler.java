@@ -25,7 +25,6 @@ import java.util.UUID;
 
 public class WorldHandler {
 
-
     public static HashMap<String, World> worlds = new HashMap<>();
     public static InstanceManager instanceManager;
     public static WorldRegistry WORLD_REGISTRY = new WorldRegistry();

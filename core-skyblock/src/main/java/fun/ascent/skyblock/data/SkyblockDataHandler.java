@@ -112,27 +112,39 @@ public class SkyblockDataHandler {
         SKILLS("skills", DatapointMapDouble.class, new DatapointMapDouble("skills", new HashMap<>()),
             (player, dp) -> {
                 Map<String, Double> map = (Map<String, Double>) dp.getValue();
+                var skillData = player.getSkillData();
+                if (skillData == null) return;
                 for (SkillType type : SkillType.values()) {
                     if (map.containsKey(type.name())) {
-                        Objects.requireNonNull(player.getSkillData()).setRawXp(type, map.get(type.name()));
+                        skillData.setRawXp(type, map.get(type.name()));
                     }
                 }
             },
             (player) -> {
+                var skillData = player.getSkillData();
+                if (skillData == null) return null;
                 Map<String, Double> map = new HashMap<>();
                 for (SkillType type : SkillType.values()) {
-                    map.put(type.name(), Objects.requireNonNull(player.getSkillData()).getRawXp(type));
+                    map.put(type.name(), skillData.getRawXp(type));
                 }
                 return new DatapointMapDouble("skills", map);
             }),
 
         LEVEL("level", DatapointObject.class, new DatapointObject<>("level", new SkyblockLevel(), SkyblockLevel.class),
             (player, dp) -> player.setSkyblockLevel((SkyblockLevel) dp.getValue()),
-            (player) -> new DatapointObject<>("level", player.getSkyblockLevel(), SkyblockLevel.class)),
+            (player) -> {
+                var level = player.getSkyblockLevel();
+                if (level == null) return null;
+                return new DatapointObject<>("level", level, SkyblockLevel.class);
+            }),
 
         HOTM("hotm", DatapointObject.class, new DatapointObject<>("hotm", new HotmData(), HotmData.class),
             (player, dp) -> player.setSkyblockHotmData((HotmData) dp.getValue()),
-            (player) -> new DatapointObject<>("hotm", player.getSkyblockHotmData(), HotmData.class)),
+            (player) -> {
+                var hotm = player.getSkyblockHotmData();
+                if (hotm == null) return null;
+                return new DatapointObject<>("hotm", hotm, HotmData.class);
+            }),
 
         INVENTORY("inventory", DatapointInventory.class, new DatapointInventory("inventory", new ArrayList<>()),
             (player, dp) -> {

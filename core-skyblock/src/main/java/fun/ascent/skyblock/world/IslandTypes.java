@@ -1,5 +1,7 @@
 package fun.ascent.skyblock.world;
 
+import lombok.Getter;
+
 public enum IslandTypes {
     PRIVATE_ISLAND("Private Island"),
     GARDEN("Garden"),
@@ -18,14 +20,12 @@ public enum IslandTypes {
     JERRYS_WORKSHOP("Jerry's Workshop"),
     RIFT("Rift"),
     BACKWATER_BAYOU("Backwater Bayou"),
-    GALATEA("Galatea"),;
+    GALATEA("Galatea");
 
-    private final String display;
+    @Getter
+    private final String locationDisplay;
 
     IslandTypes(String display) {
-        this.display = display;
-    }
-    public String getLocationDisplay() {
-        return display;
+        this.locationDisplay = display;
     }
 }

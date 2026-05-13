@@ -1,4 +1,4 @@
-package fun.ascent.lobby.transfer;
+package fun.ascent.common.util;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.NetworkBuffer;

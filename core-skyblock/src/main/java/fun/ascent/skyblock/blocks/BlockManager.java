@@ -4,6 +4,7 @@ import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
+import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.world.location.SkyblockLocation;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -28,17 +29,28 @@ public class BlockManager {
     public static void initialize() {
         REGISTRY.clear();
 
-        // Example: Hub Farm Wheat
+        // FARMING
         register(SkyblockBlock.builder()
                 .vanillaMaterial(Material.WHEAT)
                 .skyblockItemId("WHEAT")
                 .baseDropAmount(1)
                 .fortuneApplicable(true)
-                .skillType(fun.ascent.skyblock.player.skill.SkillType.FARMING)
+                .skillType(SkillType.FARMING)
                 .xpAmount(4.0)
                 .respawnDelayTicks(60)
                 .replacementBlock(Block.DIRT)
-                .validLocations(List.of(SkyblockLocation.FARM))
+                .validLocations(List.of(SkyblockLocation.FARM, SkyblockLocation.PRIVATE_ISLAND))
+                .build());
+
+        // MINING
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.COBBLESTONE)
+                .skyblockItemId("COBBLESTONE")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(1.0)
+                .validLocations(List.of(SkyblockLocation.COAL_MINE, SkyblockLocation.PRIVATE_ISLAND))
                 .build());
 
         register(SkyblockBlock.builder()
@@ -46,16 +58,27 @@ public class BlockManager {
                 .skyblockItemId("LAPIS_LAZULI")
                 .baseDropAmount(3)
                 .fortuneApplicable(true)
-                .skillType(fun.ascent.skyblock.player.skill.SkillType.MINING)
+                .skillType(SkillType.MINING)
                 .xpAmount(12.0)
                 .respawnDelayTicks(200)
                 .replacementBlock(Block.BEDROCK)
-                .validLocations(List.of(SkyblockLocation.LAPIS))
+                .validLocations(List.of(SkyblockLocation.LAPIS, SkyblockLocation.PRIVATE_ISLAND))
+                .build());
+
+        // FORAGING
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.OAK_LOG)
+                .skyblockItemId("OAK_WOOD")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validLocations(List.of(SkyblockLocation.FOREST, SkyblockLocation.PRIVATE_ISLAND))
                 .build());
     }
 
     public static void register(SkyblockBlock block) {
-        REGISTRY.computeIfAbsent(block.vanillaMaterial, k -> new ArrayList<>()).add(block);
+        REGISTRY.computeIfAbsent(block.vanillaMaterial, _ -> new ArrayList<>()).add(block);
     }
 
     public static SkyblockBlock getBlock(Material material, SkyblockLocation location) {
@@ -112,6 +135,10 @@ public class BlockManager {
 
         if (sbBlock.skillType != null && sbBlock.xpAmount > 0) {
             SkillRegistry.grantXp(player, sbBlock.skillType, sbBlock.xpAmount);
+        }
+
+        if (player.getActiveProfile() != null && sbBlock.skyblockItemId != null) {
+            player.getActiveProfile().updateCollection(sbBlock.skyblockItemId, dropAmount);
         }
 
         if (sbBlock.respawnDelayTicks > 0 && sbBlock.replacementBlock != null) {

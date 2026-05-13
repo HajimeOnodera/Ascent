@@ -53,8 +53,7 @@ public class SkyblockPersistence {
                 UUID uuid = UUID.fromString(uuidStr);
                 Document playerDoc = membersDoc.get(uuidStr, Document.class);
                 
-                ProfilePlayer pp = new ProfilePlayer(profileID, null);
-                pp.playerUUID = uuid;
+                ProfilePlayer pp = new ProfilePlayer(profileID, uuid);
                 pp.getDataHandler().load(playerDoc);
                 
                 profile.profilePlayers.add(pp);

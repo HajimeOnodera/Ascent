@@ -46,6 +46,12 @@ public class ProfilePlayer {
 
     private SkyblockDataHandler dataHandler;
 
+    public ProfilePlayer(UUID profileID, UUID playerUUID) {
+        this.profileID = profileID;
+        this.playerUUID = playerUUID;
+        this.dataHandler = new SkyblockDataHandler(this.playerUUID, this.profileID);
+    }
+
     public ProfilePlayer(UUID profileID, SkyblockPlayer player) {
         this.profileID = profileID;
         this.playerUUID = player != null ? player.getUuid() : null;
@@ -55,15 +61,19 @@ public class ProfilePlayer {
 
     public void update() {
         if (skyblockPlayer == null) return;
-        this.inventory = Arrays.asList(skyblockPlayer.getInventory().getItemStacks());
-        this.armor = List.of(
-                skyblockPlayer.getEquipment(EquipmentSlot.BOOTS),
-                skyblockPlayer.getEquipment(EquipmentSlot.LEGGINGS),
-                skyblockPlayer.getEquipment(EquipmentSlot.CHESTPLATE),
-                skyblockPlayer.getEquipment(EquipmentSlot.HELMET)
-        );
-        // Sync to handler
-        dataHandler.syncFromPlayer(skyblockPlayer);
+        
+        // Only sync live data if this is the active profile
+        if (skyblockPlayer.getActiveProfile() != null && skyblockPlayer.getActiveProfile().profileID.equals(this.profileID)) {
+            this.inventory = Arrays.asList(skyblockPlayer.getInventory().getItemStacks());
+            this.armor = List.of(
+                    skyblockPlayer.getEquipment(EquipmentSlot.BOOTS),
+                    skyblockPlayer.getEquipment(EquipmentSlot.LEGGINGS),
+                    skyblockPlayer.getEquipment(EquipmentSlot.CHESTPLATE),
+                    skyblockPlayer.getEquipment(EquipmentSlot.HELMET)
+            );
+            // Sync to handler
+            dataHandler.syncFromPlayer(skyblockPlayer);
+        }
     }
 
 
@@ -146,9 +156,9 @@ public class ProfilePlayer {
         stats.put(stat.id, stat.addCurValue(amount));
     }
 
-    public fun.ascent.skyblock.data.SkyblockDataHandler getDataHandler() {
+    public SkyblockDataHandler getDataHandler() {
         if (dataHandler == null) {
-            dataHandler = new fun.ascent.skyblock.data.SkyblockDataHandler(playerUUID, profileID);
+            dataHandler = new SkyblockDataHandler(playerUUID, profileID);
         }
         return dataHandler;
     }
