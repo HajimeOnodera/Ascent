@@ -27,8 +27,11 @@ import fun.ascent.skyblock.player.skill.listener.SkillListeners;
 import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Main {
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     /** Host used by Velocity to reach this container. */
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
@@ -65,9 +68,9 @@ public class Main {
         IslandManager.runVacantLoop();
 
 
-        System.out.println("[Skyblock] Starting the Server");
+        LOGGER.info("Starting SkyBlock server on {}:{}", config.host(), config.port());
         server.start(config.host(), config.port());
-        System.out.println("[Skyblock] Started the Server");
+        LOGGER.info("SkyBlock server started successfully!");
 
         String serverName = System.getenv("ASCENT_SERVER_NAME");
         if (serverName == null || serverName.isBlank() || serverName.equals("skyblock")) {

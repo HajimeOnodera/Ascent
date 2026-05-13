@@ -118,7 +118,8 @@ public enum SkyblockLocation {
             return GARDEN;
         }
 
-        if (instance.getTag(fun.ascent.skyblock.island.Island.WORLD_ID_TAG) != null) {
+        if (instance.getTag(fun.ascent.skyblock.world.WorldHandler.worldID) != null && 
+            instance.getTag(fun.ascent.skyblock.world.WorldHandler.worldID).length() > 10) { // UUID length check
             return PRIVATE_ISLAND;
         }
         

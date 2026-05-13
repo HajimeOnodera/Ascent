@@ -1,0 +1,19 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <!-- Silence noisy libraries -->
+    <logger name="org.mongodb.driver" level="WARN" />
+    <logger name="org.reflections" level="WARN" />
+    <logger name="io.netty" level="WARN" />
+    
+    <!-- Silence internal noisy systems if needed -->
+    <logger name="fun.ascent.skyblock.world.WorldHandler" level="INFO" />
+</configuration>

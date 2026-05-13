@@ -9,18 +9,32 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
 
     @Override
     public void onEvent(AsyncPlayerConfigurationEvent event) {
-        if (WorldHandler.getLobby() == null) {
-            return;
-        }
+        WorldHandler.getLobby();
+
         SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
         if (player.getActiveProfile() != null && player.getActiveProfile().island != null) {
+            try {
+                // Load and wait for island instance
+                net.minestom.server.instance.InstanceContainer islandInstance = player.getActiveProfile().island.load().join();
+                if (islandInstance != null) {
+                    event.setSpawningInstance(islandInstance);
+                    player.setRespawnPoint(player.getActiveProfile().getSpawnPos());
+                    return;
+                }
+            } catch (Exception e) {
+                System.err.println("[Skyblock] Failed to load island for " + player.getUsername() + ": " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
 
-            event.setSpawningInstance(player.getActiveProfile().island.getInstance());
-            player.setRespawnPoint(player.getActiveProfile().getSpawnPos());
-
-        } else {
+        // Fallback to Lobby
+        if (WorldHandler.getLobby() != null) {
             event.setSpawningInstance(WorldHandler.getLobby());
             player.setRespawnPoint(WorldHandler.getLobbySpawn());
+        } else {
+            // Last resort: find any instance
+            System.err.println("[Skyblock] Lobby is null, falling back to any available instance!");
+            net.minestom.server.MinecraftServer.getInstanceManager().getInstances().stream().findFirst().ifPresent(event::setSpawningInstance);
         }
     }
 }

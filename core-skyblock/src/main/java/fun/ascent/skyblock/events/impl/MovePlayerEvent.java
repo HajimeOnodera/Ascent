@@ -29,7 +29,9 @@ public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
             if (sbPlayer.getActiveProfile() != null) {
                 SkyblockProfile profile = sbPlayer.getActiveProfile();
                 Instance container = event.getInstance();
-                if (event.getInstance().getTag(WorldHandler.worldID).equals(profile.island.getName())){
+                String worldId = container.getTag(WorldHandler.worldID);
+                
+                if (worldId != null && worldId.equals(profile.island.getName())){
                     if(WorldHandler.getLobby() == null) {
                         System.out.println("[WORLD] Lobby World is NULL");
                         return;
@@ -38,7 +40,8 @@ public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
                         event.getPlayer().setInstance(WorldHandler.getLobby(),WorldHandler.getLobbySpawn());
                     }
                 }
-                if(event.getInstance().getTag(WorldHandler.worldID).equals("lobby")){
+                
+                if(worldId != null && worldId.equals("lobby")){
                     InstanceContainer playerIsland = profile.island.getInstance();
                     if(container.getBlock(event.getNewPosition()).name().equals(Block.END_PORTAL.name())){
                         if(newLoc == SkyblockLocation.VILLAGE){

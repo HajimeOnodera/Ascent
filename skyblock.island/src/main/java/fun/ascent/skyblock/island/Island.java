@@ -8,7 +8,6 @@ import net.hollowcube.polar.PolarWriter;
 import net.hollowcube.polar.PolarWorld;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.tag.Tag;
 import org.bson.Document;
 
 import java.io.IOException;
@@ -16,7 +15,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class Island {
-    public static final Tag<String> WORLD_ID_TAG = Tag.String("worldID");
 
     private final UUID islandId;
     @Getter
@@ -52,12 +50,12 @@ public class Island {
                 // Create instance on the main thread (Minestom requirement)
                 CompletableFuture<Void> syncFuture = new CompletableFuture<>();
                 MinecraftServer.getSchedulerManager().submitTask(() -> {
-                    this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
-                    this.instance.setChunkLoader(new PolarLoader(polarWorld));
-                    this.instance.setTag(WORLD_ID_TAG, islandId.toString());
+                    this.instance = net.minestom.server.MinecraftServer.getInstanceManager().createInstanceContainer();
+                    this.instance.setChunkLoader(new net.hollowcube.polar.PolarLoader(polarWorld));
+                    this.instance.setTag(net.minestom.server.tag.Tag.String("world"), islandId.toString());
                     this.loaded = true;
                     syncFuture.complete(null);
-                    return null;
+                    return net.minestom.server.timer.TaskSchedule.stop();
                 }, net.minestom.server.timer.ExecutionType.TICK_END);
                 
                 syncFuture.join();

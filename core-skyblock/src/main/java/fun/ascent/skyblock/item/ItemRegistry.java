@@ -12,9 +12,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ItemRegistry {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemRegistry.class);
     private static final Map<String, SkyblockItem> ITEMS = new HashMap<>();
 
     public static void init() {
@@ -23,10 +25,9 @@ public class ItemRegistry {
             for (SkyblockItemData data : rawItems) {
                 ITEMS.put(data.id(), convert(data));
             }
-            System.out.println("[ItemRegistry] Loaded " + ITEMS.size() + " items.");
+            LOGGER.info("Loaded {} items from Hypixel API.", ITEMS.size());
         } catch (Exception e) {
-            System.err.println("[ItemRegistry] Failed to load items from Hypixel API: " + e.getMessage());
-            e.printStackTrace();
+            LOGGER.error("Failed to load items from Hypixel API: {}", e.getMessage());
         }
     }
 

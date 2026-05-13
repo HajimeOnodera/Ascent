@@ -13,8 +13,11 @@ import fun.ascent.database.MapRepository;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class PolarWorlds {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PolarWorlds.class);
 
     private PolarWorlds() {
     }
@@ -23,7 +26,7 @@ public final class PolarWorlds {
      * Loads a world into memory using Polar.
      * Useful for transient instances like minigame maps or Skyblock islands.
      */
-    public static ChunkLoader setupMemoryPolarWorld(Path templatePath, int radius) throws IOException {
+    public static ChunkLoader setupMemoryPolarWorld(Path templatePath, int radius) {
         PolarWorld world;
         try {
             if (Files.isDirectory(templatePath)) {
@@ -40,10 +43,10 @@ public final class PolarWorlds {
                 throw new IllegalArgumentException("Unsupported template format for memory polar world: " + templatePath);
             }
         } catch (Exception e) {
-            System.err.println("[PolarWorlds] CRITICAL ERROR: Failed to convert/load world from " + templatePath);
-            System.err.println("[PolarWorlds] Error detail: " + e.getMessage());
+            LOGGER.error("CRITICAL ERROR: Failed to convert/load world from {}", templatePath);
+            LOGGER.error("Error detail: {}", e.getMessage());
             if (e instanceof IllegalArgumentException && e.getMessage().contains("grindstone")) {
-                System.err.println("[PolarWorlds] DETECTED GRINDSTONE PROPERTY ERROR. This is likely a world compatibility issue.");
+                LOGGER.warn("DETECTED GRINDSTONE PROPERTY ERROR. This is likely a world compatibility issue.");
             }
             // Fallback to empty world to prevent crash
             world = new PolarWorld();
@@ -62,14 +65,14 @@ public final class PolarWorlds {
                 PolarWorld world = PolarReader.read(mongoData);
                 stripEntities(world); // Extra safeguard
                 instance.setChunkLoader(new PolarLoader(world).setLoadLighting(true));
-                System.out.println(logPrefix + " Loaded Polar world '" + worldId + "' from MongoDB");
+                LOGGER.info("{} Loaded Polar world '{}' from MongoDB", logPrefix, worldId);
                 return true;
             }
 
             // 2. Fallback to local file or conversion
             ensurePolarWorld(polarPath, anvilPath, logPrefix);
             if (!Files.isRegularFile(polarPath)) {
-                System.err.println(logPrefix + " No Polar world found at " + polarPath.toAbsolutePath());
+                LOGGER.error("{} No Polar world found at {}", logPrefix, polarPath.toAbsolutePath());
                 return false;
             }
 
@@ -82,11 +85,10 @@ public final class PolarWorlds {
             MapRepository.saveWorld(worldId, strippedData);
             
             instance.setChunkLoader(new PolarLoader(world).setLoadLighting(true));
-            System.out.println(logPrefix + " Loaded, stripped entities, and saved Polar world '" + worldId + "' to MongoDB");
+            LOGGER.info("{} Loaded, stripped entities, and saved Polar world '{}' to MongoDB", logPrefix, worldId);
             return true;
         } catch (Exception e) {
-            System.err.println(logPrefix + " Failed to load/convert Polar world from " + polarPath.toAbsolutePath());
-            e.printStackTrace();
+            LOGGER.error("{} Failed to load/convert Polar world from {}", logPrefix, polarPath.toAbsolutePath(), e);
             return false;
         }
     }
@@ -127,9 +129,9 @@ public final class PolarWorlds {
         }
 
         Files.createDirectories(polarPath.getParent());
-        System.out.println(logPrefix + " Converting Anvil world to Polar: " + anvilPath.toAbsolutePath());
+        LOGGER.info("{} Converting Anvil world to Polar: {}", logPrefix, anvilPath.toAbsolutePath());
         PolarWorld world = AnvilPolar.anvilToPolar(anvilPath);
         Files.write(polarPath, PolarWriter.write(world));
-        System.out.println(logPrefix + " Wrote Polar world to " + polarPath.toAbsolutePath());
+        LOGGER.info("{} Wrote Polar world to {}", logPrefix, polarPath.toAbsolutePath());
     }
 }

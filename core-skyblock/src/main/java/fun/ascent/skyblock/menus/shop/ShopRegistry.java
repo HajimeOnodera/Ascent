@@ -6,15 +6,18 @@ import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Set;
 
-public class ShopRegistry {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class ShopRegistry {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ShopRegistry.class);
     public static HashMap<String,ShopData> shops = new HashMap<>();
 
     public static void initialise(){
         shops.clear();
         Reflections reflections = new Reflections("fun.ascent.skyblock.menus.shop");
-        Set<Class<? extends ShopData>> shops = reflections.getSubTypesOf(ShopData.class);
-        for (Class<? extends ShopData> shop : shops) {
+        Set<Class<? extends ShopData>> shopsFound = reflections.getSubTypesOf(ShopData.class);
+        for (Class<? extends ShopData> shop : shopsFound) {
             if (Modifier.isAbstract(shop.getModifiers()) || shop.isInterface()) {
                 continue;
             }
@@ -22,16 +25,13 @@ public class ShopRegistry {
                 ShopData definition  = shop.getDeclaredConstructor().newInstance();
                 register(definition);
             } catch (Exception e) {
-                System.err.println("[Skyblock] Failed to register CMD: " + shop.getSimpleName());
-                e.printStackTrace();
+                LOGGER.error("Failed to register shop definition: {}", shop.getSimpleName(), e);
             }
-
         }
+        LOGGER.info("Initialized {} shops.", shops.size());
     }
 
     public static void register(ShopData data){
         shops.put(data.shopID,data);
-        System.out.println("[SHOPS] Registered: " + data.shopID);
     }
-
 }

@@ -16,14 +16,16 @@ import net.minestom.server.tag.Tag;
 import org.reflections.Reflections;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class WorldHandler {
+    private static final Logger LOGGER = LoggerFactory.getLogger(WorldHandler.class);
 
     public static HashMap<String, World> worlds = new HashMap<>();
     public static InstanceManager instanceManager;
@@ -62,7 +64,7 @@ public class WorldHandler {
     public static void spawnNPCS(World world){
         Reflections reflections = new Reflections("fun.ascent.skyblock.npc.village");
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
-        System.out.println("[NPC] Trying to spawn " + npcs.size() + " NPCS");
+        LOGGER.info("Trying to spawn {} NPCs in village", npcs.size());
 
         for (Class<? extends NpcDefinition> npc : npcs) {
             if (Modifier.isAbstract(npc.getModifiers()) || npc.isInterface()) {
@@ -78,13 +80,12 @@ public class WorldHandler {
                 SkyblockNPCManager.registerNPC(newNpc);
                 newNpc.spawn();
 
-                System.out.println("[NPC] Spawned " + npc.getSimpleName() + " at " + newNpc.position());
+                LOGGER.info("Spawned {} at {}", npc.getSimpleName(), newNpc.position());
 
             } catch (NoSuchMethodException e) {
-                System.err.println("[Skyblock] Failed to spawn NPC: " + npc.getSimpleName() + " (Missing Instance Constructor)");
+                LOGGER.error("Failed to spawn NPC: {} (Missing Instance Constructor)", npc.getSimpleName());
             } catch (Exception e) {
-                System.err.println("[Skyblock] Failed to register NPC: " + npc.getSimpleName());
-                e.printStackTrace();
+                LOGGER.error("Failed to register NPC: {}", npc.getSimpleName(), e);
             }
         }
     }
@@ -101,8 +102,8 @@ public class WorldHandler {
             }
             register(world, container);
             return container;
-        } catch (IOException e) {
-            System.out.println("[SKYBLOCK] Error While Creating World: " + world.name);
+        } catch (Exception e) {
+            LOGGER.error("CRITICAL ERROR While Creating World: {}", world.name, e);
             return null;
         }
     }

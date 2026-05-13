@@ -51,6 +51,8 @@ public class SkyblockMenu {
                 player.closeInventory();
             } else if (slot == INFO_SLOT) {
                 EquipmentMenu.open(player);
+            } else if (slot == COLLS_SLOT) {
+                fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu.open(player);
             }
         });
 
@@ -85,13 +87,25 @@ public class SkyblockMenu {
         lore.add(miniMessage().deserialize("<gray>unlock rewards on your way to").decoration(TextDecoration.ITALIC,false));
         lore.add(miniMessage().deserialize("<gray>becoming a master of SkyBlock!").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
-        lore.add(miniMessage().deserialize("<gray>Collections unlocked: <yellow>x.yz<gold>%").decoration(TextDecoration.ITALIC,false));
-        lore.add(miniMessage().deserialize("<white>───────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(miniMessage().deserialize(
-               "<yellow> x<gold>/<yellow>y"
-        ).decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,false)));
+        
+        int unlocked = plProfile.skyblockPlayer.getActiveProfile().unlockedCollections.size();
+        int total = fun.ascent.skyblock.player.collections.CollectionRegistry.getTotalCollectionsCount();
+        double percent = total == 0 ? 0 : (double) unlocked / total * 100;
+        
+        lore.add(miniMessage().deserialize("<gray>Collections unlocked: <yellow>" + String.format("%.1f", percent) + "<gold>%").decoration(TextDecoration.ITALIC,false));
+        
+        // Progress bar (restored style)
+        int barLength = 20;
+        int filled = total == 0 ? 0 : (int) (percent / 100 * barLength);
+        
+        String barStr = "<green>" + "─".repeat(filled) + "<white>" + "─".repeat(barLength - filled);
+        
+        lore.add(miniMessage().deserialize(barStr)
+                .decoration(TextDecoration.ITALIC, false)
+                .decoration(TextDecoration.STRIKETHROUGH, true)
+                .append(miniMessage().deserialize(" <yellow>" + unlocked + "<gold>/<yellow>" + total)
+                        .decoration(TextDecoration.STRIKETHROUGH, false)));
 
-        lore.add(Component.empty());
-        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /collection.").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
         lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
         return ItemStackCreator.createNamedItemStack(Material.PAINTING,

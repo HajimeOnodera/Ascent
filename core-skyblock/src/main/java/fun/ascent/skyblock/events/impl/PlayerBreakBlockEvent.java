@@ -12,7 +12,7 @@ public class PlayerBreakBlockEvent extends SEvent<PlayerBlockBreakEvent> {
         if(event.getPlayer() instanceof SkyblockPlayer pl){
             if (pl.getGameMode() == GameMode.CREATIVE) return;
 
-            String worldId = event.getInstance().getTag(fun.ascent.skyblock.island.Island.WORLD_ID_TAG);
+            String worldId = event.getInstance().getTag(fun.ascent.skyblock.world.WorldHandler.worldID);
             boolean isOwnIsland = pl.getActiveProfile() != null && worldId != null && worldId.equals(pl.getActiveProfile().profileID.toString());
 
             // Allow breaking on own island, but still process SkyblockBlock logic if it exists

@@ -6,8 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class ItemDefinitions {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+public class ItemDefinitions {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ItemDefinitions.class);
     private static final Map<String, ItemDefinition> DEFINITIONS = new HashMap<>();
 
     public static void init() {
@@ -19,11 +22,11 @@ public class ItemDefinitions {
                 ItemDefinition def = clazz.getDeclaredConstructor().newInstance();
                 DEFINITIONS.put(def.getItemId(), def);
             } catch (Exception e) {
-                System.err.println("[ItemDefinitions] Failed to register " + clazz.getSimpleName() + ": " + e.getMessage());
+                LOGGER.error("Failed to register item definition: {}", clazz.getSimpleName(), e);
             }
         }
 
-        System.out.println("[ItemDefinitions] Registered " + DEFINITIONS.size() + " items.");
+        LOGGER.info("Registered {} item definitions.", DEFINITIONS.size());
     }
 
     public static ItemDefinition get(String itemId) {

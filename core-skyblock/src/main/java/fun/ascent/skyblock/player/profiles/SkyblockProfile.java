@@ -3,8 +3,6 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.collections.Collection;
-import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
@@ -49,13 +47,35 @@ public class SkyblockProfile {
     }
 
     public void updateCollection(String itemId, int amount) {
-        Collection collectionDef = CollectionRegistry.get(itemId);
+        fun.ascent.skyblock.player.collections.CollectionCategory.ItemCollection collectionDef = fun.ascent.skyblock.player.collections.CollectionRegistry.get(itemId);
         if (collectionDef == null) return;
+
         int currentProgress = this.unlockedCollections.getOrDefault(itemId, 0);
         int newProgress = currentProgress + amount;
         this.unlockedCollections.put(itemId, newProgress);
 
-        collectionDef.checkForRewards(this, currentProgress, newProgress);
+        // Check for tier ups
+        int oldTier = collectionDef.getTierFromProgress(currentProgress);
+        int newTier = collectionDef.getTierFromProgress(newProgress);
+
+        if (newTier > oldTier) {
+            for (int currentTier = oldTier + 1; currentTier <= newTier; currentTier++) {
+                fun.ascent.skyblock.player.collections.CollectionCategory.CollectionReward reward = collectionDef.getRewardAtTier(currentTier);
+                if (reward != null) {
+                    String message = "§6§lCOLLECTION LEVEL UP §e" + collectionDef.name() + " " + currentTier;
+                    
+                    profilePlayers.forEach(pp -> {
+                        if (pp.skyblockPlayer != null) {
+                            pp.skyblockPlayer.sendMessage(message);
+                            reward.unlocks().forEach(u -> pp.skyblockPlayer.sendMessage("§7  Unlocked: " + u.getDisplay()));
+                        }
+                    });
+                    
+                    // Apply unlocks (one time per profile)
+                    reward.unlocks().forEach(u -> u.apply(this));
+                }
+            }
+        }
     }
 
     public void generateIsland() {
