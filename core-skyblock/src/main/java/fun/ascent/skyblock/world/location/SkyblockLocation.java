@@ -1,5 +1,7 @@
 package fun.ascent.skyblock.world.location;
 
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.world.WorldHandler;
 import lombok.Getter;
@@ -95,9 +97,9 @@ public enum SkyblockLocation {
         return y >= Math.min(min.y, max.y) && y <= Math.max(min.y, max.y);
     }
 
-    public boolean canGo(fun.ascent.skyblock.player.SkyblockPlayer player) {
+    public boolean canGo(SkyblockPlayer player) {
         if (skill == null || lvl <= 0) return true;
-        fun.ascent.skyblock.player.skill.PlayerSkillData skillData = player.getSkillData();
+        PlayerSkillData skillData = player.getSkillData();
         if (skillData == null) return false;
         return skillData.getLevel(skill) >= lvl;
     }
@@ -118,8 +120,8 @@ public enum SkyblockLocation {
             return GARDEN;
         }
 
-        if (instance.getTag(fun.ascent.skyblock.world.WorldHandler.worldID) != null && 
-            instance.getTag(fun.ascent.skyblock.world.WorldHandler.worldID).length() > 10) { // UUID length check
+        if (instance.getTag(WorldHandler.worldID) != null &&
+            instance.getTag(WorldHandler.worldID).length() > 10) { // UUID length check
             return PRIVATE_ISLAND;
         }
         

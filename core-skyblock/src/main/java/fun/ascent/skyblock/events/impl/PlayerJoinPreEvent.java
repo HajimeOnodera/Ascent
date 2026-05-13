@@ -3,7 +3,9 @@ package fun.ascent.skyblock.events.impl;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.WorldHandler;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.instance.InstanceContainer;
 
 public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
 
@@ -15,7 +17,7 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
         if (player.getActiveProfile() != null && player.getActiveProfile().island != null) {
             try {
                 // Load and wait for island instance
-                net.minestom.server.instance.InstanceContainer islandInstance = player.getActiveProfile().island.load().join();
+                InstanceContainer islandInstance = player.getActiveProfile().island.load().join();
                 if (islandInstance != null) {
                     event.setSpawningInstance(islandInstance);
                     player.setRespawnPoint(player.getActiveProfile().getSpawnPos());
@@ -34,7 +36,7 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
         } else {
             // Last resort: find any instance
             System.err.println("[Skyblock] Lobby is null, falling back to any available instance!");
-            net.minestom.server.MinecraftServer.getInstanceManager().getInstances().stream().findFirst().ifPresent(event::setSpawningInstance);
+            MinecraftServer.getInstanceManager().getInstances().stream().findFirst().ifPresent(event::setSpawningInstance);
         }
     }
 }

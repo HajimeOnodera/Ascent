@@ -4,6 +4,7 @@ import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.menus.command.skyblockMenu.EquipmentMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.stats.Stat;
 import net.kyori.adventure.text.Component;
@@ -52,7 +53,7 @@ public class SkyblockMenu {
             } else if (slot == INFO_SLOT) {
                 EquipmentMenu.open(player);
             } else if (slot == COLLS_SLOT) {
-                fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu.open(player);
+                CollectionOverviewMenu.open(player);
             }
         });
 

@@ -8,9 +8,15 @@ import net.hollowcube.polar.PolarWriter;
 import net.hollowcube.polar.PolarWorld;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.timer.ExecutionType;
+import net.minestom.server.timer.TaskSchedule;
 import org.bson.Document;
+import org.bson.types.Binary;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -38,25 +44,25 @@ public class Island {
                 Document doc = IslandDatabase.getIsland(islandId);
                 if (doc == null) {
                     // New island, load from template
-                    byte[] templateBytes = java.nio.file.Files.readAllBytes(java.nio.file.Path.of("maps/privisland.polar"));
+                    byte[] templateBytes = Files.readAllBytes(Path.of("maps/privisland.polar"));
                     this.polarWorld = PolarReader.read(templateBytes);
                     this.version = 1;
                 } else {
                     this.version = doc.getInteger("version", 1);
-                    org.bson.types.Binary data = doc.get("data", org.bson.types.Binary.class);
+                    Binary data = doc.get("data", Binary.class);
                     this.polarWorld = PolarReader.read(data.getData());
                 }
 
                 // Create instance on the main thread (Minestom requirement)
                 CompletableFuture<Void> syncFuture = new CompletableFuture<>();
                 MinecraftServer.getSchedulerManager().submitTask(() -> {
-                    this.instance = net.minestom.server.MinecraftServer.getInstanceManager().createInstanceContainer();
-                    this.instance.setChunkLoader(new net.hollowcube.polar.PolarLoader(polarWorld));
-                    this.instance.setTag(net.minestom.server.tag.Tag.String("world"), islandId.toString());
+                    this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
+                    this.instance.setChunkLoader(new PolarLoader(polarWorld));
+                    this.instance.setTag(Tag.String("world"), islandId.toString());
                     this.loaded = true;
                     syncFuture.complete(null);
-                    return net.minestom.server.timer.TaskSchedule.stop();
-                }, net.minestom.server.timer.ExecutionType.TICK_END);
+                    return TaskSchedule.stop();
+                }, ExecutionType.TICK_END);
                 
                 syncFuture.join();
                 return instance;
