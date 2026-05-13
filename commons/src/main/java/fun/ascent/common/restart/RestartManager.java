@@ -25,7 +25,6 @@ public class RestartManager {
         RestartType(String displayName) {
             this.displayName = displayName;
         }
-
     }
 
     private static Task restartTask;

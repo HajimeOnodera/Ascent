@@ -1,6 +1,9 @@
 package fun.ascent.skyblock.player;
 
+import fun.ascent.database.PlayerRepository;
+import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.actionbar.ActionBar;
+import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
@@ -51,7 +54,13 @@ public class SkyblockPlayer extends Player {
     }
 
     public void loadProfiles() {
-        // TODO: Load from database
+        ProfileManager.loadProfilesForPlayer(this);
+        String lastProfileId = PlayerRepository.getField(getUuid(), "skyblock.last_profile_id", null);
+        if (lastProfileId != null) {
+            setActiveProfile(UUID.fromString(lastProfileId));
+        } else if (!playerProfiles.isEmpty()) {
+            setActiveProfile(playerProfiles.keySet().iterator().next());
+        }
     }
 
     public void addProfile(SkyblockProfile profile) {
@@ -68,6 +77,11 @@ public class SkyblockPlayer extends Player {
         for (ProfilePlayer pp : target.profilePlayers) {
             if (pp.playerUUID.equals(getUuid())) {
                 this.activeProfileData = pp;
+                this.activeProfileData.skyblockPlayer = this; // Ensure transient ref is set
+                
+                // Sync data from handler to player (restores inventory, coins, etc.)
+                pp.getDataHandler().syncToPlayer(this);
+
                 System.out.println("Profile Set Correctly");
                 updatePlayer();
                 break;
@@ -75,6 +89,7 @@ public class SkyblockPlayer extends Player {
             System.out.println("Not Right UUID: " + pp.playerUUID);
         }
         setTag(sbProfileID, this.activeProfile.profileID);
+        PlayerRepository.setField(getUuid(), "skyblock.last_profile_id", profileID.toString());
     }
 
     public void updatePlayer() {
@@ -129,5 +144,16 @@ public class SkyblockPlayer extends Player {
         }
         return null;
     }
+
+    public void setCoins(double coins) { if (activeProfileData != null) activeProfileData.playerCoins = coins; }
+    public double getCoins() { return activeProfileData != null ? activeProfileData.playerCoins : 0; }
+    public void setBits(double bits) { if (activeProfileData != null) activeProfileData.playerBits = bits; }
+    public double getBits() { return activeProfileData != null ? activeProfileData.playerBits : 0; }
+    public void setGold(double gold) { if (activeProfileData != null) activeProfileData.playerGold = gold; }
+    public double getGold() { return activeProfileData != null ? activeProfileData.playerGold : 0; }
+    public void setSkyblockLevel(SkyblockLevel level) { if (activeProfileData != null) activeProfileData.level = level; }
+    public SkyblockLevel getSkyblockLevel() { return activeProfileData != null ? activeProfileData.level : null; }
+    public void setSkyblockHotmData(HotmData data) { if (activeProfileData != null) activeProfileData.hotmData = data; }
+    public HotmData getSkyblockHotmData() { return activeProfileData != null ? activeProfileData.hotmData : null; }
 }
 

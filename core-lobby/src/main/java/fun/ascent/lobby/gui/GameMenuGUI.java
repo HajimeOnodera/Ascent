@@ -59,7 +59,7 @@ public class GameMenuGUI extends InventoryGUI implements RefreshingGUI {
         });
 
         // Refresh cache, then populate items
-        ServerInfoCache.refreshCache().thenAccept(servers -> {
+        ServerInfoCache.refreshCache().thenAccept(_ -> {
             int i = 0;
             for (GameType game : GameType.values()) {
                 if (i >= GAME_SLOTS.length) break;

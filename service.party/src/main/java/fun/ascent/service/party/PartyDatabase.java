@@ -97,12 +97,12 @@ public record PartyDatabase(String playerId) implements MongoDB {
     }
 
     public void addPendingInvite(PendingParty invite) {
-        String id = invite.getResultPartyUUID().toString();
+        String id = invite.resultPartyUUID().toString();
         String serialized = invite.getSerializer().serialize(invite);
 
         Document doc = new Document("_id", id);
-        doc.append("invitee", invite.getInvitee().toString());
-        doc.append("leader", invite.getLeader().toString());
+        doc.append("invitee", invite.invitee().toString());
+        doc.append("leader", invite.leader().toString());
         doc.append("data", serialized);
         doc.append("timestamp", System.currentTimeMillis());
         pendingInvitesCollection.insertOne(doc);

@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.database.SkyblockRepository;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 
 import java.util.HashMap;
@@ -35,8 +36,32 @@ public class ProfileManager {
         return profile;
     }
 
+    public static void saveProfile(UUID profileID) {
+        SkyblockProfile profile = profiles.get(profileID);
+        if (profile != null) {
+            SkyblockPersistence.saveProfile(profile);
+        }
+    }
+
+    public static void loadProfilesForPlayer(SkyblockPlayer player) {
+        List<org.bson.Document> profileDocs = SkyblockRepository.getProfilesForPlayer(player.getUuid());
+        for (org.bson.Document doc : profileDocs) {
+            UUID profileID = UUID.fromString(doc.getString("_id"));
+            SkyblockProfile profile = SkyblockPersistence.loadProfile(profileID);
+            if (profile != null) {
+                register(profile);
+                player.addProfile(profile);
+            }
+        }
+    }
+
     public static void register(SkyblockProfile profile){
         profiles.put(profile.profileID, profile);
-        profile.profilePlayers.forEach(p -> p.skyblockPlayer.addProfile(profile));
+        profile.profilePlayers.forEach(p -> {
+            if (p.skyblockPlayer != null) {
+                p.skyblockPlayer.addProfile(profile);
+            }
+        });
+        SkyblockPersistence.saveProfile(profile);
     }
 }

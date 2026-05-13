@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.skyblock.data.SkyblockDataHandler;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -10,9 +11,13 @@ import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,10 +40,30 @@ public class ProfilePlayer {
     public SkyblockLevel level = new SkyblockLevel();
     public HotmData hotmData = new HotmData();
 
+    public List<ItemStack> inventory = new ArrayList<>();
+    public List<ItemStack> armor = new ArrayList<>();
+    public List<ItemStack> enderchest = new ArrayList<>();
+
+    private SkyblockDataHandler dataHandler;
+
     public ProfilePlayer(UUID profileID, SkyblockPlayer player) {
         this.profileID = profileID;
-        this.playerUUID = player.getUuid();
+        this.playerUUID = player != null ? player.getUuid() : null;
         this.skyblockPlayer = player;
+        this.dataHandler = new SkyblockDataHandler(this.playerUUID, this.profileID);
+    }
+
+    public void update() {
+        if (skyblockPlayer == null) return;
+        this.inventory = Arrays.asList(skyblockPlayer.getInventory().getItemStacks());
+        this.armor = List.of(
+                skyblockPlayer.getEquipment(EquipmentSlot.BOOTS),
+                skyblockPlayer.getEquipment(EquipmentSlot.LEGGINGS),
+                skyblockPlayer.getEquipment(EquipmentSlot.CHESTPLATE),
+                skyblockPlayer.getEquipment(EquipmentSlot.HELMET)
+        );
+        // Sync to handler
+        dataHandler.syncFromPlayer(skyblockPlayer);
     }
 
 
@@ -119,6 +144,13 @@ public class ProfilePlayer {
             stat = stats.get(stat.id);
         }
         stats.put(stat.id, stat.addCurValue(amount));
+    }
+
+    public fun.ascent.skyblock.data.SkyblockDataHandler getDataHandler() {
+        if (dataHandler == null) {
+            dataHandler = new fun.ascent.skyblock.data.SkyblockDataHandler(playerUUID, profileID);
+        }
+        return dataHandler;
     }
 
 }

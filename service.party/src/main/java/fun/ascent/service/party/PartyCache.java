@@ -47,16 +47,16 @@ public class PartyCache {
 
             for (PendingParty invite : allInvites) {
                 org.bson.Document doc = PartyDatabase.pendingInvitesCollection.find(
-                    new org.bson.Document("_id", invite.getResultPartyUUID().toString())
+                    new org.bson.Document("_id", invite.resultPartyUUID().toString())
                 ).first();
                 if (doc != null) {
                     Long timestamp = doc.getLong("timestamp");
                     if (timestamp != null && now - timestamp > INVITE_EXPIRATION_MS) {
-                        db.removePendingInvite(invite.getResultPartyUUID());
+                        db.removePendingInvite(invite.resultPartyUUID());
                         sendEvent(new PartyInviteExpiredResponseEvent(
-                            FullParty.create(invite.getLeader(), invite.getInvitee()),
-                            invite.getLeader(),
-                            invite.getInvitee()
+                            FullParty.create(invite.leader(), invite.invitee()),
+                            invite.leader(),
+                            invite.invitee()
                         ));
                     }
                 }
@@ -149,23 +149,23 @@ public class PartyCache {
         PartyDatabase db = new PartyDatabase(null);
 
         // Check if inviter is already in a party
-        FullParty inviterParty = getPartyByMember(invite.getLeader());
+        FullParty inviterParty = getPartyByMember(invite.leader());
         if (inviterParty == null) {
             // Create a new party with just the leader
-            inviterParty = FullParty.create(invite.getLeader(), invite.getLeader());
-            inviterParty.getMembers().removeIf(m -> !m.getUuid().equals(invite.getLeader()));
+            inviterParty = FullParty.create(invite.leader(), invite.leader());
+            inviterParty.getMembers().removeIf(m -> !m.getUuid().equals(invite.leader()));
             persistParty(inviterParty);
         }
 
         // Check if invitee is already in a party
-        if (isPlayerInParty(invite.getInvitee())) {
-            sendErrorToPlayer(invite.getLeader(), "That player is already in a party!");
+        if (isPlayerInParty(invite.invitee())) {
+            sendErrorToPlayer(invite.leader(), "That player is already in a party!");
             return;
         }
 
         // Check for existing pending invite
-        if (db.hasPendingInvite(invite.getInvitee(), invite.getLeader())) {
-            sendErrorToPlayer(invite.getLeader(), "You have already invited that player!");
+        if (db.hasPendingInvite(invite.invitee(), invite.leader())) {
+            sendErrorToPlayer(invite.leader(), "You have already invited that player!");
             return;
         }
 
@@ -182,7 +182,7 @@ public class PartyCache {
         // Find the pending invite
         List<PendingParty> invites = db.getPendingInvitesFor(accepter);
         PendingParty matchingInvite = invites.stream()
-            .filter(i -> i.getLeader().equals(inviter))
+            .filter(i -> i.leader().equals(inviter))
             .findFirst().orElse(null);
 
         if (matchingInvite == null) {
@@ -191,7 +191,7 @@ public class PartyCache {
         }
 
         // Remove the invite
-        db.removePendingInvite(matchingInvite.getResultPartyUUID());
+        db.removePendingInvite(matchingInvite.resultPartyUUID());
 
         // Check if accepter is already in a party
         if (isPlayerInParty(accepter)) {

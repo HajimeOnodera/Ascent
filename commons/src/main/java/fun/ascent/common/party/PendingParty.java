@@ -1,23 +1,12 @@
 package fun.ascent.common.party;
 
 import fun.ascent.common.protocol.Serializer;
-import lombok.Getter;
 import org.json.JSONObject;
 
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-public class PendingParty implements Party {
-    public final UUID resultPartyUUID;
-    public final UUID invitee;
-    public final UUID leader;
-
-    public PendingParty(UUID resultPartyUUID, UUID invitee, UUID leader) {
-        this.resultPartyUUID = resultPartyUUID;
-        this.invitee = invitee;
-        this.leader = leader;
-    }
+public record PendingParty(UUID resultPartyUUID, UUID invitee, UUID leader) implements Party {
 
     @Override
     public List<UUID> getParticipants() {
@@ -49,9 +38,9 @@ public class PendingParty implements Party {
             public PendingParty deserialize(String json) {
                 JSONObject jsonObject = new JSONObject(json);
                 return new PendingParty(
-                    UUID.fromString(jsonObject.getString("resultPartyUUID")),
-                    UUID.fromString(jsonObject.getString("invitee")),
-                    UUID.fromString(jsonObject.getString("leader"))
+                        UUID.fromString(jsonObject.getString("resultPartyUUID")),
+                        UUID.fromString(jsonObject.getString("invitee")),
+                        UUID.fromString(jsonObject.getString("leader"))
                 );
             }
 

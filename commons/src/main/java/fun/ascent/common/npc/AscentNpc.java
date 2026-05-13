@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static fun.ascent.common.StringUtility.*;
+import static fun.ascent.common.StringUtility.text;
 
 public class AscentNpc {
 

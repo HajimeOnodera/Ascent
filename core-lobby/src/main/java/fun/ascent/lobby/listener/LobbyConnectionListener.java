@@ -45,13 +45,11 @@ public class LobbyConnectionListener {
                 Component displayName = UserManager.getDisplayName(player.getUuid());
                 
                 if (rank.isEqualOrHigherThan(Rank.MVP_PLUS_PLUS)) {
-                    // Flashy arrows for MVP++ and Staff
                     joinMsg = text("<aqua>><red>><green>> ")
                             .append(displayName)
                             .append(text(" <gold>joined the lobby! "))
                             .append(text("<green><<red><<aqua><"));
                 } else {
-                    // Standard message for VIP/MVP
                     joinMsg = displayName.append(text(" <gold>joined the lobby!"));
                 }
                 

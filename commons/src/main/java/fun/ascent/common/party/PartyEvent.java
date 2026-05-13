@@ -44,65 +44,33 @@ public abstract class PartyEvent {
         String className = clazz.getSimpleName();
 
         switch (className) {
-            case "PartyAcceptInviteEvent" -> {
+            case "PartyAcceptInviteEvent", "PartyTransferRequestEvent", "PartyKickRequestEvent",
+                 "PartyPromoteRequestEvent", "PartyDemoteRequestEvent", "PartyHijackRequestEvent" -> {
                 var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
                 return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
             }
-            case "PartyLeaveRequestEvent" -> {
+            case "PartyLeaveRequestEvent", "PartyDisbandRequestEvent", "PartyPlayerSwitchedServerEvent",
+                 "PartyWarpRequestEvent", "PartyListRequestEvent", "PartyPlayerDisconnectEvent",
+                 "PartyPlayerRejoinEvent" -> {
                 var constructor = clazz.getDeclaredConstructor(UUID.class);
                 return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyDisbandRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyTransferRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyKickRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyPromoteRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyDemoteRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyPlayerSwitchedServerEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyWarpRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyListRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyHijackRequestEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
             }
             case "PartyChatMessageEvent" -> {
                 var constructor = clazz.getDeclaredConstructor(UUID.class, String.class);
                 return (PartyEvent) constructor.newInstance(UUID.randomUUID(), "");
             }
-            case "PartyPlayerSwitchedServerResponseEvent" -> {
+            case "PartyPlayerSwitchedServerResponseEvent", "PartyMemberLeaveResponseEvent", "PartyWarpResponseEvent",
+                 "PartyMemberRejoinedResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class);
                 return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID());
             }
-            case "PartyChatMessageResponseEvent" -> {
+            case "PartyChatMessageResponseEvent", "PartyDisbandResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, String.class);
                 return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), "");
             }
-            case "PartyInviteResponseEvent" -> {
+            case "PartyInviteResponseEvent", "PartyInviteEvent" -> {
                 var pendingParty = PendingParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(PendingParty.class);
                 return (PartyEvent) constructor.newInstance(pendingParty);
@@ -116,66 +84,24 @@ public abstract class PartyEvent {
                 var constructor = clazz.getDeclaredConstructor(FullParty.class);
                 return (PartyEvent) constructor.newInstance(FullParty.create(UUID.randomUUID(), UUID.randomUUID()));
             }
-            case "PartyDisbandResponseEvent" -> {
-                var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, String.class);
-                return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), "");
-            }
-            case "PartyLeaderTransferResponseEvent" -> {
+            case "PartyLeaderTransferResponseEvent", "PartyMemberKickResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, UUID.class);
                 return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), UUID.randomUUID());
             }
-            case "PartyMemberJoinResponseEvent" -> {
+            case "PartyMemberJoinResponseEvent", "PartyInviteExpiredResponseEvent" -> {
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, UUID.class);
                 return (PartyEvent) constructor.newInstance(FullParty.create(UUID.randomUUID(), UUID.randomUUID()), UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyMemberKickResponseEvent" -> {
-                var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyInviteExpiredResponseEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(FullParty.create(UUID.randomUUID(), UUID.randomUUID()), UUID.randomUUID(), UUID.randomUUID());
-            }
-            case "PartyMemberLeaveResponseEvent" -> {
-                var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID());
             }
             case "PartyPromotionResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, UUID.class, FullParty.Role.class);
                 return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), UUID.randomUUID(), FullParty.Role.MEMBER);
             }
-            case "PartyWarpResponseEvent" -> {
-                var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID());
-            }
-            case "PartyInviteEvent" -> {
-                var pendingParty = PendingParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(PendingParty.class);
-                return (PartyEvent) constructor.newInstance(pendingParty);
-            }
-            case "PartyPlayerDisconnectEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
-            case "PartyPlayerRejoinEvent" -> {
-                var constructor = clazz.getDeclaredConstructor(UUID.class);
-                return (PartyEvent) constructor.newInstance(UUID.randomUUID());
-            }
             case "PartyMemberDisconnectedResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
                 var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class, long.class);
                 return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID(), 300L);
-            }
-            case "PartyMemberRejoinedResponseEvent" -> {
-                var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());
-                var constructor = clazz.getDeclaredConstructor(FullParty.class, UUID.class);
-                return (PartyEvent) constructor.newInstance(fullParty, UUID.randomUUID());
             }
             case "PartyMemberDisconnectTimeoutResponseEvent" -> {
                 var fullParty = FullParty.create(UUID.randomUUID(), UUID.randomUUID());

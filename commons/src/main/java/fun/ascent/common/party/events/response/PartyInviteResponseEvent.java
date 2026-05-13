@@ -15,8 +15,8 @@ public class PartyInviteResponseEvent extends PartyResponseEvent {
 
     public PartyInviteResponseEvent(PendingParty party) {
         super(party);
-        this.inviter = party.getLeader();
-        this.invitee = party.getInvitee();
+        this.inviter = party.leader();
+        this.invitee = party.invitee();
     }
 
     @Override

@@ -8,6 +8,7 @@ import fun.ascent.skyblock.dungeon.DungeonManager;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.items.ItemDefinitions;
 import fun.ascent.skyblock.item.reforge.Reforge;
+import fun.ascent.skyblock.listeners.ProfileListener;
 import fun.ascent.skyblock.listeners.SkyblockChatListener;
 import fun.ascent.skyblock.menus.shop.ShopRegistry;
 import fun.ascent.skyblock.minion.service.MinionManager;
@@ -58,6 +59,7 @@ public class Main {
         ZonePopulationTicker.start();
         CombatListener.register();
         SkyblockChatListener.register();
+        ProfileListener.register(MinecraftServer.getGlobalEventHandler());
         DungeonManager.get().initialize();
 
 
