@@ -56,7 +56,7 @@ services:
   skyblock:
     build:
       context: .
-      dockerfile: core-skyblock/Dockerfile
+      dockerfile: skyblock.hub/Dockerfile
     container_name: ascent-skyblock
 #    depends_on:
 #      - redis
@@ -72,7 +72,7 @@ services:
   island:
     build:
       context: .
-      dockerfile: core-skyblock/Dockerfile
+      dockerfile: skyblock.island/Dockerfile
     container_name: ascent-island
     environment:
       - REDIS_HOST=host.docker.internal

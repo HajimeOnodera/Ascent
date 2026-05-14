@@ -65,7 +65,7 @@ public class MeleeChaseGoal extends GoalSelector {
         var pathPos = nav.getPathPosition();
         var targetPos = target.getPosition();
 
-        if (pathPos == null || !pathPos.samePoint(targetPos)) {
+        if (!pathPos.samePoint(targetPos)) {
             if (pathCooldown.isReady(time)) {
                 pathCooldown.refreshLastUpdate(time);
                 nav.setPathTo(targetPos);

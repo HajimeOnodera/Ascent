@@ -15,7 +15,6 @@ public class RegionWanderGoal extends GoalSelector {
 
     private static final long WANDER_INTERVAL = 2500L;
 
-    private final String zoneId;
     private final int radius;
     private final Random rng = new Random();
 
@@ -24,7 +23,6 @@ public class RegionWanderGoal extends GoalSelector {
 
     public RegionWanderGoal(@NotNull EntityCreature creature, int radius, String zoneId) {
         super(creature);
-        this.zoneId = zoneId;
         this.radius = radius;
     }
 

@@ -13,3 +13,4 @@ proxy/logs/
 build/
 **/build/
 bin/
+proxy/plugins/CoreProxy.jar
