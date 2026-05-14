@@ -38,7 +38,12 @@ public class UserDatabase {
         // Load achievement points
         Document achievements = PlayerRepository.getSection(uuid, "achievements");
         if (achievements != null) {
-            user.setAchievementPoints(achievements.getInteger("points", 0));
+            Object pointsObj = achievements.get("points");
+            if (pointsObj instanceof Number n) {
+                user.setAchievementPoints(n.intValue());
+            } else {
+                user.setAchievementPoints(0);
+            }
         }
 
         return user;

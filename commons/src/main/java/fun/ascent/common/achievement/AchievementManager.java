@@ -52,8 +52,21 @@ public class AchievementManager {
         categories.put(catName, catData);
         achievements.put("categories", categories);
 
-        int totalCompleted = achievements.getInteger("completed", 0) + 1;
-        int totalPoints = achievements.getInteger("points", 0) + def.points();
+        int totalCompleted;
+        Object completedObj = achievements.get("completed");
+        if (completedObj instanceof Number n) {
+            totalCompleted = n.intValue() + 1;
+        } else {
+            totalCompleted = list.size();
+        }
+
+        int currentTotalPoints = 0;
+        Object totalPointsObj = achievements.get("points");
+        if (totalPointsObj instanceof Number n) {
+            currentTotalPoints = n.intValue();
+        }
+
+        int totalPoints = currentTotalPoints + def.points();
         achievements.put("completed", totalCompleted);
         achievements.put("points", totalPoints);
 
@@ -62,6 +75,7 @@ public class AchievementManager {
         User user = UserManager.getUser(uuid);
         if (user != null) {
             user.setAchievementPoints(totalPoints);
+            UserManager.saveUser(user);
         }
 
         // Update global unlock stats
