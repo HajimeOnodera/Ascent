@@ -8,6 +8,7 @@ import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.entity.GameMode;
 
 import static fun.ascent.common.StringUtility.*;
 import static net.kyori.adventure.text.minimessage.MiniMessage.*;
@@ -27,6 +28,7 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
 
     @Override
     public void onEvent(PlayerSpawnEvent e) {
+        e.getPlayer().setGameMode(GameMode.SURVIVAL);
         if(e.isFirstSpawn()){
             e.getPlayer().setDisplayName(UserManager.getDisplayName(e.getPlayer().getUuid()));
             e.getPlayer().sendMessage(text(miniMessage().deserialize("<yellow>Welcome to <green>Hypixel SkyBlock</green><yellow>!</yellow>")));

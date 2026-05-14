@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.island;
 
+import fun.ascent.common.world.WorldRegistry;
 import fun.ascent.skyblock.island.data.IslandDatabase;
 import lombok.Getter;
 import net.hollowcube.polar.PolarLoader;
@@ -8,7 +9,6 @@ import net.hollowcube.polar.PolarWriter;
 import net.hollowcube.polar.PolarWorld;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 import org.bson.Document;
@@ -58,7 +58,7 @@ public class Island {
                 MinecraftServer.getSchedulerManager().submitTask(() -> {
                     this.instance = MinecraftServer.getInstanceManager().createInstanceContainer();
                     this.instance.setChunkLoader(new PolarLoader(polarWorld));
-                    this.instance.setTag(Tag.String("world"), islandId.toString());
+                    this.instance.setTag(WorldRegistry.WORLD_ID_TAG, islandId.toString());
                     this.loaded = true;
                     syncFuture.complete(null);
                     return TaskSchedule.stop();

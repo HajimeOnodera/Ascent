@@ -1,29 +1,29 @@
 services:
-  mongodb:
-    image: mongo:latest
-    container_name: ascent-mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-
-  redis:
-    image: redis:latest
-    container_name: ascent-redis
-    ports:
-      - "6379:6379"
+#  mongodb:
+#    image: mongo:latest
+#    container_name: ascent-mongodb
+#    ports:
+#      - "27017:27017"
+#    volumes:
+#      - mongodb_data:/data/db
+#
+#  redis:
+#    image: redis:latest
+#    container_name: ascent-redis
+#    ports:
+#      - "6379:6379"
 
   friend-service:
     build:
       context: .
       dockerfile: service.friend/Dockerfile
     container_name: ascent-friend-service
-    depends_on:
-      - mongodb
-      - redis
+#    depends_on:
+#      - mongodb
+#      - redis
     environment:
-      - MONGODB_URI=mongodb://mongodb:27017
-      - REDIS_HOST=redis
+      - MONGODB_URI=mongodb://host.docker.internal:27017
+      - REDIS_HOST=host.docker.internal
 
   proxy:
     build:
@@ -31,11 +31,12 @@ services:
       dockerfile: core-proxy/Dockerfile
     container_name: ascent-proxy
     ports:
-      - "25577:25577"
-    depends_on:
-      - redis
+      - "25577:25565"
+#    depends_on:
+#      - redis
     environment:
-      - REDIS_HOST=redis
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
       - ASCENT_SERVER_NAME=proxy
 
   lobby:
@@ -43,12 +44,12 @@ services:
       context: .
       dockerfile: core-lobby/Dockerfile
     container_name: ascent-lobby
-    depends_on:
-      - redis
-      - mongodb
+#    depends_on:
+#      - redis
+#      - mongodb
     environment:
-      - REDIS_HOST=redis
-      - MONGODB_URI=mongodb://mongodb:27017
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
       - ASCENT_SERVER_NAME=lobby-1
       - ASCENT_ADVERTISE_HOST=lobby
 
@@ -57,14 +58,27 @@ services:
       context: .
       dockerfile: core-skyblock/Dockerfile
     container_name: ascent-skyblock
-    depends_on:
-      - redis
-      - mongodb
+#    depends_on:
+#      - redis
+#      - mongodb
     environment:
-      - REDIS_HOST=redis
-      - MONGODB_URI=mongodb://mongodb:27017
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
       - ASCENT_SERVER_NAME=skyblock-1
       - ASCENT_ADVERTISE_HOST=skyblock
+      - ASCENT_SERVER_TYPE=HUB
 
-volumes:
-  mongodb_data:
+  island:
+    build:
+      context: .
+      dockerfile: core-skyblock/Dockerfile
+    container_name: ascent-island
+    environment:
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
+      - ASCENT_SERVER_NAME=island-1
+      - ASCENT_ADVERTISE_HOST=island
+      - ASCENT_SERVER_TYPE=ISLAND
+
+#volumes:
+#  mongodb_data:

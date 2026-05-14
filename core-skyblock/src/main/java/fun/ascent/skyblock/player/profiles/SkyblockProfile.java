@@ -18,6 +18,7 @@ public class SkyblockProfile {
     public UUID profileID;
     public List<ProfilePlayer> profilePlayers;
     public Map<String, Integer> unlockedCollections = new HashMap<>();
+    public Set<String> unlockedRecipes = new HashSet<>();
     public Island island;
     @Getter
     public Pos spawnPos;
@@ -35,6 +36,9 @@ public class SkyblockProfile {
         if (unlockedCollections == null) {
             unlockedCollections = new HashMap<>();
             //TODO: Notify Players of Collections corruption
+        }
+        if (unlockedRecipes == null) {
+            unlockedRecipes = new HashSet<>();
         }
     }
 
@@ -82,7 +86,11 @@ public class SkyblockProfile {
 
     public void generateIsland() {
         island = IslandManager.getIsland(profileID);
-        island.load();
+        
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        if (serverType.equalsIgnoreCase("ISLAND")) {
+            island.load();
+        }
     }
 
     public String generateRandomProfileName(){

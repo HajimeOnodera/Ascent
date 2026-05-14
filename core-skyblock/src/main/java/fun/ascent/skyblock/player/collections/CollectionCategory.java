@@ -6,10 +6,11 @@ import net.minestom.server.item.Material;
 import java.util.List;
 
 @Getter
-public abstract class CollectionCategory {
+public class CollectionCategory {
     private final String name;
     private final Material icon;
     private final CollectionType type;
+    private List<ItemCollection> collections;
 
     public CollectionCategory(String name, Material icon, CollectionType type) {
         this.name = name;
@@ -17,7 +18,12 @@ public abstract class CollectionCategory {
         this.type = type;
     }
 
-    public abstract List<ItemCollection> getCollections();
+    public CollectionCategory(String name, Material icon, CollectionType type, List<ItemCollection> collections) {
+        this.name = name;
+        this.icon = icon;
+        this.type = type;
+        this.collections = collections;
+    }
 
     public record ItemCollection(String itemId, String name, Material icon, List<CollectionReward> rewards) {
         public CollectionReward getRewardAtTier(int tier) {

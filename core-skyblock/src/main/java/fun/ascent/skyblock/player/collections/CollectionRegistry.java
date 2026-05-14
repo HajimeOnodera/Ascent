@@ -1,10 +1,9 @@
 package fun.ascent.skyblock.player.collections;
 
-import fun.ascent.skyblock.player.collections.categories.CombatCategory;
-import fun.ascent.skyblock.player.collections.categories.FarmingCategory;
-import fun.ascent.skyblock.player.collections.categories.MiningCategory;
+import fun.ascent.skyblock.player.collections.loader.CollectionLoader;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CollectionRegistry {
@@ -16,9 +15,10 @@ public class CollectionRegistry {
         COLLECTIONS_BY_ID.clear();
         CATEGORIES.clear();
 
-        registerCategory(new FarmingCategory());
-        registerCategory(new MiningCategory());
-        registerCategory(new CombatCategory());
+        List<CollectionCategory> loaded = CollectionLoader.loadAll();
+        for (CollectionCategory category : loaded) {
+            registerCategory(category);
+        }
     }
 
     public static void registerCategory(CollectionCategory category) {
@@ -34,6 +34,15 @@ public class CollectionRegistry {
 
     public static CollectionCategory getCategory(CollectionCategory.CollectionType type) {
         return CATEGORIES.get(type);
+    }
+
+    public static CollectionCategory getCategoryFor(CollectionCategory.ItemCollection collection) {
+        for (CollectionCategory category : CATEGORIES.values()) {
+            if (category.getCollections().contains(collection)) {
+                return category;
+            }
+        }
+        return null;
     }
     
     public static Map<CollectionCategory.CollectionType, CollectionCategory> getCategories() {

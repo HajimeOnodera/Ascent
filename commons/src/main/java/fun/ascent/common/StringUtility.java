@@ -19,9 +19,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class StringUtility {
-    public static final char[] ALPHABET = {
-            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'W', 'X', 'Y', 'Z'
-    };
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("#,###");
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final Map<Character, String> LEGACY_COLOR_TAGS = Map.ofEntries(
@@ -163,7 +160,7 @@ public class StringUtility {
         StringBuilder output = new StringBuilder(input.length());
         for (int i = 0; i < input.length(); i++) {
             char current = input.charAt(i);
-            if (current == '&' && i + 1 < input.length()) {
+            if ((current == '&' || current == '§') && i + 1 < input.length()) {
                 char code = Character.toLowerCase(input.charAt(i + 1));
                 String tag = LEGACY_COLOR_TAGS.get(code);
                 if (tag != null) {
@@ -494,15 +491,6 @@ public class StringUtility {
         return totalMillis;
     }
 
-    public static Component createLine(char c, int i, NamedTextColor color) {
-        StringBuilder text = new StringBuilder();
-        int index = 0;
-        while (index < i){
-            text.append(c);
-            index++;
-        }
-        return Component.text(text.toString()).color(color);
-    }
 }
 
 

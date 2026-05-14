@@ -51,9 +51,9 @@ public class CollectionCategoryMenu {
                 return;
             }
 
-            for (int i = 0; i < collections.size(); i++) {
+            for (int i = 0; i < collections.size() && i < ITEM_SLOTS.length; i++) {
                 if (slot == ITEM_SLOTS[i]) {
-                    CollectionItemMenu.open(pl, collections.get(i), category);
+                    CollectionTierMenu.open(pl, collections.get(i));
                     return;
                 }
             }

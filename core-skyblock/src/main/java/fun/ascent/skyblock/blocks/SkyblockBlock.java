@@ -1,7 +1,7 @@
 package fun.ascent.skyblock.blocks;
 
 import fun.ascent.skyblock.player.skill.SkillType;
-import fun.ascent.skyblock.world.location.SkyblockLocation;
+import fun.ascent.skyblock.world.region.RegionType;
 import lombok.Builder;
 import net.minestom.server.item.Material;
 import net.minestom.server.instance.block.Block;
@@ -23,9 +23,9 @@ public class SkyblockBlock {
     public int respawnDelayTicks;
     public Block replacementBlock;
 
-    public List<SkyblockLocation> validLocations;
+    public List<RegionType> validRegions;
 
-    public boolean appliesTo(SkyblockLocation location) {
-        return validLocations == null || validLocations.isEmpty() || validLocations.contains(location);
+    public boolean appliesTo(RegionType region) {
+        return validRegions == null || validRegions.isEmpty() || validRegions.contains(region);
     }
 }

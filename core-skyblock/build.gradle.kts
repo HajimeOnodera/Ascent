@@ -10,6 +10,7 @@ dependencies {
     implementation("net.minestom:minestom:2026.04.13-1.21.11")
     implementation("org.jctools:jctools-core:4.0.5")
     implementation("org.reflections:reflections:0.10.2")
+    implementation("org.yaml:snakeyaml:2.2")
 }
 
 tasks.shadowJar {

@@ -5,7 +5,9 @@ import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.SkillType;
-import fun.ascent.skyblock.world.location.SkyblockLocation;
+import fun.ascent.skyblock.world.region.Region;
+import fun.ascent.skyblock.world.region.RegionManager;
+import fun.ascent.skyblock.world.region.RegionType;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -39,7 +41,71 @@ public class BlockManager {
                 .xpAmount(4.0)
                 .respawnDelayTicks(60)
                 .replacementBlock(Block.DIRT)
-                .validLocations(List.of(SkyblockLocation.FARM, SkyblockLocation.PRIVATE_ISLAND))
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.SUGAR_CANE)
+                .skyblockItemId("SUGAR_CANE")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(2.0)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.CACTUS)
+                .skyblockItemId("CACTUS")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(2.0)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.CARROT)
+                .skyblockItemId("CARROT_ITEM")
+                .baseDropAmount(3)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(4.0)
+                .respawnDelayTicks(60)
+                .replacementBlock(Block.FARMLAND)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.POTATO)
+                .skyblockItemId("POTATO_ITEM")
+                .baseDropAmount(3)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(4.0)
+                .respawnDelayTicks(60)
+                .replacementBlock(Block.FARMLAND)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.PUMPKIN)
+                .skyblockItemId("PUMPKIN")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(4.5)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.MELON)
+                .skyblockItemId("MELON")
+                .baseDropAmount(5)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FARMING)
+                .xpAmount(4.5)
+                .validRegions(List.of(RegionType.FARM, RegionType.PRIVATE_ISLAND))
                 .build());
 
         // MINING
@@ -50,30 +116,144 @@ public class BlockManager {
                 .fortuneApplicable(true)
                 .skillType(SkillType.MINING)
                 .xpAmount(1.0)
-                .validLocations(List.of(SkyblockLocation.COAL_MINE, SkyblockLocation.PRIVATE_ISLAND))
+                .validRegions(List.of(RegionType.COAL_MINE, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.COAL_ORE)
+                .skyblockItemId("COAL")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(5.0)
+                .respawnDelayTicks(100)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.COAL_MINE, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.IRON_ORE)
+                .skyblockItemId("IRON_INGOT")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(7.0)
+                .respawnDelayTicks(150)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.GOLD_MINE, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.GOLD_ORE)
+                .skyblockItemId("GOLD_INGOT")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(9.0)
+                .respawnDelayTicks(180)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.GOLD_MINE, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.DIAMOND_ORE)
+                .skyblockItemId("DIAMOND")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(15.0)
+                .respawnDelayTicks(300)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.DEEP_CAVERNS, RegionType.PRIVATE_ISLAND))
                 .build());
 
         register(SkyblockBlock.builder()
                 .vanillaMaterial(Material.LAPIS_ORE)
                 .skyblockItemId("LAPIS_LAZULI")
-                .baseDropAmount(3)
+                .baseDropAmount(6)
                 .fortuneApplicable(true)
                 .skillType(SkillType.MINING)
                 .xpAmount(12.0)
                 .respawnDelayTicks(200)
                 .replacementBlock(Block.BEDROCK)
-                .validLocations(List.of(SkyblockLocation.LAPIS, SkyblockLocation.PRIVATE_ISLAND))
+                .validRegions(List.of(RegionType.DEEP_CAVERNS, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.REDSTONE_ORE)
+                .skyblockItemId("REDSTONE")
+                .baseDropAmount(6)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(10.0)
+                .respawnDelayTicks(200)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.DEEP_CAVERNS, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.EMERALD_ORE)
+                .skyblockItemId("EMERALD")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(20.0)
+                .respawnDelayTicks(400)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.DEEP_CAVERNS, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.OBSIDIAN)
+                .skyblockItemId("OBSIDIAN")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(25.0)
+                .respawnDelayTicks(600)
+                .replacementBlock(Block.BEDROCK)
+                .validRegions(List.of(RegionType.DEEP_CAVERNS, RegionType.PRIVATE_ISLAND))
                 .build());
 
         // FORAGING
         register(SkyblockBlock.builder()
                 .vanillaMaterial(Material.OAK_LOG)
-                .skyblockItemId("OAK_WOOD")
+                .skyblockItemId("OAK_LOG")
                 .baseDropAmount(1)
                 .fortuneApplicable(true)
                 .skillType(SkillType.FORAGING)
                 .xpAmount(6.0)
-                .validLocations(List.of(SkyblockLocation.FOREST, SkyblockLocation.PRIVATE_ISLAND))
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.BIRCH_LOG)
+                .skyblockItemId("BIRCH_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.SPRUCE_LOG)
+                .skyblockItemId("SPRUCE_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.DARK_OAK_LOG)
+                .skyblockItemId("DARK_OAK_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
                 .build());
     }
 
@@ -81,12 +261,12 @@ public class BlockManager {
         REGISTRY.computeIfAbsent(block.vanillaMaterial, _ -> new ArrayList<>()).add(block);
     }
 
-    public static SkyblockBlock getBlock(Material material, SkyblockLocation location) {
+    public static SkyblockBlock getBlock(Material material, RegionType regionType) {
         List<SkyblockBlock> possibleBlocks = REGISTRY.get(material);
         if (possibleBlocks == null) return null;
 
         for (SkyblockBlock sb : possibleBlocks) {
-            if (sb.appliesTo(location)) {
+            if (sb.appliesTo(regionType)) {
                 return sb;
             }
         }
@@ -94,10 +274,15 @@ public class BlockManager {
     }
 
     public static void handleBlockBreak(SkyblockPlayer player, Instance instance, Pos pos, Block brokenBlock) {
-        SkyblockLocation location = SkyblockLocation.getLocation(instance, pos);
-        SkyblockBlock sbBlock = getBlock(Material.fromKey(brokenBlock.key()), location);
+        Region region = RegionManager.getRegion(instance, pos);
+        RegionType regionType = region != null ? region.getType() : RegionType.HUB;
+        SkyblockBlock sbBlock = getBlock(Material.fromKey(brokenBlock.key()), regionType);
 
         if (sbBlock == null) {
+            // Even if not a SkyblockBlock, we must remove it on the private island
+            if (regionType == RegionType.PRIVATE_ISLAND) {
+                instance.setBlock(pos, Block.AIR);
+            }
             return;
         }
 

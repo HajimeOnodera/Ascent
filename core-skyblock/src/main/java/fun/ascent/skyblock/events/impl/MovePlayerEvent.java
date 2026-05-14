@@ -1,62 +1,52 @@
 package fun.ascent.skyblock.events.impl;
 
+import fun.ascent.common.redis.ServerLookup;
+import fun.ascent.common.util.ProxyTransfer;
+import fun.ascent.common.world.WorldRegistry;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import fun.ascent.skyblock.world.WorldHandler;
-import fun.ascent.skyblock.world.location.SkyblockLocation;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 
 public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
 
     @Override
     public void onEvent(PlayerMoveEvent event) {
-        if (event.getPlayer() instanceof SkyblockPlayer sbPlayer) {
-            SkyblockLocation newLoc = SkyblockLocation.getLocation(event.getInstance(), event.getNewPosition());
-            SkyblockLocation oldLoc = SkyblockLocation.getLocation(event.getInstance(), event.getPlayer().getPosition());
+        if (!(event.getPlayer() instanceof SkyblockPlayer sbPlayer)) return;
 
-            if (newLoc != oldLoc && !newLoc.canGo(sbPlayer)) {
-                String msg = newLoc.getRequirementMessage();
-                if (msg != null) sbPlayer.sendMessage(MiniMessage.miniMessage().deserialize(msg));
-                event.setCancelled(true);
-                return;
-            }
-
-            if (sbPlayer.getActiveProfile() != null) {
-                SkyblockProfile profile = sbPlayer.getActiveProfile();
-                Instance container = event.getInstance();
-                String worldId = container.getTag(WorldHandler.worldID);
+        if (sbPlayer.getActiveProfile() != null) {
+            Instance container = event.getInstance();
+            String worldId = container.getTag(WorldRegistry.WORLD_ID_TAG);
+            
+            // Handle Portals
+            Block blockAtNewPos = container.getBlock(event.getNewPosition());
+            if (blockAtNewPos.compare(Block.NETHER_PORTAL) || blockAtNewPos.compare(Block.END_PORTAL)) {
+                String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
                 
-                if (worldId != null && worldId.equals(profile.island.getName())){
-                    if(WorldHandler.getLobby() == null) {
-                        System.out.println("[WORLD] Lobby World is NULL");
-                        return;
+                if (serverType.equalsIgnoreCase("HUB")) {
+                    // In Hub, portal sends to Island server
+                    String targetServer = ServerLookup.findAnyByPrefix("island");
+                    if (targetServer != null) {
+                        sbPlayer.sendMessage("§aSending you to your island...");
+                        ProxyTransfer.send(sbPlayer, targetServer);
                     }
-                    if(container.getBlock(event.getNewPosition()).name().equals(Block.NETHER_PORTAL.name())){
-                        event.getPlayer().setInstance(WorldHandler.getLobby(),WorldHandler.getLobbySpawn());
-                    }
-                }
-                
-                if(worldId != null && worldId.equals("lobby")){
-                    InstanceContainer playerIsland = profile.island.getInstance();
-                    if(container.getBlock(event.getNewPosition()).name().equals(Block.END_PORTAL.name())){
-                        if(newLoc == SkyblockLocation.VILLAGE){
-                            sbPlayer.setInstance(playerIsland,profile.getSpawnPos());
-                        }
+                } else if (serverType.equalsIgnoreCase("ISLAND")) {
+                    // On Island, portal sends to Hub
+                    String targetServer = ServerLookup.findAnyByPrefix("skyblock");
+                    if (targetServer != null) {
+                        sbPlayer.sendMessage("§aReturning to SkyBlock Hub...");
+                        ProxyTransfer.send(sbPlayer, targetServer);
                     }
                 }
             }
         }
+
         if (event.getNewPosition().y() < 0) {
-            if(WorldHandler.getLobby() == null) {
-                System.out.println("[WORLD] Lobby World is NULL");
-                return;
+            if (WorldHandler.getLobby() != null) {
+                event.getPlayer().teleport(WorldHandler.getLobbySpawn());
             }
-            event.getPlayer().setInstance(WorldHandler.getLobby(),WorldHandler.getLobbySpawn());
         }
     }
 }
