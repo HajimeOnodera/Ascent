@@ -13,6 +13,7 @@ public class PlayerItemClickEvent extends SEvent<InventoryPreClickEvent> {
         if(event.getInventory() instanceof PlayerInventory inventory){
             if(inventory.getViewers().isEmpty()) return;
             if(!inventory.getViewers().contains(event.getPlayer()))return;
+            if(event.getClickedItem().getTag(PlayerJoinPostEvent.menuTag) == null) return;
             if(event.getClickedItem().getTag(PlayerJoinPostEvent.menuTag)){
                 event.setCancelled(true);
                 SkyblockMenu.open((SkyblockPlayer) event.getPlayer());
