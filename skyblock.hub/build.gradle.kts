@@ -13,6 +13,9 @@ dependencies {
 
 tasks.shadowJar {
     archiveFileName.set("SkyblockHub.jar")
+    manifest {
+        attributes["Main-Class"] = "fun.ascent.skyblock.hub.HubServer"
+    }
 }
 
 tasks.build {

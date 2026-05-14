@@ -1,6 +1,5 @@
 package fun.ascent.skyblock.player.profiles;
 
-import fun.ascent.common.npc.AscentNpc;
 import org.bson.Document;
 
 import fun.ascent.skyblock.island.Island;
@@ -10,8 +9,6 @@ import fun.ascent.skyblock.minion.model.MinionType;
 import fun.ascent.skyblock.minion.service.MinionFactory;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.minion.service.MinionPersistence;
-import fun.ascent.skyblock.npc.SkyblockNPCManager;
-import fun.ascent.skyblock.npc.island.JerryNPC;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
@@ -142,23 +139,9 @@ public class SkyblockProfile {
     }
 
     private void spawnIslandDefaults(Instance instance) {
-        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
-        System.out.println("[IslandInit] Spawning defaults for profile " + profileID + " on server " + serverType);
-
-        Pos jerryPos = new Pos(9.5, 100, 34, 180, 0);
-
-        String jerryId = "jerry_" + profileID;
-        if (SkyblockNPCManager.getNPCbyID(jerryId) == null) {
-            System.out.println("[IslandInit] Spawning Jerry " + jerryId);
-            AscentNpc jerry = new AscentNpc(new JerryNPC(instance, jerryPos, jerryId));
-            SkyblockNPCManager.registerNPC(jerry);
-            jerry.spawn();
-        } else {
-            System.out.println("[IslandInit] Jerry already exists: " + jerryId);
-        }
-
+        // Moved Jerry to skyblock.island module (IslandJoinListener)
         Pos minionPos = new Pos(3.5, 100, 36.5, -90, 0);
-
+        
         Collection<SkyblockMinion> owned = MinionManager.getOwnedMinions(profileID);
         System.out.println("[IslandInit] Profile " + profileID + " has " + owned.size() + " minions in memory");
         

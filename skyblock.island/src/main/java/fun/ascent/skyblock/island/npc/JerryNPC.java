@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.npc.island;
+package fun.ascent.skyblock.island.npc;
 
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
@@ -16,7 +16,7 @@ public record JerryNPC(Instance instance, Pos position, String id) implements Np
 
     @Override
     public String name() {
-        return "<green>Jerry</green>";
+        return "<white>Jerry</white>";
     }
 
     @Override
@@ -32,13 +32,14 @@ public record JerryNPC(Instance instance, Pos position, String id) implements Np
     @Override
     public String[] holograms() {
         return new String[] {
-            "<green>Jerry</green>",
-            "<yellow><bold>CLICK TO MANAGE</bold></yellow>"
+            "<orange><bold>NEW UPDATE</bold></orange>",
+            "<white>Jerry</white>",
+            "<yellow><bold>CLICK</bold></yellow>"
         };
     }
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
-        npc.speak(player, "Welcome back to your island!", "I'm here to help you manage your resources.");
+        npc.speak(player, "Jerry!");
     }
 }

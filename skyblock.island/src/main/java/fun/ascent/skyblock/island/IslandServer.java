@@ -2,6 +2,7 @@ package fun.ascent.skyblock.island;
 
 import fun.ascent.common.redis.PingService;
 import fun.ascent.skyblock.Main;
+import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.config.ServerConfig;
 import net.minestom.server.MinecraftServer;
 import org.slf4j.Logger;
@@ -22,8 +23,9 @@ public class IslandServer {
         
         // Island Specific Initialization
         IslandManager.runVacantLoop();
+        fun.ascent.skyblock.island.listener.IslandJoinListener.register(MinecraftServer.getGlobalEventHandler());
         
-        fun.ascent.skyblock.cmds.CommandHandler.register(new IslandCommand());
+        CommandHandler.register(new IslandCommand());
         
         LOGGER.info("Starting SkyBlock ISLAND server on {}:{}", config.host(), config.port());
         server.start(config.host(), config.port());

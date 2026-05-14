@@ -1,10 +1,7 @@
 package fun.ascent.skyblock.world;
 
-import fun.ascent.common.npc.AscentNpc;
-import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.world.PolarWorlds;
 import fun.ascent.common.world.WorldRegistry;
-import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -13,13 +10,9 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.tag.Tag;
-import org.reflections.Reflections;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.util.HashMap;
-import java.util.Set;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,48 +39,10 @@ public class WorldHandler {
         return world.getInstance();
     }
 
-    public static void shutdown() {
-        for(World world : worlds.values()){
-            if(world.save){
-                world.getInstance().saveChunksToStorage();
-            }
-        }
-    }
-
     public static void createLobbyWorld(){
         World world = new World("lobby",new File("maps/sbhub"),
                 new File("maps/sbhub"),false);
         world.getInstance();
-        spawnNPCS(world);
-    }
-
-    public static void spawnNPCS(World world){
-        Reflections reflections = new Reflections("fun.ascent.skyblock.npc.hub");
-        Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
-        LOGGER.info("Trying to spawn {} NPCs in hub", npcs.size());
-
-        for (Class<? extends NpcDefinition> npc : npcs) {
-            if (Modifier.isAbstract(npc.getModifiers()) || npc.isInterface()) {
-                continue;
-            }
-            try {
-                Constructor<? extends NpcDefinition> constructor = npc.getDeclaredConstructor(Instance.class);
-                constructor.setAccessible(true);
-                NpcDefinition definition = constructor.newInstance(world.getInstance());
-
-                AscentNpc newNpc = new AscentNpc(definition);
-
-                SkyblockNPCManager.registerNPC(newNpc);
-                newNpc.spawn();
-
-                LOGGER.info("Spawned {} at {}", npc.getSimpleName(), newNpc.position());
-
-            } catch (NoSuchMethodException e) {
-                LOGGER.error("Failed to spawn NPC: {} (Missing Instance Constructor)", npc.getSimpleName());
-            } catch (Exception e) {
-                LOGGER.error("Failed to register NPC: {}", npc.getSimpleName(), e);
-            }
-        }
     }
 
     public static InstanceContainer createWorld(World world){

@@ -41,43 +41,55 @@ public class AscentNpc {
 
     public void spawn() {
         System.out.println("[NpcSpawn] Queueing spawn for " + definition.id() + " at " + position);
-        definition.instance().loadChunk(position).thenRun(() -> MinecraftServer.getSchedulerManager().submitTask(() -> {
-            if (entity != null && entity.getInstance() != null) return TaskSchedule.stop();
+        
+        CompletableFuture<net.minestom.server.instance.Chunk> chunkFuture;
+        try {
+            chunkFuture = definition.instance().loadChunk(position);
+        } catch (Exception e) {
+            System.err.println("[NpcSpawn] Failed to load chunk for " + definition.id() + ": " + e.getMessage());
+            chunkFuture = CompletableFuture.completedFuture(null);
+        }
+
+        chunkFuture.handle((inst, err) -> {
+            if (err != null) {
+                System.err.println("[NpcSpawn] Error loading chunk for " + definition.id() + ": " + err.getMessage());
+            }
             
-            Instance instance = definition.instance();
-            System.out.println("[NpcSpawn] Chunk loaded, creating entity for " + definition.id());
-            
-            // Re-instantiate until we get an ID that isn't already in use in this instance
-            while (true) {
-                if (definition.type() == NpcType.VILLAGER) {
-                    entity = new Entity(EntityType.VILLAGER);
-                } else if (definition.type() == NpcType.WITCH) {
-                    entity = new Entity(EntityType.WITCH);
-                } else {
-                    entity = new EntityCreature(EntityType.MANNEQUIN);
-                    entity.editEntityMeta(MannequinMeta.class, meta -> meta.setProfile(profile()));
+            MinecraftServer.getSchedulerManager().submitTask(() -> {
+                if (entity != null && entity.getInstance() != null) return TaskSchedule.stop();
+                
+                Instance instance = definition.instance();
+                System.out.println("[NpcSpawn] Processing spawn for " + definition.id());
+                
+                try {
+                    if (definition.type() == NpcType.VILLAGER) {
+                        entity = new Entity(EntityType.VILLAGER);
+                    } else if (definition.type() == NpcType.WITCH) {
+                        entity = new Entity(EntityType.WITCH);
+                    } else {
+                        entity = new EntityCreature(EntityType.MANNEQUIN);
+                        entity.editEntityMeta(MannequinMeta.class, meta -> meta.setProfile(profile()));
+                    }
+
+                    entity.setNoGravity(true);
+                    entity.setInstance(instance, position);
+                    spawnHolograms();
+                    System.out.println("[NpcSpawn] Entity successfully placed for " + definition.id());
+
+                    if (definition.looking()) {
+                        MinecraftServer.getSchedulerManager().buildTask(this::tick)
+                            .repeat(TaskSchedule.tick(2))
+                            .schedule();
+                    }
+                } catch (Exception e) {
+                    System.err.println("[NpcSpawn] CRITICAL ERROR during spawn for " + definition.id() + ": " + e.getMessage());
+                    e.printStackTrace();
                 }
 
-                if (instance.getEntityById(entity.getEntityId()) == null) {
-                    break;
-                }
-                entity.remove();
-            }
-
-            entity.setNoGravity(true);
-            entity.setInstance(instance, position);
-            spawnHolograms();
-            System.out.println("[NpcSpawn] Entity created and placed for " + definition.id());
-
-            // Start ticking for player tracking if enabled
-            if (definition.looking()) {
-                MinecraftServer.getSchedulerManager().buildTask(this::tick)
-                    .repeat(TaskSchedule.tick(2))
-                    .schedule();
-            }
-
-            return TaskSchedule.stop();
-        }, ExecutionType.TICK_END));
+                return TaskSchedule.stop();
+            }, ExecutionType.TICK_END);
+            return null;
+        });
     }
 
     public void tick() {

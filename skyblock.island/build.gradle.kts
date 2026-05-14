@@ -13,6 +13,9 @@ dependencies {
 
 tasks.shadowJar {
     archiveFileName.set("SkyblockIsland.jar")
+    manifest {
+        attributes["Main-Class"] = "fun.ascent.skyblock.island.IslandServer"
+    }
 }
 
 tasks.build {
