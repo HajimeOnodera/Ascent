@@ -20,11 +20,11 @@ public abstract class FishingMinion extends SkyblockMinion {
         setCurrentTask(MinionTask.FISH);
         Pos waterPos = findWater();
         if (waterPos == null) {
-            setWarning("This location is not perfect!", "/!\\");
+            setWarning("This location is not perfect!");
             return;
         }
         List<ItemStack> drops = getProfile().createHarvestDrops();
-        if (!canStoreDrops(drops)) {
+        if (canStoreDrops(drops)) {
             return;
         }
         MinionAnimation.animateFishing(this, waterPos, () -> storeDrops(drops));

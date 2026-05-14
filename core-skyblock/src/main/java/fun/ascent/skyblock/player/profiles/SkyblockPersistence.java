@@ -25,6 +25,9 @@ public class SkyblockPersistence {
         }
         doc.put("members", members);
 
+        // Save island state
+        profile.saveIsland();
+
         SkyblockRepository.saveProfile(profile.profileID, doc);
     }
 

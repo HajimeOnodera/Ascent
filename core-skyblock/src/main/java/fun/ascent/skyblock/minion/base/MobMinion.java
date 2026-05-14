@@ -35,7 +35,7 @@ public abstract class MobMinion extends SkyblockMinion {
         }
         setCurrentTask(MinionTask.SLAY);
         List<ItemStack> drops = getProfile().createHarvestDrops();
-        if (!canStoreDrops(drops)) {
+        if (canStoreDrops(drops)) {
             return;
         }
         Pos target = targetMob.getPosition();

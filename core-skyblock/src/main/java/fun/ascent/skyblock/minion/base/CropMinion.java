@@ -31,7 +31,7 @@ public abstract class CropMinion extends SkyblockMinion {
         }
         setCurrentTask(MinionTask.HARVEST);
         List<ItemStack> drops = getProfile().createHarvestDrops();
-        if (!canStoreDrops(drops)) {
+        if (canStoreDrops(drops)) {
             return;
         }
         Block block = getInstance().getBlock(breakPos);

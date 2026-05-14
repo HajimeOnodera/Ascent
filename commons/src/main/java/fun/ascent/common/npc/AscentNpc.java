@@ -10,6 +10,7 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.network.player.ResolvableProfile;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 
@@ -39,22 +40,65 @@ public class AscentNpc {
     }
 
     public void spawn() {
-        if (definition.type() == NpcType.VILLAGER) {
-            entity = new Entity(EntityType.VILLAGER);
-        } else if (definition.type() == NpcType.WITCH) {
-            entity = new Entity(EntityType.WITCH);
-        } else {
-            entity = new EntityCreature(EntityType.MANNEQUIN);
-            entity.editEntityMeta(MannequinMeta.class, meta -> meta.setProfile(profile()));
-        }
-
-        entity.setNoGravity(true);
+        System.out.println("[NpcSpawn] Queueing spawn for " + definition.id() + " at " + position);
         definition.instance().loadChunk(position).thenRun(() -> MinecraftServer.getSchedulerManager().submitTask(() -> {
-            if (entity.getInstance() != null) return TaskSchedule.stop();
-            entity.setInstance(definition.instance(), position);
+            if (entity != null && entity.getInstance() != null) return TaskSchedule.stop();
+            
+            Instance instance = definition.instance();
+            System.out.println("[NpcSpawn] Chunk loaded, creating entity for " + definition.id());
+            
+            // Re-instantiate until we get an ID that isn't already in use in this instance
+            while (true) {
+                if (definition.type() == NpcType.VILLAGER) {
+                    entity = new Entity(EntityType.VILLAGER);
+                } else if (definition.type() == NpcType.WITCH) {
+                    entity = new Entity(EntityType.WITCH);
+                } else {
+                    entity = new EntityCreature(EntityType.MANNEQUIN);
+                    entity.editEntityMeta(MannequinMeta.class, meta -> meta.setProfile(profile()));
+                }
+
+                if (instance.getEntityById(entity.getEntityId()) == null) {
+                    break;
+                }
+                entity.remove();
+            }
+
+            entity.setNoGravity(true);
+            entity.setInstance(instance, position);
             spawnHolograms();
+            System.out.println("[NpcSpawn] Entity created and placed for " + definition.id());
+
+            // Start ticking for player tracking if enabled
+            if (definition.looking()) {
+                MinecraftServer.getSchedulerManager().buildTask(this::tick)
+                    .repeat(TaskSchedule.tick(2))
+                    .schedule();
+            }
+
             return TaskSchedule.stop();
         }, ExecutionType.TICK_END));
+    }
+
+    public void tick() {
+        if (entity == null || entity.getInstance() == null || entity.isRemoved()) return;
+
+        // Look at nearest player within 10 blocks
+        Player nearest = null;
+        double nearestDistance = 100; // 10 blocks squared
+
+        for (Player player : entity.getInstance().getPlayers()) {
+            double dist = player.getPosition().distanceSquared(entity.getPosition());
+            if (dist < nearestDistance) {
+                nearestDistance = dist;
+                nearest = player;
+            }
+        }
+
+        if (nearest != null) {
+            Pos target = nearest.getPosition().add(0, nearest.getEyeHeight(), 0);
+            entity.lookAt(target);
+        }
     }
 
     public void interact(Player player) {

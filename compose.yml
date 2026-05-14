@@ -66,6 +66,7 @@ services:
       - MONGODB_URI=mongodb://host.docker.internal:27017
       - ASCENT_SERVER_NAME=skyblock-1
       - ASCENT_ADVERTISE_HOST=skyblock
+      - ASCENT_SERVER_PORT=25566
       - ASCENT_SERVER_TYPE=HUB
 
   island:
@@ -78,6 +79,7 @@ services:
       - MONGODB_URI=mongodb://host.docker.internal:27017
       - ASCENT_SERVER_NAME=island-1
       - ASCENT_ADVERTISE_HOST=island
+      - ASCENT_SERVER_PORT=25568
       - ASCENT_SERVER_TYPE=ISLAND
 
 #volumes:
