@@ -1,8 +1,11 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.database.SkyblockRepository;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import org.bson.Document;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -40,19 +43,50 @@ public class ProfileManager {
     }
 
     public static void loadProfilesForPlayer(SkyblockPlayer player) {
-        List<org.bson.Document> profileDocs = SkyblockRepository.getProfilesForPlayer(player.getUuid());
-        for (org.bson.Document doc : profileDocs) {
+        List<Document> profileDocs = SkyblockRepository.getProfilesForPlayer(player.getUuid());
+        for (Document doc : profileDocs) {
             UUID profileID = UUID.fromString(doc.getString("_id"));
             
-            // Check if profile is already loaded in cache
-            SkyblockProfile profile = profiles.get(profileID);
-            if (profile == null) {
-                profile = SkyblockPersistence.loadProfile(profileID);
+            // ALWAYS wait for save lock from previous server
+            long start = System.currentTimeMillis();
+            while (RedisManager.get().isSaving(profileID.toString())) {
+                if (System.currentTimeMillis() - start > 5000) {
+                    System.err.println("[Profile] TIMEOUT waiting for save lock for " + profileID);
+                    break;
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignored) {}
             }
+            
+            // ALWAYS reload from DB to ensure latest data
+            SkyblockProfile profile = SkyblockPersistence.loadProfile(profileID);
             
             if (profile != null) {
                 register(profile);
                 player.addProfile(profile);
+            }
+        }
+    }
+
+    public static void saveAllProfiles() {
+        for (SkyblockProfile profile : profiles.values()) {
+            SkyblockPersistence.saveProfile(profile);
+        }
+    }
+
+    public static void unloadProfileForPlayer(SkyblockPlayer player) {
+        for (SkyblockProfile profile : new ArrayList<>(player.getPlayerProfiles().values())) {
+            boolean activeElsewhere = false;
+            for (ProfilePlayer pp : profile.profilePlayers) {
+                if (pp.skyblockPlayer != null && pp.skyblockPlayer != player && pp.skyblockPlayer.isOnline()) {
+                    activeElsewhere = true;
+                    break;
+                }
+            }
+            
+            if (!activeElsewhere) {
+                profiles.remove(profile.profileID);
             }
         }
     }

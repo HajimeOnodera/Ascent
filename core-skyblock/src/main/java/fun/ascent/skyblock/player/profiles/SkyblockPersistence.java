@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.database.SkyblockRepository;
 import org.bson.Document;
 
@@ -8,27 +9,38 @@ import java.util.*;
 public class SkyblockPersistence {
 
     public static void saveProfile(SkyblockProfile profile) {
-        Document doc = new Document();
-        doc.put("name", profile.profileName);
-        doc.put("minion_slots", profile.minionSlots);
+        // Set Redis lock to signal we are saving IMMEDIATELY
+        RedisManager.get().setSavingLock(profile.profileID.toString());
         
-        // Save collections
-        Document collections = new Document();
-        collections.putAll(profile.unlockedCollections);
-        doc.put("collections", collections);
+        try {
+            Document doc = new Document();
+            doc.put("name", profile.profileName);
+            doc.put("minion_slots", profile.minionSlots);
+            doc.put("lastUpdated", System.currentTimeMillis());
+            
+            // Save collections
+            Document collections = new Document();
+            collections.putAll(profile.unlockedCollections);
+            doc.put("collections", collections);
 
-        // Save members
-        Document members = new Document();
-        for (ProfilePlayer pp : profile.profilePlayers) {
-            pp.update(); // Sync live player data to the data handler
-            members.put(pp.playerUUID.toString(), pp.getDataHandler().save());
+            // Save members
+            Document members = new Document();
+            for (ProfilePlayer pp : profile.profilePlayers) {
+                pp.update(); // Sync live player data to the data handler
+                members.put(pp.playerUUID.toString(), pp.getDataHandler().save());
+            }
+            doc.put("members", members);
+
+            // Save island state
+            if (profile.island != null) {
+                profile.island.save();
+            }
+
+            SkyblockRepository.saveProfile(profile.profileID, doc);
+        } finally {
+            // Clear Redis lock when done
+            RedisManager.get().clearSavingLock(profile.profileID.toString());
         }
-        doc.put("members", members);
-
-        // Save island state
-        profile.saveIsland();
-
-        SkyblockRepository.saveProfile(profile.profileID, doc);
     }
 
     public static SkyblockProfile loadProfile(UUID profileID) {

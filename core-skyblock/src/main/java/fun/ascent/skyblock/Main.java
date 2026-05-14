@@ -1,10 +1,13 @@
 package fun.ascent.skyblock;
 
 import fun.ascent.skyblock.events.EventManager;
+import fun.ascent.skyblock.island.IslandManager;
+import fun.ascent.skyblock.island.IslandSystemListener;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.actionbar.ActionBarManager;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.combat.CombatListener;
+import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
@@ -24,6 +27,7 @@ import fun.ascent.skyblock.listeners.ProfileListener;
 import fun.ascent.skyblock.listeners.SkyblockChatListener;
 import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.calendar.Calendar;
+import fun.ascent.skyblock.shop.ShopRegistry;
 import fun.ascent.skyblock.world.region.RegionListener;
 import fun.ascent.skyblock.world.region.RegionManager;
 import net.minestom.server.MinecraftServer;
@@ -61,14 +65,24 @@ public class Main {
         RegionManager.initialize();
         BazaarRegistry.initialise();
         AuctionRegistry.initialise();
+        ShopRegistry.initialise();
         RegionListener.register(MinecraftServer.getGlobalEventHandler());
         ProfileListener.register(MinecraftServer.getGlobalEventHandler());
+        IslandSystemListener.register(MinecraftServer.getGlobalEventHandler());
+        
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        if (serverType.equalsIgnoreCase("ISLAND")) {
+            IslandManager.runVacantLoop();
+        }
+        
         DungeonManager.get().initialize();
 
         LOGGER.info("Core SkyBlock initialized successfully!");
     }
 
     public static void shutdown() {
+        LOGGER.info("Shutting down SkyBlock Core...");
+        ProfileManager.saveAllProfiles();
         MinecraftServer.stopCleanly();
     }
 }

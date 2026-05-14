@@ -1,23 +1,22 @@
-package fun.ascent.skyblock.hub;
+package fun.ascent.skyblock.shop.command;
 
-import fun.ascent.skyblock.hub.shop.ShopMenu;
+import fun.ascent.skyblock.shop.ShopMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 
 public class ShopCommand extends Command {
 
     public ShopCommand() {
         super("shop");
 
-        var shopID = ArgumentType.String("shop");
+        ArgumentWord shopID = ArgumentType.Word("shop");
+        
         addSyntax((sender, args) -> {
-
-            String shop = args.get(shopID);
             if(!(sender instanceof SkyblockPlayer pl)) return;
-            System.out.println("[SHOP] Opening Shop " + shop);
-            ShopMenu.open(pl,shop);
-
-        },shopID);
+            String shop = args.get(shopID);
+            ShopMenu.open(pl, shop);
+        }, shopID);
     }
 }

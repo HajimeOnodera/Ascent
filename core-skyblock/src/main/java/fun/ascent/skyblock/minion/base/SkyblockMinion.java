@@ -112,6 +112,7 @@ public abstract class SkyblockMinion {
     }
 
     public void tick() {
+        if (entity.getInstance() == null) return;
         if (busy) {
             return;
         }
@@ -193,6 +194,7 @@ public abstract class SkyblockMinion {
     }
 
     public void rotateToward(Pos target) {
+        if (entity.getInstance() == null) return;
         double dx = target.x() - position.x();
         double dz = target.z() - position.z();
         float yaw = (float) Math.toDegrees(Math.atan2(-dx, dz));

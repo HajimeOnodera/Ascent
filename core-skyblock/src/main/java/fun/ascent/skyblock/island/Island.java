@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.island;
 
 import fun.ascent.common.world.WorldRegistry;
+import fun.ascent.skyblock.events.definitions.IslandLoadEvent;
+import fun.ascent.skyblock.events.definitions.IslandSaveEvent;
 import fun.ascent.skyblock.island.data.IslandDatabase;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,6 +27,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class Island {
 
+    @Getter
     private final UUID islandId;
     @Getter
     private InstanceContainer instance;
@@ -32,6 +35,7 @@ public class Island {
     @Getter
     private boolean loaded = false;
     private int version = 1;
+    private long lastLoadTime = 0;
 
     // Additional data to be saved in MongoDB alongside the world
     @Getter
@@ -41,17 +45,27 @@ public class Island {
     @Setter
     private List<Document> npcData = new ArrayList<>();
 
+    @Getter
+    private final java.util.Set<java.util.UUID> spawnedMinionUuids = new java.util.HashSet<>();
+    @Getter
+    private final java.util.Set<String> spawnedNpcIds = new java.util.HashSet<>();
+
     public Island(UUID islandId) {
         this.islandId = islandId;
     }
+
+    private CompletableFuture<InstanceContainer> loadFuture;
 
     public CompletableFuture<InstanceContainer> load() {
         if (loaded && instance != null) {
             return CompletableFuture.completedFuture(instance);
         }
+        if (loadFuture != null && !loadFuture.isCompletedExceptionally() && !loadFuture.isDone()) {
+            return loadFuture;
+        }
 
         System.out.println("[Island] Loading island " + islandId);
-        return CompletableFuture.supplyAsync(() -> {
+        loadFuture = CompletableFuture.supplyAsync(() -> {
             try {
                 Document doc = IslandDatabase.getIsland(islandId);
                 if (doc == null) {
@@ -85,7 +99,12 @@ public class Island {
                 }, ExecutionType.TICK_END);
                 
                 syncFuture.join();
+                this.lastLoadTime = System.currentTimeMillis();
                 System.out.println("[Island] Island " + islandId + " load complete");
+                
+                // Fire load event
+                MinecraftServer.getGlobalEventHandler().call(new IslandLoadEvent(this, instance));
+                
                 return instance;
 
             } catch (IOException e) {
@@ -93,6 +112,7 @@ public class Island {
                 return null;
             }
         });
+        return loadFuture;
     }
 
     public String getName() {
@@ -101,6 +121,9 @@ public class Island {
 
     public void runVacantCheck() {
         if (instance == null || !loaded) return;
+
+        // Grace period of 1 minute after load to allow players to join
+        if (System.currentTimeMillis() - lastLoadTime < 60000) return;
 
         if (instance.getPlayers().isEmpty()) {
             System.out.println("[Island] Island " + islandId + " is vacant, unloading...");
@@ -123,6 +146,10 @@ public class Island {
         if (!loaded || instance == null || polarWorld == null) return;
         
         System.out.println("[Island] Saving island " + islandId + " to database...");
+        
+        // Fire save event so sub-systems can update data before save
+        MinecraftServer.getGlobalEventHandler().call(new IslandSaveEvent(this));
+        
         // Update polarWorld with current instance state
         new PolarLoader(polarWorld).saveInstance(instance);
         byte[] bytes = PolarWriter.write(polarWorld);

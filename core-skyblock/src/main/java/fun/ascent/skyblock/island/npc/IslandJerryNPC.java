@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
-public record JerryNPC(Instance instance, Pos position, String id) implements NpcDefinition {
+public record IslandJerryNPC(Instance instance, Pos position, String id) implements NpcDefinition {
 
     @Override
     public String id() {

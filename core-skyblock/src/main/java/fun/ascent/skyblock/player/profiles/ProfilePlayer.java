@@ -15,7 +15,6 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +65,12 @@ public class ProfilePlayer {
         
         // Only sync live data if this is the active profile
         if (skyblockPlayer.getActiveProfile() != null && skyblockPlayer.getActiveProfile().profileID.equals(this.profileID)) {
-            this.inventory = Arrays.asList(skyblockPlayer.getInventory().getItemStacks());
+            ItemStack[] items = skyblockPlayer.getInventory().getItemStacks();
+            this.inventory = new ArrayList<>(items.length);
+            for (ItemStack item : items) {
+                this.inventory.add(item != null ? item : ItemStack.AIR);
+            }
+            
             this.armor = List.of(
                     skyblockPlayer.getEquipment(EquipmentSlot.BOOTS),
                     skyblockPlayer.getEquipment(EquipmentSlot.LEGGINGS),

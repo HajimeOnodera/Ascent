@@ -3,6 +3,7 @@ package fun.ascent.skyblock.cmds.impl;
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.GameMode;
@@ -25,6 +26,9 @@ public class HubCommand extends Command {
                     return;
                 }
                 player.sendMessage(text("<green>Sending you to SkyBlock Hub..."));
+                if (player.getActiveProfile() != null) {
+                    ProfileManager.saveProfile(player.getActiveProfile().profileID);
+                }
                 ProxyTransfer.send(player, targetServer);
                 return;
             }

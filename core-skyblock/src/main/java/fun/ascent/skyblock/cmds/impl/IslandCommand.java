@@ -1,8 +1,10 @@
-package fun.ascent.skyblock.island;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
+import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.GameMode;
@@ -27,6 +29,7 @@ public class IslandCommand extends Command {
                     return;
                 }
                 player.sendMessage("§aSending you to the Island server...");
+                ProfileManager.saveProfile(profile.profileID);
                 ProxyTransfer.send(player, targetServer);
                 return;
             }
@@ -38,16 +41,24 @@ public class IslandCommand extends Command {
             }
 
             if (island.isLoaded()) {
-                player.setInstance(island.getInstance(), profile.getSpawnPos());
-                player.setGameMode(GameMode.SURVIVAL);
-                player.sendMessage("§aTeleporting to your island!");
+                if (player.getInstance() != island.getInstance()) {
+                    player.setInstance(island.getInstance(), profile.getSpawnPos());
+                    player.setGameMode(GameMode.SURVIVAL);
+                    player.sendMessage("§aTeleporting to your island!");
+                } else {
+                    player.sendMessage("§aYou are already on your island!");
+                }
             } else {
                 player.sendMessage("§eYour island is loading, please wait...");
                 island.load().thenAccept(instance -> {
                     if (instance != null) {
-                        player.setInstance(instance, profile.getSpawnPos());
-                        player.setGameMode(GameMode.SURVIVAL);
-                        player.sendMessage("§aIsland loaded! Teleporting...");
+                        if (player.getInstance() != instance) {
+                            player.setInstance(instance, profile.getSpawnPos());
+                            player.setGameMode(GameMode.SURVIVAL);
+                            player.sendMessage("§aIsland loaded! Teleporting...");
+                        } else {
+                            player.sendMessage("§aIsland loaded!");
+                        }
                     } else {
                         player.sendMessage("§cFailed to load island!");
                     }

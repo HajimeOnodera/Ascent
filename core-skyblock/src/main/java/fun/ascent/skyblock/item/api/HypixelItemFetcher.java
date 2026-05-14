@@ -161,7 +161,7 @@ public class HypixelItemFetcher {
 
     private static Material parseMaterial(String apiName) {
         String mapped = LEGACY_MATERIALS.getOrDefault(apiName, apiName.toLowerCase());
-        Material material = Material.fromKey("minecraft:" + mapped);
+        Material material = Material.fromKey(mapped);
         return material != null ? material : Material.PAPER;
     }
 

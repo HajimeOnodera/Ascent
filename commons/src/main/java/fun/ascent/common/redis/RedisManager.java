@@ -59,6 +59,24 @@ public final class RedisManager {
         return pool.getResource();
     }
 
+    public void setSavingLock(String profileId) {
+        try (Jedis jedis = getResource()) {
+            jedis.setex("ascent:saving:" + profileId, 10, "true");
+        }
+    }
+
+    public boolean isSaving(String profileId) {
+        try (Jedis jedis = getResource()) {
+            return jedis.exists("ascent:saving:" + profileId);
+        }
+    }
+
+    public void clearSavingLock(String profileId) {
+        try (Jedis jedis = getResource()) {
+            jedis.del("ascent:saving:" + profileId);
+        }
+    }
+
     public void close() {
         pool.close();
     }

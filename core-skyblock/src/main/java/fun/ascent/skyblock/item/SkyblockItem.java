@@ -114,6 +114,8 @@ public class SkyblockItem {
     private final boolean bookOfStats;
     private final int kills;
     private final boolean artOfPeace;
+    @Getter
+    private final UUID uuid;
 
     private SkyblockItem(Builder builder) {
         this.itemId = builder.itemId;
@@ -148,6 +150,7 @@ public class SkyblockItem {
         this.bookOfStats = builder.bookOfStats;
         this.kills = builder.kills;
         this.artOfPeace = builder.artOfPeace;
+        this.uuid = builder.uuid != null ? builder.uuid : UUID.randomUUID();
     }
 
     public static SkyblockItem fromStack(ItemStack itemStack) {
@@ -188,6 +191,9 @@ public class SkyblockItem {
                 }
             }
         }
+
+        UUID uuid = ItemNBT.getUuid(itemStack);
+        if (uuid != null) builder.uuid(uuid);
 
         return builder.build();
     }
@@ -283,7 +289,7 @@ public class SkyblockItem {
     private CustomData buildCustomData() {
         CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder()
                 .putString("id", itemId)
-                .putString("uuid", UUID.randomUUID().toString())
+                .putString("uuid", uuid.toString())
                 .putLong("timestamp", System.currentTimeMillis());
 
         if (recombobulated) {
@@ -598,6 +604,7 @@ public class SkyblockItem {
         private boolean bookOfStats = false;
         private int kills = 0;
         private boolean artOfPeace = false;
+        private UUID uuid = null;
 
         private Builder(String itemId, Material material, Rarity rarity) {
             this.itemId = itemId;
@@ -633,6 +640,7 @@ public class SkyblockItem {
         public Builder bookOfStats(boolean bookOfStats) { this.bookOfStats = bookOfStats; return this; }
         public Builder kills(int kills) { this.kills = kills; return this; }
         public Builder artOfPeace(boolean artOfPeace) { this.artOfPeace = artOfPeace; return this; }
+        public Builder uuid(UUID uuid) { this.uuid = uuid; return this; }
 
         public SkyblockItem build() { return new SkyblockItem(this); }
     }

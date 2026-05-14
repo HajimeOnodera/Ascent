@@ -3,7 +3,6 @@ package fun.ascent.skyblock.hub;
 import fun.ascent.common.redis.PingService;
 import fun.ascent.skyblock.Main;
 import fun.ascent.skyblock.config.ServerConfig;
-import fun.ascent.skyblock.hub.shop.ShopRegistry;
 import fun.ascent.skyblock.world.WorldHandler;
 import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
 import net.minestom.server.MinecraftServer;
@@ -26,10 +25,7 @@ public class HubServer {
         // Hub Specific Initialization
         WorldHandler.initialise();
         HubManager.init();
-        ShopRegistry.initialise();
         ZonePopulationTicker.start();
-        
-        fun.ascent.skyblock.cmds.CommandHandler.register(new ShopCommand());
         
         LOGGER.info("Starting SkyBlock HUB server on {}:{}", config.host(), config.port());
         server.start(config.host(), config.port());

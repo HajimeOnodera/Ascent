@@ -12,6 +12,7 @@ public class ProfileListener {
                 if (player.getActiveProfile() != null) {
                     System.out.println("[Skyblock] Saving profile for " + player.getUsername());
                     ProfileManager.saveProfile(player.getActiveProfile().profileID);
+                    ProfileManager.unloadProfileForPlayer(player);
                 }
             }
         });
