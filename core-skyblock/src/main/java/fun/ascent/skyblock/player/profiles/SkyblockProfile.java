@@ -36,6 +36,8 @@ public class SkyblockProfile {
     @Getter
     @Setter
     public int minionSlots = 5;
+    private boolean islandLoaded = false;
+    private final Set<UUID> spawnedMinionUuids = new HashSet<>();
 
     public void postLoad(){
         if(island == null){
@@ -95,6 +97,9 @@ public class SkyblockProfile {
     }
 
     public void generateIsland() {
+        if (islandLoaded) return;
+        islandLoaded = true;
+        
         island = IslandManager.getIsland(profileID);
         
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
@@ -118,8 +123,11 @@ public class SkyblockProfile {
     private void restoreIslandData(Instance instance) {
         for (Document minionDoc : island.getMinionData()) {
             SkyblockMinion minion = MinionPersistence.deserialize(minionDoc, instance);
+            if (spawnedMinionUuids.contains(minion.getId())) continue;
+            
             minion.spawn();
             MinionManager.registerMinion(minion);
+            spawnedMinionUuids.add(minion.getId());
         }
     }
 
@@ -148,8 +156,11 @@ public class SkyblockProfile {
         if (owned.stream().noneMatch(m -> m.getInstance() == instance)) {
             System.out.println("[IslandInit] Spawning default Cobblestone minion");
             SkyblockMinion minion = MinionFactory.create(profileID, MinionType.COBBLESTONE, 1, instance, minionPos);
+            if (spawnedMinionUuids.contains(minion.getId())) return;
+            
             minion.spawn();
             MinionManager.registerMinion(minion);
+            spawnedMinionUuids.add(minion.getId());
         }
     }
 

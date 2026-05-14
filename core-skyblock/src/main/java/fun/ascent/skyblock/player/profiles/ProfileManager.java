@@ -43,7 +43,13 @@ public class ProfileManager {
         List<org.bson.Document> profileDocs = SkyblockRepository.getProfilesForPlayer(player.getUuid());
         for (org.bson.Document doc : profileDocs) {
             UUID profileID = UUID.fromString(doc.getString("_id"));
-            SkyblockProfile profile = SkyblockPersistence.loadProfile(profileID);
+            
+            // Check if profile is already loaded in cache
+            SkyblockProfile profile = profiles.get(profileID);
+            if (profile == null) {
+                profile = SkyblockPersistence.loadProfile(profileID);
+            }
+            
             if (profile != null) {
                 register(profile);
                 player.addProfile(profile);

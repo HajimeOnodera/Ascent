@@ -26,7 +26,7 @@ import static fun.ascent.common.StringUtility.text;
 public class AscentNpc {
 
     private static final Set<UUID> ALREADY_TALKING = new HashSet<>();
-    private static final double HOLOGRAM_DELTA = 0.3;
+    private static final double HOLOGRAM_DELTA = 0.25;
 
     private final List<Entity> holograms = new ArrayList<>();
     private final UUID uuid = UUID.randomUUID();
@@ -217,12 +217,20 @@ public class AscentNpc {
             return;
         }
 
-        double yOffset = definition.type() == NpcType.PLAYER ? 2.0 : 2.2;
-        for (String text : lines) {
-            if (text == null || text.isBlank()) {
-                continue;
-            }
+        // Filter out blank lines to get actual count
+        java.util.List<String> validLines = new java.util.ArrayList<>();
+        for (String line : lines) {
+            if (line != null && !line.isBlank()) validLines.add(line);
+        }
+        if (validLines.isEmpty()) return;
 
+        // The base height for the bottom-most line (last in the array)
+        double baseHeight = definition.type() == NpcType.PLAYER ? 2.0 : 2.1;
+        
+        // Calculate initial yOffset so the LAST line ends up at baseHeight
+        double yOffset = baseHeight + (validLines.size() - 1) * HOLOGRAM_DELTA;
+        
+        for (String text : validLines) {
             Entity armorStand = new Entity(EntityType.ARMOR_STAND);
             ArmorStandMeta meta = (ArmorStandMeta) armorStand.getEntityMeta();
             meta.setInvisible(true);
