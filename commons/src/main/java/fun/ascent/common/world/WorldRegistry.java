@@ -1,6 +1,7 @@
 package fun.ascent.common.world;
 
 import net.minestom.server.instance.Instance;
+import net.minestom.server.tag.Tag;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class WorldRegistry {
+    public static final Tag<String> WORLD_ID_TAG = Tag.String("world");
 
     private final Map<String, UUID> worlds = new HashMap<>();
 

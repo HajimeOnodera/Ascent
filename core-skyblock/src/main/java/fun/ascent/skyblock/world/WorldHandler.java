@@ -31,7 +31,7 @@ public class WorldHandler {
     public static InstanceManager instanceManager;
     public static WorldRegistry WORLD_REGISTRY = new WorldRegistry();
     private static final Pos STARTING_SPAWN = new Pos(0 , 77, -1,180,0);
-    public static final Tag<String> worldID = Tag.String("world");
+    public static final Tag<String> worldID = WorldRegistry.WORLD_ID_TAG;
 
     public static void initialise() {
         instanceManager = MinecraftServer.getInstanceManager();
@@ -127,9 +127,5 @@ public class WorldHandler {
             return (SkyblockPlayer) player;
         }
         return null;
-    }
-
-    public static String getWorldName(Instance instance) {
-        return WORLD_REGISTRY.name(instance).orElse(null);
     }
 }

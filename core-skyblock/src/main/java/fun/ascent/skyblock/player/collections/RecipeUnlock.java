@@ -16,7 +16,6 @@ public class RecipeUnlock extends CollectionUnlock {
 
     @Override
     public void apply(SkyblockProfile profile) {
-        // TODO: Implement recipe unlocking logic in the crafting system
-        System.out.println("[Collection] Unlocked recipe: " + recipeName + " for profile " + profile.profileID);
+        profile.unlockedRecipes.add(recipeName);
     }
 }

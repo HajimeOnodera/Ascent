@@ -12,8 +12,8 @@ RUN mkdir -p plugins
 COPY core-proxy/build/libs/CoreProxy.jar ./plugins/CoreProxy.jar
 
 # Environment variables
-ENV REDIS_HOST=redis
+ENV REDIS_HOST=host.docker.internal
 ENV REDIS_PORT=6379
 
-EXPOSE 25577
+EXPOSE 25565
 CMD ["java", "-Xmx512M", "-jar", "velocity.jar"]

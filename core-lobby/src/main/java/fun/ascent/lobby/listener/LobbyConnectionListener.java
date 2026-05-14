@@ -8,6 +8,7 @@ import fun.ascent.lobby.world.LobbyWorld;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -24,6 +25,7 @@ public class LobbyConnectionListener {
 
         handler.addListener(PlayerSpawnEvent.class, event -> {
             Player player = event.getPlayer();
+            player.setGameMode(GameMode.SURVIVAL);
             player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
             
             if (!event.isFirstSpawn()) {

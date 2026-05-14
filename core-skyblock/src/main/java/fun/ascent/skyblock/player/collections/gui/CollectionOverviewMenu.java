@@ -24,15 +24,19 @@ public class CollectionOverviewMenu {
             CollectionCategory.CollectionType.COMBAT, 22,
             CollectionCategory.CollectionType.FORAGING, 23,
             CollectionCategory.CollectionType.FISHING, 24,
-            CollectionCategory.CollectionType.BOSS, 31
+            CollectionCategory.CollectionType.BOSS, 31,
+            CollectionCategory.CollectionType.OTHER, 32
     );
 
+    private static final int INFO_SLOT = 4;
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player) {
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<green>Collection"));
 
         CollectionMenuFormat.fill(inv);
+
+        inv.setItemStack(INFO_SLOT, buildInfoItem(player));
 
         Map<CollectionCategory.CollectionType, CollectionCategory> categories = CollectionRegistry.getCategories();
         for (Map.Entry<CollectionCategory.CollectionType, Integer> entry : CATEGORY_SLOTS.entrySet()) {
@@ -69,6 +73,30 @@ public class CollectionOverviewMenu {
                 return;
             }
         }
+    }
+
+    private static ItemStack buildInfoItem(SkyblockPlayer player) {
+        List<Component> lore = new ArrayList<>();
+        lore.add(text("<gray>View all of the items available in"));
+        lore.add(text("<gray>SkyBlock. Collect more of an item to"));
+        lore.add(text("<gray>unlock rewards on your way to"));
+        lore.add(text("<gray>becoming a master of SkyBlock!"));
+        lore.add(Component.text(" "));
+
+        int unlocked = player.getActiveProfile().unlockedCollections.size();
+        int total = CollectionRegistry.getTotalCollectionsCount();
+        double percent = total == 0 ? 0 : (double) unlocked / total * 100;
+
+        lore.add(text("<gray>Collections Unlocked: <yellow>" + String.format("%.1f", percent) + "<gold>%"));
+        CollectionMenuFormat.addProgress(lore, unlocked, total, "");
+
+        lore.add(Component.text(" "));
+        lore.add(text("<yellow>Click to view!"));
+
+        return ItemStack.builder(Material.PAINTING)
+                .customName(text("<green>Collections"))
+                .lore(lore)
+                .build();
     }
 
     private static ItemStack buildCategoryItem(CollectionCategory category) {

@@ -2,8 +2,12 @@ package fun.ascent.skyblock.menus;
 
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.StringUtility;
+import fun.ascent.skyblock.crafting.RecipeRegistry;
+import fun.ascent.skyblock.crafting.gui.GUIRecipeBook;
 import fun.ascent.skyblock.menus.command.skyblockMenu.EquipmentMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.collections.CollectionRegistry;
+import fun.ascent.skyblock.player.collections.gui.CollectionMenuFormat;
 import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.stats.Stat;
@@ -54,6 +58,8 @@ public class SkyblockMenu {
                 EquipmentMenu.open(player);
             } else if (slot == COLLS_SLOT) {
                 CollectionOverviewMenu.open(player);
+            } else if (slot == RECIPE_SLOT) {
+                GUIRecipeBook.open(player);
             }
         });
 
@@ -67,10 +73,15 @@ public class SkyblockMenu {
         lore.add(miniMessage().deserialize("<gray>special items! You can view how to").decoration(TextDecoration.ITALIC,false));
         lore.add(miniMessage().deserialize("<gray>craft these items here."));
         lore.add(Component.empty());
-        lore.add(miniMessage().deserialize("<gray>Recipe Book Unlocked: <yellow>x.y<gold>%").decoration(TextDecoration.ITALIC,false));
-        lore.add(miniMessage().deserialize("<white>────────────").decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,true).append(miniMessage().deserialize(
-                "<yellow> x<gold>/<yellow>y"
-        ).decoration(TextDecoration.ITALIC,false).decoration(TextDecoration.STRIKETHROUGH,false)));
+        
+        int unlocked = plProfile.skyblockPlayer.getActiveProfile().unlockedRecipes.size();
+        int total = RecipeRegistry.getTotalRecipesCount();
+        double percent = total == 0 ? 0 : (double) unlocked / total * 100;
+
+        lore.add(miniMessage().deserialize("<gray>Recipe Book Unlocked: <yellow>" + String.format("%.1f", percent) + "<gold>%").decoration(TextDecoration.ITALIC,false));
+        
+        CollectionMenuFormat.addProgress(lore, unlocked, total, "");
+
         lore.add(Component.empty());
         lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /recipes.").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
@@ -90,22 +101,12 @@ public class SkyblockMenu {
         lore.add(Component.empty());
         
         int unlocked = plProfile.skyblockPlayer.getActiveProfile().unlockedCollections.size();
-        int total = fun.ascent.skyblock.player.collections.CollectionRegistry.getTotalCollectionsCount();
+        int total = CollectionRegistry.getTotalCollectionsCount();
         double percent = total == 0 ? 0 : (double) unlocked / total * 100;
         
         lore.add(miniMessage().deserialize("<gray>Collections unlocked: <yellow>" + String.format("%.1f", percent) + "<gold>%").decoration(TextDecoration.ITALIC,false));
         
-        // Progress bar (restored style)
-        int barLength = 20;
-        int filled = total == 0 ? 0 : (int) (percent / 100 * barLength);
-        
-        String barStr = "<green>" + "─".repeat(filled) + "<white>" + "─".repeat(barLength - filled);
-        
-        lore.add(miniMessage().deserialize(barStr)
-                .decoration(TextDecoration.ITALIC, false)
-                .decoration(TextDecoration.STRIKETHROUGH, true)
-                .append(miniMessage().deserialize(" <yellow>" + unlocked + "<gold>/<yellow>" + total)
-                        .decoration(TextDecoration.STRIKETHROUGH, false)));
+        CollectionMenuFormat.addProgress(lore, unlocked, total, "");
 
         lore.add(Component.empty());
         lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));

@@ -10,6 +10,7 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.network.player.ResolvableProfile;
+import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class AscentNpc {
     private final UUID uuid = UUID.randomUUID();
     private final NpcDefinition definition;
     private Entity entity;
-    private Pos position;
+    private final Pos position;
 
     public AscentNpc(NpcDefinition definition) {
         this.definition = definition;
@@ -48,10 +49,12 @@ public class AscentNpc {
         }
 
         entity.setNoGravity(true);
-        definition.instance().loadChunk(position).thenRun(() -> {
+        definition.instance().loadChunk(position).thenRun(() -> MinecraftServer.getSchedulerManager().submitTask(() -> {
+            if (entity.getInstance() != null) return TaskSchedule.stop();
             entity.setInstance(definition.instance(), position);
             spawnHolograms();
-        });
+            return TaskSchedule.stop();
+        }, ExecutionType.TICK_END));
     }
 
     public void interact(Player player) {
@@ -90,23 +93,6 @@ public class AscentNpc {
             future.complete(null);
         }).delay(TaskSchedule.tick(totalDelay)).schedule();
 
-    }
-
-    public void updateLocation(Pos newPosition) {
-        if (newPosition == null) {
-            return;
-        }
-
-        position = newPosition;
-        if (entity != null) {
-            entity.teleport(newPosition);
-        }
-
-        double yOffset = definition.type() == NpcType.PLAYER ? 2.0 : 2.2;
-        for (Entity armorStand : holograms) {
-            armorStand.teleport(newPosition.add(0, yOffset, 0));
-            yOffset -= HOLOGRAM_DELTA;
-        }
     }
 
     public void remove() {

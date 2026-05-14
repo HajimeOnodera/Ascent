@@ -24,7 +24,7 @@ public class GamemodeCommand extends Command {
 
         gamemode.setSuggestionCallback((_,_,suggestion) -> {
             String input = suggestion.getInput();
-            List<String> mods = new ArrayList<>(List.of("Creative", "Adventure", "Survival", "Spectator"));
+            List<String> mods = new ArrayList<>(List.of("Creative", "Survival", "Spectator"));
             if(!input.isEmpty()) {
                 mods.removeIf(mod -> !mod.toLowerCase().startsWith(input.toLowerCase()));
             }
@@ -38,7 +38,6 @@ public class GamemodeCommand extends Command {
                 case "spectator" ,"2", "sp" -> SPECTATOR;
                 case "survival", "0", "s" -> SURVIVAL;
                 case "creative", "1", "c" -> CREATIVE;
-                case "adventure", "3", "ad" -> ADVENTURE;
                 default -> null;
             };
             if(modeToSet == null){
