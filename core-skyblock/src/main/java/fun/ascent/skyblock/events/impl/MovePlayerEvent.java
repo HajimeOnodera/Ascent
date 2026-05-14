@@ -2,10 +2,12 @@ package fun.ascent.skyblock.events.impl;
 
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
-import fun.ascent.common.world.WorldRegistry;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.WorldHandler;
+import fun.ascent.skyblock.world.region.Region;
+import fun.ascent.skyblock.world.region.RegionManager;
+import fun.ascent.skyblock.world.region.RegionType;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -18,14 +20,15 @@ public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
 
         if (sbPlayer.getActiveProfile() != null) {
             Instance container = event.getInstance();
-            String worldId = container.getTag(WorldRegistry.WORLD_ID_TAG);
             
             // Handle Portals
             Block blockAtNewPos = container.getBlock(event.getNewPosition());
-            if (blockAtNewPos.compare(Block.NETHER_PORTAL) || blockAtNewPos.compare(Block.END_PORTAL)) {
+            if (blockAtNewPos.id() == Block.NETHER_PORTAL.id() || blockAtNewPos.id() == Block.END_PORTAL.id()) {
                 String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
                 
                 if (serverType.equalsIgnoreCase("HUB")) {
+                    Region cur = RegionManager.getRegion(container,sbPlayer.getPosition());
+                    if(cur.getType() != RegionType.VILLAGE) return;
                     // In Hub, portal sends to Island server
                     String targetServer = ServerLookup.findAnyByPrefix("island");
                     if (targetServer != null) {

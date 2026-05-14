@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.item.items.bows;
+package fun.ascent.skyblock.item.items.swords;
 
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.item.items.ItemDefinition;

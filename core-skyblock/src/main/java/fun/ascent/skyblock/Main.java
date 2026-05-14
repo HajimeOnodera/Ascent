@@ -2,6 +2,8 @@ package fun.ascent.skyblock;
 
 import fun.ascent.common.Ascent;
 import fun.ascent.common.redis.PingService;
+import fun.ascent.skyblock.auction.AuctionRegistry;
+import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.blocks.BlockManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.crafting.RecipeRegistry;
@@ -80,6 +82,8 @@ public class Main {
         CombatListener.register();
         SkyblockChatListener.register();
         RegionManager.initialize();
+        BazaarRegistry.initialise();
+        AuctionRegistry.initialise();
         RegionListener.register(MinecraftServer.getGlobalEventHandler());
         ProfileListener.register(MinecraftServer.getGlobalEventHandler());
         DungeonManager.get().initialize();

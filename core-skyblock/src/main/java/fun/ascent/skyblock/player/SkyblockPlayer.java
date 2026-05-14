@@ -11,11 +11,14 @@ import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.timer.Task;
+import net.minestom.server.timer.TaskSchedule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +33,10 @@ public class SkyblockPlayer extends Player {
 
     private double currentHealth;
     private double currentMana;
+
+    private final Map<String, Map<Stats, Double>> statEffects = new HashMap<>();
+    private final Map<String, Task> effectTasks = new HashMap<>();
+    private final Map<String, Long> abilityCooldowns = new HashMap<>();
 
     public static final Tag<UUID> sbProfileID = Tag.UUID("profile_id");
 
@@ -84,6 +91,8 @@ public class SkyblockPlayer extends Player {
 
                 System.out.println("Profile Set Correctly");
                 updatePlayer();
+                this.currentHealth = maxStat(Stats.HEALTH);
+                this.currentMana = maxStat(Stats.INTELLIGENCE);
                 break;
             }
             System.out.println("Not Right UUID: " + pp.playerUUID);
@@ -95,8 +104,8 @@ public class SkyblockPlayer extends Player {
     public void updatePlayer() {
         if (this.activeProfile == null) return;
         this.activeProfileData.updateStats();
-        this.currentHealth = maxStat(Stats.HEALTH);
-        this.currentMana = maxStat(Stats.INTELLIGENCE);
+        this.currentHealth = Math.min(currentHealth, maxStat(Stats.HEALTH));
+        this.currentMana = Math.min(currentMana, maxStat(Stats.INTELLIGENCE));
     }
 
     public void addHealth(double amount) {
@@ -124,13 +133,51 @@ public class SkyblockPlayer extends Player {
     public double maxStat(Stats stat) {
         if (activeProfileData == null) return stat.getBaseStat();
         Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
-        return entry != null ? stat.applyCap(entry.getCurValue()) : stat.getBaseStat();
+        double base = entry != null ? entry.getCurValue() : stat.getBaseStat();
+        double bonus = statEffects.values().stream()
+                .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
+                .sum();
+        return stat.applyCap(base + bonus);
+    }
+
+    public void applyEffect(String effectId, Map<Stats, Double> bonuses, int durationSeconds) {
+        Task existing = effectTasks.remove(effectId);
+        if (existing != null) existing.cancel();
+        statEffects.put(effectId, bonuses);
+        updatePlayer();
+        Task task = MinecraftServer.getSchedulerManager()
+                .buildTask(() -> {
+                    statEffects.remove(effectId);
+                    effectTasks.remove(effectId);
+                    updatePlayer();
+                })
+                .delay(TaskSchedule.seconds(durationSeconds))
+                .schedule();
+        effectTasks.put(effectId, task);
+    }
+
+    public boolean startCooldown(String key, int seconds) {
+        long now = System.currentTimeMillis();
+        Long expires = abilityCooldowns.get(key);
+        if (expires != null && now < expires) return false;
+        abilityCooldowns.put(key, now + seconds * 1000L);
+        return true;
+    }
+
+    public int getCooldownRemaining(String key) {
+        Long expires = abilityCooldowns.get(key);
+        if (expires == null) return 0;
+        return Math.max(0, (int) Math.ceil((expires - System.currentTimeMillis()) / 1000.0));
     }
 
     public double playerStat(Stats stat) {
         if (activeProfileData == null) return stat.getBaseStat();
         Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
-        return entry != null ? entry.getCurValue() : stat.getBaseStat();
+        double base = entry != null ? entry.getCurValue() : stat.getBaseStat();
+        double bonus = statEffects.values().stream()
+                .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
+                .sum();
+        return base + bonus;
     }
 
     @Nullable
