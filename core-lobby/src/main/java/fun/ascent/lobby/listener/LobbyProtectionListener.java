@@ -15,28 +15,18 @@ public final class LobbyProtectionListener {
 
     public static void register(GlobalEventHandler handler) {
         // Prevent block breaking
-        handler.addListener(PlayerBlockBreakEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(PlayerBlockBreakEvent.class, event -> event.setCancelled(true));
 
         // Prevent block placing
-        handler.addListener(PlayerBlockPlaceEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(PlayerBlockPlaceEvent.class, event -> event.setCancelled(true));
 
         // Prevent block interactions (chests, doors, etc.)
-        handler.addListener(PlayerBlockInteractEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(PlayerBlockInteractEvent.class, event -> event.setCancelled(true));
 
         // Prevent item dropping
-        handler.addListener(ItemDropEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(ItemDropEvent.class, event -> event.setCancelled(true));
 
         // Prevent PVP and all damage
-        handler.addListener(EntityDamageEvent.class, event -> {
-            event.setCancelled(true);
-        });
+        handler.addListener(EntityDamageEvent.class, event -> event.setCancelled(true));
     }
 }

@@ -86,7 +86,6 @@ public final class PlayerRepository {
      * Gets a single field from a player's document.
      * Supports dot-notation for nested fields: "profile.name"
      */
-    @SuppressWarnings("unchecked")
     public static <T> T getField(UUID uuid, String field, T defaultValue) {
         Document doc = getPlayerDocument(uuid);
         if (doc == null) return defaultValue;

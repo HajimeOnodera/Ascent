@@ -9,7 +9,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisException;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;

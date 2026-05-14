@@ -126,7 +126,6 @@ public class ChallengeAchievementsGUI extends InventoryGUI {
         e.setCancelled(true);
     }
 
-    @SuppressWarnings("unchecked")
     private List<String> getCompletedAchievementNames(UUID uuid) {
         Object val = PlayerRepository.getField(uuid,
                 "achievements.categories." + category.name().toLowerCase() + ".list", null);
