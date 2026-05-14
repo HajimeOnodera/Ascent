@@ -55,7 +55,6 @@ public class IslandSystemListener {
                 Pos jerryPos = new Pos(9.5, 100, 34, 180, 0);
                 AscentNpc jerry = new AscentNpc(new IslandJerryNPC(event.instance(), jerryPos, jerryId));
                 SkyblockNPCManager.registerNPC(jerry);
-                jerry.spawn();
             }
         });
 

@@ -10,7 +10,6 @@ import fun.ascent.skyblock.player.skill.event.SkillXpGainEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.minestom.server.event.player.PlayerBlockBreakEvent;
 
 import java.util.Locale;
 
@@ -31,16 +30,6 @@ public class SkillListeners {
             public void onEvent(SkillXpGainEvent event) {
                 if (!event.leveledUp()) return;
                 handleLevelUp(event);
-            }
-        });
-
-        EventManager.registerEvent(new SEvent<PlayerBlockBreakEvent>() {
-            @Override
-            public void onEvent(PlayerBlockBreakEvent event) {
-                SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
-                // Mining XP - full block tracking will live here once
-                // the item system is wired up. This shows the hook point.
-                // SkillRegistry.grantXp(player, SkillType.MINING, xpValue);
             }
         });
     }

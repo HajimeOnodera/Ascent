@@ -14,6 +14,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.timer.TaskSchedule;
 
@@ -279,9 +280,17 @@ public class BlockManager {
         SkyblockBlock sbBlock = getBlock(Material.fromKey(brokenBlock.key()), regionType);
 
         if (sbBlock == null) {
-            // Even if not a SkyblockBlock, we must remove it on the private island
             if (regionType == RegionType.PRIVATE_ISLAND) {
-                instance.setBlock(pos, Block.AIR);
+                try {
+                    Material material = Material.fromKey(brokenBlock.key());
+                    if (material != null && material != Material.AIR) {
+                        player.getInventory().addItemStack(ItemStack.of(material, 1));
+                    }
+                    instance.setBlock(pos, Block.AIR);
+                } catch (Exception e) {
+                    System.err.println("[BlockManager] Error breaking block " + brokenBlock.key() + " at " + pos);
+                    instance.setBlock(pos, Block.AIR);
+                }
             }
             return;
         }

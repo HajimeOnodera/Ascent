@@ -1,6 +1,5 @@
 package fun.ascent.skyblock.cmds;
 
-import fun.ascent.skyblock.cmds.impl.ItemListCommand;
 import fun.ascent.skyblock.dungeon.commands.DroomCommand;
 import fun.ascent.skyblock.dungeon.commands.DungeonCommand;
 import fun.ascent.skyblock.entity.mob.command.SpawnMobCommand;
@@ -42,7 +41,6 @@ public class CommandHandler {
         register(new DungeonCommand());
         register(new DroomCommand());
         register(new ShopCommand());
-        register(new ItemListCommand());
 
         Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);
