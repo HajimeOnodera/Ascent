@@ -11,11 +11,6 @@ public class ProfileManager {
 
     public static HashMap<UUID,SkyblockProfile> profiles = new HashMap<>();
 
-    public static void initialise(){
-        profiles.clear();
-        //TODO: Load Profiles from DB:
-    }
-
     public static SkyblockProfile getProfile(UUID tag) {
         if(tag == null) return null;
         return profiles.get(tag);
@@ -30,6 +25,7 @@ public class ProfileManager {
 
     public static SkyblockProfile createProfile(SkyblockPlayer player) {
         SkyblockProfile profile = new SkyblockProfile(List.of(player));
+        profile.generateIsland();
         register(profile);
         player.setActiveProfile(profile.profileID);
         System.out.println("1: " + profile.profileName + " : " + profile.profileID);

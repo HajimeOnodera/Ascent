@@ -60,6 +60,8 @@ public class SkyblockPersistence {
             }
         }
 
+        profile.postLoad();
+        profile.generateIsland();
         return profile;
     }
 }

@@ -49,7 +49,6 @@ public class SkyblockProfile {
         spawnPos = new Pos(7,100, 5);
         players.forEach(pl -> profilePlayers.add(new ProfilePlayer(this.profileID, pl)));
         this.unlockedCollections = new HashMap<>();
-        generateIsland();
     }
 
     public void updateCollection(String itemId, int amount) {

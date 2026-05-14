@@ -4,25 +4,25 @@ import lombok.Getter;
 
 @Getter
 public enum RegionType {
-    HUB("SkyBlock Hub", "§b"),
-    VILLAGE("Village", "§a"),
-    BANK("Bank", "§6"),
-    AUCTION_HOUSE("Auction House", "§6"),
-    BAZAAR("Bazaar Alley", "§e"),
-    FARM("Farm", "§e"),
-    BARN("The Barn", "§b"),
-    MUSHROOM_DESERT("Mushroom Desert", "§e"),
-    COAL_MINE("Coal Mine", "§8"),
-    GOLD_MINE("Gold Mine", "§6"),
-    DEEP_CAVERNS("Deep Caverns", "§b"),
-    GRAVEYARD("Graveyard", "§c"),
-    SPIDER_DEN("Spider's Den", "§4"),
-    THE_END("The End", "§d"),
-    FOREST("Forest", "§2"),
-    BIRCH_PARK("Birch Park", "§a"),
-    MOUNTAIN("Mountain", "§b"),
-    PRIVATE_ISLAND("Private Island", "§a"),
-    WILDERNESS("Wilderness", "§2");
+    HUB("SkyBlock Hub", "<aqua>"),
+    VILLAGE("Village", "<green>"),
+    BANK("Bank", "<gold>"),
+    AUCTION_HOUSE("Auction House", "<gold>"),
+    BAZAAR("Bazaar Alley", "<yellow>"),
+    FARM("Farm", "<yellow>"),
+    BARN("The Barn", "<aqua>"),
+    MUSHROOM_DESERT("Mushroom Desert", "<yellow>"),
+    COAL_MINE("Coal Mine", "<dark_gray>"),
+    GOLD_MINE("Gold Mine", "<gold>"),
+    DEEP_CAVERNS("Deep Caverns", "<aqua>"),
+    GRAVEYARD("Graveyard", "<red>"),
+    SPIDER_DEN("Spider's Den", "<dark_red>"),
+    THE_END("The End", "<light_purple>"),
+    FOREST("Forest", "<dark_green>"),
+    BIRCH_PARK("Birch Park", "<green>"),
+    MOUNTAIN("Mountain", "<aqua>"),
+    PRIVATE_ISLAND("Private Island", "<green>"),
+    WILDERNESS("Wilderness", "<dark_green>");
 
     private final String name;
     private final String color;

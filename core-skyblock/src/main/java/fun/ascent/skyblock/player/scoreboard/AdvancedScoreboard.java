@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.player.scoreboard;
 
 import fun.ascent.skyblock.calendar.Calendar;
+import fun.ascent.skyblock.dungeon.DungeonInstance;
+import fun.ascent.skyblock.dungeon.DungeonManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
@@ -62,36 +64,38 @@ public class AdvancedScoreboard {
         List<String> renderedLines = new ArrayList<>();
 
         for (ScoreboardBlock block : blocks) {
-            List<String> blockLines = block.render(player);
-            if (blockLines != null && !blockLines.isEmpty()) {
-                renderedLines.addAll(blockLines);
+            try {
+                List<String> lines = block.render(player);
+                if (lines != null) {
+                    renderedLines.addAll(lines);
+                }
+            } catch (Exception e) {
+                System.err.println("Error in block " + block.getClass().getSimpleName());
+                e.printStackTrace();
             }
         }
 
-        if (renderedLines.size() > 15) {
-            renderedLines = renderedLines.subList(0, 15);
+        while (renderedLines.size() > 15) {
+            renderedLines.removeLast();
         }
 
         int score = renderedLines.size();
-
         for (int i = 0; i < renderedLines.size(); i++) {
             String lineId = "§" + Integer.toHexString(i) + "§r";
             String content = renderedLines.get(i);
+            if (content == null || content.isEmpty()) content = " ";
 
             if (i < lastLineCount) {
                 sidebar.updateLineContent(lineId, MiniMessage.miniMessage().deserialize(content));
             } else {
-                sidebar.createLine(
-                        new Sidebar.ScoreboardLine(lineId, MiniMessage.miniMessage().deserialize(content), score));
+                sidebar.createLine(new Sidebar.ScoreboardLine(lineId, MiniMessage.miniMessage().deserialize(content), score));
             }
             score--;
         }
 
         for (int i = renderedLines.size(); i < lastLineCount; i++) {
-            String lineId = "§" + Integer.toHexString(i) + "§r";
-            sidebar.removeLine(lineId);
+            sidebar.removeLine("§" + Integer.toHexString(i) + "§r");
         }
-
         lastLineCount = renderedLines.size();
     }
 
@@ -101,12 +105,9 @@ public class AdvancedScoreboard {
 
     public static class HeaderBlock implements ScoreboardBlock {
         private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yy");
-
         @Override
         public List<String> render(SkyblockPlayer player) {
-            return List.of(
-                    "<gray>" + LocalDate.now().format(formatter) + " <dark_gray>megaC1R</dark_gray></gray>",
-                    "");
+            return List.of("<gray>" + LocalDate.now().format(formatter) + " <dark_gray>megaC1R</dark_gray>", "");
         }
     }
 
@@ -114,12 +115,11 @@ public class AdvancedScoreboard {
         @Override
         public List<String> render(SkyblockPlayer player) {
             Calendar.SkyBlockTime time = Calendar.getCachedTime();
-            if (time == null)
-                return List.of("<gray>Loading...</gray>", "");
-
+            if (time == null) return List.of("<gray>Loading...");
             return List.of(
                     "<white> " + time.getMonthName() + " " + time.getOrdinalDay() + "</white>",
-                    "<gray> " + time.getHourFormatted() + "</gray>"
+                    "<gray> " + time.getHourFormatted() + "</gray>",
+                    ""
             );
         }
     }
@@ -127,26 +127,37 @@ public class AdvancedScoreboard {
     public static class LocationBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
-            Region region = RegionManager.getRegion(player.getInstance(), player.getPosition());
-            String locName = region != null ? region.getType().toString() : "<gray>None";
-            return List.of("<gray> ⏣</gray> " + locName, "");
+            String locStr = "<gray> ⏣</gray> <aqua>None";
+            try {
+                DungeonInstance dungeon = DungeonManager.get().getDungeon(player.getUuid());
+                if (dungeon != null && dungeon.instance() != null && dungeon.instance().equals(player.getInstance())) {
+                    locStr = "<gray> ⏣</gray> <red>The Catacombs <gray>(" + dungeon.floor().shortName() + ")";
+                } else {
+                    Region region = RegionManager.getRegion(player.getInstance(), player.getPosition());
+                    if (region != null) {
+                        locStr = "<gray> ⏣</gray> " + region.getType().toString();
+                    }
+                }
+            } catch (Exception ignored) {}
+            return List.of(locStr, "");
         }
     }
 
     public static class EconomyBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
-            return List.of(
-                    "<white>Purse:</white> <gold>" + player.getActiveProfileData().playerCoins + "</gold>",
-                    "");
+            double coins = 0;
+            try {
+                if (player.getActiveProfileData() != null) coins = player.getActiveProfileData().playerCoins;
+            } catch (Exception ignored) {}
+            return List.of("<white>Purse:</white> <gold>" + String.format("%.1f", coins), "");
         }
     }
 
     public static class FooterBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
-            return List.of(
-                    "<yellow>ascent.eu</yellow>");
+            return List.of("<yellow>ascent.eu</yellow>");
         }
     }
 }
