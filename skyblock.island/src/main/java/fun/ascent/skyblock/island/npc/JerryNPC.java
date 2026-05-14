@@ -32,9 +32,9 @@ public record JerryNPC(Instance instance, Pos position, String id) implements Np
     @Override
     public String[] holograms() {
         return new String[] {
-            "<orange><bold>NEW UPDATE</bold></orange>",
-            "<white>Jerry</white>",
-            "<yellow><bold>CLICK</bold></yellow>"
+            "<gold><bold>NEW UPDATE",
+            "<white>Jerry",
+            "<yellow><bold>CLICK"
         };
     }
 

@@ -16,7 +16,7 @@ public record AdventurerNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public String name() {
-        return "<gold>Adventurer</gold>";
+        return "<gold>Adventurer";
     }
 
     @Override
