@@ -21,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import fun.ascent.skyblock.player.stats.playerStat.Speed;
+
 import static fun.ascent.common.StringUtility.text;
 import static fun.ascent.skyblock.player.stats.Stats.*;
 
@@ -90,7 +92,8 @@ public class ProfilePlayer {
     }
 
     public void updateStats() {
-        // TODO: Update player stats
+        if (skyblockPlayer == null) return;
+        Speed.apply(skyblockPlayer);
     }
 
 

@@ -70,8 +70,8 @@ public class StatCommand extends Command {
             built.setCurValue(value);
             player.getActiveProfileData().stats.put(built.id, built);
             player.updatePlayer();
-            sender.sendMessage("<green>Set " + stat.getStatColor() + stat.getStatFormattedDisplay()
-                    + " <green>to <white>" + (int) value);
+            sender.sendMessage(text("<green>Set " + stat.getStatColor() + stat.getStatFormattedDisplay()
+                    + " <green>to <white>" + (int) value));
         }, action, statArg, valueArg);
     }
 
@@ -82,8 +82,8 @@ public class StatCommand extends Command {
             double value = player.playerStat(stat);
             String suffix = stat.getStatIntType() ? "%" : "";
             String symbol = stat.getStatSymbol();
-            player.sendMessage(" " + symbol + " <gray>" + stat.getStatFormattedDisplay()
-                    + ": " + stat.getStatColor() + (int) value + suffix);
+            player.sendMessage(text(" " + symbol + " <gray>" + stat.getStatFormattedDisplay()
+                    + ": " + stat.getStatColor() + (int) value + suffix));
         }
     }
 }

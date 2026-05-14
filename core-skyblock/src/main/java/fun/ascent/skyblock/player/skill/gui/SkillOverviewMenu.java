@@ -75,7 +75,7 @@ public class SkillOverviewMenu {
 
         List<Component> lore = new ArrayList<>();
         for (String line : type.definition().description()) {
-            lore.add(Component.text(line));
+            lore.add(text(line));
         }
         lore.add(Component.text(" "));
 
@@ -84,7 +84,7 @@ public class SkillOverviewMenu {
             SkillMenuFormat.addProgress(lore, data, type, reward.xpRequired(),
                     "<gray>Progress to Level " + SkillReward.toRoman(nextLevel) + ": ");
             lore.add(Component.text(" "));
-            reward.toLore().forEach(s -> lore.add(Component.text(s)));
+            reward.toLore().forEach(s -> lore.add(text(s)));
         } else {
             lore.add(text("<green>MAXED OUT!"));
         }
@@ -93,7 +93,7 @@ public class SkillOverviewMenu {
         lore.add(text("<yellow>Click to view!"));
 
         return ItemStack.builder(type.definition().icon())
-                .customName(Component.text(SkillMenuFormat.skillNameWithLevel(type, level)))
+                .customName(text(SkillMenuFormat.skillNameWithLevel(type, level)))
                 .lore(lore)
                 .build();
     }

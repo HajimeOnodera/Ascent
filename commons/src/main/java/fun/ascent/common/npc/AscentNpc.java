@@ -40,6 +40,8 @@ public class AscentNpc {
     public void spawn() {
         if (definition.type() == NpcType.VILLAGER) {
             entity = new Entity(EntityType.VILLAGER);
+        } else if (definition.type() == NpcType.WITCH) {
+            entity = new Entity(EntityType.WITCH);
         } else {
             entity = new EntityCreature(EntityType.MANNEQUIN);
             entity.editEntityMeta(MannequinMeta.class, meta -> meta.setProfile(profile()));

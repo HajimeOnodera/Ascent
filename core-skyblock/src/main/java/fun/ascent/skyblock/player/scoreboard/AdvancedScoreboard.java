@@ -1,7 +1,10 @@
 package fun.ascent.skyblock.player.scoreboard;
 
 import fun.ascent.skyblock.calendar.Calendar;
+import fun.ascent.skyblock.dungeon.DungeonInstance;
+import fun.ascent.skyblock.dungeon.DungeonManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.world.location.SkyblockLocation;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.scoreboard.Sidebar;
 
@@ -9,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import fun.ascent.skyblock.world.location.SkyblockLocation;
 
 public class AdvancedScoreboard {
 
@@ -126,10 +128,12 @@ public class AdvancedScoreboard {
     public static class LocationBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
+            DungeonInstance dungeon = DungeonManager.get().getDungeon(player.getUuid());
+            if (dungeon != null && dungeon.instance().equals(player.getInstance())) {
+                return List.of("<gray> ⏣</gray> <red>The Catacombs</red> <gray>(" + dungeon.floor().shortName() + ")</gray>", "");
+            }
             SkyblockLocation location = SkyblockLocation.getLocation(player.getInstance(), player.getPosition());
-            return List.of(
-                    "<dark_gray> ⏣</dark_gray> " + location.getName(),
-                    "");
+            return List.of("<gray> ⏣</gray> " + location.getName(), "");
         }
     }
 

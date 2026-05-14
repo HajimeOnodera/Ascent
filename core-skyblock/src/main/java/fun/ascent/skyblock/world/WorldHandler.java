@@ -62,9 +62,9 @@ public class WorldHandler {
     }
 
     public static void spawnNPCS(World world){
-        Reflections reflections = new Reflections("fun.ascent.skyblock.npc.village");
+        Reflections reflections = new Reflections("fun.ascent.skyblock.npc.hub");
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
-        LOGGER.info("Trying to spawn {} NPCs in village", npcs.size());
+        LOGGER.info("Trying to spawn {} NPCs in hub", npcs.size());
 
         for (Class<? extends NpcDefinition> npc : npcs) {
             if (Modifier.isAbstract(npc.getModifiers()) || npc.isInterface()) {

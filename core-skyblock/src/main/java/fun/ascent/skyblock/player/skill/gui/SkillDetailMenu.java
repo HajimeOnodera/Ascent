@@ -94,7 +94,7 @@ public class SkillDetailMenu {
         Integer nextLevel = data.getNextLevel(type);
 
         List<Component> lore = new ArrayList<>();
-        def.description().forEach(s -> lore.add(Component.text(s)));
+        def.description().forEach(s -> lore.add(text(s)));
         lore.add(Component.text(" "));
 
         if (nextLevel != null) {
@@ -127,7 +127,7 @@ public class SkillDetailMenu {
         String title = color + type.getDisplayName() + " Level " + SkillReward.toRoman(reward.level());
 
         List<Component> lore = new ArrayList<>();
-        reward.toLore().forEach(s -> lore.add(Component.text(s)));
+        reward.toLore().forEach(s -> lore.add(text(s)));
 
         if (unlocked) {
             lore.add(Component.text(" "));
@@ -138,7 +138,7 @@ public class SkillDetailMenu {
         }
 
         return ItemStack.builder(glass)
-                .customName(Component.text(title))
+                .customName(text(title))
                 .lore(lore)
                 .build();
     }

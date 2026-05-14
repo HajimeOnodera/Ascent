@@ -38,7 +38,7 @@ final class SkillMenuFormat {
         int filled = (int) Math.round(progress * PROGRESS_BAR_SEGMENTS);
 
         lore.add(text(prefix + "<yellow>" + String.format(Locale.US, "%.2f", progress * 100) + "<gold>%"));
-        lore.add(Component.text(
+        lore.add(text(
                 "<dark_green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
                         + "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
                         + "<reset> <yellow>" + formatNumber(current)
