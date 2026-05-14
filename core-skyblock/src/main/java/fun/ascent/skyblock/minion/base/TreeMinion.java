@@ -30,7 +30,7 @@ public abstract class TreeMinion extends SkyblockMinion {
         }
         setCurrentTask(MinionTask.HARVEST);
         List<ItemStack> drops = List.of(ItemStack.of(getProfile().outputMaterial(), 3));
-        if (!canStoreDrops(drops)) {
+        if (canStoreDrops(drops)) {
             return;
         }
         Block block = getInstance().getBlock(breakPos);

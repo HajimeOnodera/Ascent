@@ -1,13 +1,27 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.common.npc.AscentNpc;
+import org.bson.Document;
+
 import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.island.IslandManager;
+import fun.ascent.skyblock.minion.base.SkyblockMinion;
+import fun.ascent.skyblock.minion.model.MinionType;
+import fun.ascent.skyblock.minion.service.MinionFactory;
+import fun.ascent.skyblock.minion.service.MinionManager;
+import fun.ascent.skyblock.minion.service.MinionPersistence;
+import fun.ascent.skyblock.npc.SkyblockNPCManager;
+import fun.ascent.skyblock.npc.island.JerryNPC;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.timer.ExecutionType;
+import net.minestom.server.timer.TaskSchedule;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -88,7 +102,71 @@ public class SkyblockProfile {
         
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
         if (serverType.equalsIgnoreCase("ISLAND")) {
-            island.load();
+            System.out.println("[IslandInit] Starting load for " + profileID);
+            island.load().thenAccept(instance -> {
+                System.out.println("[IslandInit] Load finished for " + profileID + ", instance: " + (instance != null));
+                if (instance == null) return;
+                
+                // Wait for instance to be ready and spawn defaults
+                MinecraftServer.getSchedulerManager().submitTask(() -> {
+                    System.out.println("[IslandInit] Executing spawn task for " + profileID);
+                    restoreIslandData(instance);
+                    spawnIslandDefaults(instance);
+                    return TaskSchedule.stop();
+                }, ExecutionType.TICK_END);
+            });
+        }
+    }
+
+    private void restoreIslandData(Instance instance) {
+        for (Document minionDoc : island.getMinionData()) {
+            SkyblockMinion minion = MinionPersistence.deserialize(minionDoc, instance);
+            minion.spawn();
+            MinionManager.registerMinion(minion);
+        }
+    }
+
+    public void saveIsland() {
+        if (island == null || !island.isLoaded()) return;
+        
+        // Prepare minion data
+        List<Document> minionDocs = new ArrayList<>();
+        Collection<SkyblockMinion> minions = MinionManager.getOwnedMinions(profileID);
+        for (SkyblockMinion minion : minions) {
+            if (minion.getInstance() == island.getInstance()) {
+                minionDocs.add(MinionPersistence.serialize(minion));
+            }
+        }
+        island.setMinionData(minionDocs);
+        island.save();
+    }
+
+    private void spawnIslandDefaults(Instance instance) {
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        System.out.println("[IslandInit] Spawning defaults for profile " + profileID + " on server " + serverType);
+
+        Pos jerryPos = new Pos(9.5, 100, 34, 180, 0);
+
+        String jerryId = "jerry_" + profileID;
+        if (SkyblockNPCManager.getNPCbyID(jerryId) == null) {
+            System.out.println("[IslandInit] Spawning Jerry " + jerryId);
+            AscentNpc jerry = new AscentNpc(new JerryNPC(instance, jerryPos, jerryId));
+            SkyblockNPCManager.registerNPC(jerry);
+            jerry.spawn();
+        } else {
+            System.out.println("[IslandInit] Jerry already exists: " + jerryId);
+        }
+
+        Pos minionPos = new Pos(3.5, 100, 36.5, -90, 0);
+
+        Collection<SkyblockMinion> owned = MinionManager.getOwnedMinions(profileID);
+        System.out.println("[IslandInit] Profile " + profileID + " has " + owned.size() + " minions in memory");
+        
+        if (owned.stream().noneMatch(m -> m.getInstance() == instance)) {
+            System.out.println("[IslandInit] Spawning default Cobblestone minion");
+            SkyblockMinion minion = MinionFactory.create(profileID, MinionType.COBBLESTONE, 1, instance, minionPos);
+            minion.spawn();
+            MinionManager.registerMinion(minion);
         }
     }
 

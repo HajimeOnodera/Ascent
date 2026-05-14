@@ -86,6 +86,11 @@ public final class MinionManager {
                 .schedule();
     }
 
+    public static void registerMinion(SkyblockMinion minion) {
+        MINIONS_BY_ID.put(minion.getId(), minion);
+        MINIONS_BY_OWNER.computeIfAbsent(minion.getOwnerUuid(), ignored -> new ArrayList<>()).add(minion);
+    }
+
     public static void placeMinion(SkyblockPlayer player, MinionType type) {
         placeMinion(player, type, 1);
     }
@@ -187,7 +192,12 @@ public final class MinionManager {
     public static Collection<SkyblockMinion> getOwnedMinions(SkyblockPlayer player) {
         SkyblockProfile profile = player.getActiveProfile();
         if(profile == null) return List.of();
-        return MINIONS_BY_OWNER.getOrDefault(profile.profileID, List.of());
+        return getOwnedMinions(profile.profileID);
+    }
+
+    public static Collection<SkyblockMinion> getOwnedMinions(UUID profileId) {
+        if(profileId == null) return List.of();
+        return MINIONS_BY_OWNER.getOrDefault(profileId, List.of());
     }
 
     private static void tickAll() {

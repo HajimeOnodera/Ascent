@@ -14,7 +14,9 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
         WorldHandler.getLobby();
 
         SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
-        if (player.getActiveProfile() != null && player.getActiveProfile().island != null) {
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        
+        if (serverType.equalsIgnoreCase("ISLAND") && player.getActiveProfile() != null && player.getActiveProfile().island != null) {
             try {
                 // Load and wait for island instance
                 InstanceContainer islandInstance = player.getActiveProfile().island.load().join();

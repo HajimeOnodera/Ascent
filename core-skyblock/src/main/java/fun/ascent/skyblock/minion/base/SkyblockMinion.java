@@ -45,6 +45,7 @@ public abstract class SkyblockMinion {
     private final LivingEntity entity;
     private final Entity warningTop;
     private final Entity warningBottom;
+    @Getter
     private final MinionStorage storage;
     private final List<LivingEntity> spawnedMobs;
 
@@ -116,11 +117,11 @@ public abstract class SkyblockMinion {
         }
         MinionLayoutValidator.ValidationResult validation = MinionLayoutValidator.validate(this);
         if (!validation.valid()) {
-            setWarning(validation.message(), "/!\\");
+            setWarning(validation.message());
             return;
         }
         if (storage.totalItems() >= data.getMaxStorage()) {
-            setWarning("My storage is full!", "/!\\");
+            setWarning("My storage is full!");
             return;
         }
         clearWarning();
@@ -378,10 +379,10 @@ public abstract class SkyblockMinion {
 
     protected boolean canStoreDrops(List<ItemStack> drops) {
         if (storage.canFit(drops, data.getStorageSlots())) {
-            return true;
+            return false;
         }
-        setWarning("My storage is full!", "/!\\");
-        return false;
+        setWarning("My storage is full!");
+        return true;
     }
 
     protected void storeDrops(List<ItemStack> drops) {
@@ -391,9 +392,9 @@ public abstract class SkyblockMinion {
         }
     }
 
-    protected void setWarning(String top, String bottom) {
+    protected void setWarning(String top) {
         warningTop.setCustomName(MINI_MESSAGE.deserialize("<red>" + top));
-        warningBottom.setCustomName(MINI_MESSAGE.deserialize("<red>" + bottom));
+        warningBottom.setCustomName(MINI_MESSAGE.deserialize("<red>" + "/!\\"));
         warningTop.setCustomNameVisible(true);
         warningBottom.setCustomNameVisible(true);
     }
