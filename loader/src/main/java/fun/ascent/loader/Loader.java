@@ -107,6 +107,10 @@ public final class Loader {
                     pb.environment().put("REDIS_HOST", config.getRedisHost());
                     pb.environment().put("REDIS_PORT", String.valueOf(config.getRedisPort()));
                     pb.environment().put("MONGODB_URI", config.getMongodbUri());
+                    Path forwardingSecret = Path.of("proxy", "forwarding.secret").toAbsolutePath();
+                    if (java.nio.file.Files.isRegularFile(forwardingSecret)) {
+                        pb.environment().put("ASCENT_VELOCITY_SECRET_FILE", forwardingSecret.toString());
+                    }
 
                     Process process = pb.start();
                     synchronized (children) {
@@ -169,7 +173,7 @@ public final class Loader {
                 java.nio.file.Files.copy(builtProxy.toPath(), coreProxyJar.toPath());
                 System.out.println(YELLOW + "   Copied CoreProxy.jar → proxy/plugins/" + RESET);
             } catch (IOException e) {
-                System.out.println(YELLOW + "   Warning: could not copy CoreProxy.jar – " + e.getMessage() + RESET);
+                System.out.println(YELLOW + "   Warning: could not copy CoreProxy.jar: " + e.getMessage() + RESET);
             }
         }
 
@@ -228,9 +232,9 @@ public final class Loader {
 
     private static void printMenu() {
         System.out.println(BOLD + "    ┌─────────────────────────────────────────┐" + RESET);
-        System.out.println(BOLD + "    │  " + GREEN  + "[1]" + RESET + BOLD + "  LOBBY       " + RESET + "– Minestom lobby       " + BOLD + "│" + RESET);
-        System.out.println(BOLD + "    │  " + YELLOW + "[2]" + RESET + BOLD + "  SKYBLOCK    " + RESET + "– Minestom skyblock    " + BOLD + "│" + RESET);
-        System.out.println(BOLD + "    │  " + CYAN   + "[3]" + RESET + BOLD + "  PROXY       " + RESET + "– Velocity proxy       " + BOLD + "│" + RESET);
+        System.out.println(BOLD + "    │  " + GREEN  + "[1]" + RESET + BOLD + "  LOBBY       " + RESET + "| Minestom lobby       " + BOLD + "│" + RESET);
+        System.out.println(BOLD + "    │  " + YELLOW + "[2]" + RESET + BOLD + "  SKYBLOCK    " + RESET + "| Minestom skyblock    " + BOLD + "│" + RESET);
+        System.out.println(BOLD + "    │  " + CYAN   + "[3]" + RESET + BOLD + "  PROXY       " + RESET + "| Velocity proxy       " + BOLD + "│" + RESET);
         System.out.println(BOLD + "    │  " + RED    + "[Q]" + RESET + BOLD + "  QUIT                              " + BOLD + "│" + RESET);
         System.out.println(BOLD + "    └─────────────────────────────────────────┘" + RESET);
     }

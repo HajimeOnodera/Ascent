@@ -44,8 +44,10 @@ public record ServerConfig(String host, int port, String velocitySecret) {
         }
 
         String secretFile = envOrProperty("ASCENT_VELOCITY_SECRET_FILE", properties, "velocity.secret-file", "forwarding.secret");
-        Path path = Path.of(secretFile);
-        if (Files.isRegularFile(path)) {
+        for (Path path : new Path[]{Path.of(secretFile), Path.of("proxy", "forwarding.secret")}) {
+            if (!Files.isRegularFile(path)) {
+                continue;
+            }
             try {
                 return Files.readString(path).trim();
             } catch (IOException e) {

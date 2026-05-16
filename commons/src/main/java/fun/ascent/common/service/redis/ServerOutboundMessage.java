@@ -96,13 +96,13 @@ public class ServerOutboundMessage {
                     consecutiveFailures++;
                     long delay = Math.min(1000L * consecutiveFailures, MAX_RECONNECT_DELAY_MS);
                     System.err.println("[Ascent] PubSub connection lost: " + e.getMessage()
-                            + " — reconnecting in " + delay + "ms...");
+                            + ", reconnecting in " + delay + "ms...");
                     sleep(delay);
                 } catch (Exception e) {
                     consecutiveFailures++;
                     long delay = Math.min(1000L * consecutiveFailures, MAX_RECONNECT_DELAY_MS);
                     System.err.println("[Ascent] PubSub error: " + e.getMessage()
-                            + " — reconnecting in " + delay + "ms...");
+                            + ", reconnecting in " + delay + "ms...");
                     sleep(delay);
                 }
             }

@@ -50,7 +50,7 @@ public class ServiceRegistryManager {
 
     public void start() {
         scheduler.scheduleAtFixedRate(this::sync, 0, 2, TimeUnit.SECONDS);
-        logger.info("ServiceRegistryManager started – polling Redis every 2 s");
+        logger.info("ServiceRegistryManager started, polling Redis every 2 s");
     }
 
     public void stop() {

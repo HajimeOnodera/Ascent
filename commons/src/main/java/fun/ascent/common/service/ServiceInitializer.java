@@ -82,7 +82,7 @@ public class ServiceInitializer {
                 consecutiveFailures++;
                 long delay = Math.min(1000L * consecutiveFailures, MAX_RECONNECT_DELAY_MS);
                 System.err.println("[" + service.getType().name() + "] Queue consumer error: "
-                        + e.getMessage() + " — retrying in " + delay + "ms...");
+                        + e.getMessage() + ", retrying in " + delay + "ms...");
                 sleep(delay);
             }
         }
