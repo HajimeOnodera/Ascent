@@ -1,5 +1,5 @@
 {
     "redis_port": 6379,
     "redis_host": "127.0.0.1",
-    "mongodb_uri": "mongodb://localhost:27017"
+    "mongodb_uri": "mongodb://Ascent:P5T4Ts2E0YJovXUG@ac-dm9ngn8-shard-00-00.rbvvooh.mongodb.net:27017,ac-dm9ngn8-shard-00-01.rbvvooh.mongodb.net:27017,ac-dm9ngn8-shard-00-02.rbvvooh.mongodb.net:27017/?ssl=true&replicaSet=atlas-wj5bjv-shard-0&authSource=admin&appName=AscentSync"
 }

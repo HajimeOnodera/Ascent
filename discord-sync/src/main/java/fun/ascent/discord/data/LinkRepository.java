@@ -21,7 +21,7 @@ public final class LinkRepository {
     private static final String CODES_COL = "discord_codes";
     private static final String LINKS_COL = "discord_links";
     private static final String DEFAULT_URI = "mongodb://127.0.0.1:27017";
-    private static final String DEFAULT_DB = "AscentSync";
+    private static final String DEFAULT_DB = "ascentSync";
     private static final String MINECRAFT_NAME_LOWER = "minecraftNameLower";
 
     private final MongoCollection<Document> codes;
@@ -31,11 +31,18 @@ public final class LinkRepository {
 
     public LinkRepository() {
         String uri = System.getenv().getOrDefault("MONGODB_URI", DEFAULT_URI);
-        String databaseName = System.getenv().getOrDefault("MONGO_DB", DEFAULT_DB);
+        ConnectionString connectionString = new ConnectionString(uri);
+        String databaseName = System.getenv("MONGO_DB");
+        if (databaseName == null || databaseName.isBlank()) {
+            databaseName = connectionString.getDatabase();
+        }
+        if (databaseName == null || databaseName.isBlank()) {
+            databaseName = DEFAULT_DB;
+        }
 
         this.client = MongoClients.create(
                 MongoClientSettings.builder()
-                        .applyConnectionString(new ConnectionString(uri))
+                        .applyConnectionString(connectionString)
                         .build()
         );
 
