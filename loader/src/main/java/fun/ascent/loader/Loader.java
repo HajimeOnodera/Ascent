@@ -25,7 +25,7 @@ public final class Loader {
 
     private Loader() {}
 
-    static void main(String @NonNull [] args) {
+    public static void main(String @NonNull [] args) {
         config = LoaderConfig.load();
         
         // Kill all children when this loader is terminated

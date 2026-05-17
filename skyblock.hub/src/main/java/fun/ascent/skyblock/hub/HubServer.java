@@ -13,7 +13,7 @@ public class HubServer {
     private static final Logger LOGGER = LoggerFactory.getLogger(HubServer.class);
     private static final String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         ServerConfig config = ServerConfig.load();
         
         // Initialize Minestom
