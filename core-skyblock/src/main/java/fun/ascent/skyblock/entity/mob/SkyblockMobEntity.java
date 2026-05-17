@@ -190,7 +190,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
     private Component buildNameplateComponent(float hp, float max) {
         MobCategory primary = categories().getFirst();
-        return Component.text(
+        return fun.ascent.common.StringUtility.text(
                 "<dark_gray>[<gray>Lv" + level() + "<dark_gray>] "
                         + primary.prefix() + " <red>"
                         + displayName()

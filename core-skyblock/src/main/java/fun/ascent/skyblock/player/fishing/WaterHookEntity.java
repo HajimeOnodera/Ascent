@@ -31,11 +31,18 @@ public class WaterHookEntity extends Entity {
     private int biteCountdownTicks = -1;
     private int nibbleDurationTicks = -1;
 
+    private double wakeAngle = 0;
+    private double wakeDistance = -1;
+
     public WaterHookEntity(@NotNull SkyblockPlayer owner) {
         super(EntityType.FISHING_BOBBER);
         this.owner = owner;
         setOwnerEntity(owner);
-        setNoGravity(true);
+        
+        setAerodynamics(getAerodynamics()
+                .withGravity(0)
+                .withHorizontalAirResistance(0.92)
+                .withVerticalAirResistance(0.92));
     }
 
     private void setOwnerEntity(@Nullable Entity entity) {
@@ -63,7 +70,7 @@ public class WaterHookEntity extends Entity {
         }
 
         if (phase == HookPhase.AIRBORNE) {
-            applyFlightPhysics();
+            setVelocity(getVelocity().add(0, -0.04 * 20.0, 0));
             checkEntityCollisions();
             if (isInWater()) {
                 enterWater();
@@ -81,6 +88,7 @@ public class WaterHookEntity extends Entity {
                 phase = HookPhase.AIRBORNE;
                 ticksInState = 0;
                 biteCountdownTicks = -1;
+                wakeDistance = -1;
             } else {
                 handleBobbingLogic();
             }
@@ -90,6 +98,7 @@ public class WaterHookEntity extends Entity {
                 phase = HookPhase.AIRBORNE;
                 ticksInState = 0;
                 biteCountdownTicks = -1;
+                wakeDistance = -1;
             } else {
                 handleNibbleLogic();
             }
@@ -108,13 +117,6 @@ public class WaterHookEntity extends Entity {
         try {
             super.tick(time);
         } catch (Exception ignored) {}
-    }
-
-    private void applyFlightPhysics() {
-        Vec vel = getVelocity();
-        vel = vel.add(0, -0.04 * 20, 0);
-        vel = new Vec(vel.x() * 0.92, vel.y() * 0.92, vel.z() * 0.92);
-        setVelocity(vel);
     }
 
     private void applyWaterFloatPhysics() {
@@ -139,7 +141,7 @@ public class WaterHookEntity extends Entity {
         } else if (block == Block.WATER && blockAbove == Block.WATER) {
             vel = new Vec(vel.x() * 0.8, 0.15, vel.z() * 0.8);
         } else {
-            vel = vel.add(0, -0.03 * 20, 0).mul(0.9);
+            vel = vel.add(0, -0.03 * 20.0, 0).mul(0.9);
         }
 
         setVelocity(vel);
@@ -166,7 +168,9 @@ public class WaterHookEntity extends Entity {
         Instance inst = getInstance();
         if (inst == null) return false;
         Pos pos = getPosition();
-        return inst.getBlock(pos) == Block.WATER;
+        Block b1 = inst.getBlock(pos.blockX(), pos.blockY(), pos.blockZ());
+        Block b2 = inst.getBlock(pos.blockX(), (int) Math.floor(pos.y() - 0.4), pos.blockZ());
+        return b1 == Block.WATER || b2 == Block.WATER;
     }
 
     private void enterWater() {
@@ -186,11 +190,37 @@ public class WaterHookEntity extends Entity {
         }
 
         biteCountdownTicks = (int) (timeSec * 20.0);
+        wakeDistance = -1;
     }
 
     private void handleBobbingLogic() {
         if (biteCountdownTicks > 0) {
             biteCountdownTicks--;
+
+            if (biteCountdownTicks <= 80) {
+                if (wakeDistance < 0) {
+                    wakeAngle = ThreadLocalRandom.current().nextDouble(0, 2.0 * Math.PI);
+                    wakeDistance = 4.0;
+                }
+
+                wakeDistance = 4.0 * (biteCountdownTicks / 80.0);
+
+                Pos p = getPosition();
+                double wx = p.x() + Math.cos(wakeAngle) * wakeDistance;
+                double wz = p.z() + Math.sin(wakeAngle) * wakeDistance;
+                double rx = ThreadLocalRandom.current().nextDouble(-0.1, 0.1);
+                double rz = ThreadLocalRandom.current().nextDouble(-0.1, 0.1);
+
+                Pos wakePos = new Pos(wx + rx, p.y() - 0.05, wz + rz);
+
+                if (ThreadLocalRandom.current().nextBoolean()) {
+                    sendPacketToViewersAndSelf(new ParticlePacket(Particle.BUBBLE, wakePos, new Vec(0.05, 0.0, 0.05), 0.01f, 2));
+                }
+                if (ThreadLocalRandom.current().nextDouble() < 0.35) {
+                    sendPacketToViewersAndSelf(new ParticlePacket(Particle.SPLASH, wakePos, new Vec(0.05, 0.0, 0.05), 0.01f, 1));
+                }
+            }
+
             if (biteCountdownTicks <= 0) {
                 triggerBite();
             }
@@ -205,16 +235,16 @@ public class WaterHookEntity extends Entity {
         Instance inst = getInstance();
         if (inst != null) {
             Pos p = getPosition();
-            sendPacketToViewersAndSelf(new ParticlePacket(Particle.SPLASH, p.add(0, 0.1, 0), new Vec(0.2, 0.05, 0.2), 0.1f, 15));
+            sendPacketToViewersAndSelf(new ParticlePacket(Particle.SPLASH, p.add(0, 0.1, 0), new Vec(0.25, 0.05, 0.25), 0.1f, 18));
             owner.playSound(Sound.sound(SoundEvent.ENTITY_FISHING_BOBBER_SPLASH, Sound.Source.MASTER, 1f, 1f));
         }
     }
 
     private void handleNibbleLogic() {
         Instance inst = getInstance();
-        if (inst != null && ticksInState % 5 == 0) {
+        if (inst != null && ticksInState % 4 == 0) {
             Pos p = getPosition();
-            sendPacketToViewersAndSelf(new ParticlePacket(Particle.BUBBLE, p.add(0, -0.1, 0), new Vec(0.1, 0.05, 0.1), 0.05f, 3));
+            sendPacketToViewersAndSelf(new ParticlePacket(Particle.BUBBLE, p.add(0, -0.05, 0), new Vec(0.1, 0.02, 0.1), 0.02f, 4));
         }
 
         if (nibbleDurationTicks > 0) {
@@ -229,6 +259,7 @@ public class WaterHookEntity extends Entity {
         phase = HookPhase.BOBBING;
         ticksInState = 0;
         biteCountdownTicks = (int) (ThreadLocalRandom.current().nextDouble(4.0, 12.0) * 20.0);
+        wakeDistance = -1;
     }
 
     @Override

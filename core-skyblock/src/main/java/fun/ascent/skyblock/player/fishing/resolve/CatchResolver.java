@@ -13,6 +13,7 @@ import fun.ascent.skyblock.player.fishing.event.FishCaughtEvent;
 import fun.ascent.skyblock.player.fishing.loot.*;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
@@ -101,7 +102,22 @@ public final class CatchResolver {
 
         ItemEntity entity = new ItemEntity(stack);
         entity.setInstance(instance, pos.add(0, 0.5, 0));
-        entity.setVelocity(new net.minestom.server.coordinate.Vec(0, 8, 0));
+        
+        Pos playerPos = player.getPosition();
+        double dx = playerPos.x() - pos.x();
+        double dy = playerPos.y() - pos.y();
+        double dz = playerPos.z() - pos.z();
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        
+        double speedScale = 0.075;
+        double vertScale = 0.065;
+        
+        double vx = dx * speedScale * 20.0;
+        double vy = (dy * speedScale + Math.sqrt(distance) * vertScale) * 20.0;
+        double vz = dz * speedScale * 20.0;
+        
+        Vec vel = new Vec(vx, vy, vz);
+        entity.setVelocity(vel);
 
         player.sendMessage(text("<gold>A treasure was pulled up: " + entry.displayName() + "!"));
         player.playSound(Sound.sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Sound.Source.MASTER, 0.9f, 1.1f));
@@ -116,7 +132,22 @@ public final class CatchResolver {
 
         ItemEntity entity = new ItemEntity(stack);
         entity.setInstance(instance, pos.add(0, 0.5, 0));
-        entity.setVelocity(new net.minestom.server.coordinate.Vec(0, 6, 0));
+        
+        Pos playerPos = player.getPosition();
+        double dx = playerPos.x() - pos.x();
+        double dy = playerPos.y() - pos.y();
+        double dz = playerPos.z() - pos.z();
+        double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        
+        double speedScale = 0.075;
+        double vertScale = 0.065;
+        
+        double vx = dx * speedScale * 20.0;
+        double vy = (dy * speedScale + Math.sqrt(distance) * vertScale) * 20.0;
+        double vz = dz * speedScale * 20.0;
+        
+        Vec vel = new Vec(vx, vy, vz);
+        entity.setVelocity(vel);
 
         player.playSound(Sound.sound(SoundEvent.ENTITY_ITEM_PICKUP, Sound.Source.MASTER, 1.0f, 1.5f));
 

@@ -77,7 +77,7 @@ public class SkillListeners {
         if (reward != null && !reward.unlocks().isEmpty()) {
             player.sendMessage(" ");
             player.sendMessage(text("  <green><bold>REWARDS"));
-            reward.unlocks().forEach(unlock -> player.sendMessage("    " + unlock.display()));
+            reward.unlocks().forEach(unlock -> player.sendMessage(text("    " + unlock.display())));
         }
 
         player.sendMessage(border);

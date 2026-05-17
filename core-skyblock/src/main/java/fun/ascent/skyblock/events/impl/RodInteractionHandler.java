@@ -43,12 +43,31 @@ public class RodInteractionHandler extends SEvent<PlayerUseItemEvent> {
 
         consumeBait(player);
 
-        Pos pos = player.getPosition();
-        Vec dir = pos.direction();
-        Vec vel = new Vec(dir.x(), dir.y() + 0.38, dir.z()).normalize().mul(1.65);
+        Pos playerPos = player.getPosition();
+        float playerPitch = playerPos.pitch();
+        float playerYaw = playerPos.yaw();
 
-        bobber.setInstance(player.getInstance(), pos.add(0, player.getBoundingBox().height() * 0.85, 0));
-        bobber.setVelocity(vel);
+        float zDir = (float) Math.cos(Math.toRadians(-playerYaw) - Math.PI);
+        float xDir = (float) Math.sin(Math.toRadians(-playerYaw) - Math.PI);
+
+        double spawnX = playerPos.x() - (double) xDir * 0.3;
+        double spawnY = playerPos.y() + player.getEyeHeight();
+        double spawnZ = playerPos.z() - (double) zDir * 0.3;
+
+        double maxVelocity = 0.4;
+        Vec velocity = new Vec(
+                -Math.sin(playerYaw / 180.0f * (float) Math.PI) * Math.cos(playerPitch / 180.0f * (float) Math.PI) * maxVelocity,
+                -Math.sin(playerPitch / 180.0f * (float) Math.PI) * maxVelocity,
+                Math.cos(playerYaw / 180.0f * (float) Math.PI) * Math.cos(playerPitch / 180.0f * (float) Math.PI) * maxVelocity
+        );
+
+        double length = velocity.length();
+        if (length > 0) {
+            velocity = velocity.div(length).mul(1.5);
+        }
+
+        bobber.setInstance(player.getInstance(), new Pos(spawnX, spawnY, spawnZ));
+        bobber.setVelocity(velocity.mul(15.0));
 
         player.playSound(Sound.sound(SoundEvent.ENTITY_FISHING_BOBBER_THROW, Sound.Source.MASTER, 0.9f, 1.1f));
     }
