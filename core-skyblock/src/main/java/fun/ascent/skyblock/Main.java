@@ -60,6 +60,7 @@ public class Main {
         RecipeRegistry.init();
         CommandHandler.initialise();
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
+        fun.ascent.skyblock.player.fishing.FishingModule.init();
         CombatListener.register();
         SkyblockChatListener.register();
         RegionManager.initialize();
