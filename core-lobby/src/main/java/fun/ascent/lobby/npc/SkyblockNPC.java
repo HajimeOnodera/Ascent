@@ -53,7 +53,6 @@ public record SkyblockNPC(Instance instance) implements NpcDefinition {
             player.sendMessage(text(text("<red>No SkyBlock server is currently online!")));
             return;
         }
-        player.sendMessage(text(text("<yellow>Sending you to <gold>SkyBlock<yellow>...")));
         ProxyTransfer.send(player, serverName);
     }
 }

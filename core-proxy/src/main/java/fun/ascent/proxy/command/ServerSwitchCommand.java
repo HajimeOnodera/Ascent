@@ -40,7 +40,6 @@ public final class ServerSwitchCommand implements SimpleCommand {
             return;
         }
 
-        player.sendMessage(text("<yellow>Sending you to " + escapeMiniMessage(displayName) + "..."));
         player.createConnectionRequest(server).connect().thenAccept(result -> {
             if (!result.isSuccessful()) {
                 player.sendMessage(text("<red>Could not connect to " + escapeMiniMessage(displayName) + "."));

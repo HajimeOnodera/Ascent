@@ -5,9 +5,12 @@ import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
+import com.velocitypowered.api.event.player.ServerPreConnectEvent;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.server.RegisteredServer;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
+import fun.ascent.common.StringUtility;
 
 public class ConnectionListener {
 
@@ -28,5 +31,19 @@ public class ConnectionListener {
 
         // Persist session playtime to MongoDB
         PlaytimeTracker.onDisconnect(player.getUniqueId());
+    }
+
+    @Subscribe
+    public void onServerPreConnect(ServerPreConnectEvent event) {
+        Player player = event.getPlayer();
+        RegisteredServer targetServer = event.getResult().getServer().orElse(event.getOriginalServer());
+        if (targetServer != null) {
+            String name = targetServer.getServerInfo().getName();
+
+            // Only send the transition message if they are moving from a previous server (i.e. not proxy join)
+            if (event.getPreviousServer() != null) {
+                player.sendMessage(StringUtility.text("<gray>Sending to server " + name + "..."));
+            }
+        }
     }
 }

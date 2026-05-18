@@ -3,6 +3,8 @@ package fun.ascent.skyblock.events.impl;
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.events.SEvent;
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.item.ItemStack;
@@ -31,7 +33,20 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
         e.getPlayer().setGameMode(GameMode.SURVIVAL);
         if(e.isFirstSpawn()){
             e.getPlayer().setDisplayName(UserManager.getDisplayName(e.getPlayer().getUuid()));
-            e.getPlayer().sendMessage(text(miniMessage().deserialize("<yellow>Welcome to <green>Hypixel SkyBlock</green><yellow>!</yellow>")));
+            e.getPlayer().sendMessage(text(miniMessage().deserialize("<yellow>Welcome to <green>Ascent SkyBlock</green><yellow>!</yellow>")));
+            e.getPlayer().sendMessage(Component.empty());
+            
+            if (e.getPlayer() instanceof SkyblockPlayer player) {
+                SkyblockProfile activeProfile = player.getActiveProfile();
+                if (activeProfile != null) {
+                    String profileName = activeProfile.profileName != null ? activeProfile.profileName : "Unknown";
+                    String profileId = activeProfile.profileID != null ? activeProfile.profileID.toString() : "Unknown";
+                    
+                    e.getPlayer().sendMessage(text(miniMessage().deserialize("<green>You are playing on profile: <yellow>" + profileName)));
+                    e.getPlayer().sendMessage(text(miniMessage().deserialize("<dark_gray>Profile ID: " + profileId)));
+                }
+            }
+            
             e.getPlayer().getInventory().setItemStack(8,menuItem.build());
         }
     }
