@@ -66,7 +66,7 @@ public class EquipmentMenu {
             if (slot == CLOSE_SLOT) {
                 player.closeInventory();
             } else if (slot == BACK_SLOT) {
-                player.closeInventory();
+                fun.ascent.skyblock.menus.SkyblockMenu.open(player);
             }
         });
 
@@ -74,16 +74,16 @@ public class EquipmentMenu {
     }
 
     private static void placeEquipment(Inventory inv, SkyblockPlayer player) {
-        inv.setItemStack(HELD_ITEM_SLOT, equipmentDisplayItem(player, EquipmentSlot.MAIN_HAND, "Held Item",
-                Material.LIGHT_GRAY_STAINED_GLASS_PANE));
-        inv.setItemStack(HELMET_SLOT, equipmentDisplayItem(player, EquipmentSlot.HELMET, "Helmet",
-                Material.LIGHT_GRAY_STAINED_GLASS_PANE));
-        inv.setItemStack(CHESTPLATE_SLOT, equipmentDisplayItem(player, EquipmentSlot.CHESTPLATE, "Chestplate",
-                Material.LIGHT_GRAY_STAINED_GLASS_PANE));
-        inv.setItemStack(LEGGINGS_SLOT, equipmentDisplayItem(player, EquipmentSlot.LEGGINGS, "Leggings",
-                Material.LIGHT_GRAY_STAINED_GLASS_PANE));
-        inv.setItemStack(BOOTS_SLOT, equipmentDisplayItem(player, EquipmentSlot.BOOTS, "Boots",
-                Material.LIGHT_GRAY_STAINED_GLASS_PANE));
+        inv.setItemStack(HELD_ITEM_SLOT, equipmentDisplayItem(player, EquipmentSlot.MAIN_HAND, "Held Item"
+        ));
+        inv.setItemStack(HELMET_SLOT, equipmentDisplayItem(player, EquipmentSlot.HELMET, "Helmet"
+        ));
+        inv.setItemStack(CHESTPLATE_SLOT, equipmentDisplayItem(player, EquipmentSlot.CHESTPLATE, "Chestplate"
+        ));
+        inv.setItemStack(LEGGINGS_SLOT, equipmentDisplayItem(player, EquipmentSlot.LEGGINGS, "Leggings"
+        ));
+        inv.setItemStack(BOOTS_SLOT, equipmentDisplayItem(player, EquipmentSlot.BOOTS, "Boots"
+        ));
 
         inv.setItemStack(NECKLACE_SLOT, emptySlotItem("Necklace"));
         inv.setItemStack(CLOAK_SLOT, emptySlotItem("Cloak"));
@@ -93,7 +93,7 @@ public class EquipmentMenu {
         inv.setItemStack(PET_SLOT, emptySlotItem("Pet"));
     }
 
-    private static ItemStack equipmentDisplayItem(SkyblockPlayer player, EquipmentSlot slot, String slotName, Material emptyMaterial) {
+    private static ItemStack equipmentDisplayItem(SkyblockPlayer player, EquipmentSlot slot, String slotName) {
         ItemStack equipped = player.getEquipment(slot);
         if (!equipped.isAir() && ItemNBT.isSkyblockItem(equipped)) {
             return equipped;

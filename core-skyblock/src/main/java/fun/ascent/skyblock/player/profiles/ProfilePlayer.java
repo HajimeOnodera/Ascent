@@ -11,6 +11,9 @@ import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.text.Component;
+import java.time.Duration;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 
@@ -117,13 +120,25 @@ public class ProfilePlayer {
         if (xp <= 0) return;
 
         int oldLevel = level.curLevel;
-        level.addExp(xp % 100);
-        level.curLevel += xp / 100;
+        for (int i = 0; i < xp; i++) {
+            level.addExp(1);
+        }
+        int newLevel = level.curLevel;
 
-        sendLevelUpMessage(oldLevel, level.curLevel);
+        if (newLevel > oldLevel) {
+            sendLevelUpMessage(oldLevel, newLevel);
+        } else {
+            if (skyblockPlayer != null) {
+                skyblockPlayer.sendActionBar(text("<dark_aqua>+" + xp + " SkyBlock XP <dark_gray>(" + level.progress.curProgress + "/100)"));
+                skyblockPlayer.playSound(Sound.sound(
+                        Key.key("entity.experience_orb.pickup"),
+                        Sound.Source.PLAYER, 0.5f, 1.5f));
+            }
+        }
     }
 
     public void sendLevelUpMessage(int oldLevel, int curLevel) {
+        if (skyblockPlayer == null) return;
         Map<String, ItemStack> stringRewards = SkyblockLevel.getRewards(oldLevel, curLevel);
         int totalStrength = SkyblockLevel.getStrengthReward(oldLevel, curLevel);
         int totalHealth = SkyblockLevel.getHealthReward(oldLevel, curLevel);
@@ -131,24 +146,35 @@ public class ProfilePlayer {
         String newColour = SkyblockLevel.getLevelColour(curLevel);
         String oldColour = SkyblockLevel.getLevelColour(oldLevel);
 
-        skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(text(text("<dark_aqua><bold>SKYBLOCK LEVEL UP")));
-        skyblockPlayer.sendMessage(text(text(newColour + "Level <dark_gray>[" + oldColour + oldLevel + "<dark_gray>] -> [" + newColour + curLevel + "<dark_gray>]")));
-        skyblockPlayer.sendMessage("");
-        skyblockPlayer.sendMessage(text(text("<green><bold>REWARDS")));
+        String border = "<dark_aqua><bold>" + "▬".repeat(38);
+        skyblockPlayer.sendMessage(text(border));
+        skyblockPlayer.sendMessage(text("  <dark_aqua><bold>SKYBLOCK LEVEL UP"));
+        skyblockPlayer.sendMessage(text("  " + newColour + "Level <dark_gray>[" + oldColour + oldLevel + "<dark_gray>] ➜ [" + newColour + curLevel + "<dark_gray>]"));
+        skyblockPlayer.sendMessage(Component.empty());
+        skyblockPlayer.sendMessage(text("  <green><bold>REWARDS"));
 
         if (totalHealth > 0) {
-            skyblockPlayer.sendMessage(text(text("  <dark_gray>+<red>" + totalHealth + " <red>❤ Health")));
+            skyblockPlayer.sendMessage(text("    <dark_gray>+<red>" + totalHealth + " <red>❤ Health"));
             addToStat(HEALTH, totalHealth);
         }
         if (totalStrength > 0) {
-            skyblockPlayer.sendMessage(text(text("  <dark_gray>+<red>" + totalStrength + " <red>❁ Strength")));
+            skyblockPlayer.sendMessage(text("    <dark_gray>+<red>" + totalStrength + " <red>❁ Strength"));
             addToStat(STRENGTH, totalStrength);
         }
 
         for (String rewardStr : stringRewards.keySet()) {
-            skyblockPlayer.sendMessage(text(text("  <dark_gray>+" + rewardStr)));
+            skyblockPlayer.sendMessage(text("    <dark_gray>+" + rewardStr));
         }
+
+        skyblockPlayer.sendMessage(text(border));
+
+        // Premium level-up Title + Subtitle!
+        Title titleObj = Title.title(
+                text("<dark_aqua><bold>LEVEL UP!"),
+                text(newColour + "Level " + oldLevel + " <gray>➜ " + newColour + curLevel),
+                Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(2500), Duration.ofMillis(400))
+        );
+        skyblockPlayer.showTitle(titleObj);
 
         skyblockPlayer.playSound(Sound.sound(
                 Key.key("entity.player.levelup"),

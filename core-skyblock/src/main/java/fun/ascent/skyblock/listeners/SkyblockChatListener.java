@@ -6,6 +6,8 @@ import fun.ascent.common.user.UserManager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.kyori.adventure.text.Component;
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.SkyblockLevel;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.OutputStream;
@@ -29,10 +31,18 @@ public class SkyblockChatListener {
             User user = UserManager.getUser(event.getPlayer().getUuid());
             Component displayName = user.getDisplayName();
 
+            int sbLevel = 0;
+            if (event.getPlayer() instanceof SkyblockPlayer sp && sp.getActiveProfileData() != null) {
+                sbLevel = sp.getActiveProfileData().level.curLevel;
+            }
+            String levelColor = SkyblockLevel.getLevelColour(sbLevel);
+            Component levelPrefix = text("<dark_gray>[" + levelColor + sbLevel + "<dark_gray>] ");
+            Component finalDisplayName = levelPrefix.append(displayName);
+
             String messageColor = (user.getRank() == Rank.DEFAULT) ? "<gray>" : "<white>";
 
             Component message = text("<gray>: " + messageColor + escapeMiniMessage(event.getRawMessage()));
-            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(displayName.append(message)));
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(p -> p.sendMessage(finalDisplayName.append(message)));
 
             String messageContent = "[" + MinecraftServer.getServer().getPort() + "] " +
                     event.getPlayer().getUsername() + ": " + event.getRawMessage();

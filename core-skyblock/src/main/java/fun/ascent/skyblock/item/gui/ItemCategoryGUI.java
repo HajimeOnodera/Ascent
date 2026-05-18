@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.gui.itemlist;
+package fun.ascent.skyblock.item.gui;
 
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;

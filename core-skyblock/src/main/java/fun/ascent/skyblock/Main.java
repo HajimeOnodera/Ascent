@@ -56,6 +56,7 @@ public class Main {
         SkillRegistry.init();
         SkillListeners.register();
         CollectionRegistry.init();
+        fun.ascent.skyblock.player.level.SkyBlockLevelRequirement.loadFromYaml();
         RecipeRegistry.init();
         CommandHandler.initialise();
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");

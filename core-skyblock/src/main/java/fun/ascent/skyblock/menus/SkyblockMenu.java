@@ -9,6 +9,8 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.collections.gui.CollectionMenuFormat;
 import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
+import fun.ascent.skyblock.player.level.gui.SkyblockLevelMenu;
+import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.skill.gui.SkillOverviewMenu;
 import fun.ascent.skyblock.player.stats.Stat;
@@ -32,6 +34,7 @@ public class SkyblockMenu {
     private static final int SKILLS_SLOT = 19;
     private static final int COLLS_SLOT = 20;
     private static final int RECIPE_SLOT = 21;
+    private static final int LEVELING_SLOT = 22;
     public static void open(SkyblockPlayer player) {
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, miniMessage().deserialize("SkyBlock Menu"));
 
@@ -44,6 +47,7 @@ public class SkyblockMenu {
         inv.setItemStack(SKILLS_SLOT,getSkillsItem());
         inv.setItemStack(COLLS_SLOT,getCollectionItem(plProfile));
         inv.setItemStack(RECIPE_SLOT,getRecipeItem(plProfile));
+        inv.setItemStack(LEVELING_SLOT,getLevelingItem(plProfile));
 
         // Close button
         inv.setItemStack(CLOSE_SLOT, ItemStack.builder(Material.BARRIER)
@@ -63,6 +67,8 @@ public class SkyblockMenu {
                 SkillOverviewMenu.open(player);
             } else if (slot == RECIPE_SLOT) {
                 GUIRecipeBook.open(player);
+            } else if (slot == LEVELING_SLOT) {
+                SkyblockLevelMenu.open(player);
             }
         });
 
@@ -148,10 +154,50 @@ public class SkyblockMenu {
         lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /stats").decoration(TextDecoration.ITALIC,false));
         lore.add(Component.empty());
         lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC,false));
-        return ItemStack.builder(Material.PLAYER_HEAD)
-                .customName(miniMessage().deserialize("<green>Your SkyBlock Profile").decoration(TextDecoration.ITALIC,false))
-                .lore(lore)
-                .build();
+        
+        return ItemStackCreator.getStackHead(
+                miniMessage().deserialize("<green>Your SkyBlock Profile"),
+                plProfile.skyblockPlayer.getSkin(),
+                1,
+                lore
+        ).build();
+    }
+
+    private static ItemStack getLevelingItem(ProfilePlayer plProfile) {
+        List<Component> lore = new ArrayList<>();
+        int level = plProfile.level.curLevel;
+        double currentXp = plProfile.level.progress.curProgress;
+        int reqXp = plProfile.level.progress.reqProgress;
+        int nextLevel = level + 1;
+
+        lore.add(miniMessage().deserialize("<gray>Your SkyBlock Level: <dark_gray>[" + SkyblockLevel.getLevelColour(level) + level + "<dark_gray>]").decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.empty());
+        lore.add(miniMessage().deserialize("<gray>Determine how far you've").decoration(TextDecoration.ITALIC, false));
+        lore.add(miniMessage().deserialize("<gray>progressed in SkyBlock and earn").decoration(TextDecoration.ITALIC, false));
+        lore.add(miniMessage().deserialize("<gray>rewards from completing unique").decoration(TextDecoration.ITALIC, false));
+        lore.add(miniMessage().deserialize("<gray>tasks.").decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.empty());
+        lore.add(miniMessage().deserialize("<gray>Progress to Level " + nextLevel + ":").decoration(TextDecoration.ITALIC, false));
+        
+        int totalBars = 20;
+        double percent = currentXp / reqXp;
+        int completed = (int) Math.round(percent * totalBars);
+        completed = Math.clamp(completed, 0, totalBars);
+        int remaining = totalBars - completed;
+        String bar = "<dark_aqua>" + "▬".repeat(completed) + "<white>" + "▬".repeat(remaining) + " <aqua>" + (int) currentXp + "/" + reqXp + " XP";
+        
+        lore.add(miniMessage().deserialize(bar).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.empty());
+        lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /levels").decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.empty());
+        lore.add(miniMessage().deserialize("<yellow>Click to view!").decoration(TextDecoration.ITALIC, false));
+
+        return ItemStackCreator.getStackHead(
+                miniMessage().deserialize("<green>SkyBlock Leveling"),
+                "3255327dd8e90afad681a19231665bea2bd06065a09d77ac1408837f9e0b242",
+                1,
+                lore
+        ).build();
     }
 
     private static void fill(Inventory inventory) {

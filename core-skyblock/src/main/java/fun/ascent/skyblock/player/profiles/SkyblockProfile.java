@@ -96,6 +96,10 @@ public class SkyblockProfile {
         int newTier = collectionDef.getTierFromProgress(newProgress);
 
         if (newTier > oldTier) {
+            int tiersGained = newTier - oldTier;
+            int collectionSbXp = tiersGained * 5;
+            profilePlayers.forEach(pp -> pp.addSkyblockXp(collectionSbXp));
+
             for (int currentTier = oldTier + 1; currentTier <= newTier; currentTier++) {
                 CollectionCategory.CollectionReward reward = collectionDef.getRewardAtTier(currentTier);
                 if (reward != null) {
@@ -107,8 +111,9 @@ public class SkyblockProfile {
                             pp.skyblockPlayer.sendMessage(separator);
                             pp.skyblockPlayer.sendMessage(title);
                             pp.skyblockPlayer.sendMessage(" ");
+                            pp.skyblockPlayer.sendMessage("  §a§lREWARDS");
+                            pp.skyblockPlayer.sendMessage("    §7+§95 SkyBlock XP");
                             if (reward.unlocks() != null && !reward.unlocks().isEmpty()) {
-                                pp.skyblockPlayer.sendMessage("  §a§lREWARDS");
                                 reward.unlocks().forEach(u -> pp.skyblockPlayer.sendMessage("    §7" + u.getDisplay()));
                             }
                             pp.skyblockPlayer.sendMessage(separator);

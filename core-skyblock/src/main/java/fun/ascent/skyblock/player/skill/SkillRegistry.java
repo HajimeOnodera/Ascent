@@ -73,6 +73,12 @@ public class SkillRegistry {
         EventManager.handler.call(event);
 
         if (newLevel > oldLevel) {
+            int levelsGained = newLevel - oldLevel;
+            int sbXp = levelsGained * 10;
+            if (player.getActiveProfileData() != null) {
+                player.getActiveProfileData().addSkyblockXp(sbXp);
+            }
+
             for (int lvl = oldLevel + 1; lvl <= newLevel; lvl++) {
                 SkillReward reward = def.rewardAt(lvl);
                 if (reward == null) continue;

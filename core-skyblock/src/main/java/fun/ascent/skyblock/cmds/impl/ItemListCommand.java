@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.cmds.impl;
 
-import fun.ascent.skyblock.gui.itemlist.ItemCategoryGUI;
+import fun.ascent.skyblock.item.gui.ItemCategoryGUI;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Player;
 
