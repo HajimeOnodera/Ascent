@@ -1,7 +1,5 @@
 package fun.ascent.proxy.manager;
 
-import fun.ascent.proxy.config.*;
-import fun.ascent.proxy.service.*;
 import com.google.gson.Gson;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;

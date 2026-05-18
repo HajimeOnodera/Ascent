@@ -1,14 +1,8 @@
 package fun.ascent.skyblock.events;
 
-import fun.ascent.skyblock.world.WorldHandler;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.GlobalEventHandler;
-import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
-import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Modifier;
@@ -17,7 +11,6 @@ import java.util.*;
 public class EventManager {
 
     public static GlobalEventHandler handler = MinecraftServer.getGlobalEventHandler();
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     private static final Map<Class<? extends Event>, List<SEvent<? extends Event>>> dispatchers = new HashMap<>();
 
@@ -45,7 +38,6 @@ public class EventManager {
         }
     }
 
-    @SuppressWarnings("unchecked")
     public static <T extends Event> void registerEvent(SEvent<T> event) {
         Class<T> type = event.getEventType();
 

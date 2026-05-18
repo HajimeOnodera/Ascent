@@ -4,7 +4,6 @@ import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.fishing.WaterHookEntity;
 import fun.ascent.skyblock.player.fishing.HookPhase;
 import fun.ascent.skyblock.player.fishing.resolve.CatchResolver;
-import fun.ascent.skyblock.player.fishing.resolve.CatchResult;
 import fun.ascent.skyblock.item.ItemNBT;
 import fun.ascent.skyblock.item.registries.FishingBaitRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;

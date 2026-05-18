@@ -11,7 +11,6 @@ import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.listener.SkillListeners;
-import fun.ascent.skyblock.config.ServerConfig;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.auction.AuctionRegistry;
 import fun.ascent.skyblock.bazaar.BazaarRegistry;
@@ -38,7 +37,7 @@ import fun.ascent.common.Ascent;
 public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    public static void initCore(ServerConfig config) {
+    public static void initCore() {
         Ascent.initialize();
 
         MinecraftServer.getConnectionManager().setPlayerProvider(SkyblockPlayer::new);
@@ -85,38 +84,6 @@ public class Main {
         LOGGER.info("Shutting down SkyBlock Core...");
         ProfileManager.saveAllProfiles();
         MinecraftServer.stopCleanly();
-    }
-
-    public static void main(String[] args) {
-        ServerConfig config = ServerConfig.load();
-        
-        // Initialize Minestom
-        MinecraftServer server = MinecraftServer.init(config.auth());
-        
-        // Initialize Core SkyBlock
-        initCore(config);
-        
-        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
-        if (serverType.equalsIgnoreCase("HUB")) {
-            fun.ascent.skyblock.world.WorldHandler.initialise();
-            fun.ascent.skyblock.entity.mob.ZonePopulationTicker.start();
-            try {
-                Class<?> hubManagerCls = Class.forName("fun.ascent.skyblock.hub.HubManager");
-                hubManagerCls.getMethod("init").invoke(null);
-            } catch (ClassNotFoundException e) {
-                LOGGER.info("HubManager not found on classpath, skipping hub-specific NPC/world initialization.");
-            } catch (Exception e) {
-                LOGGER.error("Failed to initialize HubManager via reflection", e);
-            }
-        }
-        
-        LOGGER.info("Starting SkyBlock server (Type: {}) on {}:{}", serverType.toUpperCase(), config.host(), config.port());
-        server.start(config.host(), config.port());
-        
-        // Registration
-        String serverName = System.getenv().getOrDefault("ASCENT_SERVER_NAME", "skyblock-" + serverType.toLowerCase());
-        String ADVERTISE_HOST = System.getenv().getOrDefault("ASCENT_ADVERTISE_HOST", "127.0.0.1");
-        fun.ascent.common.redis.PingService.start(serverName, ADVERTISE_HOST, config.port());
     }
 }
 

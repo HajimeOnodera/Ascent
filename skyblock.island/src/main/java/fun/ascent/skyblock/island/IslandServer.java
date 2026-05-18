@@ -18,7 +18,7 @@ public class IslandServer {
         MinecraftServer server = MinecraftServer.init(config.auth());
         
         // Initialize Core SkyBlock
-        Main.initCore(config);
+        Main.initCore();
         
         
         LOGGER.info("Starting SkyBlock ISLAND server on {}:{}", config.host(), config.port());

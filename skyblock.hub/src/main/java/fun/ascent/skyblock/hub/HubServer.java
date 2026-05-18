@@ -20,7 +20,7 @@ public class HubServer {
         MinecraftServer server = MinecraftServer.init(config.auth());
         
         // Initialize Core SkyBlock
-        Main.initCore(config);
+        Main.initCore();
         
         // Hub Specific Initialization
         WorldHandler.initialise();

@@ -6,7 +6,6 @@ import fun.ascent.skyblock.enchantment.Enchantment;
 import fun.ascent.skyblock.enchantment.EnchantmentNBT;
 import fun.ascent.skyblock.enchantment.EnchantmentRegistry;
 import fun.ascent.skyblock.enchantment.EnchantingItemResolver;
-import fun.ascent.skyblock.item.ItemNBT;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.Component;

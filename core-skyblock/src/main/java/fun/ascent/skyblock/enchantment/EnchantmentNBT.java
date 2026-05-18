@@ -1,7 +1,6 @@
 package fun.ascent.skyblock.enchantment;
 
 import fun.ascent.skyblock.item.ItemNBT;
-import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.Rarity;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.item.reforge.Reforge;

@@ -1,10 +1,7 @@
 package fun.ascent.skyblock.item.items.consumables;
 
-import fun.ascent.skyblock.item.ItemAbility;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.item.items.ItemDefinition;
-
-import java.util.List;
 
 public class MetaphysicalSerum implements ItemDefinition {
     public String getItemId() {

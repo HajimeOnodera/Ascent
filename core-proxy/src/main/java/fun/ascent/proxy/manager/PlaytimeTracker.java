@@ -1,7 +1,5 @@
 package fun.ascent.proxy.manager;
 
-import fun.ascent.proxy.config.*;
-import fun.ascent.proxy.service.*;
 import fun.ascent.database.PlayerRepository;
 import java.util.Map;
 import java.util.UUID;

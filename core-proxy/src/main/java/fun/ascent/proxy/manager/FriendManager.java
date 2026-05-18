@@ -1,6 +1,5 @@
 package fun.ascent.proxy.manager;
 
-import fun.ascent.proxy.config.*;
 import fun.ascent.proxy.service.*;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;

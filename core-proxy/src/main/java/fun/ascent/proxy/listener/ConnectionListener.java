@@ -1,7 +1,6 @@
 package fun.ascent.proxy.listener;
 
 import fun.ascent.proxy.manager.*;
-import fun.ascent.proxy.config.*;
 import com.velocitypowered.api.event.PostOrder;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;

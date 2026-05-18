@@ -4,8 +4,6 @@ import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import fun.ascent.discord.manager.LinkManager;
 
-import static fun.ascent.common.StringUtility.text;
-
 public final class LinkCommand implements SimpleCommand {
 
     private final LinkManager manager;

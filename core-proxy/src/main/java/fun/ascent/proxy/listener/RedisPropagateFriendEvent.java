@@ -1,7 +1,5 @@
 package fun.ascent.proxy.listener;
 
-import fun.ascent.proxy.manager.*;
-import fun.ascent.proxy.config.*;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import fun.ascent.common.friends.FriendEvent;
