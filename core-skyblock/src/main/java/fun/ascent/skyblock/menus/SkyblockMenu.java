@@ -10,6 +10,7 @@ import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.collections.gui.CollectionMenuFormat;
 import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
+import fun.ascent.skyblock.player.skill.gui.SkillOverviewMenu;
 import fun.ascent.skyblock.player.stats.Stat;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -58,6 +59,8 @@ public class SkyblockMenu {
                 EquipmentMenu.open(player);
             } else if (slot == COLLS_SLOT) {
                 CollectionOverviewMenu.open(player);
+            } else if (slot == SKILLS_SLOT) {
+                SkillOverviewMenu.open(player);
             } else if (slot == RECIPE_SLOT) {
                 GUIRecipeBook.open(player);
             }

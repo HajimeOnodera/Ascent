@@ -26,9 +26,9 @@ public class SkillRegistry {
         register(SkillType.TAMING, new TamingSkill());
         register(SkillType.CARPENTRY, new CarpentrySkill());
         register(SkillType.RUNECRAFTING, new RunecraftingSkill());
-//        register(SkillType.DUNGEONEERING, new DungeoneeringSkill());
-//        register(SkillType.HUNTING, new HuntingSkill());
-//        register(SkillType.SOCIAL, new SocialSkill());
+        register(SkillType.DUNGEONEERING, new DungeoneeringSkill());
+        register(SkillType.HUNTING, new HuntingSkill());
+        register(SkillType.SOCIAL, new SocialSkill());
 
         for (SkillType type : SkillType.values()) {
             if (!definitions.containsKey(type)) {

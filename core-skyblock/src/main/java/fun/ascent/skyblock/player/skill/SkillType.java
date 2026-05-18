@@ -14,10 +14,10 @@ public enum SkillType {
     ALCHEMY("Alchemy", Material.BREWING_STAND, false),
     TAMING("Taming", Material.POLAR_BEAR_SPAWN_EGG, false),
     CARPENTRY("Carpentry", Material.CRAFTING_TABLE, false),
-    RUNECRAFTING("Runecrafting", Material.MAGMA_CREAM, true);
-//    SOCIAL("Social", Material.EMERALD, true),
-//    HUNTING("Hunting", Material.LEAD, false),
-//    DUNGEONEERING("Dungeoneering", Material.PLAYER_HEAD, true);
+    RUNECRAFTING("Runecrafting", Material.MAGMA_CREAM, true),
+    SOCIAL("Social", Material.EMERALD, true),
+    HUNTING("Hunting", Material.LEAD, false),
+    DUNGEONEERING("Dungeoneering", Material.PLAYER_HEAD, true);
 
 
     @Getter private final String displayName;
