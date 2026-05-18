@@ -25,7 +25,6 @@ public class HubCommand extends Command {
                     player.sendMessage(text("<red>SkyBlock Hub is currently offline!"));
                     return;
                 }
-                player.sendMessage(text("<green>Sending you to SkyBlock Hub..."));
                 if (player.getActiveProfile() != null) {
                     ProfileManager.saveProfile(player.getActiveProfile().profileID);
                 }

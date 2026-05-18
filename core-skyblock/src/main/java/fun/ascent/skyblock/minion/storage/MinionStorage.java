@@ -36,6 +36,13 @@ public final class MinionStorage {
         return collected;
     }
 
+    public void remove(int index) {
+        if (index >= 0 && index < stacks.size()) {
+            stacks.remove(index);
+        }
+    }
+
+
     public List<ItemStack> snapshot() {
         List<ItemStack> copy = new ArrayList<>(stacks.size());
         for (ItemStack stack : stacks) {

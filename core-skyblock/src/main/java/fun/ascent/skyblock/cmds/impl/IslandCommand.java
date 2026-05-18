@@ -28,7 +28,6 @@ public class IslandCommand extends Command {
                     player.sendMessage("§cIsland server is currently offline!");
                     return;
                 }
-                player.sendMessage("§aSending you to the Island server...");
                 ProfileManager.saveProfile(profile.profileID);
                 ProxyTransfer.send(player, targetServer);
                 return;

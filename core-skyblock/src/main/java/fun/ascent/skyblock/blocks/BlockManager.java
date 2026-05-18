@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.blocks;
 
+import fun.ascent.skyblock.events.impl.CollectionAddEvent;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -16,6 +17,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.timer.TaskSchedule;
 
 import java.time.Duration;
@@ -315,15 +317,30 @@ public class BlockManager {
 
         if (dropAmount > 0) {
             SkyblockItem item = ItemRegistry.getItem(sbBlock.skyblockItemId);
+            ItemStack dropStack;
             if (item != null) {
-                if (player.getActiveProfileData().level.curLevel >= 6){
-                    player.getInventory().addItemStack(item.buildItemStack(player).withAmount(dropAmount));
-                }else{
-                    ItemEntity entity = new ItemEntity(item.buildItemStack(player).withAmount(dropAmount));
-                    entity.setPickupDelay(Duration.ofMillis(200));
-                    entity.setInstance(player.getInstance(),pos);
-                    entity.setVelocity(new Vec(3));
+                dropStack = item.buildItemStack(player).withAmount(dropAmount);
+            } else {
+                dropStack = ItemStack.of(sbBlock.vanillaMaterial, dropAmount);
+            }
+
+            var profileData = player.getActiveProfileData();
+            boolean teleportsToInventory = profileData != null && profileData.level != null && profileData.level.curLevel >= 6;
+
+            if (teleportsToInventory) {
+                player.getInventory().addItemStack(dropStack);
+            } else {
+                ItemEntity entity = new ItemEntity(dropStack);
+                entity.setPickupDelay(Duration.ofMillis(200));
+                entity.setTag(Tag.Boolean("block_drop"), true);
+                Instance inst = player.getInstance() != null ? player.getInstance() : instance;
+                if (inst != null) {
+                    entity.setInstance(inst, pos.add(0.5, 0.5, 0.5));
                 }
+                double rx = ThreadLocalRandom.current().nextDouble(-1.5, 1.5);
+                double ry = ThreadLocalRandom.current().nextDouble(2.0, 4.0);
+                double rz = ThreadLocalRandom.current().nextDouble(-1.5, 1.5);
+                entity.setVelocity(new Vec(rx, ry, rz));
             }
         }
 
@@ -331,8 +348,13 @@ public class BlockManager {
             SkillRegistry.grantXp(player, sbBlock.skillType, sbBlock.xpAmount);
         }
 
-        if (player.getActiveProfile() != null && sbBlock.skyblockItemId != null) {
-            player.getActiveProfile().updateCollection(sbBlock.skyblockItemId, dropAmount);
+        if (player.getActiveProfile() != null) {
+            String collectionId = sbBlock.skyblockItemId != null ?
+                sbBlock.skyblockItemId :
+                CollectionAddEvent.getCollectionId(sbBlock.vanillaMaterial, null);
+            if (collectionId != null) {
+                player.getActiveProfile().updateCollection(collectionId, dropAmount);
+            }
         }
 
         if (sbBlock.respawnDelayTicks > 0 && sbBlock.replacementBlock != null) {

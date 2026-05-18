@@ -7,6 +7,7 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.actionbar.ActionBarManager;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.combat.CombatListener;
+import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
@@ -56,7 +57,7 @@ public class Main {
         SkillRegistry.init();
         SkillListeners.register();
         CollectionRegistry.init();
-        fun.ascent.skyblock.player.level.SkyBlockLevelRequirement.loadFromYaml();
+        SkyBlockLevelRequirement.loadFromYaml();
         RecipeRegistry.init();
         CommandHandler.initialise();
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");

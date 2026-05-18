@@ -73,10 +73,54 @@ public final class MinionMenu {
                     }
                     if (skyItem != null) {
                         MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(skyItem, clickingPlayer, stack.amount()));
+                    } else {
+                        MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(stack.material(), clickingPlayer, stack.amount()));
                     }
                 }
                 clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);
+                return;
+            }
+
+            int clickedSlot = event.getSlot();
+            int storageIndex = -1;
+            for (int i = 0; i < STORAGE_SLOTS.length; i++) {
+                if (STORAGE_SLOTS[i] == clickedSlot) {
+                    storageIndex = i;
+                    break;
+                }
+            }
+
+            if (storageIndex != -1) {
+                int unlockedSlots = minion.getData().getStorageSlots();
+                if (storageIndex >= unlockedSlots) {
+                    return;
+                }
+                List<ItemStack> stored = minion.getStoredStacks();
+                if (storageIndex >= stored.size()) {
+                    return;
+                }
+                ItemStack clickedStack = stored.get(storageIndex);
+                if (clickedStack == null || clickedStack.isAir()) {
+                    return;
+                }
+                boolean added = clickingPlayer.getInventory().addItemStack(clickedStack);
+                if (added) {
+                    minion.getStorage().remove(storageIndex);
+                    SkyblockItem skyItem = SkyblockItem.fromStack(clickedStack);
+                    if (skyItem == null) {
+                        skyItem = ItemRegistry.getItem(clickedStack.material().name());
+                    }
+                    if (skyItem != null) {
+                        MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(skyItem, clickingPlayer, clickedStack.amount()));
+                    } else {
+                        MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(clickedStack.material(), clickingPlayer, clickedStack.amount()));
+                    }
+                    clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from minion storage.</green>")));
+                    render(inventory, minion);
+                } else {
+                    clickingPlayer.sendMessage(StringUtility.text(text("<red>Your inventory is full!</red>")));
+                }
                 return;
             }
 
