@@ -22,6 +22,7 @@ public class SkyblockPersistence {
             Document collections = new Document();
             collections.putAll(profile.unlockedCollections);
             doc.put("collections", collections);
+            doc.put("recipes", new ArrayList<>(profile.unlockedRecipes));
 
             // Save members
             Document members = new Document();
@@ -58,6 +59,10 @@ public class SkyblockPersistence {
             for (String key : collections.keySet()) {
                 profile.unlockedCollections.put(key, collections.getInteger(key));
             }
+        }
+        List<String> recipes = doc.getList("recipes", String.class);
+        if (recipes != null) {
+            profile.unlockedRecipes.addAll(recipes);
         }
 
         // Load members

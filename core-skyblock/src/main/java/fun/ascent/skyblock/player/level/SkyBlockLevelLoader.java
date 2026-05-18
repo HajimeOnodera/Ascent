@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.level;
 
+import fun.ascent.skyblock.config.ConfigPaths;
 import net.minestom.server.item.Material;
 import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.player.level.unlocks.CustomLevelUnlock;
@@ -15,7 +16,7 @@ public class SkyBlockLevelLoader {
 
     public static SkyBlockLevelRequirement[] loadFromFile() {
         List<SkyBlockLevelRequirement> requirements = new ArrayList<>();
-        File file = new File("./configuration/skyblock/levels/skyblock_level_rewards.yml");
+        File file = ConfigPaths.skyblockPath("levels/skyblock_level_rewards.yml");
         if (!file.exists()) {
             System.err.println("Could not find skyblock_level_rewards.yml at: " + file.getAbsolutePath());
             return new SkyBlockLevelRequirement[0];

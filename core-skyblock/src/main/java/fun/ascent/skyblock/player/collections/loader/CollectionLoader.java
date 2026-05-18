@@ -1,7 +1,7 @@
 package fun.ascent.skyblock.player.collections.loader;
 
+import fun.ascent.skyblock.config.ConfigPaths;
 import fun.ascent.skyblock.player.collections.*;
-import fun.ascent.skyblock.player.skill.SkillType;
 import net.minestom.server.item.Material;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -15,7 +15,7 @@ import java.util.Locale;
 
 public class CollectionLoader {
 
-    private static final File COLLECTIONS_DIR = new File("./configuration/skyblock/collections");
+    private static final File COLLECTIONS_DIR = ConfigPaths.skyblockPath("collections");
 
     public static List<CollectionCategory> loadAll() {
         List<CollectionCategory> categories = new ArrayList<>();
@@ -88,14 +88,7 @@ public class CollectionLoader {
         CollectionConfig.RewardData data = action.getData();
 
         return switch (type) {
-            case "XP" -> {
-                try {
-                    SkillType skill = SkillType.valueOf(categoryType.name());
-                    yield new XpUnlock(skill, data.getXp() != null ? data.getXp() : 0);
-                } catch (Exception e) {
-                    yield null;
-                }
-            }
+            case "XP" -> new XpUnlock(data.getXp() != null ? data.getXp() : 0);
             case "RECIPE_UNLOCK" -> new RecipeUnlock(data.getUnlockedItemType());
             case "CUSTOM_AWARD" -> new CustomUnlock(data.getCustomAward());
             default -> null;

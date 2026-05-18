@@ -17,6 +17,7 @@ public class CoinRewardUnlock extends SkillUnlock {
 
     @Override
     public void apply(SkyblockPlayer player) {
-        // TODO integrate with coin system when added
+        if (player.getActiveProfileData() == null) return;
+        player.setCoins(player.getCoins() + coins);
     }
 }

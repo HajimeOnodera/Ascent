@@ -5,6 +5,8 @@ import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.skill.SkillType;
+import fun.ascent.skyblock.player.stats.StatBuilder;
+import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -108,6 +110,28 @@ public class SkyblockDataHandler {
         GOLD("gold", DatapointDouble.class, new DatapointDouble("gold", 0.0),
             (player, dp) -> player.setGold((Double) dp.getValue()),
             (player) -> new DatapointDouble("gold", player.getGold())),
+
+        STATS("stats", DatapointMapDouble.class, new DatapointMapDouble("stats", new HashMap<>()),
+            (player, dp) -> {
+                Map<String, Double> map = (Map<String, Double>) dp.getValue();
+                if (player.getActiveProfileData() == null || map == null) return;
+                for (Map.Entry<String, Double> entry : map.entrySet()) {
+                    try {
+                        Stats statType = Stats.valueOf(entry.getKey().toUpperCase(Locale.ROOT));
+                        var stat = StatBuilder.build(statType);
+                        stat.setMaxValue(entry.getValue());
+                        stat.setCurValue(entry.getValue());
+                        player.getActiveProfileData().stats.put(stat.id, stat);
+                    } catch (IllegalArgumentException ignored) {
+                    }
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                Map<String, Double> map = new HashMap<>();
+                player.getActiveProfileData().stats.forEach((id, stat) -> map.put(id, stat.getCurValue()));
+                return new DatapointMapDouble("stats", map);
+            }),
 
         SKILLS("skills", DatapointMapDouble.class, new DatapointMapDouble("skills", new HashMap<>()),
             (player, dp) -> {

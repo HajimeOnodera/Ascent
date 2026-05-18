@@ -77,12 +77,11 @@ public class SkillListeners {
         if (reward != null && !reward.unlocks().isEmpty()) {
             player.sendMessage(" ");
             player.sendMessage(text("  <green><bold>REWARDS"));
-            player.sendMessage(text("    <dark_gray>+<dark_aqua>10 SkyBlock XP"));
             reward.unlocks().forEach(unlock -> player.sendMessage(text("    " + unlock.display())));
         } else {
             player.sendMessage(" ");
             player.sendMessage(text("  <green><bold>REWARDS"));
-            player.sendMessage(text("    <dark_gray>+<dark_aqua>10 SkyBlock XP"));
+            player.sendMessage(text("    <gray>No rewards"));
         }
 
         player.sendMessage(border);

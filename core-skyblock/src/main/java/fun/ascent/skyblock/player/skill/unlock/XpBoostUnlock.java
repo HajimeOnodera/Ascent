@@ -17,6 +17,7 @@ public class XpBoostUnlock extends SkillUnlock {
 
     @Override
     public void apply(SkyblockPlayer player) {
-        // TODO integrate with SkyBlock XP system when added
+        if (player.getActiveProfileData() == null) return;
+        player.getActiveProfileData().addSkyblockXp(amount);
     }
 }

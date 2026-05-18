@@ -3,7 +3,9 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.data.SkyblockDataHandler;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
+import fun.ascent.skyblock.player.level.unlocks.SkyBlockLevelStatisticUnlock;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.StatBuilder;
@@ -19,6 +21,7 @@ import net.minestom.server.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,7 +29,6 @@ import java.util.UUID;
 import fun.ascent.skyblock.player.stats.playerStat.Speed;
 
 import static fun.ascent.common.StringUtility.text;
-import static fun.ascent.skyblock.player.stats.Stats.*;
 
 public class ProfilePlayer {
 
@@ -140,8 +142,7 @@ public class ProfilePlayer {
     public void sendLevelUpMessage(int oldLevel, int curLevel) {
         if (skyblockPlayer == null) return;
         Map<String, ItemStack> stringRewards = SkyblockLevel.getRewards(oldLevel, curLevel);
-        int totalStrength = SkyblockLevel.getStrengthReward(oldLevel, curLevel);
-        int totalHealth = SkyblockLevel.getHealthReward(oldLevel, curLevel);
+        Map<Stats, Double> statRewards = getLevelStatRewards(oldLevel, curLevel);
 
         String newColour = SkyblockLevel.getLevelColour(curLevel);
         String oldColour = SkyblockLevel.getLevelColour(oldLevel);
@@ -153,13 +154,16 @@ public class ProfilePlayer {
         skyblockPlayer.sendMessage(Component.empty());
         skyblockPlayer.sendMessage(text("  <green><bold>REWARDS"));
 
-        if (totalHealth > 0) {
-            skyblockPlayer.sendMessage(text("    <dark_gray>+<red>" + totalHealth + " <red>❤ Health"));
-            addToStat(HEALTH, totalHealth);
-        }
-        if (totalStrength > 0) {
-            skyblockPlayer.sendMessage(text("    <dark_gray>+<red>" + totalStrength + " <red>❁ Strength"));
-            addToStat(STRENGTH, totalStrength);
+        for (Map.Entry<Stats, Double> entry : statRewards.entrySet()) {
+            Stats stat = entry.getKey();
+            double amount = entry.getValue();
+            if (amount <= 0) continue;
+
+            String displayAmount = amount == Math.rint(amount)
+                    ? String.valueOf((int) amount)
+                    : String.format("%.1f", amount);
+            skyblockPlayer.sendMessage(text("    <dark_gray>+<green>" + displayAmount + " " + stat.getStatColor() + stat.getStatFormattedDisplay()));
+            addToStat(stat, amount);
         }
 
         for (String rewardStr : stringRewards.keySet()) {
@@ -181,11 +185,26 @@ public class ProfilePlayer {
                 Sound.Source.PLAYER, 1f, 1f));
     }
 
-    public void addToStat(Stats base, int amount) {
+    private Map<Stats, Double> getLevelStatRewards(int oldLevel, int curLevel) {
+        Map<Stats, Double> statRewards = new LinkedHashMap<>();
+        for (int level = oldLevel + 1; level <= curLevel; level++) {
+            SkyBlockLevelRequirement requirement = SkyBlockLevelRequirement.getLevel(level);
+            if (requirement == null) continue;
+
+            for (SkyBlockLevelStatisticUnlock unlock : requirement.getStatisticUnlocks()) {
+                unlock.getStatistics().forEach((stat, amount) ->
+                        statRewards.merge(stat, amount, Double::sum));
+            }
+        }
+        return statRewards;
+    }
+
+    public void addToStat(Stats base, double amount) {
         Stat stat = StatBuilder.build(base);
         if (stats.containsKey(stat.id)) {
             stat = stats.get(stat.id);
         }
+        stat.setMaxValue(stat.getMaxValue() + amount);
         stats.put(stat.id, stat.addCurValue(amount));
     }
 
