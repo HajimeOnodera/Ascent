@@ -1,5 +1,6 @@
 package fun.ascent.skyblock;
 
+import fun.ascent.common.gui.InventoryGUIListener;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.island.IslandSystemListener;
@@ -7,6 +8,7 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.actionbar.ActionBarManager;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.combat.CombatListener;
+import fun.ascent.skyblock.player.fishing.FishingModule;
 import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.scoreboard.ScoreboardManager;
@@ -61,7 +63,7 @@ public class Main {
         RecipeRegistry.init();
         CommandHandler.initialise();
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
-        fun.ascent.skyblock.player.fishing.FishingModule.init();
+        FishingModule.init();
         CombatListener.register();
         SkyblockChatListener.register();
         RegionManager.initialize();
@@ -71,6 +73,7 @@ public class Main {
         RegionListener.register(MinecraftServer.getGlobalEventHandler());
         ProfileListener.register(MinecraftServer.getGlobalEventHandler());
         IslandSystemListener.register(MinecraftServer.getGlobalEventHandler());
+        InventoryGUIListener.register(MinecraftServer.getGlobalEventHandler());
         
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
         if (serverType.equalsIgnoreCase("ISLAND")) {
