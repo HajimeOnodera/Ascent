@@ -3,6 +3,7 @@ package fun.ascent.skyblock.world.region;
 import fun.ascent.skyblock.data.SkyblockDataHandler;
 import fun.ascent.skyblock.data.impl.DatapointStringList;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.actionbar.ActionBar;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
@@ -30,7 +31,10 @@ public class RegionListener {
             if (!currentId.equals(lastRegionId)) {
                 player.setTag(LAST_REGION, currentId);
                 if (current != null) {
-                    player.sendActionBar(text("<gray> ⏣ " + current.getType().getColor() + current.getType().getName()));
+                    ActionBar.of(player.getUuid()).addReplacement(
+                            ActionBar.Section.DEFENSE,
+                            "<gray> ⏣ " + current.getType().getColor() + current.getType().getName(),
+                            20, 10);
                     checkNewZoneDiscovery(player, current.getType());
                 }
             }
