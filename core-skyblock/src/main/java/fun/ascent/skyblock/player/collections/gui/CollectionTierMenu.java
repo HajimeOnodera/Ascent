@@ -56,12 +56,12 @@ public class CollectionTierMenu {
             lore.add(text("<gray>Requirement: <yellow>" + String.format("%,d", reward.requirement()) + " " + collection.name()));
             lore.add(Component.empty());
             lore.add(text("<gray>Rewards:"));
+            reward.unlocks().forEach(u -> lore.add(text("  <green>" + u.getDisplay())));
             lore.add(Component.empty());
             
             if (completed) {
                 lore.add(text("<green>UNLOCKED"));
             } else {
-                int remaining = reward.requirement() - collected;
                 lore.add(text("<gray>Progress: <yellow>" + String.format("%.1f", (collected / (double) reward.requirement()) * 100) + "%"));
                 lore.add(getProgressBar(collected, reward.requirement()));
                 lore.add(Component.empty());

@@ -15,7 +15,7 @@ public class XpUnlock extends CollectionUnlock {
 
     @Override
     public String getDisplay() {
-        return "§8+§b" + (int)amount + " " + skillType.getDisplayName() + " XP";
+        return "§9+" + (int)amount + " " + skillType.getDisplayName() + " XP";
     }
 
     @Override

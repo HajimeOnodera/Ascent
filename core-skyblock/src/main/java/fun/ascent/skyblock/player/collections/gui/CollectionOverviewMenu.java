@@ -3,6 +3,7 @@ package fun.ascent.skyblock.player.collections.gui;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
+import fun.ascent.skyblock.menus.SkyblockMenu;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
@@ -24,15 +25,16 @@ public class CollectionOverviewMenu {
             CollectionCategory.CollectionType.COMBAT, 22,
             CollectionCategory.CollectionType.FORAGING, 23,
             CollectionCategory.CollectionType.FISHING, 24,
-            CollectionCategory.CollectionType.BOSS, 31,
-            CollectionCategory.CollectionType.OTHER, 32
+            CollectionCategory.CollectionType.BOSS, 31
     );
 
     private static final int INFO_SLOT = 4;
+    private static final int BACK_SLOT = 48;
     private static final int CLOSE_SLOT = 49;
+    private static final int CRAFTED_MINIONS_SLOT = 50;
 
     public static void open(SkyblockPlayer player) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<green>Collection"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("Collections"));
 
         CollectionMenuFormat.fill(inv);
 
@@ -42,13 +44,21 @@ public class CollectionOverviewMenu {
         for (Map.Entry<CollectionCategory.CollectionType, Integer> entry : CATEGORY_SLOTS.entrySet()) {
             CollectionCategory category = categories.get(entry.getKey());
             if (category != null) {
-                inv.setItemStack(entry.getValue(), buildCategoryItem(category));
+                inv.setItemStack(entry.getValue(), buildCategoryItem(player, category));
             } else {
                 inv.setItemStack(entry.getValue(), buildLockedCategoryItem(entry.getKey()));
             }
         }
 
+        inv.setItemStack(BACK_SLOT, CollectionMenuFormat.backButton("SkyBlock Menu"));
         inv.setItemStack(CLOSE_SLOT, CollectionMenuFormat.closeButton());
+        inv.setItemStack(CRAFTED_MINIONS_SLOT, fun.ascent.common.item.ItemStackCreator.getStackHead("§aCrafted Minions",
+                "ebcc099f3a00ece0e5c4b31d31c828e52b06348d0a4eac11f3fcbef3c05cb407", 1,
+                "§7View all the unique minions that you",
+                "§7have crafted.",
+                "",
+                "§eClick to view!").build());
+
         inv.eventNode().addListener(InventoryPreClickEvent.class, CollectionOverviewMenu::handleClick);
 
         player.openInventory(inv);
@@ -61,6 +71,17 @@ public class CollectionOverviewMenu {
         int slot = event.getSlot();
         if (slot == CLOSE_SLOT) {
             player.closeInventory();
+            return;
+        }
+
+        if (slot == BACK_SLOT) {
+            SkyblockMenu.open(player);
+            return;
+        }
+
+        if (slot == CRAFTED_MINIONS_SLOT) {
+            player.sendMessage("§cMinion recipes and crafted minions view is coming soon!");
+            player.playSound(net.kyori.adventure.sound.Sound.sound(net.minestom.server.sound.SoundEvent.BLOCK_NOTE_BLOCK_PLING, net.kyori.adventure.sound.Sound.Source.MASTER, 1f, 0.5f));
             return;
         }
 
@@ -99,21 +120,46 @@ public class CollectionOverviewMenu {
                 .build();
     }
 
-    private static ItemStack buildCategoryItem(CollectionCategory category) {
+    private static ItemStack buildCategoryItem(SkyblockPlayer player, CollectionCategory category) {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<gray>View your " + category.getName() + " Collections!"));
+        lore.add(Component.text(" "));
+
+        int total = category.getCollections().size();
+        int unlocked = 0;
+        if (player.getActiveProfile() != null) {
+            for (CollectionCategory.ItemCollection col : category.getCollections()) {
+                if (player.getActiveProfile().unlockedCollections.getOrDefault(col.itemId(), 0) > 0) {
+                    unlocked++;
+                }
+            }
+        }
+
+        double ratio = total == 0 ? 0.0 : (double) unlocked / total;
+        int percent = (int) (ratio * 100);
+
+        lore.add(text("<gray>Collections Unlocked: <yellow>" + percent + "<gold>%"));
+
+        String baseBar = "─────────────────";
+        int maxLen = baseBar.length();
+        int filled = (int) Math.round(ratio * maxLen);
+
+        String completed = filled > 0 ? "§2§m" + baseBar.substring(0, Math.min(filled, maxLen)) : "";
+        String remaining = "§7§m" + baseBar.substring(Math.min(filled, maxLen));
+
+        lore.add(text(completed + remaining + "§r <yellow>" + unlocked + "<gold>/<yellow>" + total));
         lore.add(Component.text(" "));
         lore.add(text("<yellow>Click to view!"));
 
         return ItemStack.builder(category.getIcon())
-                .customName(text("<green>" + category.getName() + " Collection"))
+                .customName(text("<green>" + category.getName() + " Collections"))
                 .lore(lore)
                 .build();
     }
 
     private static ItemStack buildLockedCategoryItem(CollectionCategory.CollectionType type) {
         return ItemStack.builder(Material.BARRIER)
-                .customName(text("<red>" + type.getDisplayName() + " Collection"))
+                .customName(text("<red>" + type.getDisplayName() + " Collections"))
                 .lore(List.of(text("<gray>Coming soon!")))
                 .build();
     }

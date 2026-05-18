@@ -11,7 +11,7 @@ public class RecipeUnlock extends CollectionUnlock {
 
     @Override
     public String getDisplay() {
-        return "§e" + recipeName + " §7Recipe";
+        return "§f" + recipeName + " §8Recipe";
     }
 
     @Override

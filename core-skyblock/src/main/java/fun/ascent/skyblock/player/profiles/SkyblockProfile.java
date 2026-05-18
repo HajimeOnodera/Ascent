@@ -3,14 +3,18 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.sound.SoundEvent;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static net.kyori.adventure.sound.Sound.*;
 
 public class SkyblockProfile {
 
@@ -52,6 +56,23 @@ public class SkyblockProfile {
         this.unlockedCollections = new HashMap<>();
     }
 
+    private String getRomanNumeral(int number) {
+        if (number <= 0) return "";
+        return switch(number) {
+            case 1 -> "I";
+            case 2 -> "II";
+            case 3 -> "III";
+            case 4 -> "IV";
+            case 5 -> "V";
+            case 6 -> "VI";
+            case 7 -> "VII";
+            case 8 -> "VIII";
+            case 9 -> "IX";
+            case 10 -> "X";
+            default -> String.valueOf(number);
+        };
+    }
+
     public void updateCollection(String itemId, int amount) {
         CollectionCategory.ItemCollection collectionDef = CollectionRegistry.get(itemId);
         if (collectionDef == null) return;
@@ -60,7 +81,17 @@ public class SkyblockProfile {
         int newProgress = currentProgress + amount;
         this.unlockedCollections.put(itemId, newProgress);
 
-        // Check for tier ups
+        if (currentProgress == 0 && newProgress > 0) {
+            profilePlayers.forEach(pp -> {
+                if (pp.skyblockPlayer != null) {
+                    pp.skyblockPlayer.sendMessage("§e§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                    pp.skyblockPlayer.sendMessage("  §6§lCOLLECTION UNLOCKED §e" + collectionDef.name());
+                    pp.skyblockPlayer.sendMessage("§e§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+                    pp.skyblockPlayer.playSound(sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Source.MASTER, 1f, 0.5f));
+                }
+            });
+        }
+
         int oldTier = collectionDef.getTierFromProgress(currentProgress);
         int newTier = collectionDef.getTierFromProgress(newProgress);
 
@@ -68,20 +99,41 @@ public class SkyblockProfile {
             for (int currentTier = oldTier + 1; currentTier <= newTier; currentTier++) {
                 CollectionCategory.CollectionReward reward = collectionDef.getRewardAtTier(currentTier);
                 if (reward != null) {
-                    String message = "§6§lCOLLECTION LEVEL UP §e" + collectionDef.name() + " " + currentTier;
+                    String separator = "§e§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬";
+                    String title = "  §6§lCOLLECTION LEVEL UP §e" + collectionDef.name() + " " + (currentTier == 1 ? getRomanNumeral(currentTier) : "§8" + getRomanNumeral(currentTier - 1) + "➜§e" + getRomanNumeral(currentTier));
                     
                     profilePlayers.forEach(pp -> {
                         if (pp.skyblockPlayer != null) {
-                            pp.skyblockPlayer.sendMessage(message);
-                            reward.unlocks().forEach(u -> pp.skyblockPlayer.sendMessage("§7  Unlocked: " + u.getDisplay()));
+                            pp.skyblockPlayer.sendMessage(separator);
+                            pp.skyblockPlayer.sendMessage(title);
+                            pp.skyblockPlayer.sendMessage(" ");
+                            if (reward.unlocks() != null && !reward.unlocks().isEmpty()) {
+                                pp.skyblockPlayer.sendMessage("  §a§lREWARDS");
+                                reward.unlocks().forEach(u -> pp.skyblockPlayer.sendMessage("    §7" + u.getDisplay()));
+                            }
+                            pp.skyblockPlayer.sendMessage(separator);
+                            pp.skyblockPlayer.playSound(sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Source.MASTER, 1f, 1f));
                         }
                     });
-                    
-                    // Apply unlocks (one time per profile)
+
                     reward.unlocks().forEach(u -> u.apply(this));
                 }
             }
         }
+
+        CollectionCategory.CollectionReward nextReward = collectionDef.getRewardAtTier(newTier + 1);
+        String actionBarText;
+        if (nextReward != null) {
+            actionBarText = "§2+" + amount + " " + collectionDef.name() + " §7(" + String.format("%,d", newProgress) + "/" + String.format("%,d", nextReward.requirement()) + ")";
+        } else {
+            actionBarText = "§2+" + amount + " " + collectionDef.name() + " §7(" + String.format("%,d", newProgress) + ")";
+        }
+
+        profilePlayers.forEach(pp -> {
+            if (pp.skyblockPlayer != null) {
+                ActionBar.of(pp.skyblockPlayer.getUuid()).addReplacement(ActionBar.Section.DEFENSE, actionBarText, 40, 10);
+            }
+        });
     }
 
     public void generateIsland() {

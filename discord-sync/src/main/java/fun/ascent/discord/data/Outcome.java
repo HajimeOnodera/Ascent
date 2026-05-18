@@ -10,9 +10,8 @@ public sealed interface Outcome<T> permits Outcome.Ok, Outcome.Fail {
 
     default boolean ok() { return this instanceof Ok<T>; }
 
-    @SuppressWarnings("unchecked")
     default T unwrap() {
-        if (this instanceof Ok<T> o) return o.value();
+        if (this instanceof Ok<T>(T value)) return value;
         throw new IllegalStateException(((Fail<T>) this).reason());
     }
 }
