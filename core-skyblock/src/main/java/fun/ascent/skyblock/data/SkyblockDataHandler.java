@@ -180,6 +180,8 @@ public class SkyblockDataHandler {
                 // TODO: Save enderchest items
                 return new DatapointInventory("enderchest", new ArrayList<>());
             }),
+
+        VISITED_REGIONS("visited_regions", DatapointStringList.class, new DatapointStringList("visited_regions", new ArrayList<>())),
         ;
 
         @Getter private final String key;

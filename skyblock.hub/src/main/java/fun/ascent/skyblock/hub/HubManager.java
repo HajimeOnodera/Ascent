@@ -67,7 +67,6 @@ public class HubManager {
 
                 AscentNpc newNpc = new AscentNpc(definition);
                 SkyblockNPCManager.registerNPC(newNpc);
-                newNpc.spawn();
 
                 LOGGER.info("Spawned Hub NPC: {} at {}", npc.getSimpleName(), newNpc.position());
             } catch (Exception e) {

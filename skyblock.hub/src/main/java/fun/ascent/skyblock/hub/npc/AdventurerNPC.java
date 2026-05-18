@@ -3,6 +3,8 @@ package fun.ascent.skyblock.hub.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
+import fun.ascent.skyblock.hub.shop.ShopMenu;
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -32,12 +34,14 @@ public record AdventurerNPC(Instance instance) implements NpcDefinition {
         return new Pos(-49.5, 69, -66.5,-90,0);
     }
 
-    @Override
-    public void onInteract(Player player, AscentNpc npc) {
-        npc.speak(player, "I've seen it all - every island from here to the edge of the world!",
-                "Over the years I've acquired a variety of Talismans and Artifact.",
-                "For a price, you can have it all!",
-                "Click me again to open the Adventurer Shop!");
-    }
+    @Override public String[] firstInteractionMessages() { return new String[]{
+            "I've seen it all - every island from here to the edge of the world!",
+            "Over the years I've acquired a variety of Talismans and Artifact.",
+            "For a price, you can have it all!",
+            "Click me again to open the Adventurer Shop!"}; }
+
+    @Override public void onFirstInteract(Player player, AscentNpc npc) { npc.speak(player, firstInteractionMessages()); }
+
+    @Override public void onInteract(Player player, AscentNpc npc) { ShopMenu.open((SkyblockPlayer) player, "adv_shop"); }
 }
 

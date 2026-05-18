@@ -330,6 +330,9 @@ public class SkyblockItem {
             lore.add("<dark_gray>Booster");
 
         }
+        if (LavaRodRegistry.isLavaRod((itemId))) {
+            lore.add("<dark_gray>Lava Rod");
+        }
 
         if (AnvilCombinableRegistry.isAnvilCombinable(itemId)) {
             lore.add("<dark_gray>Combinable in Anvil");

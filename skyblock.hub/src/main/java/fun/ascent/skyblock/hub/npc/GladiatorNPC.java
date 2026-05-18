@@ -1,0 +1,18 @@
+package fun.ascent.skyblock.hub.npc;
+
+import fun.ascent.common.npc.AscentNpc;
+import fun.ascent.common.npc.NpcDefinition;
+import fun.ascent.common.npc.NpcSkin;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+
+public record GladiatorNPC(Instance instance) implements NpcDefinition {
+    @Override public String id() { return "hub_gladiator"; }
+    @Override public String name() { return "<aqua>Gladiator"; }
+    @Override public NpcSkin skin() { return new NpcSkin("eyJ0aW1lc3RhbXAiOjE1NjA4NzMzMzg3MTQsInByb2ZpbGVJZCI6ImEyZjgzNDU5NWM4OTRhMjdhZGQzMDQ5NzE2Y2E5MTBjIiwicHJvZmlsZU5hbWUiOiJiUHVuY2giLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2Y3MWNhYWM2YmVjNjQwNjYwNDJjZjViZmJkOWRmZjJkZGRlZWFiMWM2OTU2ZjM1MWUxOGQ4MjcxNGI1NmIxMmIifX19", "Hait/P/7IFMJudb1Ixdx3OdKlTP6D11idZAvDjQATno2D1vEe2ZfacpR1dEENqaBrkoRi0cbGWFmTiqM79zPPknRlfuDGDdaPB4m1fqKZkyTWBfDeHl9ugPxfiEZrOPboNzcOnU8K5kr/FDmbczEwIGARM0p4SmA0defqBEnNhBclsYIzpCM/Xn3G4PkDa/+f0QPmkd8EOhDljPwPd62z3wTNt8W0ofSjCfWXTnIk0rvRymNjhmXZZ/UGDjzvlKdDgb4TyqOBOgbrg9DWTCapIJfFIsZLTbEkit906pzJph2jTLmvGNoFR+011LHNAZRnOXhJ0pEhOslv3BoAvQEyB8+LWGo3/1eOayDHV3aygoV6j+e4vMXzZIcODyYX5pGYbC4DSnNBHcFeTIxJLRxP4/zcH8RwUU9Kj0W5MEmLIJruwqATdWc9liK7zMDk7ZtJoCXx9/YUehw+1tv/DV3ZZvwsfnTxC9GB+xM6yFpWwA1ulvu2mqw0oa6TvV2UwxzJ4Pq+XXeEnnnuobauV33qiKaxqHkmVwjEWnjt1bZhitqrnqupLVo9XcCV0kDsjo2T7vqVphbGHh1vjNoK6VtNdkFV7JzJ/MOl2VieWqVuKjZf1aYqop+Nz1E9GQzKY65ypCGOl+09Rr9SfRXaw1sDOMwhlZn/D1ekyj5IavhpEk="); }
+    @Override public Pos position() { return new Pos(123.5, 79, 165.5, 135, 14); }
+    @Override public String[] firstInteractionMessages() { return new String[]{"Welcome to the Colosseum!", "Oh...wait. Nevermind.", "Here you can join me in drinking away your sorrows."}; }
+    @Override public void onFirstInteract(Player player, AscentNpc npc) { npc.speak(player, firstInteractionMessages()); }
+    @Override public void onInteract(Player player, AscentNpc npc) { npc.speak(player, "Welcome to the Colosseum! Pull up a chair and have a drink."); }
+}
