@@ -125,6 +125,8 @@ public final class CoreProxy {
         );
 
         ServerOutboundMessage.registerClientListener(new RedisPropagateFriendEvent(proxy));
+        ServerOutboundMessage.registerClientListener(new RedisPropagatePartyEvent(proxy));
+        ServerOutboundMessage.registerClientListener(new RedisSendMessageListener(proxy));
 
         proxy.getCommandManager().register(
                 proxy.getCommandManager().metaBuilder("party")
@@ -133,8 +135,6 @@ public final class CoreProxy {
                         .build(),
                 new PartyCommand(proxy)
         );
-
-        ServerOutboundMessage.registerClientListener(new RedisPropagatePartyEvent(proxy));
 
         proxy.getCommandManager().register(
                 proxy.getCommandManager().metaBuilder("playtime")

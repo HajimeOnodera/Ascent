@@ -337,6 +337,7 @@ public class BlockManager {
                     case MINING -> fortune = player.getActiveProfileData().stats.get("mining_fortune").getCurValue();
                     case FARMING -> fortune = player.getActiveProfileData().stats.get("farming_fortune").getCurValue();
                     case FORAGING -> fortune = player.getActiveProfileData().stats.get("foraging_fortune").getCurValue();
+                    default -> throw new IllegalArgumentException("Unexpected value: " + sbBlock.skillType);
                 }
             } catch (NullPointerException ignored) {
                 // Keep base fortune if stat lookup fails

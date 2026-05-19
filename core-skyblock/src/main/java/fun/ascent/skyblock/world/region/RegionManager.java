@@ -1,14 +1,14 @@
 package fun.ascent.skyblock.world.region;
 
-import fun.ascent.skyblock.world.WorldHandler;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.instance.Instance;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import fun.ascent.skyblock.world.WorldHandler;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.Instance;
 
 public class RegionManager {
     private static final Map<String, Region> regions = new HashMap<>();

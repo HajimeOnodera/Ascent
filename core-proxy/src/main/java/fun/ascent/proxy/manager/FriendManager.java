@@ -7,6 +7,8 @@ import fun.ascent.common.friends.FriendEvent;
 import fun.ascent.common.friends.events.FriendAcceptRequestEvent;
 import fun.ascent.common.friends.events.FriendAddRequestEvent;
 import fun.ascent.common.friends.events.FriendDenyRequestEvent;
+import fun.ascent.common.friends.events.FriendPlayerJoinEvent;
+import fun.ascent.common.friends.events.FriendPlayerLeaveEvent;
 import fun.ascent.common.friends.events.FriendRemoveRequestEvent;
 import fun.ascent.common.protocol.objects.friend.SendFriendEventToServiceProtocolObject;
 import fun.ascent.common.service.ServiceType;
@@ -58,5 +60,15 @@ public class FriendManager {
         if (target == null) return;
 
         FRIEND_SERVICE.send(new FriendRemoveRequestEvent(player.getUniqueId(), target.getUniqueId(), player.getUsername(), target.getUsername()));
+    }
+
+    public static void sendJoinEvent(Player player) {
+        if (FRIEND_SERVICE.ensureAvailable(player)) return;
+        FRIEND_SERVICE.send(new FriendPlayerJoinEvent(player.getUniqueId(), player.getUsername()));
+    }
+
+    public static void sendLeaveEvent(Player player) {
+        if (FRIEND_SERVICE.ensureAvailable(player)) return;
+        FRIEND_SERVICE.send(new FriendPlayerLeaveEvent(player.getUniqueId(), player.getUsername()));
     }
 }

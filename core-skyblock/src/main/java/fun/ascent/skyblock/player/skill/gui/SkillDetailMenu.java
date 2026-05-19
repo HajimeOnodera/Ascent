@@ -90,7 +90,6 @@ public class SkillDetailMenu {
     }
 
     private static ItemStack buildInfoItem(SkillType type, SkillDefinition def, PlayerSkillData data) {
-        int level = data.getLevel(type);
         Integer nextLevel = data.getNextLevel(type);
 
         List<Component> lore = new ArrayList<>();

@@ -345,7 +345,7 @@ public abstract class InventoryGUI {
             }
             hasFinishedLoading = true;
 
-            if (this instanceof RefreshingGUI gui) {
+            if (this instanceof @SuppressWarnings("deprecation") RefreshingGUI gui) {
                 MinecraftServer.getSchedulerManager().submitTask(() -> {
                     // Player is removed from Map on disconnect, so we just need to check that
                     if (!GUI_MAP.containsKey(player.getUuid()) || GUI_MAP.get(player.getUuid()) != this) {

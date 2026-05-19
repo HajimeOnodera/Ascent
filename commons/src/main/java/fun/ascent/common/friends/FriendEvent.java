@@ -13,14 +13,15 @@ public abstract class FriendEvent {
     public FriendEvent() {
     }
 
+    @SuppressWarnings("rawtypes")
     public abstract Serializer getSerializer();
 
     public abstract List<UUID> getParticipants();
 
     public static @NonNull FriendEvent findFromType(String className) {
         String[] packageNames = {
-                "net.swofty.commons.friend.events",
-                "net.swofty.commons.friend.events.response"
+                "fun.ascent.common.friends.events",
+                "fun.ascent.common.friends.events.response"
         };
 
         for (String packageName : packageNames) {
@@ -40,6 +41,10 @@ public abstract class FriendEvent {
 
         switch (className) {
             // Request events
+            case "FriendPlayerJoinEvent", "FriendPlayerLeaveEvent" -> {
+                var constructor = clazz.getDeclaredConstructor(UUID.class, String.class);
+                return (FriendEvent) constructor.newInstance(UUID.randomUUID(), "");
+            }
             case "FriendAddRequestEvent" -> {
                 var constructor = clazz.getDeclaredConstructor(UUID.class, UUID.class);
                 return (FriendEvent) constructor.newInstance(UUID.randomUUID(), UUID.randomUUID());
