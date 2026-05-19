@@ -98,4 +98,19 @@ public class PartyManager {
         if (PARTY_SERVICE.ensureAvailable(player)) return;
         PARTY_SERVICE.send(new PartyChatMessageEvent(player.getUniqueId(), message));
     }
+
+    public static void sendDisconnectEvent(Player player) {
+        if (PARTY_SERVICE.ensureAvailable(player)) return;
+        PARTY_SERVICE.send(new PartyPlayerDisconnectEvent(player.getUniqueId()));
+    }
+
+    public static void sendRejoinEvent(Player player) {
+        if (PARTY_SERVICE.ensureAvailable(player)) return;
+        PARTY_SERVICE.send(new PartyPlayerRejoinEvent(player.getUniqueId()));
+    }
+
+    public static void sendSwitchServerEvent(Player player, String serverName) {
+        if (PARTY_SERVICE.ensureAvailable(player)) return;
+        PARTY_SERVICE.send(new PartyPlayerSwitchedServerEvent(player.getUniqueId()));
+    }
 }

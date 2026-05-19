@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 public class ServerOutboundMessage {
+    @SuppressWarnings("rawtypes")
     public static final Map<String, ProtocolObject> protocolObjects = new ConcurrentHashMap<>();
     private static final Map<UUID, PendingRequest> pendingRequests = new ConcurrentHashMap<>();
     private static final Map<String, ServiceToClient> clientListeners = new ConcurrentHashMap<>();

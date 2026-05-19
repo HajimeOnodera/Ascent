@@ -38,7 +38,7 @@ public record PartyDatabase(String playerId) implements MongoDB {
     }
 
     public FullParty getPartyByMember(UUID memberUuid) {
-        Document doc = partyDataCollection.find(Filters.eq("members.uuid", memberUuid.toString())).first();
+        Document doc = partyDataCollection.find(Filters.eq("members", memberUuid.toString())).first();
         if (doc == null) {
             return null;
         }
@@ -49,15 +49,24 @@ public record PartyDatabase(String playerId) implements MongoDB {
     public void saveParty(FullParty party) {
         String serialized = party.getSerializer().serialize(party);
         String id = party.getUuid().toString();
+        
+        List<String> memberUuids = new ArrayList<>();
+        for (FullParty.Member m : party.getMembers()) {
+            memberUuids.add(m.getUuid().toString());
+        }
 
         Document query = new Document("_id", id);
         Document existing = partyDataCollection.find(query).first();
 
         if (existing != null) {
-            partyDataCollection.updateOne(query, Updates.set("data", serialized));
+            partyDataCollection.updateOne(query, Updates.combine(
+                Updates.set("data", serialized),
+                Updates.set("members", memberUuids)
+            ));
         } else {
             Document newDoc = new Document("_id", id);
             newDoc.append("data", serialized);
+            newDoc.append("members", memberUuids);
             partyDataCollection.insertOne(newDoc);
         }
     }

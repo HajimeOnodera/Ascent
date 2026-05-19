@@ -23,6 +23,10 @@ public class ConnectionListener {
 
         // Start tracking this session's playtime
         PlaytimeTracker.onLogin(player.getUniqueId());
+
+        // Notify services
+        FriendManager.sendJoinEvent(player);
+        PartyManager.sendRejoinEvent(player);
     }
 
     @Subscribe
@@ -31,6 +35,10 @@ public class ConnectionListener {
 
         // Persist session playtime to MongoDB
         PlaytimeTracker.onDisconnect(player.getUniqueId());
+
+        // Notify services
+        FriendManager.sendLeaveEvent(player);
+        PartyManager.sendDisconnectEvent(player);
     }
 
     @Subscribe
@@ -43,6 +51,7 @@ public class ConnectionListener {
             // Only send the transition message if they are moving from a previous server (i.e. not proxy join)
             if (event.getPreviousServer() != null) {
                 player.sendMessage(StringUtility.text("<gray>Sending to server " + name + "..."));
+                PartyManager.sendSwitchServerEvent(player, name);
             }
         }
     }

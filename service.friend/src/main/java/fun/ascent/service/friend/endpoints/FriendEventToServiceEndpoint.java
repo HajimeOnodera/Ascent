@@ -38,6 +38,10 @@ public class FriendEventToServiceEndpoint implements ServiceEndpoint<SendFriendE
             FriendCache.handleListRequest(listEvent, listEvent.getPlayerNames(), listEvent.getOnlineStatus());
         } else if (event instanceof FriendRequestsListEvent requestsListEvent) {
             FriendCache.handleRequestsListRequest(requestsListEvent, requestsListEvent.getPlayerNames());
+        } else if (event instanceof FriendPlayerJoinEvent joinEvent) {
+            FriendCache.handlePlayerJoin(joinEvent.getPlayerUuid(), joinEvent.getPlayerName());
+        } else if (event instanceof FriendPlayerLeaveEvent leaveEvent) {
+            FriendCache.handlePlayerLeave(leaveEvent.getPlayerUuid(), leaveEvent.getPlayerName());
         }
 
         return new SendFriendEventToServiceProtocolObject.SendFriendEventToServiceResponse(true);

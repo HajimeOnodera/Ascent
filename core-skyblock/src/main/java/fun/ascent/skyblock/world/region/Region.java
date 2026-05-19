@@ -1,12 +1,12 @@
 package fun.ascent.skyblock.world.region;
 
+import java.util.Arrays;
+import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-
-import java.util.Arrays;
-import java.util.List;
 
 @Getter
 @Setter
