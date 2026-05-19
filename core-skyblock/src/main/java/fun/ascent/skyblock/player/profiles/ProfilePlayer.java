@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import fun.ascent.skyblock.player.stats.playerStat.Speed;
+import fun.ascent.skyblock.quest.QuestData;
 
 import static fun.ascent.common.StringUtility.text;
 
@@ -106,7 +107,7 @@ public class ProfilePlayer {
         if (level == null) level = new SkyblockLevel();
         if (hotmData == null) hotmData = new HotmData();
         hotmData.postLoad();
-        if (questData == null) questData = new fun.ascent.skyblock.quest.QuestData();
+        if (questData == null) questData = new QuestData();
         if (playerUUID != null) {
             this.skyblockPlayer = WorldHandler.getPlayer(playerUUID);
             if (this.skyblockPlayer != null) {

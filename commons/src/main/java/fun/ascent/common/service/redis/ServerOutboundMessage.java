@@ -9,6 +9,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisException;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +27,7 @@ public class ServerOutboundMessage {
     private static final Map<String, ServiceToClient> clientListeners = new ConcurrentHashMap<>();
     private static final String SERVER_ID = UUID.randomUUID().toString();
     private static volatile boolean listening = false;
+    private static volatile JedisPubSub activePubSub = null;
 
     private static final long REQUEST_TIMEOUT_MS = 30_000;
     private static final long MAX_RECONNECT_DELAY_MS = 15_000;
@@ -45,12 +48,42 @@ public class ServerOutboundMessage {
             try {
                 ProtocolObject obj = clazz.getDeclaredConstructor().newInstance();
                 protocolObjects.put(clazz.getSimpleName(), obj);
+
+                // Also map by the request message class simple name
+                Type superclass = clazz.getGenericSuperclass();
+                if (superclass instanceof ParameterizedType parameterizedType) {
+                    Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
+                    if (actualTypeArguments.length > 0) {
+                        Type requestType = actualTypeArguments[0];
+                        if (requestType instanceof Class<?> reqClass) {
+                            protocolObjects.put(reqClass.getSimpleName(), obj);
+                        }
+                    }
+                }
             } catch (Exception ignored) {}
         }
     }
 
     public static void registerClientListener(ServiceToClient listener) {
-        clientListeners.put(listener.getChannel().getChannelName(), listener);
+        String channelName = listener.getChannel().getChannelName();
+        clientListeners.put(channelName, listener);
+
+        JedisPubSub pubSub = activePubSub;
+        if (pubSub != null && pubSub.isSubscribed()) {
+            try {
+                String fullChannel = "service_broadcast_" + channelName;
+                System.out.println("[Ascent] Dynamically subscribing to channel: " + fullChannel);
+                Thread.startVirtualThread(() -> {
+                    try {
+                        pubSub.subscribe(fullChannel);
+                    } catch (Exception e) {
+                        System.err.println("[Ascent] Error in dynamic subscribe call: " + e.getMessage());
+                    }
+                });
+            } catch (Exception e) {
+                System.err.println("[Ascent] Failed to dynamically subscribe to " + channelName + ": " + e.getMessage());
+            }
+        }
     }
 
     public static void init() {
@@ -89,17 +122,20 @@ public class ServerOutboundMessage {
                         }
                     };
 
+                    activePubSub = pubSub;
                     String[] channels = buildChannelArray();
                     System.out.println("[Ascent] PubSub listener connected (" + channels.length + " channels)");
                     jedis.subscribe(pubSub, channels);
 
                 } catch (JedisException e) {
+                    activePubSub = null;
                     consecutiveFailures++;
                     long delay = Math.min(1000L * consecutiveFailures, MAX_RECONNECT_DELAY_MS);
                     System.err.println("[Ascent] PubSub connection lost: " + e.getMessage()
                             + ", reconnecting in " + delay + "ms...");
                     sleep(delay);
                 } catch (Exception e) {
+                    activePubSub = null;
                     consecutiveFailures++;
                     long delay = Math.min(1000L * consecutiveFailures, MAX_RECONNECT_DELAY_MS);
                     System.err.println("[Ascent] PubSub error: " + e.getMessage()
