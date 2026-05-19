@@ -46,6 +46,10 @@ public class RegionManager {
         regions.put(region.getId(), region);
     }
 
+    public static Region getRegion(String id) {
+        return regions.get(id);
+    }
+
     public static Region getRegion(Instance instance, Point point) {
         if (instance == null) return null;
 

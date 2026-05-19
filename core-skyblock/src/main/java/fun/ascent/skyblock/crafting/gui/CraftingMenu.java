@@ -91,6 +91,7 @@ public class CraftingMenu {
                 // Give result and consume grid
                 player.getInventory().addItemStack(result);
                 recipe.consume(inv, GRID_SLOTS);
+                MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.PlayerCraftItemEvent(player, result));
             }
 
             event.setCancelled(true);
