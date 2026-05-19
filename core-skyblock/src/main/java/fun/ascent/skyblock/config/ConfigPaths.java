@@ -7,16 +7,6 @@ public final class ConfigPaths {
     }
 
     public static File skyblockPath(String relativePath) {
-        File primary = new File("./configuration/skyblock", relativePath);
-        if (primary.exists()) {
-            return primary;
-        }
-
-        File moduleLocal = new File("./core-skyblock/configuration/skyblock", relativePath);
-        if (moduleLocal.exists()) {
-            return moduleLocal;
-        }
-
-        return primary;
+        return new File("./configuration/skyblock", relativePath);
     }
 }

@@ -3,7 +3,7 @@ FROM amazoncorretto:25-alpine
 WORKDIR /app
 COPY core-skyblock/build/libs/CoreSkyblock.jar .
 COPY maps/ ./maps
-COPY core-skyblock/configuration/ ./configuration/
+COPY configuration/ ./configuration/
 COPY proxy/forwarding.secret ./forwarding.secret
 
 # Environment variables

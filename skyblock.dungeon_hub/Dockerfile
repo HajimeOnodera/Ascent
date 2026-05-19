@@ -2,7 +2,7 @@ FROM amazoncorretto:25-alpine
 WORKDIR /app
 COPY skyblock.dungeon_hub/build/libs/DungeonHub.jar .
 COPY maps/ ./maps
-COPY core-skyblock/configuration/ ./configuration/
+COPY configuration/ ./configuration/
 COPY proxy/forwarding.secret ./forwarding.secret
 
 # Environment variables
