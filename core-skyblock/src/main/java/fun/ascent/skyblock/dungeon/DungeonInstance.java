@@ -4,10 +4,13 @@ import fun.ascent.skyblock.dungeon.generation.*;
 import fun.ascent.skyblock.dungeon.template.RoomTemplate;
 import fun.ascent.skyblock.dungeon.template.RoomTemplateLoader;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class DungeonInstance {
 
@@ -44,11 +47,57 @@ public class DungeonInstance {
         Room[][] grid = generator.grid();
         int gridSize = generator.gridSize();
 
+        // Batch preload ALL chunks needed for the entire dungeon grid
+        preloadAllChunks(gridSize);
+
         pasteRooms(random, grid, gridSize, templates);
         processDoors(grid, gridSize, templates, random);
 
+        // Invalidate all chunks and recalculate lighting
+        invalidateAllChunks(gridSize);
+        LightingChunk.relight(instance, instance.getChunks());
+
         long elapsed = System.nanoTime() - start;
         System.out.printf("[Dungeon] Built world for %s in %.2fms%n", floor.shortName(), elapsed / 1_000_000.0);
+    }
+
+    private void preloadAllChunks(int gridSize) {
+        int minX = GRID_ORIGIN_X - GAP;
+        int maxX = GRID_ORIGIN_X + gridSize * CELL_STRIDE + GAP;
+        int minZ = GRID_ORIGIN_Z - GAP;
+        int maxZ = GRID_ORIGIN_Z + gridSize * CELL_STRIDE + GAP;
+
+        int minCX = minX >> 4;
+        int maxCX = maxX >> 4;
+        int minCZ = minZ >> 4;
+        int maxCZ = maxZ >> 4;
+
+        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
+        for (int cx = minCX; cx <= maxCX; cx++) {
+            for (int cz = minCZ; cz <= maxCZ; cz++) {
+                futures.add(instance.loadChunk(cx, cz));
+            }
+        }
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).join();
+    }
+
+    private void invalidateAllChunks(int gridSize) {
+        int minX = GRID_ORIGIN_X - GAP;
+        int maxX = GRID_ORIGIN_X + gridSize * CELL_STRIDE + GAP;
+        int minZ = GRID_ORIGIN_Z - GAP;
+        int maxZ = GRID_ORIGIN_Z + gridSize * CELL_STRIDE + GAP;
+
+        int minCX = minX >> 4;
+        int maxCX = maxX >> 4;
+        int minCZ = minZ >> 4;
+        int maxCZ = maxZ >> 4;
+
+        for (int cx = minCX; cx <= maxCX; cx++) {
+            for (int cz = minCZ; cz <= maxCZ; cz++) {
+                Chunk chunk = instance.getChunk(cx, cz);
+                if (chunk != null) chunk.invalidate();
+            }
+        }
     }
 
     private void pasteRooms(Random random, Room[][] grid, int gridSize, RoomTemplateLoader templates) {

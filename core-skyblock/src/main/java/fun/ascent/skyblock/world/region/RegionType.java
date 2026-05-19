@@ -49,7 +49,8 @@ public enum RegionType {
     SAVANNA_WOODLAND("Savanna Woodland", "<yellow>"),
     DWARVEN_MINES("Dwarven Mines", "<aqua>"),
     TRIALS_OF_FIRE("Trials of Fire", "<gold>"),
-    DUNGEON_HUB("Dungeon Hub", "<red>");
+    DUNGEON_HUB("Dungeon Hub", "<red>"),
+    THE_CATACOMBS("The Catacombs", "<red>");
 
     private final String name;
     private final String color;

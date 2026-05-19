@@ -68,6 +68,10 @@ public class DungeonManager {
         player.setInstance(dungeon.instance(), dungeon.spawnPosition());
     }
 
+    public void trackPlayer(UUID playerUuid, DungeonInstance dungeon) {
+        playerDungeonMap.put(playerUuid, dungeon);
+    }
+
     public void removePlayer(Player player) {
         playerDungeonMap.remove(player.getUuid());
     }
