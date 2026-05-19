@@ -128,6 +128,8 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             nameplate = null;
         }
 
+        fun.ascent.skyblock.player.combat.CombatListener.cleanMobData(getUuid());
+
         activeMobs.remove(this);
         super.kill();
 

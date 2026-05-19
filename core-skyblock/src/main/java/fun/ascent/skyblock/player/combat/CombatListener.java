@@ -19,6 +19,28 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CombatListener {
 
     private static final Map<UUID, Long> attackCooldowns = new ConcurrentHashMap<>();
+    
+    public static final java.util.Set<UUID> damagedMobs = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    private static final Map<UUID, Integer> lethalityStacks = new ConcurrentHashMap<>();
+    private static final Map<UUID, Integer> mobHitCounts = new ConcurrentHashMap<>();
+
+    public static int incrementLethality(UUID mobUuid) {
+        return lethalityStacks.merge(mobUuid, 1, (old, val) -> Math.min(4, old + 1));
+    }
+
+    public static int getHitCount(UUID mobUuid) {
+        return mobHitCounts.getOrDefault(mobUuid, 0);
+    }
+
+    public static void incrementHitCount(UUID mobUuid) {
+        mobHitCounts.merge(mobUuid, 1, (old, val) -> old + 1);
+    }
+
+    public static void cleanMobData(UUID mobUuid) {
+        damagedMobs.remove(mobUuid);
+        lethalityStacks.remove(mobUuid);
+        mobHitCounts.remove(mobUuid);
+    }
 
     public static void register() {
         EventManager.registerEvent(new SEvent<EntityAttackEvent>() {
@@ -37,16 +59,20 @@ public class CombatListener {
     }
 
     private static void handlePlayerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob) {
+        if (mob.isDead()) return;
+
         long now = System.currentTimeMillis();
         
-        // DYNAMIC ATTACK SPEED COOLDOWN
         double attackSpeed = playerStat(player, Stats.ATTACK_SPEED);
         long attackCooldownMs = (long) (500.0 / (1.0 + attackSpeed / 100.0));
         
         if (now - attackCooldowns.getOrDefault(player.getUuid(), 0L) < attackCooldownMs) return;
         attackCooldowns.put(player.getUuid(), now);
 
-        CombatCalculator.CombatResult result = CombatCalculator.playerHitsMob(player, mob);
+        net.minestom.server.item.ItemStack held = player.getEquipment(net.minestom.server.entity.EquipmentSlot.MAIN_HAND);
+        boolean isFirstHit = damagedMobs.add(mob.getUuid());
+
+        CombatCalculator.CombatResult result = CombatCalculator.playerHitsMob(player, mob, held, isFirstHit);
 
         player.playSound(Sound.sound(
                 Key.key("entity." + mob.getEntityType().name().toLowerCase().replace("minecraft:", "") + ".hurt"),
@@ -59,22 +85,109 @@ public class CombatListener {
 
         mob.damage(new Damage(DamageType.PLAYER_ATTACK, player, player, player.getPosition(), result.damageFloat()));
 
-        // FEROCITY MULTI-HIT SYSTEM
+        int lifeStealLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.LIFE_STEAL);
+        if (lifeStealLevel > 0) {
+            double maxHealth = player.maxStat(Stats.HEALTH);
+            double healAmount = maxHealth * (0.005 * lifeStealLevel);
+            if (healAmount > 0) {
+                player.addHealth(healAmount);
+                player.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 0.4f, 1.4f), Sound.Emitter.self());
+                ActionBar.of(player.getUuid()).addReplacement(
+                        ActionBar.Section.HEALTH,
+                        "<green>+" + Math.round(healAmount) + "❤ (Life Steal)",
+                        20, 10
+                );
+            }
+        }
+
+        if (result.isCrit()) {
+            int syphonLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SYPHON);
+            if (syphonLevel > 0) {
+                double critDamage = playerStat(player, Stats.CRITICAL_DAMAGE);
+                double multiplier = critDamage / 10.0;
+                double maxHealth = player.maxStat(Stats.HEALTH);
+                double healAmount = maxHealth * (0.001 * syphonLevel) * multiplier;
+                if (healAmount > 0) {
+                    player.addHealth(healAmount);
+                    player.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 0.4f, 1.4f), Sound.Emitter.self());
+                    ActionBar.of(player.getUuid()).addReplacement(
+                            ActionBar.Section.HEALTH,
+                            "<green>+" + Math.round(healAmount) + "❤ (Syphon)",
+                            20, 10
+                    );
+                }
+            }
+        }
+
+        int thunderlordLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.THUNDERLORD);
+        if (thunderlordLevel > 0) {
+            int currentHits = getHitCount(mob.getUuid()) + 1;
+            if (currentHits % 3 == 0) {
+                double magicDmg = thunderlordLevel * 100.0;
+                mob.damage(new Damage(DamageType.MAGIC, player, player, player.getPosition(), (float) magicDmg));
+                if (mob.getInstance() != null) {
+                    net.minestom.server.entity.Entity lightning = new net.minestom.server.entity.Entity(net.minestom.server.entity.EntityType.LIGHTNING_BOLT);
+                    lightning.setInstance(mob.getInstance(), mob.getPosition());
+                }
+                player.playSound(Sound.sound(Key.key("entity.lightning_bolt.thunder"), Sound.Source.PLAYER, 0.4f, 1.2f), Sound.Emitter.self());
+            }
+        }
+
+        int cleaveLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.CLEAVE);
+        if (cleaveLevel > 0 && mob.getInstance() != null) {
+            double cleaveDamage = result.damage() * (cleaveLevel * 0.03);
+            if (cleaveDamage > 0) {
+                mob.getInstance().getNearbyEntities(mob.getPosition(), 3.0).stream()
+                        .filter(e -> e instanceof SkyblockMobEntity && !e.equals(mob))
+                        .forEach(e -> {
+                            SkyblockMobEntity targetMob = (SkyblockMobEntity) e;
+                            targetMob.damage(new Damage(DamageType.PLAYER_ATTACK, player, player, player.getPosition(), (float) cleaveDamage));
+                            DamageIndicator.spawn(targetMob.getInstance(), targetMob.getPosition(), cleaveDamage, false);
+                        });
+            }
+        }
+
+        if (mob.isDead()) {
+            int scavengerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SCAVENGER);
+            if (scavengerLevel > 0) {
+                double extraCoins = scavengerLevel * 1.5;
+                player.addCoins(extraCoins);
+                player.sendMessage(fun.ascent.common.StringUtility.text("<gold>+ " + extraCoins + " Coins (Scavenger)"));
+            }
+
+            int vampirismLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.VAMPIRISM);
+            if (vampirismLevel > 0) {
+                double maxHealth = player.maxStat(Stats.HEALTH);
+                double healAmount = (maxHealth - player.getCurrentHealth()) * (vampirismLevel * 0.01);
+                if (healAmount > 0) {
+                    player.addHealth(healAmount);
+                    player.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 0.4f, 1.4f), Sound.Emitter.self());
+                    ActionBar.of(player.getUuid()).addReplacement(
+                            ActionBar.Section.HEALTH,
+                            "<green>+" + Math.round(healAmount) + "❤ (Vampirism)",
+                            20, 10
+                    );
+                }
+            }
+        }
+
+        incrementHitCount(mob.getUuid());
+
         double ferocity = playerStat(player, Stats.FEROCITY);
         if (ferocity > 0) {
             int extraAttacks = (int) (ferocity / 100);
             double extraAttackChance = (ferocity % 100) / 100.0;
 
             for (int i = 0; i < extraAttacks; i++) {
-                triggerFerocityStrike(player, mob, result);
+                triggerFerocityStrike(player, mob, result, held);
             }
             if (Math.random() < extraAttackChance) {
-                triggerFerocityStrike(player, mob, result);
+                triggerFerocityStrike(player, mob, result, held);
             }
         }
     }
 
-    private static void triggerFerocityStrike(SkyblockPlayer player, SkyblockMobEntity mob, CombatCalculator.CombatResult result) {
+    private static void triggerFerocityStrike(SkyblockPlayer player, SkyblockMobEntity mob, CombatCalculator.CombatResult result, net.minestom.server.item.ItemStack held) {
         if (mob.isDead()) return;
 
         net.minestom.server.coordinate.Pos offsetPos = mob.getPosition().add(
@@ -93,6 +206,30 @@ public class CombatListener {
         ), Sound.Emitter.self());
 
         mob.damage(new Damage(DamageType.PLAYER_ATTACK, player, player, player.getPosition(), result.damageFloat()));
+
+        if (mob.isDead()) {
+            int scavengerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SCAVENGER);
+            if (scavengerLevel > 0) {
+                double extraCoins = scavengerLevel * 1.5;
+                player.addCoins(extraCoins);
+                player.sendMessage(fun.ascent.common.StringUtility.text("<gold>+ " + extraCoins + " Coins (Scavenger)"));
+            }
+
+            int vampirismLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.VAMPIRISM);
+            if (vampirismLevel > 0) {
+                double maxHealth = player.maxStat(Stats.HEALTH);
+                double healAmount = (maxHealth - player.getCurrentHealth()) * (vampirismLevel * 0.01);
+                if (healAmount > 0) {
+                    player.addHealth(healAmount);
+                    player.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 0.4f, 1.4f), Sound.Emitter.self());
+                    ActionBar.of(player.getUuid()).addReplacement(
+                            ActionBar.Section.HEALTH,
+                            "<green>+" + Math.round(healAmount) + "❤ (Vampirism)",
+                            20, 10
+                    );
+                }
+            }
+        }
     }
 
     private static void handleMobHitsPlayer(SkyblockMobEntity mob, SkyblockPlayer player) {
@@ -110,11 +247,8 @@ public class CombatListener {
         }
 
         player.removeHealth(actualDamage);
-
-        // Visual damage red-flash, tilt, and grunt sound client-side
         player.triggerStatus((byte) 2);
 
-        // Apply physical knockback velocity away from the attacking mob
         double dx = player.getPosition().x() - mob.getPosition().x();
         double dz = player.getPosition().z() - mob.getPosition().z();
         double dist = Math.sqrt(dx * dx + dz * dz);
@@ -123,7 +257,6 @@ public class CombatListener {
             double kz = dz / dist;
             player.setVelocity(new net.minestom.server.coordinate.Vec(kx * 4.5, 3.0, kz * 4.5));
         } else {
-            // Fallback direction if perfectly overlapping
             player.setVelocity(new net.minestom.server.coordinate.Vec(0.0, 3.0, 4.5));
         }
 

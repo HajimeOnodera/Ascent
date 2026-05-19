@@ -144,7 +144,7 @@ public final class EnchantingTableMenu {
         return ItemStackCreator.getStack(
                 "<green>Bookshelf Power", Material.BOOKSHELF, 1,
                 List.of(
-                        t("<gray>Current power: <green>" + bookshelfPower + "<gray>/60"),
+                        t("<gray>Bookshelf Power: <green>" + bookshelfPower),
                         t(""),
                         t("<gray>Surround the enchanting table"),
                         t("<gray>with bookshelves to increase power.")

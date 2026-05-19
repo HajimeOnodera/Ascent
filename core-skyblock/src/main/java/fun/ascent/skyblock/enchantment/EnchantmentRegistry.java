@@ -16,7 +16,19 @@ public enum EnchantmentRegistry {
     GROWTH("Growth", new GrowthEnchantment()),
     PROTECTION("Protection", new ProtectionEnchantment()),
     FORTUNE("Fortune", new FortuneEnchantment()),
-    EFFICIENCY("Efficiency", new EfficiencyEnchantment());
+    EFFICIENCY("Efficiency", new EfficiencyEnchantment()),
+    GIANT_KILLER("Giant Killer", new GiantKillerEnchantment()),
+    EXECUTE("Execute", new ExecuteEnchantment()),
+    PROSECUTE("Prosecute", new ProsecuteEnchantment()),
+    LETHALITY("Lethality", new LethalityEnchantment()),
+    SMITE("Smite", new SmiteEnchantment()),
+    ENDER_SLAYER("Ender Slayer", new EnderSlayerEnchantment()),
+    CUBISM("Cubism", new CubismEnchantment()),
+    SYPHON("Syphon", new SyphonEnchantment()),
+    VAMPIRISM("Vampirism", new VampirismEnchantment()),
+    TRIPLE_STRIKE("Triple-Strike", new TripleStrikeEnchantment()),
+    THUNDERLORD("Thunderlord", new ThunderlordEnchantment()),
+    CLEAVE("Cleave", new CleaveEnchantment());
 
     private final String displayName;
     private final Enchantment enchantment;

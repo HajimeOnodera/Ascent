@@ -138,6 +138,22 @@ public class SkyblockPlayer extends Player {
         double bonus = statEffects.values().stream()
                 .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
                 .sum();
+
+        if (stat == Stats.HEALTH) {
+            for (net.minestom.server.entity.EquipmentSlot slot : List.of(
+                    net.minestom.server.entity.EquipmentSlot.HELMET,
+                    net.minestom.server.entity.EquipmentSlot.CHESTPLATE,
+                    net.minestom.server.entity.EquipmentSlot.LEGGINGS,
+                    net.minestom.server.entity.EquipmentSlot.BOOTS)) {
+                net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
+                if (armorPiece != null && !armorPiece.isAir()) {
+                    int growthLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(
+                            armorPiece, fun.ascent.skyblock.enchantment.EnchantmentRegistry.GROWTH);
+                    bonus += growthLevel * 15.0;
+                }
+            }
+        }
+
         return stat.applyCap(base + bonus);
     }
 
@@ -178,6 +194,22 @@ public class SkyblockPlayer extends Player {
         double bonus = statEffects.values().stream()
                 .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
                 .sum();
+
+        if (stat == Stats.DEFENSE) {
+            for (net.minestom.server.entity.EquipmentSlot slot : List.of(
+                    net.minestom.server.entity.EquipmentSlot.HELMET,
+                    net.minestom.server.entity.EquipmentSlot.CHESTPLATE,
+                    net.minestom.server.entity.EquipmentSlot.LEGGINGS,
+                    net.minestom.server.entity.EquipmentSlot.BOOTS)) {
+                net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
+                if (armorPiece != null && !armorPiece.isAir()) {
+                    int protLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(
+                            armorPiece, fun.ascent.skyblock.enchantment.EnchantmentRegistry.PROTECTION);
+                    bonus += protLevel * 4.0;
+                }
+            }
+        }
+
         return base + bonus;
     }
 
