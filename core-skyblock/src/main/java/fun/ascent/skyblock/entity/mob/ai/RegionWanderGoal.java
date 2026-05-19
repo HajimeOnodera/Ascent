@@ -1,9 +1,12 @@
 package fun.ascent.skyblock.entity.mob.ai;
 
+import fun.ascent.skyblock.world.region.Region;
+import fun.ascent.skyblock.world.region.RegionManager;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,40 +16,43 @@ import java.util.Random;
 
 public class RegionWanderGoal extends GoalSelector {
 
-    private static final long WANDER_INTERVAL = 2500L;
+    private static final long WANDER_INTERVAL_MS = 2500L;
 
     private final int radius;
+    private final String zoneId;
     private final Random rng = new Random();
 
-    private long lastWander = 0;
-    private List<Vec> reachable = null;
+    private long lastWanderTime = 0;
+    private List<Pos> wanderNodes = null;
 
     public RegionWanderGoal(@NotNull EntityCreature creature, int radius, String zoneId) {
         super(creature);
         this.radius = radius;
+        this.zoneId = zoneId;
     }
 
     @Override
     public boolean shouldStart() {
-        return System.currentTimeMillis() - lastWander >= WANDER_INTERVAL;
+        return System.currentTimeMillis() - lastWanderTime >= WANDER_INTERVAL_MS;
     }
 
     @Override
     public void start() {
-        if (reachable == null) {
-            reachable = buildReachableOffsets();
+        if (wanderNodes == null) {
+            wanderNodes = buildWanderNodes();
         }
 
-        if (reachable.isEmpty()) {
+        if (wanderNodes.isEmpty()) {
             end();
             return;
         }
 
-        int attempts = reachable.size();
+        int attempts = Math.min(10, wanderNodes.size());
         while (attempts-- > 0) {
-            Vec offset = reachable.get(rng.nextInt(reachable.size()));
-            Pos target = entityCreature.getPosition().add(offset);
-            if (entityCreature.getNavigator().setPathTo(target)) break;
+            Pos target = wanderNodes.get(rng.nextInt(wanderNodes.size()));
+            if (entityCreature.getNavigator().setPathTo(target)) {
+                break;
+            }
         }
     }
 
@@ -60,32 +66,59 @@ public class RegionWanderGoal extends GoalSelector {
 
     @Override
     public void end() {
-        lastWander = System.currentTimeMillis();
+        lastWanderTime = System.currentTimeMillis();
     }
 
-    private @NotNull List<Vec> buildReachableOffsets() {
-        List<Vec> result = new ArrayList<>();
+    private @NotNull List<Pos> buildWanderNodes() {
+        List<Pos> nodes = new ArrayList<>();
+        Instance instance = entityCreature.getInstance();
+        if (instance == null) return nodes;
 
-        for (int x = -radius; x <= radius; x++) {
-            for (int z = -radius; z <= radius; z++) {
-                int bx = entityCreature.getPosition().blockX() + x;
-                int by = entityCreature.getPosition().blockY();
-                int bz = entityCreature.getPosition().blockZ() + z;
-
-                Pos candidate = new Pos(bx, by, bz);
-
-                if (entityCreature.getInstance() != null) {
-                    if (!entityCreature.getInstance().isChunkLoaded(candidate)) {
-                        entityCreature.getInstance().loadChunk(candidate).join();
-                    }
-                    Block block = entityCreature.getInstance().getBlock(bx, by, bz);
-                    if (!block.isAir()) continue;
-                }
-
-                result.add(new Vec(x, by, z));
+        Region activeRegion = null;
+        for (Region r : RegionManager.getAllRegions()) {
+            if (r.getId().equalsIgnoreCase(zoneId)) {
+                activeRegion = r;
+                break;
             }
         }
 
-        return result;
+        int centerX = entityCreature.getPosition().blockX();
+        int centerY = entityCreature.getPosition().blockY();
+        int centerZ = entityCreature.getPosition().blockZ();
+
+        // OPTIMIZATION: Instead of scanning 600+ block columns sequentially (which wastes massive CPU),
+        // we perform random sampling of 30 target coordinates within the wander radius!
+        for (int attempt = 0; attempt < 30; attempt++) {
+            int rx = centerX + rng.nextInt(radius * 2 + 1) - radius;
+            int rz = centerZ + rng.nextInt(radius * 2 + 1) - radius;
+
+            // Scan elevation offset of +/- 2 blocks to handle stairs, slabs, or minor slopes
+            for (int yOffset = -2; yOffset <= 2; yOffset++) {
+                int ty = centerY + yOffset;
+                Pos candidate = new Pos(rx + 0.5, ty, rz + 0.5);
+
+                // Ensure candidate coordinate is within active zone boundaries
+                if (activeRegion != null && !activeRegion.isInside(candidate)) {
+                    continue;
+                }
+
+                // OPTIMIZATION: Skip unloaded chunks to avoid blocking the main server thread with I/O calls!
+                if (!instance.isChunkLoaded(candidate)) {
+                    continue;
+                }
+
+                Block feetBlock = instance.getBlock(rx, ty, rz);
+                Block headBlock = instance.getBlock(rx, ty + 1, rz);
+                Block groundBlock = instance.getBlock(rx, ty - 1, rz);
+
+                // Solid surface to walk on, with air above feet and head
+                if (feetBlock.isAir() && headBlock.isAir() && !groundBlock.isAir()) {
+                    nodes.add(candidate);
+                    break;
+                }
+            }
+        }
+
+        return nodes;
     }
 }

@@ -1,6 +1,10 @@
 
 package fun.ascent.skyblock.entity.mob.ai;
 
+import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
+import fun.ascent.skyblock.world.region.Region;
+import fun.ascent.skyblock.world.region.RegionManager;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
@@ -51,6 +55,15 @@ public class MeleeChaseGoal extends GoalSelector {
             return;
         }
 
+        // Region boundary validation: Stop chasing if target escapes active spawning zone
+        if (entityCreature instanceof SkyblockMobEntity mob && mob.getZoneId() != null) {
+            Region playerRegion = RegionManager.getRegion(entityCreature.getInstance(), target.getPosition());
+            if (playerRegion == null || !playerRegion.getId().equalsIgnoreCase(mob.getZoneId())) {
+                finished = true;
+                return;
+            }
+        }
+
         if (entityCreature.getDistanceSquared(target) <= reach * reach) {
             entityCreature.lookAt(target);
 
@@ -62,10 +75,11 @@ public class MeleeChaseGoal extends GoalSelector {
         }
 
         Navigator nav = entityCreature.getNavigator();
-        var pathPos = nav.getPathPosition();
-        var targetPos = target.getPosition();
+        net.minestom.server.coordinate.Point pathPos = nav.getPathPosition();
+        Pos targetPos = target.getPosition();
 
-        if (!pathPos.samePoint(targetPos)) {
+        // FIXED NULL CHECK: Fixes NullPointerException if pathPos is null
+        if (pathPos == null || !pathPos.samePoint(targetPos)) {
             if (pathCooldown.isReady(time)) {
                 pathCooldown.refreshLastUpdate(time);
                 nav.setPathTo(targetPos);

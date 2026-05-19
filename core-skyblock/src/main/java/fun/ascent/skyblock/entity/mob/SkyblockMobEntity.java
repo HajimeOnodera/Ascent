@@ -41,6 +41,15 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     private FloatingTextEntity nameplate;
     private Component currentNameplate;
     private final AtomicLong lastAttackMillis = new AtomicLong(0);
+    private String zoneId;
+
+    public String getZoneId() {
+        return zoneId;
+    }
+
+    public void setZoneId(String zoneId) {
+        this.zoneId = zoneId;
+    }
 
     protected SkyblockMobEntity(EntityType type) {
         super(type);
@@ -52,7 +61,9 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         }
 
         currentNameplate = buildNameplateComponent(baseStat(HEALTH), baseStat(HEALTH));
-        nameplate = new FloatingTextEntity(currentNameplate, meta -> {});
+        nameplate = new FloatingTextEntity(currentNameplate, meta -> {
+            meta.setTranslation(new net.minestom.server.coordinate.Vec(0, nameplateOffset(), 0));
+        });
 
         onSetup();
     }
@@ -75,7 +86,8 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     public void spawn() {
         super.spawn();
         activeMobs.add(this);
-        nameplate.setInstance(getInstance(), nameplatePos());
+        nameplate.setInstance(getInstance(), getPosition());
+        addPassenger(nameplate);
         onSpawn();
     }
 
@@ -111,6 +123,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     @Override
     public void kill() {
         if (nameplate != null) {
+            removePassenger(nameplate);
             nameplate.remove();
             nameplate = null;
         }
@@ -127,7 +140,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         if (table == null || getInstance() == null) return;
 
         Pos dropPos = getPosition().add(0, 0.5, 0);
-        for (MobDrop drop : table.roll()) {
+        for (MobDrop drop : table.roll(killer)) {
             DroppedItemEntity dropped = new DroppedItemEntity(
                     drop.item().withAmount(drop.rolledAmount()), killer);
             dropped.setInstance(getInstance(), dropPos);
@@ -142,10 +155,6 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         Pos pos = getPosition();
         if (!world.isChunkLoaded(pos)) {
             world.loadChunk(pos).join();
-        }
-
-        if (nameplate != null && nameplate.getInstance() != null) {
-            nameplate.teleport(nameplatePos());
         }
 
         pushOverlappingMobs();

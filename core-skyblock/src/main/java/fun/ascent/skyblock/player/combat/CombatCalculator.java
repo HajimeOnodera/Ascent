@@ -9,25 +9,24 @@ import java.util.Map;
 
 public class CombatCalculator {
 
-    private static final double BASE_WEAPON_DAMAGE = 5.0;
-
     public static CombatResult playerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob) {
+        double weaponDamage = playerStat(player, Stats.DAMAGE);
         double strength = playerStat(player, Stats.STRENGTH);
         double critChance = playerStat(player, Stats.CRITICAL_CHANCE);
         double critDamage = playerStat(player, Stats.CRITICAL_DAMAGE);
         double defense = mob.baseStat(Stats.DEFENSE);
 
-        boolean isCrit = Math.random() * 100 <= critChance;
+        boolean isCrit = Math.random() * 100.0 <= critChance;
 
-        double damage = BASE_WEAPON_DAMAGE
-                * (1 + strength / 100)
-                * (isCrit ? 1 + critDamage / 100 : 1);
+        double damage = weaponDamage
+                * (1.0 + strength / 100.0)
+                * (isCrit ? 1.0 + critDamage / 100.0 : 1.0);
 
         if (defense > 0) {
-            damage *= 1 - (defense / (defense + 100));
+            damage *= 1.0 - (defense / (defense + 100.0));
         }
 
-        return new CombatResult(Math.max(1, damage), isCrit);
+        return new CombatResult(Math.max(1.0, damage), isCrit);
     }
 
     public static CombatResult mobHitsPlayer(SkyblockMobEntity mob, SkyblockPlayer player) {

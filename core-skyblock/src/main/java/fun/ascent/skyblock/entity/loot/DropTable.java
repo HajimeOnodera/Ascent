@@ -16,4 +16,14 @@ public abstract class DropTable {
         }
         return result;
     }
+
+    public final List<MobDrop> roll(fun.ascent.skyblock.player.SkyblockPlayer killer) {
+        List<MobDrop> result = new ArrayList<>();
+        for (MobDrop drop : drops()) {
+            if (drop.rolls(killer)) {
+                result.add(drop);
+            }
+        }
+        return result;
+    }
 }
