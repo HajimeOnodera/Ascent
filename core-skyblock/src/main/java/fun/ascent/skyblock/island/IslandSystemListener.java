@@ -2,14 +2,11 @@ package fun.ascent.skyblock.island;
 
 import fun.ascent.skyblock.events.definitions.IslandLoadEvent;
 import fun.ascent.skyblock.events.definitions.IslandSaveEvent;
-import fun.ascent.skyblock.island.npc.IslandJerryNPC;
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.minion.service.MinionPersistence;
 import fun.ascent.skyblock.minion.service.MinionFactory;
 import fun.ascent.skyblock.minion.model.MinionType;
-import fun.ascent.skyblock.npc.SkyblockNPCManager;
-import fun.ascent.common.npc.AscentNpc;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.GlobalEventHandler;
 import org.bson.Document;
@@ -48,14 +45,6 @@ public class IslandSystemListener {
                 island.getSpawnedMinionUuids().add(minion.getId());
             }
 
-            // 2. Spawn Jerry
-            String jerryId = "jerry_" + island.getIslandId();
-            if (SkyblockNPCManager.getNPCbyID(jerryId) == null) {
-                System.out.println("[IslandSync] Spawning Jerry for island " + island.getIslandId());
-                Pos jerryPos = new Pos(9.5, 100, 34, 180, 0);
-                AscentNpc jerry = new AscentNpc(new IslandJerryNPC(event.instance(), jerryPos, jerryId));
-                SkyblockNPCManager.registerNPC(jerry);
-            }
         });
 
         handler.addListener(IslandSaveEvent.class, event -> {

@@ -20,6 +20,8 @@ public class IslandServer {
         // Initialize Core SkyBlock
         Main.initCore();
         
+        // Initialize Island NPCs
+        IslandNPCManager.init(MinecraftServer.getGlobalEventHandler());
         
         LOGGER.info("Starting SkyBlock ISLAND server on {}:{}", config.host(), config.port());
         server.start(config.host(), config.port());

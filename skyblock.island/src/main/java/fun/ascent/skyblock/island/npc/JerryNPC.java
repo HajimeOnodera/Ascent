@@ -3,15 +3,17 @@ package fun.ascent.skyblock.island.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcType;
+import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
-public record IslandJerryNPC(Instance instance, Pos position, String id) implements NpcDefinition {
+public record JerryNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public String id() {
-        return id;
+        String worldId = instance.getTag(WorldHandler.worldID);
+        return "jerry_" + (worldId != null ? worldId : "unknown");
     }
 
     @Override
@@ -26,7 +28,7 @@ public record IslandJerryNPC(Instance instance, Pos position, String id) impleme
 
     @Override
     public Pos position() {
-        return position;
+        return new Pos(9.5, 100, 34, 180, 0);
     }
 
     @Override
