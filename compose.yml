@@ -82,5 +82,18 @@ services:
       - ASCENT_SERVER_PORT=25568
       - ASCENT_SERVER_TYPE=ISLAND
 
+  dungeon-hub:
+    build:
+      context: .
+      dockerfile: skyblock.dungeon_hub/Dockerfile
+    container_name: ascent-dungeon-hub
+    environment:
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
+      - ASCENT_SERVER_NAME=dungeon-hub-1
+      - ASCENT_ADVERTISE_HOST=dungeon-hub
+      - ASCENT_SERVER_PORT=25567
+      - ASCENT_SERVER_TYPE=DUNGEON_HUB
+
 #volumes:
 #  mongodb_data:

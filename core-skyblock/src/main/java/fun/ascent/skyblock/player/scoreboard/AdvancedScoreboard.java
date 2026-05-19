@@ -118,8 +118,7 @@ public class AdvancedScoreboard {
             if (time == null) return List.of("<gray>Loading...");
             return List.of(
                     "<white> " + time.getMonthName() + " " + time.getOrdinalDay() + "</white>",
-                    "<gray> " + time.getHourFormatted() + "</gray>",
-                    ""
+                    "<gray> " + time.getHourFormatted() + "</gray>"
             );
         }
     }
@@ -127,7 +126,7 @@ public class AdvancedScoreboard {
     public static class LocationBlock implements ScoreboardBlock {
         @Override
         public List<String> render(SkyblockPlayer player) {
-            String locStr = "<gray> ⏣</gray> <aqua>None";
+            String locStr = "<gray> ⏣</gray> <gray>None";
             try {
                 DungeonInstance dungeon = DungeonManager.get().getDungeon(player.getUuid());
                 if (dungeon != null && dungeon.instance() != null && dungeon.instance().equals(player.getInstance())) {

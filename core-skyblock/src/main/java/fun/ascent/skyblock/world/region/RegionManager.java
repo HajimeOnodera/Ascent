@@ -49,10 +49,15 @@ public class RegionManager {
     public static Region getRegion(Instance instance, Point point) {
         if (instance == null) return null;
 
-        // Check for Private Island first
+        // Check for special instances by world ID
         String worldId = instance.getTag(WorldHandler.worldID);
-        if (worldId != null && worldId.length() > 10) {
-            return new Region("private_island", RegionType.PRIVATE_ISLAND, new Pos(0,0,0), new Pos(0,0,0));
+        if (worldId != null) {
+            if (worldId.equals("dungeon_hub")) {
+                return new Region("dungeon_hub", RegionType.DUNGEON_HUB, new Pos(0,0,0), new Pos(0,0,0));
+            }
+            if (worldId.length() > 10) {
+                return new Region("private_island", RegionType.PRIVATE_ISLAND, new Pos(0,0,0), new Pos(0,0,0));
+            }
         }
 
         Pos pos = Pos.fromPoint(point);

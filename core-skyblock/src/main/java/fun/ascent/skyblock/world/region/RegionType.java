@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum RegionType {
     HUB("SkyBlock Hub", "<aqua>"),
-    VILLAGE("Village", "<green>"),
+    VILLAGE("Village", "<aqua>"),
     BANK("Bank", "<gold>"),
     AUCTION_HOUSE("Auction House", "<gold>"),
     BAZAAR("Bazaar Alley", "<yellow>"),
@@ -48,7 +48,8 @@ public enum RegionType {
     SPRUCE_WOODS("Spruce Woods", "<dark_green>"),
     SAVANNA_WOODLAND("Savanna Woodland", "<yellow>"),
     DWARVEN_MINES("Dwarven Mines", "<aqua>"),
-    TRIALS_OF_FIRE("Trials of Fire", "<gold>");
+    TRIALS_OF_FIRE("Trials of Fire", "<gold>"),
+    DUNGEON_HUB("Dungeon Hub", "<red>");
 
     private final String name;
     private final String color;
