@@ -61,11 +61,19 @@ public class ShapedRecipe extends SkyblockRecipe {
                 
                 RecipeIngredient ingredient = ingredients.get(symbol);
                 if (ingredient != null) {
-                    SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId());
+                    SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId().toUpperCase().replace("MINECRAFT:", ""));
                     if (item != null) {
                         grid[r * 3 + c] = item.buildItemStack(player).withAmount(ingredient.getAmount());
                     } else {
-                        grid[r * 3 + c] = ItemStack.of(Material.fromKey("minecraft:" + ingredient.getItemId().toLowerCase())).withAmount(ingredient.getAmount());
+                        String matName = ingredient.getItemId().toLowerCase().replace("minecraft:", "");
+                        Material mat = Material.fromKey("minecraft:" + matName);
+                        if (mat == null) {
+                            mat = Material.fromKey(matName);
+                        }
+                        if (mat == null) {
+                            mat = Material.PAPER;
+                        }
+                        grid[r * 3 + c] = ItemStack.of(mat).withAmount(ingredient.getAmount());
                     }
                 }
             }
@@ -107,10 +115,11 @@ public class ShapedRecipe extends SkyblockRecipe {
                         if (stack == null || stack.isAir()) return false;
                         
                         SkyblockItem si = SkyblockItem.fromStack(stack);
+                        String ingredientId = ingredient.getItemId().toUpperCase().replace("MINECRAFT:", "");
                         if (si == null) {
-                            if (!stack.material().name().equals(ingredient.getItemId())) return false;
+                            if (!stack.material().name().equalsIgnoreCase(ingredientId)) return false;
                         } else {
-                            if (!ingredient.getItemId().equals(si.getItemId())) return false;
+                            if (!si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(ingredientId)) return false;
                         }
                         
                         if (stack.amount() < ingredient.getAmount()) return false;

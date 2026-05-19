@@ -5,6 +5,7 @@ import fun.ascent.skyblock.crafting.SkyblockRecipe;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.events.PlayerCraftItemEvent;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
@@ -12,9 +13,9 @@ import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.timer.TaskSchedule;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,41 +66,131 @@ public class CraftingMenu {
             return;
         }
 
-        // If clicking background, cancel
-        if (event.getClickedItem().material() == Material.GRAY_STAINED_GLASS_PANE) {
+        // If clicking top inventory background slots (slots < 54), cancel
+        boolean isTopInventory = slot < inv.getSize() && event.getInventory() == inv;
+        if (isTopInventory && !isGridSlot(slot) && slot != RESULT_SLOT) {
             event.setCancelled(true);
             return;
         }
 
-        // If clicking result slot
+        // Handle clicks in bottom inventory (player inventory)
+        boolean isBottomClick = (event.getInventory() instanceof net.minestom.server.inventory.PlayerInventory) || (slot >= inv.getSize());
+        if (isBottomClick) {
+            boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
+            if (isShift) {
+                event.setCancelled(true);
+                ItemStack toDistribute = event.getClickedItem();
+                if (!toDistribute.isAir()) {
+                    ItemStack remaining = distributeToGrid(inv, toDistribute);
+                    int playerSlot = (event.getInventory() instanceof net.minestom.server.inventory.PlayerInventory) ? slot : (slot - inv.getSize());
+                    player.getInventory().setItemStack(playerSlot, remaining);
+                    updateResult(inv, player);
+                }
+            } else {
+                // Let normal click pass so they can interact with their inventory, but update result next tick
+                MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateResult(inv, player));
+            }
+            return;
+        }
+
+        // Handle shift click on grid slots (to return items back to player inventory)
+        boolean isGridShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
+        if (isGridSlot(slot) && isGridShift) {
+            event.setCancelled(true);
+            ItemStack toReturn = inv.getItemStack(slot);
+            if (!toReturn.isAir()) {
+                if (player.getInventory().addItemStack(toReturn)) {
+                    inv.setItemStack(slot, ItemStack.AIR);
+                }
+                updateResult(inv, player);
+            }
+            return;
+        }
+
+        // Handle click on result slot
         if (slot == RESULT_SLOT) {
+            event.setCancelled(true);
             ItemStack result = inv.getItemStack(RESULT_SLOT);
             if (result.isAir()) {
-                event.setCancelled(true);
                 return;
             }
 
             SkyblockRecipe recipe = findCurrentRecipe(inv);
-            if (recipe != null) {
-                SkyblockRecipe.CraftingResult craftResult = recipe.getCanCraft().apply(player);
-                if (!craftResult.allowed()) {
-                    player.sendMessage("§c" + craftResult.errorMessage());
-                    event.setCancelled(true);
-                    return;
-                }
-                
-                // Give result and consume grid
-                player.getInventory().addItemStack(result);
-                recipe.consume(inv, GRID_SLOTS);
-                MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.PlayerCraftItemEvent(player, result));
+            if (recipe == null) {
+                return;
             }
 
-            event.setCancelled(true);
+            SkyblockRecipe.CraftingResult craftResult = recipe.getCanCraft().apply(player);
+            if (!craftResult.allowed()) {
+                player.sendMessage("§c" + craftResult.errorMessage());
+                return;
+            }
+
+            SkyblockItem resultItem = ItemRegistry.getItem(recipe.getResultItemId());
+            if (resultItem == null) {
+                return;
+            }
+
+            ItemStack craftedItem = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
+
+            boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
+            if (isShift) {
+                int maxCraftsByInventory = getMaxCraftsByInventory(player, craftedItem, recipe.getResultAmount());
+                if (maxCraftsByInventory <= 0) {
+                    player.sendMessage("§cYour inventory is full!");
+                    return;
+                }
+
+                int craftedCount = 0;
+                while (craftedCount < maxCraftsByInventory) {
+                    ItemStack[] currentGrid = new ItemStack[9];
+                    for (int i = 0; i < 9; i++) {
+                        currentGrid[i] = inv.getItemStack(GRID_SLOTS[i]);
+                    }
+                    if (!recipe.matches(currentGrid)) {
+                        break;
+                    }
+
+                    SkyblockRecipe.CraftingResult tickCraftResult = recipe.getCanCraft().apply(player);
+                    if (!tickCraftResult.allowed()) {
+                        break;
+                    }
+
+                    recipe.consume(inv, GRID_SLOTS);
+                    craftedCount++;
+                }
+
+                if (craftedCount > 0) {
+                    int totalAmount = craftedCount * recipe.getResultAmount();
+                    ItemStack finalOutput = craftedItem.withAmount(totalAmount);
+                    player.getInventory().addItemStack(finalOutput);
+                    MinecraftServer.getGlobalEventHandler().call(new PlayerCraftItemEvent(player, finalOutput));
+                }
+            } else {
+                ItemStack cursorItem = player.getInventory().getCursorItem();
+                if (!cursorItem.isAir()) {
+                    if (!cursorItem.isSimilar(craftedItem)) {
+                        return;
+                    }
+                    int newAmount = cursorItem.amount() + craftedItem.amount();
+                    if (newAmount > cursorItem.material().maxStackSize()) {
+                        return;
+                    }
+                    recipe.consume(inv, GRID_SLOTS);
+                    player.getInventory().setCursorItem(cursorItem.withAmount(newAmount));
+                } else {
+                    recipe.consume(inv, GRID_SLOTS);
+                    player.getInventory().setCursorItem(craftedItem);
+                }
+                MinecraftServer.getGlobalEventHandler().call(new PlayerCraftItemEvent(player, craftedItem));
+            }
+
             updateResult(inv, player);
             return;
         }
 
-        MinecraftServer.getSchedulerManager().buildTask(() -> updateResult(inv, player)).delay(TaskSchedule.nextTick()).schedule();
+        // For grid slot clicks, update results after the click is processed
+        MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateResult(inv, player));
     }
 
     private static void updateResult(Inventory inv, SkyblockPlayer player) {
@@ -113,11 +204,11 @@ public class CraftingMenu {
         if (resultItem == null) return;
 
         ItemStack resultStack = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
-        
+
         // Add "Click to craft" lore or lock warning
         List<Component> lore = new ArrayList<>(resultStack.get(DataComponents.LORE, List.of()));
         lore.add(Component.empty());
-        
+
         SkyblockRecipe.CraftingResult craftResult = recipe.getCanCraft().apply(player);
         if (craftResult.allowed()) {
             lore.add(text("<yellow>Click to craft!"));
@@ -125,7 +216,7 @@ public class CraftingMenu {
             lore.add(text("<red>Recipe Locked!"));
             lore.add(text("<grey>" + craftResult.errorMessage()));
         }
-        
+
         inv.setItemStack(RESULT_SLOT, resultStack.withLore(lore));
     }
 
@@ -135,5 +226,68 @@ public class CraftingMenu {
             grid[i] = inv.getItemStack(GRID_SLOTS[i]);
         }
         return RecipeRegistry.findMatch(grid);
+    }
+
+    private static boolean isGridSlot(int slot) {
+        for (int gridSlot : GRID_SLOTS) {
+            if (gridSlot == slot) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static ItemStack distributeToGrid(Inventory inv, ItemStack toDistribute) {
+        if (toDistribute.isAir()) return toDistribute;
+        int remainingAmount = toDistribute.amount();
+
+        // Phase 1: Try to merge with existing items of the same type in the grid slots
+        for (int slot : GRID_SLOTS) {
+            if (remainingAmount <= 0) break;
+            ItemStack stack = inv.getItemStack(slot);
+            if (!stack.isAir() && stack.isSimilar(toDistribute)) {
+                int maxStack = stack.material().maxStackSize();
+                int currentAmount = stack.amount();
+                if (currentAmount < maxStack) {
+                    int add = Math.min(remainingAmount, maxStack - currentAmount);
+                    inv.setItemStack(slot, stack.withAmount(currentAmount + add));
+                    remainingAmount -= add;
+                }
+            }
+        }
+
+        // Phase 2: Place in first empty grid slot
+        for (int slot : GRID_SLOTS) {
+            if (remainingAmount <= 0) break;
+            ItemStack stack = inv.getItemStack(slot);
+            if (stack.isAir()) {
+                int maxStack = toDistribute.material().maxStackSize();
+                int add = Math.min(remainingAmount, maxStack);
+                inv.setItemStack(slot, toDistribute.withAmount(add));
+                remainingAmount -= add;
+            }
+        }
+
+        if (remainingAmount <= 0) {
+            return ItemStack.AIR;
+        } else {
+            return toDistribute.withAmount(remainingAmount);
+        }
+    }
+
+    private static int getMaxCraftsByInventory(SkyblockPlayer player, ItemStack craftedItem, int amountPerCraft) {
+        if (amountPerCraft <= 0) return 0;
+        int maxStack = craftedItem.material().maxStackSize();
+        int availableSpace = 0;
+
+        for (int slot = 0; slot < 36; slot++) {
+            ItemStack stack = player.getInventory().getItemStack(slot);
+            if (stack.isAir()) {
+                availableSpace += maxStack;
+            } else if (stack.isSimilar(craftedItem)) {
+                availableSpace += Math.max(0, maxStack - stack.amount());
+            }
+        }
+        return availableSpace / amountPerCraft;
     }
 }
