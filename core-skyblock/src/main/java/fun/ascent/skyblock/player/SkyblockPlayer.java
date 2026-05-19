@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.player;
 
 import fun.ascent.database.PlayerRepository;
+import fun.ascent.skyblock.entity.display.DroppedItemEntity;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -202,5 +203,28 @@ public class SkyblockPlayer extends Player {
     public SkyblockLevel getSkyblockLevel() { return activeProfileData != null ? activeProfileData.level : null; }
     public void setSkyblockHotmData(HotmData data) { if (activeProfileData != null) activeProfileData.hotmData = data; }
     public HotmData getSkyblockHotmData() { return activeProfileData != null ? activeProfileData.hotmData : null; }
-}
 
+    // ─── Drop Alert Toggle ───────────────────────────────────────────
+    private static final Tag<Boolean> DROP_ALERTS_DISABLED = Tag.Boolean("drop_alerts_disabled").defaultValue(false);
+
+    public boolean hasDropAlertsDisabled() {
+        Boolean val = getTag(DROP_ALERTS_DISABLED);
+        return val != null && val;
+    }
+
+    public void setDropAlertsDisabled(boolean disabled) {
+        setTag(DROP_ALERTS_DISABLED, disabled);
+    }
+
+    // ─── Coins Helper ────────────────────────────────────────────────
+    public void addCoins(double amount) {
+        if (activeProfileData != null) {
+            activeProfileData.playerCoins += amount;
+        }
+    }
+
+    // ─── Cleanup on disconnect ───────────────────────────────────────
+    public void cleanupDroppedItems() {
+        DroppedItemEntity.clearDroppedItems(this);
+    }
+}

@@ -3,6 +3,7 @@ package fun.ascent.skyblock.player.skill.listener;
 import fun.ascent.skyblock.events.EventManager;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.skill.SkillReward;
 import fun.ascent.skyblock.player.skill.SkillType;
@@ -44,14 +45,16 @@ public class SkillListeners {
         double xpInLevel = profileData.skillData.getXpIntoCurrentLevel(type);
         Integer nextLevel = profileData.skillData.getNextLevel(type);
 
-        String xpStr = String.format("%.0f", gained);
+        String xpStr = gained % 1 == 0 ? String.format("%.0f", gained) : String.format("%.1f", gained);
         String progressStr = nextLevel != null
                 ? String.format("%.0f/%.0f", xpInLevel, (double) type.definition().rewardAt(nextLevel).xpRequired())
                 : "MAX";
 
-        player.sendActionBar(text(
-                "<dark_aqua>+" + xpStr + " " + type.getDisplayName() + " XP <dark_gray>(" + progressStr + ")"
-        ));
+        ActionBar.of(player.getUuid()).addReplacement(
+                ActionBar.Section.MANA,
+                "<dark_aqua>+" + xpStr + " " + type.getDisplayName() + " XP <dark_gray>(" + progressStr + ")",
+                60, 10
+        );
     }
 
     private static void handleLevelUp(SkillXpGainEvent event) {

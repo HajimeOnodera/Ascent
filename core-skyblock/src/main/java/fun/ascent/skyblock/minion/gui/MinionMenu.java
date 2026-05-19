@@ -10,6 +10,8 @@ import fun.ascent.skyblock.minion.upgrade.MinionUpgradeCost;
 import fun.ascent.skyblock.minion.upgrade.MinionUpgradeManager;
 import fun.ascent.skyblock.minion.visual.MinionItems;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.skill.SkillRegistry;
+import fun.ascent.skyblock.player.skill.SkillType;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -76,6 +78,18 @@ public final class MinionMenu {
                     } else {
                         MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(stack.material(), clickingPlayer, stack.amount()));
                     }
+                    
+                    SkillType skillType = null;
+                    switch (minion.getType().getCategory()) {
+                        case MINING -> skillType = SkillType.MINING;
+                        case FARMING -> skillType = SkillType.FARMING;
+                        case FORAGING -> skillType = SkillType.FORAGING;
+                        case COMBAT -> skillType = SkillType.COMBAT;
+                        case FISHING -> skillType = SkillType.FISHING;
+                    }
+                    if (skillType != null) {
+                        SkillRegistry.grantXp(clickingPlayer, skillType, stack.amount() * 0.1);
+                    }
                 }
                 clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);
@@ -116,6 +130,19 @@ public final class MinionMenu {
                     } else {
                         MinecraftServer.getGlobalEventHandler().call(new InventoryItemAddEvent(clickedStack.material(), clickingPlayer, clickedStack.amount()));
                     }
+
+                    SkillType skillType = null;
+                    switch (minion.getType().getCategory()) {
+                        case MINING -> skillType = SkillType.MINING;
+                        case FARMING -> skillType = SkillType.FARMING;
+                        case FORAGING -> skillType = SkillType.FORAGING;
+                        case COMBAT -> skillType = SkillType.COMBAT;
+                        case FISHING -> skillType = SkillType.FISHING;
+                    }
+                    if (skillType != null) {
+                        SkillRegistry.grantXp(clickingPlayer, skillType, clickedStack.amount() * 0.1);
+                    }
+
                     clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from minion storage.</green>")));
                     render(inventory, minion);
                 } else {

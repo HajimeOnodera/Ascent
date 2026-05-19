@@ -3,7 +3,6 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import lombok.Getter;
@@ -121,19 +120,6 @@ public class SkyblockProfile {
             }
         }
 
-        CollectionCategory.CollectionReward nextReward = collectionDef.getRewardAtTier(newTier + 1);
-        String actionBarText;
-        if (nextReward != null) {
-            actionBarText = "§2+" + amount + " " + collectionDef.name() + " §7(" + String.format("%,d", newProgress) + "/" + String.format("%,d", nextReward.requirement()) + ")";
-        } else {
-            actionBarText = "§2+" + amount + " " + collectionDef.name() + " §7(" + String.format("%,d", newProgress) + ")";
-        }
-
-        profilePlayers.forEach(pp -> {
-            if (pp.skyblockPlayer != null) {
-                ActionBar.of(pp.skyblockPlayer.getUuid()).addReplacement(ActionBar.Section.DEFENSE, actionBarText, 40, 10);
-            }
-        });
     }
 
     public void generateIsland() {
