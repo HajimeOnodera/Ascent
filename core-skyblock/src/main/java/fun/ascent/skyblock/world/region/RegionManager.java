@@ -59,6 +59,9 @@ public class RegionManager {
             if (worldId.equals("dungeon_hub")) {
                 return new Region("dungeon_hub", RegionType.DUNGEON_HUB, new Pos(0,0,0), new Pos(0,0,0));
             }
+            if (worldId.startsWith("dungeon_")) {
+                return new Region("the_catacombs", RegionType.THE_CATACOMBS, new Pos(0,0,0), new Pos(0,0,0));
+            }
             if (worldId.length() > 10) {
                 return new Region("private_island", RegionType.PRIVATE_ISLAND, new Pos(0,0,0), new Pos(0,0,0));
             }

@@ -129,8 +129,7 @@ public class DroomCommand extends Command {
         int pasteX = 0;
         int pasteZ = 0;
 
-        preloadChunks(editInstance, pasteX, pasteZ, template.width(), template.length());
-        template.paste(editInstance, pasteX, EDIT_BASE_Y, pasteZ);
+        template.pasteWithPreload(editInstance, pasteX, EDIT_BASE_Y, pasteZ, 0);
 
         EditSession session = new EditSession(name, editInstance, file,
                 pasteX, EDIT_BASE_Y, pasteZ,

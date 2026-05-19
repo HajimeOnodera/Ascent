@@ -25,6 +25,15 @@ services:
       - MONGODB_URI=mongodb://host.docker.internal:27017
       - REDIS_HOST=host.docker.internal
 
+  party-service:
+    build:
+      context: .
+      dockerfile: service.party/Dockerfile
+    container_name: ascent-party-service
+    environment:
+      - MONGODB_URI=mongodb://host.docker.internal:27017
+      - REDIS_HOST=host.docker.internal
+
   proxy:
     build:
       context: .
@@ -94,6 +103,19 @@ services:
       - ASCENT_ADVERTISE_HOST=dungeon-hub
       - ASCENT_SERVER_PORT=25567
       - ASCENT_SERVER_TYPE=DUNGEON_HUB
+
+  dungeon:
+    build:
+      context: .
+      dockerfile: skyblock.dungeon/Dockerfile
+    container_name: ascent-dungeon
+    environment:
+      - REDIS_HOST=host.docker.internal
+      - MONGODB_URI=mongodb://host.docker.internal:27017
+      - ASCENT_SERVER_NAME=dungeon-1
+      - ASCENT_ADVERTISE_HOST=dungeon
+      - ASCENT_SERVER_PORT=25569
+      - ASCENT_SERVER_TYPE=DUNGEON
 
 #volumes:
 #  mongodb_data:
