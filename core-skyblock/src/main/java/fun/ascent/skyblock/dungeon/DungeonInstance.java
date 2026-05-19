@@ -336,8 +336,11 @@ public class DungeonInstance {
                             {nCellX, nCellZ + WALL_CENTER}
                     };
 
-                    Block thisMarker = instance.getBlock(markerPos[dir][0], MARKER_DETECT_Y, markerPos[dir][1]);
-                    Block otherMarker = instance.getBlock(nMarkerPos[oppositeDir][0], MARKER_DETECT_Y, nMarkerPos[oppositeDir][1]);
+                    boolean thisLoaded = instance.isChunkLoaded(markerPos[dir][0] >> 4, markerPos[dir][1] >> 4);
+                    boolean otherLoaded = instance.isChunkLoaded(nMarkerPos[oppositeDir][0] >> 4, nMarkerPos[oppositeDir][1] >> 4);
+
+                    Block thisMarker = thisLoaded ? instance.getBlock(markerPos[dir][0], MARKER_DETECT_Y, markerPos[dir][1]) : Block.AIR;
+                    Block otherMarker = otherLoaded ? instance.getBlock(nMarkerPos[oppositeDir][0], MARKER_DETECT_Y, nMarkerPos[oppositeDir][1]) : Block.AIR;
                     boolean thisHasMarker = isMarkerRequired(thisMarker) || isMarkerOptional(thisMarker);
                     boolean otherHasMarker = isMarkerRequired(otherMarker) || isMarkerOptional(otherMarker);
 
@@ -365,6 +368,7 @@ public class DungeonInstance {
     }
 
     private void clearMarker(int mx, int mz) {
+        if (!instance.isChunkLoaded(mx >> 4, mz >> 4)) return;
         Block block = instance.getBlock(mx, MARKER_DETECT_Y, mz);
         if (isMarkerRequired(block) || isMarkerOptional(block)) {
             instance.setBlock(mx, MARKER_DETECT_Y, mz, Block.STONE_BRICKS);
