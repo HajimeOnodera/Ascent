@@ -10,17 +10,20 @@ import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
 import fun.ascent.skyblock.world.region.RegionType;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.ItemEntity;
+
+import fun.ascent.skyblock.entity.display.DroppedItemEntity;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.tag.Tag;
+
 import net.minestom.server.timer.TaskSchedule;
 
-import java.time.Duration;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +123,16 @@ public class BlockManager {
                 .skillType(SkillType.MINING)
                 .xpAmount(1.0)
                 .validRegions(List.of(RegionType.COAL_MINE, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.STONE)
+                .skyblockItemId("COBBLESTONE")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.MINING)
+                .xpAmount(1.0)
+                .validRegions(List.of(RegionType.COAL_MINE, RegionType.GOLD_MINE, RegionType.PRIVATE_ISLAND))
                 .build());
 
         register(SkyblockBlock.builder()
@@ -279,6 +292,13 @@ public class BlockManager {
     public static void handleBlockBreak(SkyblockPlayer player, Instance instance, Pos pos, Block brokenBlock) {
         Region region = RegionManager.getRegion(instance, pos);
         RegionType regionType = region != null ? region.getType() : RegionType.HUB;
+        boolean hasSilkTouch = false;
+        ItemStack handItem = player.getItemInMainHand();
+        var enchants = handItem.get(DataComponents.ENCHANTMENTS);
+        if (enchants != null && enchants.enchantments().containsKey(Enchantment.SILK_TOUCH)) {
+            hasSilkTouch = true;
+        }
+
         SkyblockBlock sbBlock = getBlock(Material.fromKey(brokenBlock.key()), regionType);
 
         if (sbBlock == null) {
@@ -286,7 +306,18 @@ public class BlockManager {
                 try {
                     Material material = Material.fromKey(brokenBlock.key());
                     if (material != null && material != Material.AIR) {
-                        player.getInventory().addItemStack(ItemStack.of(material, 1));
+                        Material dropMaterial = material;
+                        if (!hasSilkTouch) {
+                            if (material == Material.STONE) dropMaterial = Material.COBBLESTONE;
+                            else if (material == Material.GRASS_BLOCK) dropMaterial = Material.DIRT;
+                            else if (material == Material.COAL_ORE) dropMaterial = Material.COAL;
+                            else if (material == Material.DIAMOND_ORE) dropMaterial = Material.DIAMOND;
+                            else if (material == Material.EMERALD_ORE) dropMaterial = Material.EMERALD;
+                            else if (material == Material.LAPIS_ORE) dropMaterial = Material.LAPIS_LAZULI;
+                            else if (material == Material.REDSTONE_ORE) dropMaterial = Material.REDSTONE;
+                            else if (material == Material.NETHER_QUARTZ_ORE) dropMaterial = Material.QUARTZ;
+                        }
+                        player.getInventory().addItemStack(ItemStack.of(dropMaterial, 1));
                     }
                     instance.setBlock(pos, Block.AIR);
                 } catch (Exception e) {
@@ -297,13 +328,18 @@ public class BlockManager {
             return;
         }
 
+        // Calculate drop amount with fortune
         int dropAmount = sbBlock.baseDropAmount;
         if (sbBlock.fortuneApplicable && player.getActiveProfileData() != null) {
             double fortune = 0;
-            switch (sbBlock.skillType) {
-                case MINING -> fortune = player.getActiveProfileData().stats.get("mining_fortune").getCurValue();
-                case FARMING -> fortune = player.getActiveProfileData().stats.get("farming_fortune").getCurValue();
-                case FORAGING -> fortune = player.getActiveProfileData().stats.get("foraging_fortune").getCurValue();
+            try {
+                switch (sbBlock.skillType) {
+                    case MINING -> fortune = player.getActiveProfileData().stats.get("mining_fortune").getCurValue();
+                    case FARMING -> fortune = player.getActiveProfileData().stats.get("farming_fortune").getCurValue();
+                    case FORAGING -> fortune = player.getActiveProfileData().stats.get("foraging_fortune").getCurValue();
+                }
+            } catch (NullPointerException ignored) {
+                // Keep base fortune if stat lookup fails
             }
 
             double multiplier = 1.0 + (fortune / 100.0);
@@ -315,48 +351,95 @@ public class BlockManager {
             }
         }
 
-        if (dropAmount > 0) {
-            SkyblockItem item = ItemRegistry.getItem(sbBlock.skyblockItemId);
-            ItemStack dropStack;
-            if (item != null) {
-                dropStack = item.buildItemStack(player).withAmount(dropAmount);
+        // Check if we should override with silk touch
+        boolean isSilkTouchable = (sbBlock.vanillaMaterial == Material.COAL_ORE ||
+                                 sbBlock.vanillaMaterial == Material.IRON_ORE ||
+                                 sbBlock.vanillaMaterial == Material.GOLD_ORE ||
+                                 sbBlock.vanillaMaterial == Material.DIAMOND_ORE ||
+                                 sbBlock.vanillaMaterial == Material.EMERALD_ORE ||
+                                 sbBlock.vanillaMaterial == Material.LAPIS_ORE ||
+                                 sbBlock.vanillaMaterial == Material.REDSTONE_ORE ||
+                                 sbBlock.vanillaMaterial == Material.NETHER_QUARTZ_ORE ||
+                                 sbBlock.vanillaMaterial == Material.STONE ||
+                                 sbBlock.vanillaMaterial == Material.GRASS_BLOCK);
+
+        boolean usedSilkTouchOnOre = hasSilkTouch && isSilkTouchable;
+
+        ItemStack dropStack;
+        if (usedSilkTouchOnOre) {
+            dropStack = ItemStack.of(sbBlock.vanillaMaterial, 1);
+        } else {
+            SkyblockItem skyItem = sbBlock.skyblockItemId != null ?
+                ItemRegistry.getItem(sbBlock.skyblockItemId) : null;
+
+            if (skyItem != null) {
+                dropStack = skyItem.buildItemStack(player).withAmount(dropAmount);
             } else {
                 dropStack = ItemStack.of(sbBlock.vanillaMaterial, dropAmount);
             }
+        }
 
+        if (dropAmount > 0 || usedSilkTouchOnOre) {
             var profileData = player.getActiveProfileData();
             boolean teleportsToInventory = profileData != null && profileData.level != null && profileData.level.curLevel >= 6;
 
             if (teleportsToInventory) {
                 player.getInventory().addItemStack(dropStack);
             } else {
-                ItemEntity entity = new ItemEntity(dropStack);
-                entity.setPickupDelay(Duration.ofMillis(200));
-                entity.setTag(Tag.Boolean("block_drop"), true);
+                Pos playerPos = player.getPosition();
+
+                Pos[] offsets = {
+                        new Pos(1, 0, 0), new Pos(-1, 0, 0),
+                        new Pos(0, 1, 0), new Pos(0, -1, 0),
+                        new Pos(0, 0, 1), new Pos(0, 0, -1)
+                };
+
+                Pos nearestAirBlock = null;
+                double closestDistanceSquared = Double.MAX_VALUE;
+
+                for (Pos offset : offsets) {
+                    Pos adjacentPos = pos.add(offset);
+                    Block adjacentBlock = instance.getBlock(adjacentPos);
+
+                    if (adjacentBlock.isAir()) {
+                        double distanceSquared = adjacentPos.distanceSquared(playerPos);
+                        if (distanceSquared < closestDistanceSquared) {
+                            closestDistanceSquared = distanceSquared;
+                            nearestAirBlock = adjacentPos;
+                        }
+                    }
+                }
+
+                // Use nearest air block or fallback to above-block position
+                Pos dropPos = (nearestAirBlock != null)
+                        ? nearestAirBlock.add(0.5, 0.5, 0.5)
+                        : pos.add(0.5, 1.5, 0.5);
+
+                // Spawn per-player visible dropped item entity
+                DroppedItemEntity droppedItem = new DroppedItemEntity(dropStack, player);
                 Instance inst = player.getInstance() != null ? player.getInstance() : instance;
                 if (inst != null) {
-                    entity.setInstance(inst, pos.add(0.5, 0.5, 0.5));
+                    droppedItem.setInstance(inst, dropPos);
                 }
-                double rx = ThreadLocalRandom.current().nextDouble(-1.5, 1.5);
-                double ry = ThreadLocalRandom.current().nextDouble(2.0, 4.0);
-                double rz = ThreadLocalRandom.current().nextDouble(-1.5, 1.5);
-                entity.setVelocity(new Vec(rx, ry, rz));
             }
         }
 
-        if (sbBlock.skillType != null && sbBlock.xpAmount > 0) {
+        boolean playerPlaced = brokenBlock.hasTag(Tag.Boolean("player_placed")) && brokenBlock.getTag(Tag.Boolean("player_placed"));
+
+        // Grant skill XP (not granted if placed by player OR if silk touch was used on an ore)
+        if (!playerPlaced && !usedSilkTouchOnOre && sbBlock.skillType != null && sbBlock.xpAmount > 0) {
             SkillRegistry.grantXp(player, sbBlock.skillType, sbBlock.xpAmount);
         }
 
-        if (player.getActiveProfile() != null) {
-            String collectionId = sbBlock.skyblockItemId != null ?
-                sbBlock.skyblockItemId :
-                CollectionAddEvent.getCollectionId(sbBlock.vanillaMaterial, null);
+        // Update collection data
+        if (!playerPlaced && !usedSilkTouchOnOre && player.getActiveProfile() != null) {
+            String collectionId = CollectionAddEvent.getCollectionId(sbBlock.vanillaMaterial, sbBlock.skyblockItemId);
             if (collectionId != null) {
                 player.getActiveProfile().updateCollection(collectionId, dropAmount);
             }
         }
 
+        // Handle block respawn or removal
         if (sbBlock.respawnDelayTicks > 0 && sbBlock.replacementBlock != null) {
             instance.setBlock(pos, sbBlock.replacementBlock);
 
@@ -366,3 +449,4 @@ public class BlockManager {
         }
     }
 }
+

@@ -31,7 +31,7 @@ services:
       dockerfile: core-proxy/Dockerfile
     container_name: ascent-proxy
     ports:
-      - "25577:25565"
+      - "25565:25565"
 #    depends_on:
 #      - redis
     environment:
