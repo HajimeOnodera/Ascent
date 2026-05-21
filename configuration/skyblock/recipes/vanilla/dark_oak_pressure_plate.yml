@@ -1,0 +1,9 @@
+id: DARK_OAK_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: DARK_OAK_PLANKS
+result:
+  item: DARK_OAK_PRESSURE_PLATE
+  amount: 1

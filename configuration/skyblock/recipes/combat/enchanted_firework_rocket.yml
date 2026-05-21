@@ -1,0 +1,15 @@
+id: ENCHANTED_FIREWORK_ROCKET
+type: SHAPED
+requirements:
+  collections:
+    GUNPOWDER: 6
+pattern:
+  - " A "
+  - "ABA"
+  - " A "
+ingredients:
+  A: {item: ENCHANTED_GUNPOWDER, amount: 16}
+  B: {item: PAPER, amount: 16}
+result:
+  item: ENCHANTED_FIREWORK_ROCKET
+  amount: 1

@@ -1,0 +1,9 @@
+id: WARPED_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: WARPED_PLANKS
+result:
+  item: WARPED_SLAB
+  amount: 6

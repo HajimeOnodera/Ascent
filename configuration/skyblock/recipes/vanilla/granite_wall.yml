@@ -1,0 +1,10 @@
+id: GRANITE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: GRANITE
+result:
+  item: GRANITE_WALL
+  amount: 6

@@ -1,0 +1,14 @@
+id: ENCHANTED_LAVA_BUCKET
+type: SHAPED
+requirements:
+  collections:
+    COAL: 8
+pattern:
+  - "ABA"
+  - " A "
+ingredients:
+  A: ENCHANTED_IRON_INGOT
+  B: {item: ENCHANTED_COAL_BLOCK, amount: 2}
+result:
+  item: ENCHANTED_LAVA_BUCKET
+  amount: 1

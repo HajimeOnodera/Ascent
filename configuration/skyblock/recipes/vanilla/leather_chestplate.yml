@@ -1,0 +1,11 @@
+id: LEATHER_CHESTPLATE
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: LEATHER
+result:
+  item: LEATHER_CHESTPLATE
+  amount: 1

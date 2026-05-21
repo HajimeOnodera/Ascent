@@ -1,0 +1,7 @@
+id: DARK_OAK_PLANKS
+type: SHAPELESS
+ingredients:
+  - DARK_OAK_LOG
+result:
+  item: DARK_OAK_PLANKS
+  amount: 4

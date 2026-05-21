@@ -1,0 +1,11 @@
+id: GOLDEN_LEGGINGS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: GOLD_INGOT
+result:
+  item: GOLDEN_LEGGINGS
+  amount: 1

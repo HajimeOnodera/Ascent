@@ -1,0 +1,11 @@
+id: COBBLESTONE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: COBBLESTONE
+result:
+  item: COBBLESTONE_STAIRS
+  amount: 4

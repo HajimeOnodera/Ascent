@@ -1,0 +1,9 @@
+id: PURPLE_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: PURPLE_WOOL
+result:
+  item: PURPLE_CARPET
+  amount: 3

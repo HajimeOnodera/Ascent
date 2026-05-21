@@ -1,0 +1,10 @@
+id: GRAY_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: GRAY_STAINED_GLASS
+result:
+  item: GRAY_STAINED_GLASS_PANE
+  amount: 16

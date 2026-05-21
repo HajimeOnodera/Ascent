@@ -1,0 +1,9 @@
+id: JUNGLE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: JUNGLE_PLANKS
+result:
+  item: JUNGLE_SLAB
+  amount: 6

@@ -1,0 +1,12 @@
+id: PINK_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: PINK_DYE
+result:
+  item: PINK_TERRACOTTA
+  amount: 8

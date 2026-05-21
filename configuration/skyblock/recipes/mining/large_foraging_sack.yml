@@ -1,0 +1,15 @@
+id: LARGE_FORAGING_SACK
+type: SHAPED
+requirements:
+  collections:
+    BIRCH_LOG: 8
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_BIRCH_LOG, amount: 8}
+  B: MEDIUM_FORAGING_SACK
+result:
+  item: LARGE_FORAGING_SACK
+  amount: 1

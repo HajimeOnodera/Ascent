@@ -1,0 +1,11 @@
+id: JUNGLE_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: JUNGLE_PLANKS
+  B: STICK
+result:
+  item: JUNGLE_FENCE
+  amount: 3

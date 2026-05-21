@@ -1,0 +1,12 @@
+id: WARPED_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: WARPED_PLANKS
+  B: STICK
+result:
+  item: WARPED_SIGN
+  amount: 3

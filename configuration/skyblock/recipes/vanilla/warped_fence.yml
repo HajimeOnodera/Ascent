@@ -1,0 +1,11 @@
+id: WARPED_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: WARPED_PLANKS
+  B: STICK
+result:
+  item: WARPED_FENCE
+  amount: 3

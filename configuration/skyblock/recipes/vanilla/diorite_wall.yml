@@ -1,0 +1,10 @@
+id: DIORITE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: DIORITE
+result:
+  item: DIORITE_WALL
+  amount: 6

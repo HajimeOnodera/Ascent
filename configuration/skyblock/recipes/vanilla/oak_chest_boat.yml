@@ -1,0 +1,11 @@
+id: OAK_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: OAK_BOAT
+result:
+  item: OAK_CHEST_BOAT
+  amount: 1

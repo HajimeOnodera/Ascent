@@ -1,0 +1,10 @@
+id: FINE_JASPER_GEM
+type: SHAPELESS
+requirements:
+  collections:
+    FINE_JASPER_GEM: 5
+ingredients:
+  - {item: FLAWED_JASPER_GEM, amount: 80}
+result:
+  item: FINE_JASPER_GEM
+  amount: 1

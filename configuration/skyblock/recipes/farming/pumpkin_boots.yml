@@ -1,0 +1,13 @@
+id: PUMPKIN_BOOTS
+type: SHAPED
+requirements:
+  collections:
+    PUMPKIN: 2
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: PUMPKIN
+result:
+  item: PUMPKIN_BOOTS
+  amount: 1

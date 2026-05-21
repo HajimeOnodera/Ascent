@@ -1,0 +1,7 @@
+id: RED_DYE_ALT3
+type: SHAPELESS
+ingredients:
+  - ROSE_BUSH
+result:
+  item: RED_DYE
+  amount: 2

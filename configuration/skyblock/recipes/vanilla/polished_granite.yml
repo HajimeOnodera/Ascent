@@ -1,0 +1,10 @@
+id: POLISHED_GRANITE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: GRANITE
+result:
+  item: POLISHED_GRANITE
+  amount: 4

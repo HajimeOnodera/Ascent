@@ -1,0 +1,11 @@
+id: MANGROVE_FENCE_GATE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: STICK
+  B: MANGROVE_PLANKS
+result:
+  item: MANGROVE_FENCE_GATE
+  amount: 1

@@ -1,0 +1,12 @@
+id: MAGENTA_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: MAGENTA_WOOL
+  B: STICK
+result:
+  item: MAGENTA_BANNER
+  amount: 1

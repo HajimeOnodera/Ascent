@@ -1,0 +1,11 @@
+id: ACACIA_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: ACACIA_PLANKS
+  B: STICK
+result:
+  item: ACACIA_FENCE
+  amount: 3

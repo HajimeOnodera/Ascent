@@ -1,0 +1,8 @@
+id: CYAN_DYE
+type: SHAPELESS
+ingredients:
+  - BLUE_DYE
+  - GREEN_DYE
+result:
+  item: CYAN_DYE
+  amount: 2

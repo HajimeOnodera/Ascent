@@ -1,0 +1,13 @@
+id: POWERED_RAIL
+type: SHAPED
+pattern:
+  - "A A"
+  - "ABA"
+  - "ACA"
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+  C: REDSTONE
+result:
+  item: POWERED_RAIL
+  amount: 6

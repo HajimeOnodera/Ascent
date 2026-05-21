@@ -1,0 +1,15 @@
+id: LARGE_AGRONOMY_SACK
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 10
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_WHEAT, amount: 64}
+  B: MEDIUM_AGRONOMY_SACK
+result:
+  item: LARGE_AGRONOMY_SACK
+  amount: 1

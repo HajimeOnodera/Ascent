@@ -1,0 +1,9 @@
+id: MANGROVE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: MANGROVE_PLANKS
+result:
+  item: MANGROVE_SLAB
+  amount: 6

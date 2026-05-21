@@ -1,0 +1,15 @@
+id: SMALL_AGRONOMY_SACK
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 7
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_WHEAT, amount: 16}
+  B: ENCHANTED_LEATHER
+result:
+  item: SMALL_AGRONOMY_SACK
+  amount: 1

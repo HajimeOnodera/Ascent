@@ -1,0 +1,10 @@
+id: BAMBOO_RAFT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: BAMBOO_PLANKS
+result:
+  item: BAMBOO_RAFT
+  amount: 1

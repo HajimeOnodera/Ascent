@@ -1,0 +1,12 @@
+id: STONE_HOE
+type: SHAPED
+pattern:
+  - "AA"
+  - " B"
+  - " B"
+ingredients:
+  A: COBBLESTONE
+  B: STICK
+result:
+  item: STONE_HOE
+  amount: 1

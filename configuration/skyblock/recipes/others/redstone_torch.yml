@@ -1,0 +1,11 @@
+id: REDSTONE_TORCH
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: REDSTONE
+  B: STICK
+result:
+  item: REDSTONE_TORCH
+  amount: 1

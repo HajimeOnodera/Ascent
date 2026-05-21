@@ -1,0 +1,8 @@
+id: PURPLE_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - PURPLE_DYE
+result:
+  item: PURPLE_WOOL
+  amount: 1

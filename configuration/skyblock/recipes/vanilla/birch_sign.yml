@@ -1,0 +1,12 @@
+id: BIRCH_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: BIRCH_PLANKS
+  B: STICK
+result:
+  item: BIRCH_SIGN
+  amount: 3

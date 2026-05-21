@@ -1,0 +1,8 @@
+id: BROWN_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - BROWN_DYE
+result:
+  item: BROWN_WOOL
+  amount: 1

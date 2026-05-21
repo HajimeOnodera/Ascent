@@ -1,0 +1,7 @@
+id: BROWN_DYE
+type: SHAPELESS
+ingredients:
+  - COCOA_BEANS
+result:
+  item: BROWN_DYE
+  amount: 1

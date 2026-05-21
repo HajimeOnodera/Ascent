@@ -1,0 +1,7 @@
+id: IRON_NUGGET
+type: SHAPELESS
+ingredients:
+  - IRON_INGOT
+result:
+  item: IRON_NUGGET
+  amount: 9

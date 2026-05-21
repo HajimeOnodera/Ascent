@@ -1,0 +1,12 @@
+id: OAK_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_OAK_LOG
+result:
+  item: OAK_HANGING_SIGN
+  amount: 6

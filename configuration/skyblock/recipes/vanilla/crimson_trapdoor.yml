@@ -1,0 +1,10 @@
+id: CRIMSON_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: CRIMSON_PLANKS
+result:
+  item: CRIMSON_TRAPDOOR
+  amount: 2

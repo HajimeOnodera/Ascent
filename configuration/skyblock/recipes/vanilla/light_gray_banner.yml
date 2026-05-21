@@ -1,0 +1,12 @@
+id: LIGHT_GRAY_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: LIGHT_GRAY_WOOL
+  B: STICK
+result:
+  item: LIGHT_GRAY_BANNER
+  amount: 1

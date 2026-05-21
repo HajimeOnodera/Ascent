@@ -1,0 +1,12 @@
+id: GOLDEN_AXE_ALT1
+type: SHAPED
+pattern:
+  - "AA"
+  - "BA"
+  - "B"
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+result:
+  item: GOLDEN_AXE
+  amount: 1

@@ -2,6 +2,8 @@ package fun.ascent.skyblock.crafting;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,11 @@ import java.util.Map;
 
 import com.google.gson.*;
 import fun.ascent.skyblock.config.ConfigPaths;
+import fun.ascent.skyblock.player.skill.SkillType;
+import fun.ascent.skyblock.player.collections.CollectionRegistry;
+import fun.ascent.skyblock.player.collections.CollectionCategory;
 import net.minestom.server.item.ItemStack;
+import org.yaml.snakeyaml.Yaml;
 
 public class RecipeRegistry {
     private static final List<SkyblockRecipe> RECIPES = new ArrayList<>();
@@ -61,6 +67,7 @@ public class RecipeRegistry {
 
         // Dynamically load custom and vanilla recipe JSONs from config
         loadCustomRecipes();
+        loadYamlRecipes();
     }
 
     private static void registerVanillaRecipes() {
@@ -332,6 +339,173 @@ public class RecipeRegistry {
             } catch (Exception e) {
                 System.err.println("Failed to load recipe: " + file.getName());
                 e.printStackTrace();
+            }
+        }
+    }
+
+    public static void loadYamlRecipes() {
+        File folder = ConfigPaths.skyblockPath("recipes");
+        if (!folder.exists()) {
+            folder.mkdirs();
+            return;
+        }
+        loadYamlRecipesRecursively(folder);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void loadYamlRecipesRecursively(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) return;
+
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadYamlRecipesRecursively(file);
+            } else if (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) {
+                try (InputStream inputStream = new FileInputStream(file)) {
+                    Yaml yaml = new Yaml();
+                    Map<String, Object> data = yaml.load(inputStream);
+                    if (data == null) continue;
+
+                    String id = (String) data.get("id");
+                    if (id == null) {
+                        id = file.getName().substring(0, file.getName().lastIndexOf('.')).toUpperCase();
+                    } else {
+                        id = id.toUpperCase();
+                    }
+
+                    String typeStr = (String) data.getOrDefault("type", "SHAPED");
+                    
+                    // Recipe category - map from parent directory name
+                    String parentName = directory.getName().toUpperCase();
+                    SkyblockRecipe.RecipeType category = SkyblockRecipe.RecipeType.NONE;
+                    try {
+                        category = SkyblockRecipe.RecipeType.valueOf(parentName);
+                    } catch (IllegalArgumentException e) {
+                        // ignore or default
+                    }
+
+                    // Result
+                    Map<String, Object> resultObj = (Map<String, Object>) data.get("result");
+                    if (resultObj == null) continue;
+                    String resultItemId = (String) resultObj.get("item");
+                    if (resultItemId == null) continue;
+                    resultItemId = resultItemId.toUpperCase().replace("MINECRAFT:", "");
+                    int amount = ((Number) resultObj.getOrDefault("amount", 1)).intValue();
+
+                    // Requirements
+                    Map<String, Integer> requiredCollections = new HashMap<>();
+                    Map<String, Integer> requiredSkills = new HashMap<>();
+                    Map<String, Object> reqs = (Map<String, Object>) data.get("requirements");
+                    if (reqs != null) {
+                        Map<String, Object> cols = (Map<String, Object>) reqs.get("collections");
+                        if (cols != null) {
+                            for (Map.Entry<String, Object> entry : cols.entrySet()) {
+                                requiredCollections.put(entry.getKey().toUpperCase(), ((Number) entry.getValue()).intValue());
+                            }
+                        }
+                        Map<String, Object> skills = (Map<String, Object>) reqs.get("skills");
+                        if (skills != null) {
+                            for (Map.Entry<String, Object> entry : skills.entrySet()) {
+                                requiredSkills.put(entry.getKey().toUpperCase(), ((Number) entry.getValue()).intValue());
+                            }
+                        }
+                    }
+
+                    SkyblockRecipe recipe = null;
+                    if (typeStr.equalsIgnoreCase("SHAPED")) {
+                        List<String> patternList = (List<String>) data.get("pattern");
+                        if (patternList == null) continue;
+                        String[] pattern = patternList.toArray(new String[0]);
+
+                        Map<String, Object> ingredientsMap = (Map<String, Object>) data.get("ingredients");
+                        Map<Character, RecipeIngredient> shapedIngredients = new HashMap<>();
+                        if (ingredientsMap != null) {
+                            for (Map.Entry<String, Object> entry : ingredientsMap.entrySet()) {
+                                char key = entry.getKey().charAt(0);
+                                Object val = entry.getValue();
+                                if (val instanceof String) {
+                                    shapedIngredients.put(key, new RecipeIngredient(((String) val).toUpperCase(), 1));
+                                } else if (val instanceof Map) {
+                                    Map<String, Object> ingredientDetails = (Map<String, Object>) val;
+                                    String item = (String) ingredientDetails.get("item");
+                                    int count = ((Number) ingredientDetails.getOrDefault("amount", 1)).intValue();
+                                    shapedIngredients.put(key, new RecipeIngredient(item.toUpperCase(), count));
+                                }
+                            }
+                        }
+
+                        recipe = new ShapedRecipe(id, resultItemId, amount, category, pattern, shapedIngredients);
+                    } else if (typeStr.equalsIgnoreCase("SHAPELESS")) {
+                        List<Object> ingredientsList = (List<Object>) data.get("ingredients");
+                        if (ingredientsList == null) continue;
+
+                        List<RecipeIngredient> shapelessIngredients = new ArrayList<>();
+                        for (Object obj : ingredientsList) {
+                            if (obj instanceof String) {
+                                shapelessIngredients.add(new RecipeIngredient(((String) obj).toUpperCase(), 1));
+                            } else if (obj instanceof Map) {
+                                Map<String, Object> ingredientDetails = (Map<String, Object>) obj;
+                                String item = (String) ingredientDetails.get("item");
+                                int count = ((Number) ingredientDetails.getOrDefault("amount", 1)).intValue();
+                                shapelessIngredients.add(new RecipeIngredient(item.toUpperCase(), count));
+                            }
+                        }
+                        recipe = new ShapelessRecipe(id, resultItemId, amount, category, shapelessIngredients);
+                    }
+
+                    if (recipe != null) {
+                        recipe.setRequiredCollections(requiredCollections);
+                        recipe.setRequiredSkills(requiredSkills);
+
+                        final String finalId = id;
+                        final Map<String, Integer> finalReqCols = requiredCollections;
+                        final Map<String, Integer> finalReqSkills = requiredSkills;
+
+                        recipe.setCanCraft((player) -> {
+                            // Check collections
+                            for (Map.Entry<String, Integer> entry : finalReqCols.entrySet()) {
+                                String colId = entry.getKey();
+                                int reqTier = entry.getValue();
+
+                                var col = CollectionRegistry.get(colId);
+                                if (col == null) {
+                                    return new SkyblockRecipe.CraftingResult(false, "Unknown collection: " + colId);
+                                }
+
+                                int currentProgress = player.getActiveProfile().unlockedCollections.getOrDefault(colId, 0);
+                                int currentTier = col.getTierFromProgress(currentProgress);
+                                if (currentTier < reqTier) {
+                                    return new SkyblockRecipe.CraftingResult(false, "Requires " + col.name() + " Collection Tier " + reqTier + "!");
+                                }
+                            }
+
+                            // Check skill requirements
+                            for (Map.Entry<String, Integer> entry : finalReqSkills.entrySet()) {
+                                String skillName = entry.getKey();
+                                int reqLevel = entry.getValue();
+
+                                SkillType skillType;
+                                try {
+                                    skillType = SkillType.valueOf(skillName.toUpperCase());
+                                } catch (IllegalArgumentException e) {
+                                    return new SkyblockRecipe.CraftingResult(false, "Unknown skill: " + skillName);
+                                }
+
+                                int currentLevel = player.getSkillData().getLevel(skillType);
+                                if (currentLevel < reqLevel) {
+                                    return new SkyblockRecipe.CraftingResult(false, "Requires " + skillType.getDisplayName() + " Level " + reqLevel + "!");
+                                }
+                            }
+
+                            return new SkyblockRecipe.CraftingResult(true, null);
+                        });
+
+                        register(recipe);
+                    }
+                } catch (Exception e) {
+                    System.err.println("Failed to load YAML recipe: " + file.getName());
+                    e.printStackTrace();
+                }
             }
         }
     }

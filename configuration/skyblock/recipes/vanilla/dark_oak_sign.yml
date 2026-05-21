@@ -1,0 +1,12 @@
+id: DARK_OAK_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: DARK_OAK_PLANKS
+  B: STICK
+result:
+  item: DARK_OAK_SIGN
+  amount: 3

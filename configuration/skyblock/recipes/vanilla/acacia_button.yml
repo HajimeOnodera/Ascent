@@ -1,0 +1,7 @@
+id: ACACIA_BUTTON
+type: SHAPELESS
+ingredients:
+  - ACACIA_PLANKS
+result:
+  item: ACACIA_BUTTON
+  amount: 1

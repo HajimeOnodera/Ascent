@@ -1,0 +1,10 @@
+id: ANDESITE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: ANDESITE
+result:
+  item: ANDESITE_WALL
+  amount: 6

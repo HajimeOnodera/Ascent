@@ -1,0 +1,11 @@
+id: BAMBOO_CHEST_RAFT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: BAMBOO_RAFT
+result:
+  item: BAMBOO_CHEST_RAFT
+  amount: 1

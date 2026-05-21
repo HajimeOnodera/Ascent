@@ -1,0 +1,11 @@
+id: IRON_LEGGINGS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: IRON_LEGGINGS
+  amount: 1

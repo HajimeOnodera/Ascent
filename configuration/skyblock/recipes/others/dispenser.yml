@@ -1,0 +1,13 @@
+id: DISPENSER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "ACA"
+ingredients:
+  A: COBBLESTONE
+  B: BOW
+  C: REDSTONE
+result:
+  item: DISPENSER
+  amount: 1

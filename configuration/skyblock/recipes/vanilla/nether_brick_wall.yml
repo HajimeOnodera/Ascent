@@ -1,0 +1,10 @@
+id: NETHER_BRICK_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: NETHER_BRICKS
+result:
+  item: NETHER_BRICK_WALL
+  amount: 6

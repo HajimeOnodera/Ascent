@@ -1,0 +1,14 @@
+id: CONCENTRATED_STONE
+type: SHAPED
+requirements:
+  collections:
+    HARD_STONE: 6
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_HARD_STONE, amount: 64}
+result:
+  item: CONCENTRATED_STONE
+  amount: 1

@@ -1,0 +1,12 @@
+id: REPEATER
+type: SHAPED
+pattern:
+  - "ABA"
+  - "CCC"
+ingredients:
+  A: REDSTONE_TORCH
+  B: REDSTONE
+  C: STONE
+result:
+  item: REPEATER
+  amount: 1

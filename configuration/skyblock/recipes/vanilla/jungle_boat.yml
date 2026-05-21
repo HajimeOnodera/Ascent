@@ -1,0 +1,10 @@
+id: JUNGLE_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: JUNGLE_PLANKS
+result:
+  item: JUNGLE_BOAT
+  amount: 1

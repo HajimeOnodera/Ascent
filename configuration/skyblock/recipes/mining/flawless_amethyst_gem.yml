@@ -1,0 +1,10 @@
+id: FLAWLESS_AMETHYST_GEM
+type: SHAPELESS
+requirements:
+  collections:
+    FINE_JASPER_GEM: 9
+ingredients:
+  - {item: FINE_AMETHYST_GEM, amount: 80}
+result:
+  item: FLAWLESS_AMETHYST_GEM
+  amount: 1

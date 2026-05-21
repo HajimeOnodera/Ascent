@@ -1,0 +1,9 @@
+id: DIORITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: DIORITE
+result:
+  item: DIORITE_SLAB
+  amount: 6

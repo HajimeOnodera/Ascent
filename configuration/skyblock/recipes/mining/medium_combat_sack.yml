@@ -1,0 +1,15 @@
+id: MEDIUM_COMBAT_SACK
+type: SHAPED
+requirements:
+  collections:
+    ROTTEN_FLESH: 7
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_ROTTEN_FLESH, amount: 4}
+  B: SMALL_COMBAT_SACK
+result:
+  item: MEDIUM_COMBAT_SACK
+  amount: 1

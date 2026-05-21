@@ -1,0 +1,12 @@
+id: PINK_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: PINK_DYE
+result:
+  item: PINK_STAINED_GLASS
+  amount: 8

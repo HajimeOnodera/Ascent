@@ -1,0 +1,14 @@
+id: REAPER_MASK
+type: SHAPED
+pattern:
+  - "A A"
+  - "BCD"
+  - "A A"
+ingredients:
+  A: {item: REVENANT_VISCERA, amount: 32}
+  B: BEHEADED_HORROR
+  C: {item: ENCHANTED_STRING, amount: 32}
+  D: REVIVED_HEART
+result:
+  item: REAPER_MASK
+  amount: 1

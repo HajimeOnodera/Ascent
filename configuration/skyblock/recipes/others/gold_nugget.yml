@@ -1,0 +1,7 @@
+id: GOLD_NUGGET
+type: SHAPELESS
+ingredients:
+  - GOLD_INGOT
+result:
+  item: GOLD_NUGGET
+  amount: 9

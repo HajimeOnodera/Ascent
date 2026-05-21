@@ -1,0 +1,7 @@
+id: MANGROVE_BUTTON
+type: SHAPELESS
+ingredients:
+  - MANGROVE_PLANKS
+result:
+  item: MANGROVE_BUTTON
+  amount: 1

@@ -1,0 +1,10 @@
+id: MAGMA_BUCKET
+type: SHAPED
+pattern:
+  - "ABA"
+ingredients:
+  A: ENCHANTED_LAVA_BUCKET
+  B: HEAT_CORE
+result:
+  item: MAGMA_BUCKET
+  amount: 1

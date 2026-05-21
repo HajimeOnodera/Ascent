@@ -1,0 +1,9 @@
+id: MOSSY_COBBLESTONE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: MOSSY_COBBLESTONE
+result:
+  item: MOSSY_COBBLESTONE_SLAB
+  amount: 6

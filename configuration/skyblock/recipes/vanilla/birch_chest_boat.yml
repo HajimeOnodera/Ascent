@@ -1,0 +1,11 @@
+id: BIRCH_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: BIRCH_BOAT
+result:
+  item: BIRCH_CHEST_BOAT
+  amount: 1

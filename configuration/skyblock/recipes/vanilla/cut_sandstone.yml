@@ -1,0 +1,10 @@
+id: CUT_SANDSTONE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SANDSTONE
+result:
+  item: CUT_SANDSTONE
+  amount: 1

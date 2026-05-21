@@ -1,0 +1,12 @@
+id: BROWN_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: BROWN_WOOL
+  B: STICK
+result:
+  item: BROWN_BANNER
+  amount: 1

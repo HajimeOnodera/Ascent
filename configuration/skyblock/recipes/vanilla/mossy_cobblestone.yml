@@ -1,0 +1,10 @@
+id: MOSSY_COBBLESTONE
+type: SHAPED
+pattern:
+  - "AB"
+ingredients:
+  A: COBBLESTONE
+  B: VINES
+result:
+  item: MOSSY_COBBLESTONE
+  amount: 1

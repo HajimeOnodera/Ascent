@@ -1,0 +1,7 @@
+id: CRIMSON_BUTTON
+type: SHAPELESS
+ingredients:
+  - CRIMSON_PLANKS
+result:
+  item: CRIMSON_BUTTON
+  amount: 1

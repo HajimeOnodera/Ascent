@@ -1,0 +1,9 @@
+id: NETHER_BRICK_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: NETHER_BRICKS
+result:
+  item: NETHER_BRICK_SLAB
+  amount: 6

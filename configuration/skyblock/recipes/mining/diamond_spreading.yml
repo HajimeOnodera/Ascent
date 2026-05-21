@@ -1,0 +1,15 @@
+id: DIAMOND_SPREADING
+type: SHAPED
+requirements:
+  collections:
+    DIAMOND: 6
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: VINES
+  B: ENCHANTED_DIAMOND
+result:
+  item: DIAMOND_SPREADING
+  amount: 1

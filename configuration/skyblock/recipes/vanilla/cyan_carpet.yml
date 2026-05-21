@@ -1,0 +1,9 @@
+id: CYAN_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: CYAN_WOOL
+result:
+  item: CYAN_CARPET
+  amount: 3

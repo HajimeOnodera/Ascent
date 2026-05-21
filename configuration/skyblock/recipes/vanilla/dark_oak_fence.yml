@@ -1,0 +1,11 @@
+id: DARK_OAK_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: DARK_OAK_PLANKS
+  B: STICK
+result:
+  item: DARK_OAK_FENCE
+  amount: 3

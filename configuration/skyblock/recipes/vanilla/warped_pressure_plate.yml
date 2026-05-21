@@ -1,0 +1,9 @@
+id: WARPED_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: WARPED_PLANKS
+result:
+  item: WARPED_PRESSURE_PLATE
+  amount: 1

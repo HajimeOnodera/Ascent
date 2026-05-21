@@ -1,0 +1,9 @@
+id: LIGHT_GRAY_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: LIGHT_GRAY_WOOL
+result:
+  item: LIGHT_GRAY_CARPET
+  amount: 3

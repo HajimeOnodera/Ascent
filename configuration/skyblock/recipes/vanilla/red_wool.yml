@@ -1,0 +1,8 @@
+id: RED_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - RED_DYE
+result:
+  item: RED_WOOL
+  amount: 1

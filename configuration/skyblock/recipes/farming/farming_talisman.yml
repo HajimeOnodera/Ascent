@@ -1,0 +1,15 @@
+id: FARMING_TALISMAN
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 4
+pattern:
+  - "ABA"
+  - "BAB"
+  - "ABA"
+ingredients:
+  A: {item: WHEAT, amount: 8}
+  B: SEEDS
+result:
+  item: FARMING_TALISMAN
+  amount: 1

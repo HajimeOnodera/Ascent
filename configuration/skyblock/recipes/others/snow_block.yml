@@ -1,0 +1,10 @@
+id: SNOW_BLOCK
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SNOWBALL
+result:
+  item: SNOW_BLOCK
+  amount: 1

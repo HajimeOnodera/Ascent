@@ -1,0 +1,12 @@
+id: WOODEN_SWORD
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: OAK_PLANKS
+  B: STICK
+result:
+  item: WOODEN_SWORD
+  amount: 1

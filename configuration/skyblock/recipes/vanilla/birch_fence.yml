@@ -1,0 +1,11 @@
+id: BIRCH_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: BIRCH_PLANKS
+  B: STICK
+result:
+  item: BIRCH_FENCE
+  amount: 3

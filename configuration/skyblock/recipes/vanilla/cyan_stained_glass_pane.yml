@@ -1,0 +1,10 @@
+id: CYAN_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: CYAN_STAINED_GLASS
+result:
+  item: CYAN_STAINED_GLASS_PANE
+  amount: 16

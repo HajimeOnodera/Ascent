@@ -1,0 +1,9 @@
+id: BLACK_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: BLACK_WOOL
+result:
+  item: BLACK_CARPET
+  amount: 3

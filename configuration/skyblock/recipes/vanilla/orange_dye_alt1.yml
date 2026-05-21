@@ -1,0 +1,8 @@
+id: ORANGE_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - RED_DYE
+  - YELLOW_DYE
+result:
+  item: ORANGE_DYE
+  amount: 2

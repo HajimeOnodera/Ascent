@@ -1,0 +1,14 @@
+id: ZOMBIE_HEART
+type: SHAPED
+requirements:
+  collections:
+    ROTTEN_FLESH: 6
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_ROTTEN_FLESH, amount: 32}
+result:
+  item: ZOMBIE_HEART
+  amount: 1

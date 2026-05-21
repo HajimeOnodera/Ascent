@@ -1,0 +1,7 @@
+id: BLACK_DYE
+type: SHAPELESS
+ingredients:
+  - INK_SAC
+result:
+  item: BLACK_DYE
+  amount: 1

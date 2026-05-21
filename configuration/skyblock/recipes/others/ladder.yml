@@ -1,0 +1,11 @@
+id: LADDER
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+  - "A A"
+ingredients:
+  A: STICK
+result:
+  item: LADDER
+  amount: 1

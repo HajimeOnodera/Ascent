@@ -1,0 +1,11 @@
+id: RED_SANDSTONE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: RED_SANDSTONE
+result:
+  item: RED_SANDSTONE_STAIRS
+  amount: 4

@@ -1,0 +1,12 @@
+id: WARPED_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_WARPED_STEM
+result:
+  item: WARPED_HANGING_SIGN
+  amount: 6

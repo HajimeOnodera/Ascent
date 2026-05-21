@@ -1,0 +1,11 @@
+id: QUARTZ_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: QUARTZ_BLOCK
+result:
+  item: QUARTZ_STAIRS
+  amount: 4

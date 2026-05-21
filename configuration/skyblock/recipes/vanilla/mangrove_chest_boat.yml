@@ -1,0 +1,11 @@
+id: MANGROVE_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: MANGROVE_BOAT
+result:
+  item: MANGROVE_CHEST_BOAT
+  amount: 1

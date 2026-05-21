@@ -1,0 +1,11 @@
+id: FURNACE_MINECART
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: FURNACE
+  B: MINECART
+result:
+  item: FURNACE_MINECART
+  amount: 1

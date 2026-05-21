@@ -1,0 +1,11 @@
+id: POLISHED_DIORITE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: POLISHED_DIORITE
+result:
+  item: POLISHED_DIORITE_STAIRS
+  amount: 4

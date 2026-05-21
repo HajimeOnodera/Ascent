@@ -1,0 +1,10 @@
+id: FLAWED_PERIDOT_GEM
+type: SHAPELESS
+requirements:
+  collections:
+    FINE_JASPER_GEM: 2
+ingredients:
+  - {item: ROUGH_PERIDOT_GEM, amount: 80}
+result:
+  item: FLAWED_PERIDOT_GEM
+  amount: 1

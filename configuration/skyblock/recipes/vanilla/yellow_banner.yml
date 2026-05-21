@@ -1,0 +1,12 @@
+id: YELLOW_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: YELLOW_WOOL
+  B: STICK
+result:
+  item: YELLOW_BANNER
+  amount: 1

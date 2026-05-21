@@ -1,0 +1,12 @@
+id: GOLDEN_CARROT
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GOLD_NUGGET
+  B: CARROT
+result:
+  item: GOLDEN_CARROT
+  amount: 1

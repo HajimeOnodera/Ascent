@@ -1,0 +1,13 @@
+id: LEAFLET_BOOTS
+type: SHAPED
+requirements:
+  collections:
+    OAK_LOG: 3
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: OAK_LEAVES
+result:
+  item: LEAFLET_BOOTS
+  amount: 1

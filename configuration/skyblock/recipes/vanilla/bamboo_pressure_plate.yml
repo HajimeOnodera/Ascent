@@ -1,0 +1,9 @@
+id: BAMBOO_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: BAMBOO_PLANKS
+result:
+  item: BAMBOO_PRESSURE_PLATE
+  amount: 1

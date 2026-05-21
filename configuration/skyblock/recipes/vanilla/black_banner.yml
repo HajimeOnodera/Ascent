@@ -1,0 +1,12 @@
+id: BLACK_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: BLACK_WOOL
+  B: STICK
+result:
+  item: BLACK_BANNER
+  amount: 1

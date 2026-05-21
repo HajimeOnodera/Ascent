@@ -1,0 +1,10 @@
+id: OAK_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: OAK_TRAPDOOR
+  amount: 2

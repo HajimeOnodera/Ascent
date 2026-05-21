@@ -1,0 +1,8 @@
+id: PURPLE_DYE
+type: SHAPELESS
+ingredients:
+  - BLUE_DYE
+  - RED_DYE
+result:
+  item: PURPLE_DYE
+  amount: 2

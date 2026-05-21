@@ -1,0 +1,7 @@
+id: SUGAR
+type: SHAPELESS
+ingredients:
+  - SUGAR_CANE
+result:
+  item: SUGAR
+  amount: 1

@@ -1,0 +1,10 @@
+id: PLASMA_BUCKET
+type: SHAPED
+pattern:
+  - "ABA"
+ingredients:
+  A: MAGMA_BUCKET
+  B: HEAT_CORE
+result:
+  item: PLASMA_BUCKET
+  amount: 1

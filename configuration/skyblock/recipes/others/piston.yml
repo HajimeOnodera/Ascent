@@ -1,0 +1,14 @@
+id: PISTON
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BCB"
+  - "BDB"
+ingredients:
+  A: OAK_PLANKS
+  B: COBBLESTONE
+  C: IRON_INGOT
+  D: REDSTONE
+result:
+  item: PISTON
+  amount: 1

@@ -1,0 +1,10 @@
+id: WHITE_WOOL
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: STRING
+result:
+  item: WHITE_WOOL
+  amount: 1

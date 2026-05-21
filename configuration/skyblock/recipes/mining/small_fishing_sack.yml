@@ -1,0 +1,15 @@
+id: SMALL_FISHING_SACK
+type: SHAPED
+requirements:
+  collections:
+    PUFFERFISH: 5
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_PUFFERFISH, amount: 2}
+  B: ENCHANTED_LEATHER
+result:
+  item: SMALL_FISHING_SACK
+  amount: 1

@@ -1,0 +1,12 @@
+id: JUNGLE_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_JUNGLE_LOG
+result:
+  item: JUNGLE_HANGING_SIGN
+  amount: 6

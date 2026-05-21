@@ -1,0 +1,16 @@
+id: LARGE_ENCHANTED_MINING_SACK
+type: SHAPED
+requirements:
+  collections:
+    COAL: 10
+pattern:
+  - "ABA"
+  - "ACA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_COAL, amount: 16}
+  B: {item: ENCHANTED_STRING, amount: 16}
+  C: {item: ENCHANTED_LEATHER, amount: 12}
+result:
+  item: LARGE_ENCHANTED_MINING_SACK
+  amount: 1

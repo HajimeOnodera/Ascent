@@ -1,0 +1,14 @@
+id: SPEED_TALISMAN
+type: SHAPED
+requirements:
+  collections:
+    SUGAR_CANE: 2
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: {item: SUGAR_CANE, amount: 12}
+result:
+  item: SPEED_TALISMAN
+  amount: 1

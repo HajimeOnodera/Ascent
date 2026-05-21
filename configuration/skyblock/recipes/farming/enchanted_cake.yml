@@ -1,0 +1,17 @@
+id: ENCHANTED_CAKE
+type: SHAPED
+requirements:
+  collections:
+    CHICKEN: 7
+pattern:
+  - "AAA"
+  - "BCB"
+  - "DDD"
+ingredients:
+  A: MILK_BUCKET
+  B: ENCHANTED_SUGAR
+  C: ENCHANTED_EGG
+  D: WHEAT
+result:
+  item: ENCHANTED_CAKE
+  amount: 1

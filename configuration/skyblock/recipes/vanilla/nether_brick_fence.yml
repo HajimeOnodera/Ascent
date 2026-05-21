@@ -1,0 +1,10 @@
+id: NETHER_BRICK_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: NETHER_BRICKS
+result:
+  item: NETHER_BRICK_FENCE
+  amount: 3

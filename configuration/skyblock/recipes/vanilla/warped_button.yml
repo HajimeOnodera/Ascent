@@ -1,0 +1,7 @@
+id: WARPED_BUTTON
+type: SHAPELESS
+ingredients:
+  - WARPED_PLANKS
+result:
+  item: WARPED_BUTTON
+  amount: 1

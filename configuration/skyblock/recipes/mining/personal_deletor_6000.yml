@@ -1,0 +1,15 @@
+id: PERSONAL_DELETOR_6000
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 11
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: {item: ENCHANTED_IRON_INGOT, amount: 64}
+  B: PERSONAL_DELETOR_5000
+result:
+  item: PERSONAL_DELETOR_6000
+  amount: 1

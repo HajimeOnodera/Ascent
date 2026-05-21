@@ -1,0 +1,7 @@
+id: CHERRY_PLANKS
+type: SHAPELESS
+ingredients:
+  - CHERRY_LOG
+result:
+  item: CHERRY_PLANKS
+  amount: 4

@@ -1,0 +1,9 @@
+id: CRIMSON_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: CRIMSON_PLANKS
+result:
+  item: CRIMSON_SLAB
+  amount: 6

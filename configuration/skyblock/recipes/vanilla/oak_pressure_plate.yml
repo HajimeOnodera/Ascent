@@ -1,0 +1,9 @@
+id: OAK_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: OAK_PRESSURE_PLATE
+  amount: 1

@@ -1,0 +1,7 @@
+id: OAK_BUTTON
+type: SHAPELESS
+ingredients:
+  - OAK_PLANKS
+result:
+  item: OAK_BUTTON
+  amount: 1

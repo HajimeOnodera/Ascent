@@ -1,0 +1,7 @@
+id: RED_DYE
+type: SHAPELESS
+ingredients:
+  - POPPY
+result:
+  item: RED_DYE
+  amount: 1

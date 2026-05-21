@@ -1,0 +1,14 @@
+id: PUMPKIN_LEGGINGS
+type: SHAPED
+requirements:
+  collections:
+    PUMPKIN: 2
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: PUMPKIN
+result:
+  item: PUMPKIN_LEGGINGS
+  amount: 1

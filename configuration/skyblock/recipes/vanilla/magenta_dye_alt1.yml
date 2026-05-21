@@ -1,0 +1,7 @@
+id: MAGENTA_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - LILAC
+result:
+  item: MAGENTA_DYE
+  amount: 2

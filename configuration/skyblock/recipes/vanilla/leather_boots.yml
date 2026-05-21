@@ -1,0 +1,10 @@
+id: LEATHER_BOOTS
+type: SHAPED
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: LEATHER
+result:
+  item: LEATHER_BOOTS
+  amount: 1

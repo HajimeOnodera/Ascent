@@ -1,0 +1,10 @@
+id: SPRUCE_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_TRAPDOOR
+  amount: 2

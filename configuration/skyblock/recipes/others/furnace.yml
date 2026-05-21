@@ -1,0 +1,11 @@
+id: FURNACE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: COBBLESTONE
+result:
+  item: FURNACE
+  amount: 1

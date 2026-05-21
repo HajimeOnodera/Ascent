@@ -1,0 +1,12 @@
+id: DROPPER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: COBBLESTONE
+  B: REDSTONE
+result:
+  item: DROPPER
+  amount: 1

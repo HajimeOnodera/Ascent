@@ -1,0 +1,10 @@
+id: MOSSY_COBBLESTONE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: MOSSY_COBBLESTONE
+result:
+  item: MOSSY_COBBLESTONE_WALL
+  amount: 6

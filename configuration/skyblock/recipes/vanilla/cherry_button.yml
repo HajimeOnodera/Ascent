@@ -1,0 +1,7 @@
+id: CHERRY_BUTTON
+type: SHAPELESS
+ingredients:
+  - CHERRY_PLANKS
+result:
+  item: CHERRY_BUTTON
+  amount: 1

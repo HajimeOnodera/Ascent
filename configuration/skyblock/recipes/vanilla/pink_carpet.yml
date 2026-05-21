@@ -1,0 +1,9 @@
+id: PINK_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: PINK_WOOL
+result:
+  item: PINK_CARPET
+  amount: 3

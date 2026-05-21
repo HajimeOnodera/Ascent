@@ -1,0 +1,13 @@
+id: ACTIVATOR_RAIL
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ACA"
+  - "ABA"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+  C: REDSTONE_TORCH
+result:
+  item: ACTIVATOR_RAIL
+  amount: 6

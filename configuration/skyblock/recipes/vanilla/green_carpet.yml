@@ -1,0 +1,9 @@
+id: GREEN_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: GREEN_WOOL
+result:
+  item: GREEN_CARPET
+  amount: 3

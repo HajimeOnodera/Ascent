@@ -1,0 +1,12 @@
+id: GOLDEN_SWORD
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+result:
+  item: GOLDEN_SWORD
+  amount: 1

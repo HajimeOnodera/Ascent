@@ -1,0 +1,8 @@
+id: EYE_OF_ENDER
+type: SHAPELESS
+ingredients:
+  - ENDER_PEARL
+  - BLAZE_POWDER
+result:
+  item: EYE_OF_ENDER
+  amount: 1

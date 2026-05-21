@@ -1,0 +1,12 @@
+id: MAGENTA_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: MAGENTA_DYE
+result:
+  item: MAGENTA_STAINED_GLASS
+  amount: 8

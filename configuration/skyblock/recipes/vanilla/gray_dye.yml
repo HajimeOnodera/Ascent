@@ -1,0 +1,8 @@
+id: GRAY_DYE
+type: SHAPELESS
+ingredients:
+  - BLACK_DYE
+  - WHITE_DYE
+result:
+  item: GRAY_DYE
+  amount: 2

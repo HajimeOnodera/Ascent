@@ -1,0 +1,12 @@
+id: SPRUCE_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_SPRUCE_LOG
+result:
+  item: SPRUCE_HANGING_SIGN
+  amount: 6

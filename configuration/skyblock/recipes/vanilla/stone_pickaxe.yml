@@ -1,0 +1,12 @@
+id: STONE_PICKAXE
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - " B "
+ingredients:
+  A: COBBLESTONE
+  B: STICK
+result:
+  item: STONE_PICKAXE
+  amount: 1

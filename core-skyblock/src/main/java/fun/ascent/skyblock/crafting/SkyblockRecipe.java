@@ -19,6 +19,11 @@ public abstract class SkyblockRecipe {
     @Setter
     protected Function<SkyblockPlayer, CraftingResult> canCraft;
 
+    @Setter @Getter
+    protected java.util.Map<String, Integer> requiredCollections = new java.util.HashMap<>();
+    @Setter @Getter
+    protected java.util.Map<String, Integer> requiredSkills = new java.util.HashMap<>();
+
     protected SkyblockRecipe(String id, String resultItemId, int resultAmount, RecipeType recipeType) {
         this.id = id;
         this.resultItemId = resultItemId;

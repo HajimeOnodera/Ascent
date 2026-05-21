@@ -1,0 +1,13 @@
+id: TRIPWIRE_HOOK
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "C"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+  C: OAK_PLANKS
+result:
+  item: TRIPWIRE_HOOK
+  amount: 2

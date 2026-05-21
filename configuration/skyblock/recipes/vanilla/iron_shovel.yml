@@ -1,0 +1,12 @@
+id: IRON_SHOVEL
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "B"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: IRON_SHOVEL
+  amount: 1

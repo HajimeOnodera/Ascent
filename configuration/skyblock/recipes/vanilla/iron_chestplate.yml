@@ -1,0 +1,11 @@
+id: IRON_CHESTPLATE
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: IRON_CHESTPLATE
+  amount: 1

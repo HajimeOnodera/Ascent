@@ -1,0 +1,7 @@
+id: YELLOW_DYE
+type: SHAPELESS
+ingredients:
+  - DANDELION
+result:
+  item: YELLOW_DYE
+  amount: 1

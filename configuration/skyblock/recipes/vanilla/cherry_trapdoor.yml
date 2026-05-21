@@ -1,0 +1,10 @@
+id: CHERRY_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_TRAPDOOR
+  amount: 2

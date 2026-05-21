@@ -1,0 +1,17 @@
+id: EVERBURNING_FLAME
+type: SHAPED
+requirements:
+  collections:
+    RED_SAND: 8
+pattern:
+  - "ABA"
+  - "CDC"
+  - "ABA"
+ingredients:
+  A: {item: FLAMES, amount: 4}
+  B: ENCHANTED_RED_SAND_CUBE
+  C: ENCHANTED_SULPHUR_CUBE
+  D: PLASMA_BUCKET
+result:
+  item: EVERBURNING_FLAME
+  amount: 1

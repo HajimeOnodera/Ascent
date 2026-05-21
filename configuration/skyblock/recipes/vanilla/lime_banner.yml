@@ -1,0 +1,12 @@
+id: LIME_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: LIME_WOOL
+  B: STICK
+result:
+  item: LIME_BANNER
+  amount: 1

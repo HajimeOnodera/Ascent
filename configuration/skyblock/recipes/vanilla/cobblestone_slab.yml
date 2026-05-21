@@ -1,0 +1,9 @@
+id: COBBLESTONE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: COBBLESTONE
+result:
+  item: COBBLESTONE_SLAB
+  amount: 6

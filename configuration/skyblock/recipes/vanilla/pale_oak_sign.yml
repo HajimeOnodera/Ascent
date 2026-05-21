@@ -1,0 +1,12 @@
+id: PALE_OAK_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: PALE_OAK_PLANKS
+  B: STICK
+result:
+  item: PALE_OAK_SIGN
+  amount: 3

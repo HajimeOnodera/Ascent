@@ -1,0 +1,11 @@
+id: OAK_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: OAK_STAIRS
+  amount: 4

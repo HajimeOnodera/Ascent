@@ -1,0 +1,7 @@
+id: ORANGE_DYE
+type: SHAPELESS
+ingredients:
+  - ORANGE_TULIP
+result:
+  item: ORANGE_DYE
+  amount: 1

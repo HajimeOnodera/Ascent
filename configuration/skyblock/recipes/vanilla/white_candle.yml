@@ -1,0 +1,8 @@
+id: WHITE_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - WHITE_DYE
+result:
+  item: WHITE_CANDLE
+  amount: 1

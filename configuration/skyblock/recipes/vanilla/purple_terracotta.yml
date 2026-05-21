@@ -1,0 +1,12 @@
+id: PURPLE_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: PURPLE_DYE
+result:
+  item: PURPLE_TERRACOTTA
+  amount: 8

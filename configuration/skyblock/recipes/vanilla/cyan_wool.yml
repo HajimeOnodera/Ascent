@@ -1,0 +1,8 @@
+id: CYAN_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - CYAN_DYE
+result:
+  item: CYAN_WOOL
+  amount: 1

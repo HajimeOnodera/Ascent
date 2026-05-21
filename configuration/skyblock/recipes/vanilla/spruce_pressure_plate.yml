@@ -1,0 +1,9 @@
+id: SPRUCE_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_PRESSURE_PLATE
+  amount: 1

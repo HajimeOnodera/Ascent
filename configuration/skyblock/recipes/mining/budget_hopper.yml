@@ -1,0 +1,15 @@
+id: BUDGET_HOPPER
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 5
+pattern:
+  - "A A"
+  - "ABA"
+  - " A "
+ingredients:
+  A: ENCHANTED_IRON_INGOT
+  B: CHEST
+result:
+  item: BUDGET_HOPPER
+  amount: 1

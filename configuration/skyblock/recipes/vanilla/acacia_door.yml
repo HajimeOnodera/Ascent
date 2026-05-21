@@ -1,0 +1,11 @@
+id: ACACIA_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: ACACIA_PLANKS
+result:
+  item: ACACIA_DOOR
+  amount: 1

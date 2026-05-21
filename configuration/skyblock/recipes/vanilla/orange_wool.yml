@@ -1,0 +1,8 @@
+id: ORANGE_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - ORANGE_DYE
+result:
+  item: ORANGE_WOOL
+  amount: 1

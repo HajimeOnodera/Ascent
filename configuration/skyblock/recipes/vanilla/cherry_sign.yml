@@ -1,0 +1,12 @@
+id: CHERRY_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: CHERRY_PLANKS
+  B: STICK
+result:
+  item: CHERRY_SIGN
+  amount: 3

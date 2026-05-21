@@ -1,0 +1,11 @@
+id: SPRUCE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_STAIRS
+  amount: 4

@@ -1,0 +1,9 @@
+id: ACACIA_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: ACACIA_PLANKS
+result:
+  item: ACACIA_SLAB
+  amount: 6

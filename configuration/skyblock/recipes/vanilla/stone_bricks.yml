@@ -1,0 +1,10 @@
+id: STONE_BRICKS
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: STONE
+result:
+  item: STONE_BRICKS
+  amount: 4

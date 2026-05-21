@@ -1,0 +1,11 @@
+id: NETHER_BRICK_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: NETHER_BRICKS
+result:
+  item: NETHER_BRICK_STAIRS
+  amount: 4

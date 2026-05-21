@@ -1,0 +1,12 @@
+id: CRYSTALLIZED_HEART
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_DIAMOND, amount: 32}
+  B: ZOMBIE_HEART
+result:
+  item: CRYSTALLIZED_HEART
+  amount: 1

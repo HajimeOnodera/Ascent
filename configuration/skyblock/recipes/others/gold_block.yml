@@ -1,0 +1,11 @@
+id: GOLD_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: GOLD_INGOT
+result:
+  item: GOLD_BLOCK
+  amount: 1

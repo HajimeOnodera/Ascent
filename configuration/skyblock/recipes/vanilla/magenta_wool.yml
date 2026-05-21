@@ -1,0 +1,8 @@
+id: MAGENTA_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - MAGENTA_DYE
+result:
+  item: MAGENTA_WOOL
+  amount: 1

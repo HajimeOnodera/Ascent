@@ -1,0 +1,11 @@
+id: DIAMOND_CHESTPLATE
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: DIAMOND
+result:
+  item: DIAMOND_CHESTPLATE
+  amount: 1

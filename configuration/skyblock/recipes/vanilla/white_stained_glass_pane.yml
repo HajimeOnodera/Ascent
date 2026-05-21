@@ -1,0 +1,10 @@
+id: WHITE_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: WHITE_STAINED_GLASS
+result:
+  item: WHITE_STAINED_GLASS_PANE
+  amount: 16

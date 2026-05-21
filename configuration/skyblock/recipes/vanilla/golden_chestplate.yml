@@ -1,0 +1,11 @@
+id: GOLDEN_CHESTPLATE
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: GOLD_INGOT
+result:
+  item: GOLDEN_CHESTPLATE
+  amount: 1

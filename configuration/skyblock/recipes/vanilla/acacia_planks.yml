@@ -1,0 +1,7 @@
+id: ACACIA_PLANKS
+type: SHAPELESS
+ingredients:
+  - ACACIA_LOG
+result:
+  item: ACACIA_PLANKS
+  amount: 4

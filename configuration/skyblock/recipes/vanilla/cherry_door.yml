@@ -1,0 +1,11 @@
+id: CHERRY_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_DOOR
+  amount: 1

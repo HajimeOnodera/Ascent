@@ -1,0 +1,11 @@
+id: BAMBOO_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: BAMBOO_PLANKS
+  B: STICK
+result:
+  item: BAMBOO_FENCE
+  amount: 3

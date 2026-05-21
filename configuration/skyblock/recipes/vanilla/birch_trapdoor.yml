@@ -1,0 +1,10 @@
+id: BIRCH_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: BIRCH_PLANKS
+result:
+  item: BIRCH_TRAPDOOR
+  amount: 2

@@ -1,0 +1,12 @@
+id: DIAMOND_AXE_ALT1
+type: SHAPED
+pattern:
+  - "AA"
+  - "BA"
+  - "B"
+ingredients:
+  A: DIAMOND
+  B: STICK
+result:
+  item: DIAMOND_AXE
+  amount: 1

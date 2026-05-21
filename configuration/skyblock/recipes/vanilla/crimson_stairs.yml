@@ -1,0 +1,11 @@
+id: CRIMSON_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: CRIMSON_PLANKS
+result:
+  item: CRIMSON_STAIRS
+  amount: 4

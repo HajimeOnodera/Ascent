@@ -1,0 +1,12 @@
+id: DIAMOND_SWORD
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: DIAMOND
+  B: STICK
+result:
+  item: DIAMOND_SWORD
+  amount: 1

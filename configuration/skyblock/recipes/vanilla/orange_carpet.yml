@@ -1,0 +1,9 @@
+id: ORANGE_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: ORANGE_WOOL
+result:
+  item: ORANGE_CARPET
+  amount: 3

@@ -1,0 +1,12 @@
+id: GRAY_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: GRAY_DYE
+result:
+  item: GRAY_STAINED_GLASS
+  amount: 8

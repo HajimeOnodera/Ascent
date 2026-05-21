@@ -1,0 +1,9 @@
+id: GRANITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: GRANITE
+result:
+  item: GRANITE_SLAB
+  amount: 6

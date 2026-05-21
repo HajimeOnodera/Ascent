@@ -1,0 +1,12 @@
+id: BLUE_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: BLUE_DYE
+result:
+  item: BLUE_STAINED_GLASS
+  amount: 8

@@ -1,0 +1,10 @@
+id: CHISELED_SANDSTONE
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+ingredients:
+  A: SANDSTONE_SLAB
+result:
+  item: CHISELED_SANDSTONE
+  amount: 1

@@ -1,0 +1,12 @@
+id: GREEN_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: GREEN_WOOL
+  B: STICK
+result:
+  item: GREEN_BANNER
+  amount: 1

@@ -1,0 +1,12 @@
+id: DIAMOND_HOE
+type: SHAPED
+pattern:
+  - "AA"
+  - " B"
+  - " B"
+ingredients:
+  A: DIAMOND
+  B: STICK
+result:
+  item: DIAMOND_HOE
+  amount: 1

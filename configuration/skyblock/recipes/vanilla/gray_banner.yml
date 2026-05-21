@@ -1,0 +1,12 @@
+id: GRAY_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: GRAY_WOOL
+  B: STICK
+result:
+  item: GRAY_BANNER
+  amount: 1

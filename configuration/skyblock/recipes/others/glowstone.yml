@@ -1,0 +1,10 @@
+id: GLOWSTONE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: GLOWSTONE_DUST
+result:
+  item: GLOWSTONE
+  amount: 1

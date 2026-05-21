@@ -1,0 +1,12 @@
+id: JUNGLE_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: JUNGLE_PLANKS
+  B: STICK
+result:
+  item: JUNGLE_SIGN
+  amount: 3

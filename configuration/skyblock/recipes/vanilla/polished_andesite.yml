@@ -1,0 +1,10 @@
+id: POLISHED_ANDESITE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: ANDESITE
+result:
+  item: POLISHED_ANDESITE
+  amount: 4

@@ -1,0 +1,11 @@
+id: ANDESITE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: ANDESITE
+result:
+  item: ANDESITE_STAIRS
+  amount: 4

@@ -1,0 +1,13 @@
+id: COMPARATOR
+type: SHAPED
+pattern:
+  - " A "
+  - "ABA"
+  - "CCC"
+ingredients:
+  A: REDSTONE_TORCH
+  B: QUARTZ
+  C: STONE
+result:
+  item: COMPARATOR
+  amount: 1

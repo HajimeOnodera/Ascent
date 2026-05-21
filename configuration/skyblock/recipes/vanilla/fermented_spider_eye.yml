@@ -1,0 +1,9 @@
+id: FERMENTED_SPIDER_EYE
+type: SHAPELESS
+ingredients:
+  - BROWN_MUSHROOM
+  - SUGAR
+  - SPIDER_EYE
+result:
+  item: FERMENTED_SPIDER_EYE
+  amount: 1

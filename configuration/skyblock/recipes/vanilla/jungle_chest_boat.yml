@@ -1,0 +1,11 @@
+id: JUNGLE_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: JUNGLE_BOAT
+result:
+  item: JUNGLE_CHEST_BOAT
+  amount: 1

@@ -1,0 +1,8 @@
+id: LIGHT_GRAY_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - LIGHT_GRAY_DYE
+result:
+  item: LIGHT_GRAY_WOOL
+  amount: 1

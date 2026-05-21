@@ -1,0 +1,11 @@
+id: DIORITE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: DIORITE
+result:
+  item: DIORITE_STAIRS
+  amount: 4

@@ -1,0 +1,12 @@
+id: BOW
+type: SHAPED
+pattern:
+  - " AB"
+  - "A B"
+  - " AB"
+ingredients:
+  A: STICK
+  B: STRING
+result:
+  item: BOW
+  amount: 1

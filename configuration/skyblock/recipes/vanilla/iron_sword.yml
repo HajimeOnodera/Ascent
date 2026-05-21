@@ -1,0 +1,12 @@
+id: IRON_SWORD
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: IRON_SWORD
+  amount: 1

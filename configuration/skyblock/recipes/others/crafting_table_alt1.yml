@@ -1,0 +1,10 @@
+id: CRAFTING_TABLE_ALT1
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: CRAFTING_TABLE
+  amount: 1

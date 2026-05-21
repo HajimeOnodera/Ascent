@@ -1,0 +1,12 @@
+id: MITHRIL_INFUSION
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_MITHRIL, amount: 64}
+  B: MAGMA_BUCKET
+result:
+  item: MITHRIL_INFUSION
+  amount: 1

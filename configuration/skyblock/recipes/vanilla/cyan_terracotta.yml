@@ -1,0 +1,12 @@
+id: CYAN_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: CYAN_DYE
+result:
+  item: CYAN_TERRACOTTA
+  amount: 8

@@ -1,0 +1,12 @@
+id: IRON_PICKAXE
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - " B "
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: IRON_PICKAXE
+  amount: 1

@@ -1,0 +1,10 @@
+id: ACACIA_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: ACACIA_PLANKS
+result:
+  item: ACACIA_TRAPDOOR
+  amount: 2

@@ -1,0 +1,13 @@
+id: MINER_OUTFIT_BOOTS
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 2
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: IRON_BLOCK
+result:
+  item: MINER_OUTFIT_BOOTS
+  amount: 1

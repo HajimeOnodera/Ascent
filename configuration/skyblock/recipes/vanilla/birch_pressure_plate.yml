@@ -1,0 +1,9 @@
+id: BIRCH_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: BIRCH_PLANKS
+result:
+  item: BIRCH_PRESSURE_PLATE
+  amount: 1

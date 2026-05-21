@@ -1,0 +1,7 @@
+id: WARPED_PLANKS
+type: SHAPELESS
+ingredients:
+  - WARPED_STEM
+result:
+  item: WARPED_PLANKS
+  amount: 4

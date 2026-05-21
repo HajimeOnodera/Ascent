@@ -1,0 +1,10 @@
+id: SPRUCE_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_BOAT
+  amount: 1

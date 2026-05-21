@@ -1,0 +1,8 @@
+id: MAGENTA_DYE_ALT2
+type: SHAPELESS
+ingredients:
+  - PURPLE_DYE
+  - PINK_DYE
+result:
+  item: MAGENTA_DYE
+  amount: 2

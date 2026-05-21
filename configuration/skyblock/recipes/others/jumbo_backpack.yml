@@ -1,0 +1,8 @@
+id: JUMBO_BACKPACK
+type: SHAPELESS
+ingredients:
+  - GREATER_BACKPACK
+  - JUMBO_BACKPACK_UPGRADE
+result:
+  item: JUMBO_BACKPACK
+  amount: 1

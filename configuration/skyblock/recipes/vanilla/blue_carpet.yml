@@ -1,0 +1,9 @@
+id: BLUE_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: BLUE_WOOL
+result:
+  item: BLUE_CARPET
+  amount: 3

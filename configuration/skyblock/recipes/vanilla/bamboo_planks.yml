@@ -1,0 +1,7 @@
+id: BAMBOO_PLANKS
+type: SHAPELESS
+ingredients:
+  - BAMBOO_BLOCK
+result:
+  item: BAMBOO_PLANKS
+  amount: 4

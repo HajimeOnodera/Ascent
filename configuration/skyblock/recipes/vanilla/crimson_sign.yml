@@ -1,0 +1,12 @@
+id: CRIMSON_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: CRIMSON_PLANKS
+  B: STICK
+result:
+  item: CRIMSON_SIGN
+  amount: 3

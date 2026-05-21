@@ -1,0 +1,15 @@
+id: FEATHER_ARTIFACT
+type: SHAPED
+requirements:
+  collections:
+    FEATHER: 9
+pattern:
+  - " A "
+  - "ABA"
+  - " A "
+ingredients:
+  A: {item: ENCHANTED_FEATHER, amount: 32}
+  B: FEATHER_RING
+result:
+  item: FEATHER_ARTIFACT
+  amount: 1

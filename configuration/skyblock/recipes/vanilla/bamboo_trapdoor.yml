@@ -1,0 +1,10 @@
+id: BAMBOO_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: BAMBOO_PLANKS
+result:
+  item: BAMBOO_TRAPDOOR
+  amount: 2

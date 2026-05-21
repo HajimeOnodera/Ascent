@@ -1,0 +1,8 @@
+id: GREEN_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - CACTUS_GREEN
+result:
+  item: GREEN_WOOL
+  amount: 1

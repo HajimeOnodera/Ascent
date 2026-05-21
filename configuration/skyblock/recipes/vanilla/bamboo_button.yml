@@ -1,0 +1,7 @@
+id: BAMBOO_BUTTON
+type: SHAPELESS
+ingredients:
+  - BAMBOO_PLANKS
+result:
+  item: BAMBOO_BUTTON
+  amount: 1

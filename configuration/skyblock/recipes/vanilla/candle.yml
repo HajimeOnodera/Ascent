@@ -1,0 +1,11 @@
+id: CANDLE
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: STRING
+  B: HONEYCOMB
+result:
+  item: CANDLE
+  amount: 1

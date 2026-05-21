@@ -1,0 +1,11 @@
+id: YELLOW_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: YELLOW_WOOL
+  B: OAK_PLANKS
+result:
+  item: YELLOW_BED
+  amount: 1

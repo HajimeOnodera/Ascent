@@ -1,0 +1,14 @@
+id: FEATHER_TALISMAN
+type: SHAPED
+requirements:
+  collections:
+    FEATHER: 4
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: {item: FEATHER, amount: 12}
+result:
+  item: FEATHER_TALISMAN
+  amount: 1

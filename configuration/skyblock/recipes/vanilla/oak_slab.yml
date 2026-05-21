@@ -1,0 +1,9 @@
+id: OAK_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: OAK_SLAB
+  amount: 6

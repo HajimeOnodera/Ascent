@@ -1,0 +1,12 @@
+id: CYAN_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: CYAN_WOOL
+  B: STICK
+result:
+  item: CYAN_BANNER
+  amount: 1

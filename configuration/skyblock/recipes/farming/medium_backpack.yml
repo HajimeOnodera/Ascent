@@ -1,0 +1,15 @@
+id: MEDIUM_BACKPACK
+type: SHAPED
+requirements:
+  collections:
+    LEATHER: 5
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: LEATHER, amount: 64}
+  B: SMALL_BACKPACK
+result:
+  item: MEDIUM_BACKPACK
+  amount: 1

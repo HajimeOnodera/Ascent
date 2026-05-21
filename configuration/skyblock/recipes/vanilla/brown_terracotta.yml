@@ -1,0 +1,12 @@
+id: BROWN_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: BROWN_DYE
+result:
+  item: BROWN_TERRACOTTA
+  amount: 8

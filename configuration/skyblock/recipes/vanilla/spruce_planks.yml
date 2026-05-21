@@ -1,0 +1,7 @@
+id: SPRUCE_PLANKS
+type: SHAPELESS
+ingredients:
+  - SPRUCE_LOG
+result:
+  item: SPRUCE_PLANKS
+  amount: 4

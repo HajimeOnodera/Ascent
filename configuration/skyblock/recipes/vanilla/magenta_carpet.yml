@@ -1,0 +1,9 @@
+id: MAGENTA_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: MAGENTA_WOOL
+result:
+  item: MAGENTA_CARPET
+  amount: 3

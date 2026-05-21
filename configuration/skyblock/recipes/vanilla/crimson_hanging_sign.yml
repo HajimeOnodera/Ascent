@@ -1,0 +1,12 @@
+id: CRIMSON_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_CRIMSON_STEM
+result:
+  item: CRIMSON_HANGING_SIGN
+  amount: 6

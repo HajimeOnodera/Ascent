@@ -1,0 +1,11 @@
+id: REVENANT_VISCERA
+type: SHAPELESS
+ingredients:
+  - {item: REVENANT_FLESH, amount: 32}
+  - {item: REVENANT_FLESH, amount: 32}
+  - {item: REVENANT_FLESH, amount: 32}
+  - {item: REVENANT_FLESH, amount: 32}
+  - {item: ENCHANTED_STRING, amount: 32}
+result:
+  item: REVENANT_VISCERA
+  amount: 1

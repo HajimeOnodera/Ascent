@@ -16,11 +16,13 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.sound.SoundEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static fun.ascent.common.StringUtility.text;
+import static net.kyori.adventure.sound.Sound.*;
 
 public class CraftingMenu {
 
@@ -123,6 +125,7 @@ public class CraftingMenu {
             SkyblockRecipe.CraftingResult craftResult = recipe.getCanCraft().apply(player);
             if (!craftResult.allowed()) {
                 player.sendMessage("§c" + craftResult.errorMessage());
+                player.playSound(sound(SoundEvent.ENTITY_VILLAGER_NO, Source.MASTER, 1f, 1f));
                 return;
             }
 
@@ -165,6 +168,7 @@ public class CraftingMenu {
                     ItemStack finalOutput = craftedItem.withAmount(totalAmount);
                     player.getInventory().addItemStack(finalOutput);
                     MinecraftServer.getGlobalEventHandler().call(new PlayerCraftItemEvent(player, finalOutput));
+                    player.playSound(sound(SoundEvent.BLOCK_NOTE_BLOCK_PLING, Source.MASTER, 1f, 1.2f));
                 }
             } else {
                 ItemStack cursorItem = player.getInventory().getCursorItem();
@@ -183,6 +187,7 @@ public class CraftingMenu {
                     player.getInventory().setCursorItem(craftedItem);
                 }
                 MinecraftServer.getGlobalEventHandler().call(new PlayerCraftItemEvent(player, craftedItem));
+                player.playSound(sound(SoundEvent.BLOCK_NOTE_BLOCK_PLING, Source.MASTER, 1f, 1.2f));
             }
 
             updateResult(inv, player);

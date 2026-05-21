@@ -1,0 +1,12 @@
+id: BROWN_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: BROWN_DYE
+result:
+  item: BROWN_STAINED_GLASS
+  amount: 8

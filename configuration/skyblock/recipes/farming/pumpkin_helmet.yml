@@ -1,0 +1,13 @@
+id: PUMPKIN_HELMET
+type: SHAPED
+requirements:
+  collections:
+    PUMPKIN: 2
+pattern:
+  - "AAA"
+  - "A A"
+ingredients:
+  A: PUMPKIN
+result:
+  item: PUMPKIN_HELMET
+  amount: 1

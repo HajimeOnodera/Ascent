@@ -1,0 +1,12 @@
+id: IRON_HOE
+type: SHAPED
+pattern:
+  - "AA"
+  - " B"
+  - " B"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: IRON_HOE
+  amount: 1

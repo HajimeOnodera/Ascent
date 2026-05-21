@@ -1,0 +1,9 @@
+id: POLISHED_DIORITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: POLISHED_DIORITE
+result:
+  item: POLISHED_DIORITE_SLAB
+  amount: 6

@@ -1,0 +1,7 @@
+id: MANGROVE_PLANKS
+type: SHAPELESS
+ingredients:
+  - MANGROVE_LOG
+result:
+  item: MANGROVE_PLANKS
+  amount: 4

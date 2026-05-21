@@ -1,0 +1,12 @@
+id: BOOKSHELF
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+  B: BOOK
+result:
+  item: BOOKSHELF
+  amount: 1

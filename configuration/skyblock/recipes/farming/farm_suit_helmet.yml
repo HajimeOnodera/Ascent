@@ -1,0 +1,13 @@
+id: FARM_SUIT_HELMET
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 3
+pattern:
+  - "AAA"
+  - "A A"
+ingredients:
+  A: HAY_BALE
+result:
+  item: FARM_SUIT_HELMET
+  amount: 1

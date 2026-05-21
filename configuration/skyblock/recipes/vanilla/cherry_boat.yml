@@ -1,0 +1,10 @@
+id: CHERRY_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_BOAT
+  amount: 1

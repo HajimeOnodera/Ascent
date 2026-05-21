@@ -1,0 +1,10 @@
+id: PALE_OAK_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: PALE_OAK_PLANKS
+result:
+  item: PALE_OAK_BOAT
+  amount: 1

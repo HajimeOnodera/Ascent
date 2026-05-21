@@ -1,0 +1,9 @@
+id: SMOOTH_STONE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: SMOOTH_STONE
+result:
+  item: SMOOTH_STONE_SLAB
+  amount: 6

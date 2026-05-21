@@ -1,0 +1,12 @@
+id: OAK_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: OAK_PLANKS
+  B: STICK
+result:
+  item: OAK_SIGN
+  amount: 3

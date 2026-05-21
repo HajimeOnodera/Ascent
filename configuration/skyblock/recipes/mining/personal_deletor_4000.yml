@@ -1,0 +1,16 @@
+id: PERSONAL_DELETOR_4000
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 9
+pattern:
+  - "AAA"
+  - "ABA"
+  - "ACA"
+ingredients:
+  A: {item: ENCHANTED_IRON_INGOT, amount: 16}
+  B: ENCHANTED_LAVA_BUCKET
+  C: ENCHANTED_REDSTONE_BLOCK
+result:
+  item: PERSONAL_DELETOR_4000
+  amount: 1

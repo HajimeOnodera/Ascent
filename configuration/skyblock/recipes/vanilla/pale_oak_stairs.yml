@@ -1,0 +1,11 @@
+id: PALE_OAK_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: PALE_OAK_PLANKS
+result:
+  item: PALE_OAK_STAIRS
+  amount: 4

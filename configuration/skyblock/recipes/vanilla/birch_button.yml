@@ -1,0 +1,7 @@
+id: BIRCH_BUTTON
+type: SHAPELESS
+ingredients:
+  - BIRCH_PLANKS
+result:
+  item: BIRCH_BUTTON
+  amount: 1

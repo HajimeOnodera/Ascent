@@ -1,0 +1,11 @@
+id: ACACIA_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: ACACIA_BOAT
+result:
+  item: ACACIA_CHEST_BOAT
+  amount: 1

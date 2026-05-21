@@ -1,0 +1,7 @@
+id: RED_DYE_ALT2
+type: SHAPELESS
+ingredients:
+  - BEETROOT
+result:
+  item: RED_DYE
+  amount: 1

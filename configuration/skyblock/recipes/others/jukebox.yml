@@ -1,0 +1,12 @@
+id: JUKEBOX
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+  B: DIAMOND
+result:
+  item: JUKEBOX
+  amount: 1

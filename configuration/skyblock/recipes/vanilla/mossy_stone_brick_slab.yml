@@ -1,0 +1,9 @@
+id: MOSSY_STONE_BRICK_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: MOSSY_STONE_BRICKS
+result:
+  item: MOSSY_STONE_BRICK_SLAB
+  amount: 6

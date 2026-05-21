@@ -1,0 +1,7 @@
+id: BLAZE_POWDER
+type: SHAPELESS
+ingredients:
+  - BLAZE_ROD
+result:
+  item: BLAZE_POWDER
+  amount: 2

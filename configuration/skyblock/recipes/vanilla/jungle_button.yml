@@ -1,0 +1,7 @@
+id: JUNGLE_BUTTON
+type: SHAPELESS
+ingredients:
+  - JUNGLE_PLANKS
+result:
+  item: JUNGLE_BUTTON
+  amount: 1

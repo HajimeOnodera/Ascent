@@ -1,0 +1,8 @@
+id: PINK_DYE_ALT2
+type: SHAPELESS
+ingredients:
+  - RED_DYE
+  - WHITE_DYE
+result:
+  item: PINK_DYE
+  amount: 2

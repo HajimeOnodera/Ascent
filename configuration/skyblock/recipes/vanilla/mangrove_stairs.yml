@@ -1,0 +1,11 @@
+id: MANGROVE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: MANGROVE_PLANKS
+result:
+  item: MANGROVE_STAIRS
+  amount: 4

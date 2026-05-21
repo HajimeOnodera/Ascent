@@ -1,0 +1,11 @@
+id: CHERRY_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: CHERRY_PLANKS
+  B: STICK
+result:
+  item: CHERRY_FENCE
+  amount: 3

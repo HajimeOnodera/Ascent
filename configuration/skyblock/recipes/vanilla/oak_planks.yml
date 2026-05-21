@@ -1,0 +1,7 @@
+id: OAK_PLANKS
+type: SHAPELESS
+ingredients:
+  - OAK_LOG
+result:
+  item: OAK_PLANKS
+  amount: 4

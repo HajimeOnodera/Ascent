@@ -1,0 +1,7 @@
+id: WHITE_DYE
+type: SHAPELESS
+ingredients:
+  - BONE_MEAL
+result:
+  item: WHITE_DYE
+  amount: 1

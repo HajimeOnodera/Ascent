@@ -1,0 +1,16 @@
+id: LARGE_ENCHANTED_FISHING_SACK
+type: SHAPED
+requirements:
+  collections:
+    PUFFERFISH: 10
+pattern:
+  - "ABA"
+  - "ACA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_PUFFERFISH, amount: 16}
+  B: {item: ENCHANTED_STRING, amount: 16}
+  C: {item: ENCHANTED_LEATHER, amount: 12}
+result:
+  item: LARGE_ENCHANTED_FISHING_SACK
+  amount: 1

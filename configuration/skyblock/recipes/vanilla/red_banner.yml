@@ -1,0 +1,12 @@
+id: RED_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: RED_WOOL
+  B: STICK
+result:
+  item: RED_BANNER
+  amount: 1

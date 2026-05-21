@@ -1,0 +1,8 @@
+id: ORANGE_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - ORANGE_DYE
+result:
+  item: ORANGE_CANDLE
+  amount: 1

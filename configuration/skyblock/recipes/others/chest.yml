@@ -1,0 +1,11 @@
+id: CHEST
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: CHEST
+  amount: 1
