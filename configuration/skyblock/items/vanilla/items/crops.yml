@@ -1,223 +1,227 @@
 items:
-  - id: CACTUS
-    material: cactus
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-              smelting_touch: true
-            drops:
-              - item: CACTUS_GREEN
-                chance: 1.0
-                amount: 1
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 2.0
-      - id: SELLABLE
-        value: 3.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: CACTUS_BREW
-        effect_duration: 0
-        effect_amplifier: 0
-        alchemy_xp: 10
-
-  - id: CARROT
-    material: carrot
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-            drops:
-              - item: CARROT
-                chance: 1.0
-                amount: 2-5
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.0
-      - id: SELLABLE
-        value: 3.0
-
-  - id: COCOA_BEANS
-    material: cocoa_beans
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-            drops:
-              - item: COCOA_BEANS
-                chance: 1.0
-                amount: 3
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.0
-      - id: SELLABLE
-        value: 3.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: COCOA_BREW
-        effect_duration: 0
-        effect_amplifier: 0
-        alchemy_xp: 5
-
-  - id: POTATO
-    material: potato
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-            drops:
-              - item: POTATO
-                chance: 1.0
-                amount: 2-5
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.0
-      - id: SELLABLE
-        value: 3.0
-
-  - id: POISONOUS_POTATO
-    material: poisonous_potato
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 10.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: POISON
-        effect_duration: 45
-        effect_amplifier: 0
-        alchemy_xp: 20
-
-  - id: MELON_BLOCK
-    material: melon
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-              silk_touch: true
-            drops:
-              - item: MELON_BLOCK
-                chance: 1.0
-                amount: 1
-          - conditions:
-            drops:
-              - item: MELON_SLICE
-                chance: 1.0
-                amount: 3-7
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.0
-      - id: PLACEABLE
-      - id: SELLABLE
-        value: 18.0
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AAA
-              - AAA
-              - AAA
-            ingredients:
-              A:
-                type: MELON_SLICE
-                amount: 1
-            result:
-              type: MELON_BLOCK
-              amount: 1
-
-  - id: MELON_SLICE
-    material: melon_slice
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 2.0
-      - id: CUSTOM_DISPLAY_NAME
-        display_name: Melon
-
-  - id: SEEDS
-    material: wheat_seeds
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 3.0
-      - id: CUSTOM_DISPLAY_NAME
-        display_name: Seeds
-
-  - id: WHEAT
-    material: wheat
-    rarity: COMMON
-    components:
-      - id: CUSTOM_DROP
-        rules:
-          - conditions:
-            drops:
-              - item: WHEAT
-                chance: 1.0
-                amount: 1
-              - item: SEEDS
-                chance: 1.0
-                amount: 1-4
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.0
-      - id: SELLABLE
-        value: 6.0
-
-  - id: SUGAR_CANE
-    material: sugar_cane
-    rarity: COMMON
-    components:
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 2.0
-      - id: SELLABLE
-        value: 4.0
-
-  - id: PUMPKIN
-    material: pumpkin
-    rarity: COMMON
-    components:
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 4.5
-      - id: SELLABLE
-        value: 10.0
-
-  - id: MUSHROOM
-    material: BROWN_MUSHROOM
-    rarity: COMMON
-    components:
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 6.0
-      - id: SELLABLE
-        value: 10.0
-
-  - id: RED_MUSHROOM
-    rarity: COMMON
-    material: RED_MUSHROOM
-    components:
-      - id: SKILLABLE_MINE
-        category: FARMING
-        mining_value: 6.0
-      - id: SELLABLE
-        value: 10.0
-
-  - id: APPLE
-    rarity: COMMON
-    material: APPLE
-
-  - id: BAMBOO
-    rarity: COMMON
-    material: BAMBOO
-
-  - id: BEETROOT
-    rarity: COMMON
-    material: BEETROOT
+- id: CACTUS
+  material: cactus
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions:
+        smelting_touch: true
+      drops:
+      - item: CACTUS_GREEN
+        chance: 1.0
+        amount: 1
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 2.0
+  - id: SELLABLE
+    value: 3.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: CACTUS_BREW
+    effect_duration: 0
+    effect_amplifier: 0
+    alchemy_xp: 10
+  - id: STACKABLE
+- id: CARROT
+  material: carrot
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions: null
+      drops:
+      - item: CARROT
+        chance: 1.0
+        amount: 2-5
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.0
+  - id: SELLABLE
+    value: 3.0
+  - id: STACKABLE
+- id: COCOA_BEANS
+  material: cocoa_beans
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions: null
+      drops:
+      - item: COCOA_BEANS
+        chance: 1.0
+        amount: 3
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.0
+  - id: SELLABLE
+    value: 3.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: COCOA_BREW
+    effect_duration: 0
+    effect_amplifier: 0
+    alchemy_xp: 5
+  - id: STACKABLE
+- id: POTATO
+  material: potato
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions: null
+      drops:
+      - item: POTATO
+        chance: 1.0
+        amount: 2-5
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.0
+  - id: SELLABLE
+    value: 3.0
+  - id: STACKABLE
+- id: POISONOUS_POTATO
+  material: poisonous_potato
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 10.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: POISON
+    effect_duration: 45
+    effect_amplifier: 0
+    alchemy_xp: 20
+  - id: STACKABLE
+- id: MELON_BLOCK
+  material: melon
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions:
+        silk_touch: true
+      drops:
+      - item: MELON_BLOCK
+        chance: 1.0
+        amount: 1
+    - conditions: null
+      drops:
+      - item: MELON_SLICE
+        chance: 1.0
+        amount: 3-7
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.0
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 18.0
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AAA
+      - AAA
+      - AAA
+      ingredients:
+        A:
+          type: MELON_SLICE
+          amount: 1
+      result:
+        type: MELON_BLOCK
+        amount: 1
+  - id: STACKABLE
+- id: MELON_SLICE
+  material: melon_slice
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 2.0
+  - id: CUSTOM_DISPLAY_NAME
+    display_name: Melon
+  - id: STACKABLE
+- id: SEEDS
+  material: wheat_seeds
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 3.0
+  - id: CUSTOM_DISPLAY_NAME
+    display_name: Seeds
+  - id: STACKABLE
+- id: WHEAT
+  material: wheat
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions: null
+      drops:
+      - item: WHEAT
+        chance: 1.0
+        amount: 1
+      - item: SEEDS
+        chance: 1.0
+        amount: 1-4
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.0
+  - id: SELLABLE
+    value: 6.0
+  - id: STACKABLE
+- id: SUGAR_CANE
+  material: sugar_cane
+  rarity: COMMON
+  components:
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 2.0
+  - id: SELLABLE
+    value: 4.0
+  - id: STACKABLE
+- id: PUMPKIN
+  material: pumpkin
+  rarity: COMMON
+  components:
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 4.5
+  - id: SELLABLE
+    value: 10.0
+  - id: STACKABLE
+- id: MUSHROOM
+  material: BROWN_MUSHROOM
+  rarity: COMMON
+  components:
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 6.0
+  - id: SELLABLE
+    value: 10.0
+  - id: STACKABLE
+- id: RED_MUSHROOM
+  rarity: COMMON
+  material: RED_MUSHROOM
+  components:
+  - id: SKILLABLE_MINE
+    category: FARMING
+    mining_value: 6.0
+  - id: SELLABLE
+    value: 10.0
+  - id: STACKABLE
+- id: APPLE
+  rarity: COMMON
+  material: APPLE
+  components:
+  - id: STACKABLE
+- id: BAMBOO
+  rarity: COMMON
+  material: BAMBOO
+  components:
+  - id: STACKABLE
+- id: BEETROOT
+  rarity: COMMON
+  material: BEETROOT
+  components:
+  - id: STACKABLE

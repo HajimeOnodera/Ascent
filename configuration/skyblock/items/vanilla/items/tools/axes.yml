@@ -1,236 +1,241 @@
 items:
-  - id: WOODEN_AXE
-    material: wooden_axe
-    rarity: COMMON
-    default_statistics:
-      damage: 10.0
-    components:
-      - id: AXE
-        axe_strength: 2
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - AB
-              - OB
-            ingredients:
-              A:
-                type: OAK_PLANKS
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-              O:
-                type: AIR
-                amount: 1
-            result:
-              type: WOODEN_AXE
-              amount: 1
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - BA
-              - B
-            ingredients:
-              A:
-                type: OAK_PLANKS
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-            result:
-              type: WOODEN_AXE
-              amount: 1
-      - id: SELLABLE
-        value: 1.0
-  - id: STONE_AXE
-    material: stone_axe
-    rarity: COMMON
-    default_statistics:
-      damage: 15.0
-    components:
-      - id: AXE
-        axe_strength: 4
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - AB
-              - OB
-            ingredients:
-              A:
-                type: COBBLESTONE
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-              O:
-                type: AIR
-                amount: 1
-            result:
-              type: STONE_AXE
-              amount: 1
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - BA
-              - B
-            ingredients:
-              A:
-                type: COBBLESTONE
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-            result:
-              type: STONE_AXE
-              amount: 1
-      - id: SELLABLE
-        value: 2.0
-  - id: IRON_AXE
-    material: iron_axe
-    rarity: COMMON
-    default_statistics:
-      damage: 25.0
-    components:
-      - id: AXE
-        axe_strength: 6
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - AB
-              - OB
-            ingredients:
-              A:
-                type: IRON_INGOT
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-              O:
-                type: AIR
-                amount: 1
-            result:
-              type: IRON_AXE
-              amount: 1
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - BA
-              - B
-            ingredients:
-              A:
-                type: IRON_INGOT
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-            result:
-              type: IRON_AXE
-              amount: 1
-      - id: SELLABLE
-        value: 4.0
-  - id: GOLDEN_AXE
-    material: golden_axe
-    rarity: COMMON
-    default_statistics:
-      damage: 20.0
-    components:
-      - id: AXE
-        axe_strength: 12
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - AB
-              - OB
-            ingredients:
-              A:
-                type: GOLD_INGOT
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-              O:
-                type: AIR
-                amount: 1
-            result:
-              type: GOLDEN_AXE
-              amount: 1
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - BA
-              - B
-            ingredients:
-              A:
-                type: GOLD_INGOT
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-            result:
-              type: GOLDEN_AXE
-              amount: 1
-      - id: SELLABLE
-        value: 6.0
-  - id: DIAMOND_AXE
-    material: diamond_axe
-    rarity: COMMON
-    default_statistics:
-      damage: 30.0
-    components:
-      - id: AXE
-        axe_strength: 8
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - AB
-              - OB
-            ingredients:
-              A:
-                type: DIAMOND
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-              O:
-                type: AIR
-                amount: 1
-            result:
-              type: DIAMOND_AXE
-              amount: 1
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AA
-              - BA
-              - B
-            ingredients:
-              A:
-                type: DIAMOND
-                amount: 1
-              B:
-                type: STICK
-                amount: 1
-            result:
-              type: DIAMOND_AXE
-              amount: 1
-      - id: SELLABLE
-        value: 12.0
+- id: WOODEN_AXE
+  material: wooden_axe
+  rarity: COMMON
+  default_statistics:
+    damage: 10.0
+  components:
+  - id: AXE
+    axe_strength: 2
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - AB
+      - OB
+      ingredients:
+        A:
+          type: OAK_PLANKS
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+        O:
+          type: AIR
+          amount: 1
+      result:
+        type: WOODEN_AXE
+        amount: 1
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - BA
+      - B
+      ingredients:
+        A:
+          type: OAK_PLANKS
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+      result:
+        type: WOODEN_AXE
+        amount: 1
+  - id: SELLABLE
+    value: 1.0
+  - id: UNSTACKABLE
+- id: STONE_AXE
+  material: stone_axe
+  rarity: COMMON
+  default_statistics:
+    damage: 15.0
+  components:
+  - id: AXE
+    axe_strength: 4
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - AB
+      - OB
+      ingredients:
+        A:
+          type: COBBLESTONE
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+        O:
+          type: AIR
+          amount: 1
+      result:
+        type: STONE_AXE
+        amount: 1
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - BA
+      - B
+      ingredients:
+        A:
+          type: COBBLESTONE
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+      result:
+        type: STONE_AXE
+        amount: 1
+  - id: SELLABLE
+    value: 2.0
+  - id: UNSTACKABLE
+- id: IRON_AXE
+  material: iron_axe
+  rarity: COMMON
+  default_statistics:
+    damage: 25.0
+  components:
+  - id: AXE
+    axe_strength: 6
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - AB
+      - OB
+      ingredients:
+        A:
+          type: IRON_INGOT
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+        O:
+          type: AIR
+          amount: 1
+      result:
+        type: IRON_AXE
+        amount: 1
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - BA
+      - B
+      ingredients:
+        A:
+          type: IRON_INGOT
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+      result:
+        type: IRON_AXE
+        amount: 1
+  - id: SELLABLE
+    value: 4.0
+  - id: UNSTACKABLE
+- id: GOLDEN_AXE
+  material: golden_axe
+  rarity: COMMON
+  default_statistics:
+    damage: 20.0
+  components:
+  - id: AXE
+    axe_strength: 12
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - AB
+      - OB
+      ingredients:
+        A:
+          type: GOLD_INGOT
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+        O:
+          type: AIR
+          amount: 1
+      result:
+        type: GOLDEN_AXE
+        amount: 1
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - BA
+      - B
+      ingredients:
+        A:
+          type: GOLD_INGOT
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+      result:
+        type: GOLDEN_AXE
+        amount: 1
+  - id: SELLABLE
+    value: 6.0
+  - id: UNSTACKABLE
+- id: DIAMOND_AXE
+  material: diamond_axe
+  rarity: COMMON
+  default_statistics:
+    damage: 30.0
+  components:
+  - id: AXE
+    axe_strength: 8
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - AB
+      - OB
+      ingredients:
+        A:
+          type: DIAMOND
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+        O:
+          type: AIR
+          amount: 1
+      result:
+        type: DIAMOND_AXE
+        amount: 1
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AA
+      - BA
+      - B
+      ingredients:
+        A:
+          type: DIAMOND
+          amount: 1
+        B:
+          type: STICK
+          amount: 1
+      result:
+        type: DIAMOND_AXE
+        amount: 1
+  - id: SELLABLE
+    value: 12.0
+  - id: UNSTACKABLE

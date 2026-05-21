@@ -1,101 +1,107 @@
 items:
-  - id: EGG
-    material: egg
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 3.0
-  - id: FEATHER
-    material: feather
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 3.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: SLOW_FALLING
-        effect_duration: 180
-        effect_amplifier: 0
-        alchemy_xp: 10
-
-  - id: LEATHER
-    material: leather
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 3.0
-
-  - id: MUTTON
-    material: mutton
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 5.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: MUTTON_BREW
-        effect_duration: 0
-        effect_amplifier: 0
-        alchemy_xp: 5
-
-  - id: RABBIT_HIDE
-    material: rabbit_hide
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 5.0
-
-  - id: RAW_BEEF
-    material: beef
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 4.0
-
-  - id: RAW_CHICKEN
-    material: chicken
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 4.0
-
-  - id: RAW_PORKCHOP
-    material: porkchop
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 5.0
-
-  - id: RAW_RABBIT
-    material: rabbit
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 4.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: LEAPING
-        effect_duration: 180
-        effect_amplifier: 0
-        alchemy_xp: 10
-
-  - id: BEEF
-    rarity: COMMON
-    material: BEEF
-
-  - id: CHICKEN
-    rarity: COMMON
-    material: CHICKEN
-
-  - id: HONEYCOMB
-    rarity: COMMON
-    material: HONEYCOMB
-
-  - id: PORKCHOP
-    rarity: COMMON
-    material: PORKCHOP
-
-  - id: RABBIT
-    rarity: COMMON
-    material: RABBIT
-
+- id: EGG
+  material: egg
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 3.0
+  - id: STACKABLE
+- id: FEATHER
+  material: feather
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 3.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: SLOW_FALLING
+    effect_duration: 180
+    effect_amplifier: 0
+    alchemy_xp: 10
+  - id: STACKABLE
+- id: LEATHER
+  material: leather
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 3.0
+  - id: STACKABLE
+- id: MUTTON
+  material: mutton
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 5.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: MUTTON_BREW
+    effect_duration: 0
+    effect_amplifier: 0
+    alchemy_xp: 5
+  - id: STACKABLE
+- id: RABBIT_HIDE
+  material: rabbit_hide
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 5.0
+  - id: STACKABLE
+- id: RAW_BEEF
+  material: beef
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 4.0
+  - id: STACKABLE
+- id: RAW_CHICKEN
+  material: chicken
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 4.0
+  - id: STACKABLE
+- id: RAW_PORKCHOP
+  material: porkchop
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 5.0
+  - id: STACKABLE
+- id: RAW_RABBIT
+  material: rabbit
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 4.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: LEAPING
+    effect_duration: 180
+    effect_amplifier: 0
+    alchemy_xp: 10
+  - id: STACKABLE
+- id: BEEF
+  rarity: COMMON
+  material: BEEF
+  components:
+  - id: STACKABLE
+- id: CHICKEN
+  rarity: COMMON
+  material: CHICKEN
+  components:
+  - id: STACKABLE
+- id: HONEYCOMB
+  rarity: COMMON
+  material: HONEYCOMB
+  components:
+  - id: STACKABLE
+- id: PORKCHOP
+  rarity: COMMON
+  material: PORKCHOP
+  components:
+  - id: STACKABLE
+- id: RABBIT
+  rarity: COMMON
+  material: RABBIT
+  components:
+  - id: STACKABLE

@@ -9,26 +9,105 @@ import fun.ascent.skyblock.item.gemstone.GemstoneSlotType;
 import fun.ascent.skyblock.player.stats.Stats;
 import net.minestom.server.color.Color;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.*;
 
 import net.minestom.server.item.Material;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 public class ItemRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemRegistry.class);
     private static final Map<String, SkyblockItem> ITEMS = new HashMap<>();
+    private static final Map<String, Boolean> YAML_STACKABLE_OVERRIDES = new HashMap<>();
+
+    public static void loadYamlOverrides() {
+        File folder = new File("configuration/skyblock/items");
+        if (folder.exists() && folder.isDirectory()) {
+            loadYamlOverridesRecursively(folder);
+        }
+        LOGGER.info("Loaded {} item stackability overrides from YAML configs.", YAML_STACKABLE_OVERRIDES.size());
+    }
+
+    private static void loadYamlOverridesRecursively(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) return;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadYamlOverridesRecursively(file);
+            } else if (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) {
+                try (InputStream inputStream = new FileInputStream(file)) {
+                    Yaml yaml = new Yaml();
+                    Map<String, Object> data = yaml.load(inputStream);
+                    if (data != null && data.containsKey("items")) {
+                        Object itemsObj = data.get("items");
+                        if (itemsObj instanceof List) {
+                            List<?> itemsList = (List<?>) itemsObj;
+                            for (Object itemObj : itemsList) {
+                                if (itemObj instanceof Map) {
+                                    Map<?, ?> itemMap = (Map<?, ?>) itemObj;
+                                    String id = (String) itemMap.get("id");
+                                    if (id != null) {
+                                        Object componentsObj = itemMap.get("components");
+                                        if (componentsObj instanceof List) {
+                                            List<?> componentsList = (List<?>) componentsObj;
+                                            for (Object compObj : componentsList) {
+                                                if (compObj instanceof Map) {
+                                                    Map<?, ?> compMap = (Map<?, ?>) compObj;
+                                                    Object compId = compMap.get("id");
+                                                    if ("STACKABLE".equals(compId)) {
+                                                        YAML_STACKABLE_OVERRIDES.put(id.toUpperCase(), false);
+                                                    } else if ("UNSTACKABLE".equals(compId)) {
+                                                        YAML_STACKABLE_OVERRIDES.put(id.toUpperCase(), true);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("Failed to load YAML item config: {}", file.getName(), e);
+                }
+            }
+        }
+    }
 
     public static void init() {
         try {
+            loadYamlOverrides();
             long count = ItemRepository.getItemCount();
             if (count > 0) {
                 LOGGER.info("Loading items from MongoDB cache...");
                 List<Document> docs = ItemRepository.getAllItems();
+                List<Document> docsToUpdate = new ArrayList<>();
                 for (Document doc : docs) {
                     SkyblockItemData data = deserializeData(doc);
+                    
+                    // Apply YAML override check to see if database needs sync
+                    Boolean overrideUnstackable = YAML_STACKABLE_OVERRIDES.get(data.id().toUpperCase());
+                    if (overrideUnstackable != null && overrideUnstackable != data.unstackable()) {
+                        // DB needs to be updated with the YAML override
+                        data = new SkyblockItemData(
+                                data.id(), data.name(), data.material(), data.rarity(), data.itemType(),
+                                data.skinValue(), data.npcSellPrice(), data.stats(), data.gemstoneSlotTypes(),
+                                data.soulbound(), data.dungeon(), data.glowing(), overrideUnstackable,
+                                data.color(), data.description(), data.itemModel()
+                        );
+                        docsToUpdate.add(serializeData(data));
+                    }
+                    
                     ITEMS.put(data.id(), convert(data));
+                }
+                if (!docsToUpdate.isEmpty()) {
+                    LOGGER.info("Updating {} items in MongoDB with YAML overrides...", docsToUpdate.size());
+                    ItemRepository.saveItems(docsToUpdate);
                 }
                 LOGGER.info("Loaded {} items from MongoDB.", ITEMS.size());
             } else {
@@ -36,6 +115,16 @@ public class ItemRegistry {
                 var rawItems = HypixelItemFetcher.fetchItems();
                 List<Document> docsToSave = new ArrayList<>();
                 for (SkyblockItemData data : rawItems) {
+                    // Apply YAML override to the newly fetched items
+                    Boolean overrideUnstackable = YAML_STACKABLE_OVERRIDES.get(data.id().toUpperCase());
+                    if (overrideUnstackable != null) {
+                        data = new SkyblockItemData(
+                                data.id(), data.name(), data.material(), data.rarity(), data.itemType(),
+                                data.skinValue(), data.npcSellPrice(), data.stats(), data.gemstoneSlotTypes(),
+                                data.soulbound(), data.dungeon(), data.glowing(), overrideUnstackable,
+                                data.color(), data.description(), data.itemModel()
+                        );
+                    }
                     ITEMS.put(data.id(), convert(data));
                     docsToSave.add(serializeData(data));
                 }
@@ -102,11 +191,14 @@ public class ItemRegistry {
     }
 
     private static SkyblockItem convert(SkyblockItemData data) {
+        Boolean overrideUnstackable = YAML_STACKABLE_OVERRIDES.get(data.id().toUpperCase());
+        boolean isUnstackable = overrideUnstackable != null ? overrideUnstackable : data.unstackable();
+
         SkyblockItem.Builder builder = SkyblockItem.builder(data.id(), data.material(), data.rarity())
                 .displayName(data.name())
                 .itemType(data.itemType())
                 .glowing(data.glowing())
-                .unstackable(data.unstackable());
+                .unstackable(isUnstackable);
 
         if (data.hasSkin()) {
             builder.skinValue(data.skinValue());

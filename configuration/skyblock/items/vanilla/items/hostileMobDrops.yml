@@ -1,147 +1,148 @@
 items:
-  - id: BLAZE_ROD
-    material: blaze_rod
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 9.0
-
-  - id: BONE
-    material: bone
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 2.0
-
-  - id: BONE_MEAL
-    material: bone_meal
-    rarity: COMMON
-    components:
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPELESS
-            recipe-type: NONE
-            ingredients:
-              - type: BONE
-                amount: 1
-            result:
-              type: BONE_MEAL
-              amount: 3
-
-  - id: ENDER_PEARL
-    material: ender_pearl
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 7.0
-
-  - id: EYE_OF_ENDER
-    material: ender_eye
-    rarity: COMMON
-    components:
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPELESS
-            recipe-type: NONE
-            ingredients:
-              - type: ENDER_PEARL
-                amount: 1
-              - type: BLAZE_POWDER
-                amount: 1
-            result:
-              type: EYE_OF_ENDER
-              amount: 1
-      - id: SELLABLE
-        value: 15.0
-
-  - id: FERMENTED_SPIDER_EYE
-    material: fermented_spider_eye
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 10.0
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPELESS
-            recipe-type: NONE
-            ingredients:
-              - type: BROWN_MUSHROOM
-                amount: 1
-              - type: SUGAR
-                amount: 1
-              - type: SPIDER_EYE
-                amount: 1
-            result:
-              type: FERMENTED_SPIDER_EYE
-              amount: 1
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: WEAKNESS
-        effect_duration: 90
-        effect_amplifier: 0
-        alchemy_xp: 10
-
-  - id: GUNPOWDER
-    material: gunpowder
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 4.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: MODIFIER
-        effect_duration: 0
-        effect_amplifier: 0
-        alchemy_xp: 5
-
-  - id: ROTTEN_FLESH
-    material: rotten_flesh
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 2.0
-
-  - id: SLIME_BALL
-    material: slime_ball
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 5.0
-      - id: BREWING_INGREDIENT
-        brewing_time_seconds: 20
-        effect: SLIME_BREW
-        effect_duration: 0
-        effect_amplifier: 0
-        alchemy_xp: 10
-
-  - id: SLIME_BLOCK
-    material: slime_block
-    rarity: COMMON
-    components:
-      - id: PLACEABLE
-      - id: SELLABLE
-        value: 45.0
-      - id: DEFAULT_CRAFTABLE
-        recipes:
-          - type: SHAPED
-            recipe-type: NONE
-            pattern:
-              - AAA
-              - AAA
-              - AAA
-            ingredients:
-              A:
-                type: SLIME_BALL
-                amount: 1
-            result:
-              type: SLIME_BLOCK
-              amount: 1
-
-  - id: STRING
-    material: string
-    rarity: COMMON
-    components:
-      - id: SELLABLE
-        value: 3.0
-      - id: CUSTOM_DISPLAY_NAME
-        display_name: String
+- id: BLAZE_ROD
+  material: blaze_rod
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 9.0
+  - id: UNSTACKABLE
+- id: BONE
+  material: bone
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 2.0
+  - id: STACKABLE
+- id: BONE_MEAL
+  material: bone_meal
+  rarity: COMMON
+  components:
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPELESS
+      recipe-type: NONE
+      ingredients:
+      - type: BONE
+        amount: 1
+      result:
+        type: BONE_MEAL
+        amount: 3
+  - id: STACKABLE
+- id: ENDER_PEARL
+  material: ender_pearl
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 7.0
+  - id: STACKABLE
+- id: EYE_OF_ENDER
+  material: ender_eye
+  rarity: COMMON
+  components:
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPELESS
+      recipe-type: NONE
+      ingredients:
+      - type: ENDER_PEARL
+        amount: 1
+      - type: BLAZE_POWDER
+        amount: 1
+      result:
+        type: EYE_OF_ENDER
+        amount: 1
+  - id: SELLABLE
+    value: 15.0
+  - id: STACKABLE
+- id: FERMENTED_SPIDER_EYE
+  material: fermented_spider_eye
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 10.0
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPELESS
+      recipe-type: NONE
+      ingredients:
+      - type: BROWN_MUSHROOM
+        amount: 1
+      - type: SUGAR
+        amount: 1
+      - type: SPIDER_EYE
+        amount: 1
+      result:
+        type: FERMENTED_SPIDER_EYE
+        amount: 1
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: WEAKNESS
+    effect_duration: 90
+    effect_amplifier: 0
+    alchemy_xp: 10
+  - id: STACKABLE
+- id: GUNPOWDER
+  material: gunpowder
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 4.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: MODIFIER
+    effect_duration: 0
+    effect_amplifier: 0
+    alchemy_xp: 5
+  - id: STACKABLE
+- id: ROTTEN_FLESH
+  material: rotten_flesh
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 2.0
+  - id: STACKABLE
+- id: SLIME_BALL
+  material: slime_ball
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 5.0
+  - id: BREWING_INGREDIENT
+    brewing_time_seconds: 20
+    effect: SLIME_BREW
+    effect_duration: 0
+    effect_amplifier: 0
+    alchemy_xp: 10
+  - id: STACKABLE
+- id: SLIME_BLOCK
+  material: slime_block
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 45.0
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AAA
+      - AAA
+      - AAA
+      ingredients:
+        A:
+          type: SLIME_BALL
+          amount: 1
+      result:
+        type: SLIME_BLOCK
+        amount: 1
+  - id: STACKABLE
+- id: STRING
+  material: string
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 3.0
+  - id: CUSTOM_DISPLAY_NAME
+    display_name: String
+  - id: STACKABLE

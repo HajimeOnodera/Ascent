@@ -614,7 +614,7 @@ public class SkyblockItem {
         private boolean bookOfStats = false;
         private int kills = 0;
         private boolean artOfPeace = false;
-        private boolean unstackable = false;
+        private Boolean unstackable = null;
         private UUID uuid = null;
 
         private Builder(String itemId, Material material, Rarity rarity) {
@@ -655,8 +655,12 @@ public class SkyblockItem {
         public Builder uuid(UUID uuid) { this.uuid = uuid; return this; }
 
         public SkyblockItem build() {
-            if (itemType.isWeapon() || itemType.isArmor() || itemType.isTool() || itemType.isEquipment() || itemType.isAccessory()) {
-                this.unstackable = true;
+            if (this.unstackable == null) {
+                if (itemType.isWeapon() || itemType.isArmor() || itemType.isTool() || itemType.isEquipment() || itemType.isAccessory()) {
+                    this.unstackable = true;
+                } else {
+                    this.unstackable = false;
+                }
             }
             return new SkyblockItem(this);
         }
