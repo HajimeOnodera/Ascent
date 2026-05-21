@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.util.*;
 
 import net.minestom.server.item.Material;
+import net.minestom.server.item.ItemStack;
 import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -248,7 +249,58 @@ public class ItemRegistry {
     }
 
     public static SkyblockItem getItem(String id) {
-        return ITEMS.get(id);
+        if (id == null) return null;
+        SkyblockItem item = ITEMS.get(id);
+        if (item != null) return item;
+        item = ITEMS.get(id.toUpperCase());
+        if (item != null) return item;
+        return ITEMS.get(id.toLowerCase());
+    }
+
+    public static SkyblockItem getItemByMaterial(Material material) {
+        if (material == null || material == Material.AIR) return null;
+        String matName = material.name().toUpperCase();
+        
+        // 1. Explicit Skyblock special mappings
+        String targetId = switch (matName) {
+            case "WHEAT_SEEDS" -> "SEEDS";
+            case "CARROT", "CARROTS" -> "CARROT";
+            case "POTATO", "POTATOES" -> "POTATO";
+            case "MELON" -> "MELON_BLOCK";
+            case "COD" -> "RAW_FISH";
+            case "SALMON" -> "RAW_SALMON";
+            case "STONE" -> "COBBLESTONE";
+            case "GLOWSTONE" -> "GLOWSTONE_DUST";
+            default -> null;
+        };
+        
+        if (targetId != null) {
+            SkyblockItem item = getItem(targetId);
+            if (item != null) return item;
+        }
+        
+        // 2. Try the material name directly
+        SkyblockItem itemNameMatch = getItem(matName);
+        if (itemNameMatch != null) {
+            return itemNameMatch;
+        }
+        
+        // 3. Fallback: Search all registered Skyblock items by matching material
+        for (SkyblockItem item : ITEMS.values()) {
+            if (item.getMaterial() == material) {
+                return item;
+            }
+        }
+        
+        return null;
+    }
+
+    public static ItemStack createSkyblockOrVanillaStack(Material material, int amount) {
+        SkyblockItem item = getItemByMaterial(material);
+        if (item != null) {
+            return item.buildItemStack().withAmount(amount);
+        }
+        return ItemStack.of(material, amount);
     }
 
     public static boolean hasItem(String id) {

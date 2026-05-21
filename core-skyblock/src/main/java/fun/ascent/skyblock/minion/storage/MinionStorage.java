@@ -94,7 +94,7 @@ public final class MinionStorage {
                 return false;
             }
             int moved = Math.min(64, remaining);
-            target.add(ItemStack.of(stack.material(), moved));
+            target.add(stack.withAmount(moved));
             remaining -= moved;
         }
         compress(target);
