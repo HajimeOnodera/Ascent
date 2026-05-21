@@ -78,6 +78,9 @@ public class ItemRegistry {
         Material material = materialStr != null ? Material.fromKey(materialStr) : Material.PAPER;
         if (material == null) material = Material.PAPER;
 
+        Boolean unstackableVal = doc.getBoolean("unstackable");
+        boolean unstackable = unstackableVal != null ? unstackableVal : false;
+
         return new SkyblockItemData(
                 doc.getString("_id"),
                 doc.getString("name"),
@@ -91,7 +94,7 @@ public class ItemRegistry {
                 doc.getString("soulbound"),
                 doc.getBoolean("dungeon"),
                 doc.getBoolean("glowing"),
-                doc.getBoolean("unstackable"),
+                unstackable,
                 doc.getString("color"),
                 doc.getString("description"),
                 doc.getString("itemModel")
@@ -102,7 +105,8 @@ public class ItemRegistry {
         SkyblockItem.Builder builder = SkyblockItem.builder(data.id(), data.material(), data.rarity())
                 .displayName(data.name())
                 .itemType(data.itemType())
-                .glowing(data.glowing());
+                .glowing(data.glowing())
+                .unstackable(data.unstackable());
 
         if (data.hasSkin()) {
             builder.skinValue(data.skinValue());
