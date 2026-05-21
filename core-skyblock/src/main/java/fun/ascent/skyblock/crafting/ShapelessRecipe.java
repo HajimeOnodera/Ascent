@@ -60,7 +60,7 @@ public class ShapelessRecipe extends SkyblockRecipe {
                 boolean idMatches;
                 String reqId = req.getItemId().toUpperCase().replace("MINECRAFT:", "");
                 if (si == null) {
-                    idMatches = stack.material().name().equalsIgnoreCase(reqId);
+                    idMatches = stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
                 } else {
                     idMatches = si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
                 }
@@ -90,7 +90,7 @@ public class ShapelessRecipe extends SkyblockRecipe {
                 boolean idMatches;
                 String reqId = req.getItemId().toUpperCase().replace("MINECRAFT:", "");
                 if (si == null) {
-                    idMatches = stack.material().name().equalsIgnoreCase(reqId);
+                    idMatches = stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
                 } else {
                     idMatches = si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
                 }

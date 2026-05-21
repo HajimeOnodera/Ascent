@@ -117,7 +117,7 @@ public class ShapedRecipe extends SkyblockRecipe {
                         SkyblockItem si = SkyblockItem.fromStack(stack);
                         String ingredientId = ingredient.getItemId().toUpperCase().replace("MINECRAFT:", "");
                         if (si == null) {
-                            if (!stack.material().name().equalsIgnoreCase(ingredientId)) return false;
+                            if (!stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(ingredientId)) return false;
                         } else {
                             if (!si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(ingredientId)) return false;
                         }
