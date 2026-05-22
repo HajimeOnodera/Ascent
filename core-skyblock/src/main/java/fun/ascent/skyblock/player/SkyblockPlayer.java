@@ -1,6 +1,8 @@
 package fun.ascent.skyblock.player;
 
 import fun.ascent.database.PlayerRepository;
+import fun.ascent.skyblock.enchantment.EnchantmentNBT;
+import fun.ascent.skyblock.enchantment.EnchantmentRegistry;
 import fun.ascent.skyblock.entity.display.DroppedItemEntity;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.actionbar.ActionBar;
@@ -13,6 +15,7 @@ import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.network.player.GameProfile;
@@ -40,12 +43,20 @@ public class SkyblockPlayer extends Player {
     private final Map<String, Long> abilityCooldowns = new HashMap<>();
 
     public static final Tag<UUID> sbProfileID = Tag.UUID("profile_id");
+    public static final Tag<Boolean> FIRST_TIME_JOIN_TAG = Tag.Boolean("first_time_join").defaultValue(false);
 
     public SkyblockPlayer(PlayerConnection playerConnection, GameProfile gameProfile) {
         super(playerConnection, gameProfile);
         this.currentHealth = Stats.HEALTH.getBaseStat();
         this.currentMana = Stats.INTELLIGENCE.getBaseStat();
         loadProfiles();
+
+        boolean hasPlayedBefore = PlayerRepository.getField(getUuid(), "skyblock.has_played_before", false);
+        if (!hasPlayedBefore) {
+            setTag(FIRST_TIME_JOIN_TAG, true);
+            PlayerRepository.setField(getUuid(), "skyblock.has_played_before", true);
+        }
+
         if (playerProfiles.isEmpty()) {
             SkyblockProfile profile = ProfileManager.createProfile(this);
             addProfile(profile);
@@ -85,9 +96,8 @@ public class SkyblockPlayer extends Player {
         for (ProfilePlayer pp : target.profilePlayers) {
             if (pp.playerUUID.equals(getUuid())) {
                 this.activeProfileData = pp;
-                this.activeProfileData.skyblockPlayer = this; // Ensure transient ref is set
-                
-                // Sync data from handler to player (restores inventory, coins, etc.)
+                this.activeProfileData.skyblockPlayer = this;
+
                 pp.getDataHandler().syncToPlayer(this);
 
                 System.out.println("Profile Set Correctly");
@@ -140,15 +150,15 @@ public class SkyblockPlayer extends Player {
                 .sum();
 
         if (stat == Stats.HEALTH) {
-            for (net.minestom.server.entity.EquipmentSlot slot : List.of(
-                    net.minestom.server.entity.EquipmentSlot.HELMET,
-                    net.minestom.server.entity.EquipmentSlot.CHESTPLATE,
-                    net.minestom.server.entity.EquipmentSlot.LEGGINGS,
-                    net.minestom.server.entity.EquipmentSlot.BOOTS)) {
+            for (EquipmentSlot slot : List.of(
+                    EquipmentSlot.HELMET,
+                    EquipmentSlot.CHESTPLATE,
+                    EquipmentSlot.LEGGINGS,
+                    EquipmentSlot.BOOTS)) {
                 net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
-                if (armorPiece != null && !armorPiece.isAir()) {
-                    int growthLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(
-                            armorPiece, fun.ascent.skyblock.enchantment.EnchantmentRegistry.GROWTH);
+                if (!armorPiece.isAir()) {
+                    int growthLevel = EnchantmentNBT.getEnchantmentLevel(
+                            armorPiece, EnchantmentRegistry.GROWTH);
                     bonus += growthLevel * 15.0;
                 }
             }
@@ -196,15 +206,15 @@ public class SkyblockPlayer extends Player {
                 .sum();
 
         if (stat == Stats.DEFENSE) {
-            for (net.minestom.server.entity.EquipmentSlot slot : List.of(
-                    net.minestom.server.entity.EquipmentSlot.HELMET,
-                    net.minestom.server.entity.EquipmentSlot.CHESTPLATE,
-                    net.minestom.server.entity.EquipmentSlot.LEGGINGS,
-                    net.minestom.server.entity.EquipmentSlot.BOOTS)) {
+            for (EquipmentSlot slot : List.of(
+                    EquipmentSlot.HELMET,
+                    EquipmentSlot.CHESTPLATE,
+                    EquipmentSlot.LEGGINGS,
+                    EquipmentSlot.BOOTS)) {
                 net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
-                if (armorPiece != null && !armorPiece.isAir()) {
-                    int protLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(
-                            armorPiece, fun.ascent.skyblock.enchantment.EnchantmentRegistry.PROTECTION);
+                if (!armorPiece.isAir()) {
+                    int protLevel = EnchantmentNBT.getEnchantmentLevel(
+                            armorPiece, EnchantmentRegistry.PROTECTION);
                     bonus += protLevel * 4.0;
                 }
             }

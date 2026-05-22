@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.cmds.impl;
 
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.island.Island;
@@ -29,6 +30,9 @@ public class IslandCommand extends Command {
                     return;
                 }
                 ProfileManager.saveProfile(profile.profileID);
+                if (RedisManager.isInitialized()) {
+                    RedisManager.get().setTransferTarget(player.getUuid().toString(), "island");
+                }
                 ProxyTransfer.send(player, targetServer);
                 return;
             }

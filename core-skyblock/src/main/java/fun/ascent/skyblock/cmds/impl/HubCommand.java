@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.cmds.impl;
 
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -27,6 +28,9 @@ public class HubCommand extends Command {
                 }
                 if (player.getActiveProfile() != null) {
                     ProfileManager.saveProfile(player.getActiveProfile().profileID);
+                }
+                if (RedisManager.isInitialized()) {
+                    RedisManager.get().setTransferTarget(player.getUuid().toString(), "hub");
                 }
                 ProxyTransfer.send(player, targetServer);
                 return;

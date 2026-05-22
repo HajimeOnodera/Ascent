@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.cmds.impl;
 
+import fun.ascent.common.redis.RedisManager;
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -62,6 +63,10 @@ public class WarpCommand extends Command {
             SkyblockProfile profile = player.getActiveProfile();
             if (profile != null) {
                 ProfileManager.saveProfile(profile.profileID);
+            }
+
+            if (RedisManager.isInitialized()) {
+                RedisManager.get().setTransferTarget(player.getUuid().toString(), dest.serverType.toLowerCase());
             }
 
             player.sendMessage(text("<green>Warping to " + dest.displayName + "..."));
