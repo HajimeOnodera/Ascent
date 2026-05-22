@@ -8,6 +8,12 @@ import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.scoreboard.Sidebar;
+import fun.ascent.skyblock.quest.ActiveQuest;
+import fun.ascent.skyblock.quest.Quest;
+import fun.ascent.skyblock.quest.QuestData;
+import fun.ascent.skyblock.quest.QuestProgress;
+import fun.ascent.skyblock.quest.LocationAssociatedQuest;
+import net.minestom.server.coordinate.Pos;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +60,7 @@ public class AdvancedScoreboard {
         blocks.add(new CalendarBlock());
         blocks.add(new LocationBlock());
         blocks.add(new EconomyBlock());
+        blocks.add(new ObjectiveBlock());
         blocks.add(new FooterBlock());
     }
 
@@ -150,6 +157,77 @@ public class AdvancedScoreboard {
                 if (player.getActiveProfileData() != null) coins = player.getActiveProfileData().playerCoins;
             } catch (Exception ignored) {}
             return List.of("<white>Purse:</white> <gold>" + String.format("%.1f", coins), "");
+        }
+    }
+
+    public static class ObjectiveBlock implements ScoreboardBlock {
+        @Override
+        public List<String> render(SkyblockPlayer player) {
+            if (player.getActiveProfileData() == null) return List.of();
+            QuestData questData = player.getActiveProfileData().getQuestData();
+            if (questData == null || questData.getActiveQuests() == null || questData.getActiveQuests().isEmpty()) {
+                return List.of();
+            }
+
+            ActiveQuest activeQuest = questData.getActiveQuests().getFirst();
+            Quest quest = QuestData.getQuestClass(activeQuest.getQuestID());
+            if (quest == null) return List.of();
+
+            List<String> lines = new ArrayList<>();
+
+            if (quest instanceof LocationAssociatedQuest locationQuest) {
+                String arrow = getArrow(player.getPosition(), locationQuest.getLocation());
+                lines.add("<white>Objective " + arrow + "</white>");
+            } else {
+                lines.add("<white>Objective</white>");
+            }
+
+            lines.add("<yellow>" + quest.getName() + "</yellow>");
+
+            if (quest instanceof QuestProgress progressQuest) {
+                lines.add(" <gray>(</gray><yellow>" + activeQuest.getProgress() + "</yellow><gray>/</gray><green>" + progressQuest.getMaxProgress() + "</green><gray>)</gray>");
+            }
+
+            lines.add("");
+            return lines;
+        }
+
+        private String getArrow(Pos from, Pos to) {
+            if (from.x() == to.x() && from.y() == to.y() && from.z() == to.z()) {
+                return "•";
+            }
+
+            Pos lookingAt = from.withLookAt(to);
+            float targetYaw = lookingAt.yaw();
+
+            float currentYaw = from.yaw();
+            float yawDifference = targetYaw - currentYaw;
+
+            while (yawDifference > 180) yawDifference -= 360;
+            while (yawDifference < -180) yawDifference += 360;
+
+            float relativeAngle = yawDifference < 0 ? yawDifference + 360 : yawDifference;
+
+            relativeAngle += 22.5f;
+            if (relativeAngle >= 360) {
+                relativeAngle -= 360;
+            }
+
+            int direction = (int) (relativeAngle / 45.0f);
+
+            String color = from.distance(to) > 20 ? "<yellow><bold>" : "<green><bold>";
+            String closeTag = "</bold></" + (from.distance(to) > 20 ? "yellow" : "green") + ">";
+            return switch (direction) {
+                case 0 -> color + "⬆" + closeTag;
+                case 1 -> color + "⬈" + closeTag;
+                case 2 -> color + "➡" + closeTag;
+                case 3 -> color + "⬊" + closeTag;
+                case 4 -> color + "⬇" + closeTag;
+                case 5 -> color + "⬋" + closeTag;
+                case 6 -> color + "⬅" + closeTag;
+                case 7 -> color + "⬉" + closeTag;
+                default -> "•";
+            };
         }
     }
 
