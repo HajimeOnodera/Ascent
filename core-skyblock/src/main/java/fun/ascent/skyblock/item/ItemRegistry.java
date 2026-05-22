@@ -167,8 +167,7 @@ public class ItemRegistry {
                                                             case "UNSTACKABLE" -> unstackable = true;
                                                             default -> {
                                                                 try {
-                                                                    ItemType type = ItemType.valueOf(compIdStr.toUpperCase(Locale.ROOT));
-                                                                    itemType = type;
+                                                                    itemType = ItemType.valueOf(compIdStr.toUpperCase(Locale.ROOT));
                                                                 } catch (IllegalArgumentException ignored) {
                                                                 }
                                                             }
@@ -415,7 +414,10 @@ public class ItemRegistry {
 
         // Dynamic Fallback: if it's a valid vanilla material, construct a COMMON Skyblock item for it!
         String cleanId = resolvedId.toUpperCase(Locale.ROOT).replace("MINECRAFT:", "");
-        Material material = Material.fromKey(cleanId.toLowerCase(Locale.ROOT));
+        Material material = Material.fromKey("minecraft:" + cleanId.toLowerCase(Locale.ROOT));
+        if (material == null) {
+            material = Material.fromKey(cleanId.toLowerCase(Locale.ROOT));
+        }
         if (material == null) {
             material = Material.fromKey(cleanId.toUpperCase(Locale.ROOT));
         }

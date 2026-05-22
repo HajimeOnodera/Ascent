@@ -169,7 +169,7 @@ public class CraftingMenu {
                 if (material == null || material == Material.AIR) {
                     return;
                 }
-                craftedItem = ItemStack.of(material, recipe.getResultAmount());
+                craftedItem = ItemRegistry.createSkyblockOrVanillaStack(material, recipe.getResultAmount());
             }
 
             boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
@@ -258,7 +258,7 @@ public class CraftingMenu {
                 inv.setItemStack(RESULT_SLOT, ItemStack.AIR);
                 return;
             }
-            resultStack = ItemStack.of(material, recipe.getResultAmount());
+            resultStack = ItemRegistry.createSkyblockOrVanillaStack(material, recipe.getResultAmount());
         }
 
         List<Component> lore = new ArrayList<>(resultStack.get(DataComponents.LORE, List.of()));

@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.player.profiles;
 
 import fun.ascent.skyblock.data.SkyblockDataHandler;
+import fun.ascent.skyblock.data.impl.DatapointObject;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
@@ -107,6 +108,25 @@ public class ProfilePlayer {
         if (level == null) level = new SkyblockLevel();
         if (hotmData == null) hotmData = new HotmData();
         hotmData.postLoad();
+
+        if (getDataHandler() != null) {
+            var questsDp = getDataHandler().get(SkyblockDataHandler.Data.QUESTS, DatapointObject.class);
+            if (questsDp != null && questsDp.getValue() != null) {
+                this.questData = (QuestData) questsDp.getValue();
+            }
+            
+            var levelDp = getDataHandler().get(SkyblockDataHandler.Data.LEVEL, DatapointObject.class);
+            if (levelDp != null && levelDp.getValue() != null) {
+                this.level = (SkyblockLevel) levelDp.getValue();
+            }
+
+            var hotmDp = getDataHandler().get(SkyblockDataHandler.Data.HOTM, DatapointObject.class);
+            if (hotmDp != null && hotmDp.getValue() != null) {
+                this.hotmData = (HotmData) hotmDp.getValue();
+                this.hotmData.postLoad();
+            }
+        }
+
         if (questData == null) questData = new QuestData();
         if (playerUUID != null) {
             this.skyblockPlayer = WorldHandler.getPlayer(playerUUID);

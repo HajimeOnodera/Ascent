@@ -7,6 +7,7 @@ import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.player.stats.StatBuilder;
 import fun.ascent.skyblock.player.stats.Stats;
+import fun.ascent.skyblock.quest.QuestData;
 import lombok.Getter;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -206,6 +207,21 @@ public class SkyblockDataHandler {
             }),
 
         VISITED_REGIONS("visited_regions", DatapointStringList.class, new DatapointStringList("visited_regions", new ArrayList<>())),
+
+        QUESTS("quests", DatapointObject.class, new DatapointObject<>("quests", new QuestData(), QuestData.class),
+            (player, dp) -> {
+                QuestData qd = (QuestData) dp.getValue();
+                if (qd == null) qd = new QuestData();
+                qd.setSkyblockPlayer(player);
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().questData = qd;
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                QuestData qd = player.getActiveProfileData().getQuestData();
+                return new DatapointObject<>("quests", qd, QuestData.class);
+            }),
         ;
 
         @Getter private final String key;
