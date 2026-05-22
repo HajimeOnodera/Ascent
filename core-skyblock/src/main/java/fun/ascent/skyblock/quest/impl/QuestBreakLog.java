@@ -17,11 +17,14 @@ public class QuestBreakLog extends Quest {
         if (sp.getActiveProfileData() == null) return;
 
         QuestData data = sp.getActiveProfileData().getQuestData();
-        Material material = event.getBlock().registry().material();
+        Material material = Material.fromKey(event.getBlock().key());
         if (material == Material.OAK_LOG || material == Material.BIRCH_LOG || 
             material == Material.SPRUCE_LOG || material == Material.DARK_OAK_LOG || 
             material == Material.ACACIA_LOG || material == Material.JUNGLE_LOG ||
-            material.name().contains("LOG")) {
+            material == Material.OAK_WOOD || material == Material.BIRCH_WOOD || 
+            material == Material.SPRUCE_WOOD || material == Material.DARK_OAK_WOOD || 
+            material == Material.ACACIA_WOOD || material == Material.JUNGLE_WOOD ||
+            (material != null && (material.name().contains("LOG") || material.name().endsWith("_WOOD")))) {
             
             data.endQuest(QuestBreakLog.class);
         }

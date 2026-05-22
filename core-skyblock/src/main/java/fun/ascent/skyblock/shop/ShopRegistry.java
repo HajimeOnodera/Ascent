@@ -14,7 +14,9 @@ public class ShopRegistry {
 
     public static void initialise() {
         shops.clear();
-        Reflections reflections = new Reflections("fun.ascent.skyblock.shop.impl");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.shop.impl", ShopRegistry.class.getClassLoader()))
+                .addClassLoaders(ShopRegistry.class.getClassLoader()));
         Set<Class<? extends ShopData>> shopsFound = reflections.getSubTypesOf(ShopData.class);
         for (Class<? extends ShopData> shop : shopsFound) {
             if (Modifier.isAbstract(shop.getModifiers()) || shop.isInterface()) {

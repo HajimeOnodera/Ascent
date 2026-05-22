@@ -271,6 +271,86 @@ public class BlockManager {
                 .xpAmount(6.0)
                 .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
                 .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.JUNGLE_LOG)
+                .skyblockItemId("JUNGLE_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.ACACIA_LOG)
+                .skyblockItemId("ACACIA_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.OAK_WOOD)
+                .skyblockItemId("OAK_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.BIRCH_WOOD)
+                .skyblockItemId("BIRCH_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.SPRUCE_WOOD)
+                .skyblockItemId("SPRUCE_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.DARK_OAK_WOOD)
+                .skyblockItemId("DARK_OAK_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.JUNGLE_WOOD)
+                .skyblockItemId("JUNGLE_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
+
+        register(SkyblockBlock.builder()
+                .vanillaMaterial(Material.ACACIA_WOOD)
+                .skyblockItemId("ACACIA_LOG")
+                .baseDropAmount(1)
+                .fortuneApplicable(true)
+                .skillType(SkillType.FORAGING)
+                .xpAmount(6.0)
+                .validRegions(List.of(RegionType.FOREST, RegionType.PRIVATE_ISLAND))
+                .build());
     }
 
     public static void register(SkyblockBlock block) {

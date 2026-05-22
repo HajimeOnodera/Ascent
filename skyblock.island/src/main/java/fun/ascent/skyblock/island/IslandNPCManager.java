@@ -28,17 +28,15 @@ public class IslandNPCManager {
         }
         initialized = true;
 
-        handler.addListener(IslandLoadEvent.class, event -> {
-            spawnIslandNPCs(event.instance());
-        });
+        handler.addListener(IslandLoadEvent.class, event -> spawnIslandNPCs(event.instance()));
 
-        handler.addListener(IslandSaveEvent.class, event -> {
-            removeIslandNPCs(event.island().getInstance());
-        });
+        handler.addListener(IslandSaveEvent.class, event -> removeIslandNPCs(event.island().getInstance()));
     }
 
     private static void spawnIslandNPCs(Instance instance) {
-        Reflections reflections = new Reflections("fun.ascent.skyblock.island.npc");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.island.npc", IslandNPCManager.class.getClassLoader()))
+                .addClassLoaders(IslandNPCManager.class.getClassLoader()));
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
         LOGGER.info("Trying to spawn {} NPCs for island {}", npcs.size(), instance.getTag(WorldHandler.worldID));
 
@@ -71,7 +69,9 @@ public class IslandNPCManager {
     }
 
     private static void removeIslandNPCs(Instance instance) {
-        Reflections reflections = new Reflections("fun.ascent.skyblock.island.npc");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.island.npc", IslandNPCManager.class.getClassLoader()))
+                .addClassLoaders(IslandNPCManager.class.getClassLoader()));
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
         
         for (Class<? extends NpcDefinition> npc : npcs) {

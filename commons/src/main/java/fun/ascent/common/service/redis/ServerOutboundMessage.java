@@ -42,7 +42,9 @@ public class ServerOutboundMessage {
     private record PendingRequest(Consumer<String> callback, long createdAt) {}
 
     static {
-        Reflections reflections = new Reflections("fun.ascent.common.protocol.objects");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.common.protocol.objects", ServerOutboundMessage.class.getClassLoader()))
+                .addClassLoaders(ServerOutboundMessage.class.getClassLoader()));
         Set<Class<? extends ProtocolObject>> classes = reflections.getSubTypesOf(ProtocolObject.class);
         for (Class<? extends ProtocolObject> clazz : classes) {
             try {

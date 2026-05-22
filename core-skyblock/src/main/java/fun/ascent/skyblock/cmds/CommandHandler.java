@@ -44,7 +44,9 @@ public class CommandHandler {
         register(new DroomCommand());
         register(new ShopCommand());
 
-        Reflections reflections = new Reflections("fun.ascent.skyblock.cmds.impl");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.cmds.impl", CommandHandler.class.getClassLoader()))
+                .addClassLoaders(CommandHandler.class.getClassLoader()));
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> cmd : commands) {
             try {

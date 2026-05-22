@@ -21,7 +21,9 @@ public class EventManager {
     }
 
     public static void registerEventsFromReflection(){
-        Reflections reflections = new Reflections("fun.ascent.skyblock.events.impl");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.events.impl", EventManager.class.getClassLoader()))
+                .addClassLoaders(EventManager.class.getClassLoader()));
         Set<Class<? extends SEvent>> events = reflections.getSubTypesOf(SEvent.class);
         for (Class<? extends SEvent> event : events) {
             if (Modifier.isAbstract(event.getModifiers()) || event.isInterface()) {

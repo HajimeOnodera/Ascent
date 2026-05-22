@@ -17,7 +17,7 @@ public class QuestMineCoal extends QuestProgress {
         SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
         if (player.getActiveProfileData() == null) return;
 
-        Material mat = event.getBlock().registry().material();
+        Material mat = Material.fromKey(event.getBlock().key());
         if (mat == Material.COAL_ORE || mat == Material.DEEPSLATE_COAL_ORE) {
             QuestData data = player.getActiveProfileData().getQuestData();
             Map.Entry<ActiveQuest, Boolean> quest = data.getQuest(QuestMineCoal.class);

@@ -19,7 +19,9 @@ public interface SkyBlockService {
     }
 
     default <T> Stream<T> loopThroughPackage(String packageName, Class<T> clazz) {
-        Reflections reflections = new Reflections(packageName);
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage(packageName, clazz.getClassLoader()))
+                .addClassLoaders(clazz.getClassLoader()));
         Set<Class<? extends T>> subTypes = reflections.getSubTypesOf(clazz);
 
         return subTypes.stream()

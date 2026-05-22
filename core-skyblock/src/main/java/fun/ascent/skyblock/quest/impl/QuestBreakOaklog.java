@@ -17,8 +17,8 @@ public class QuestBreakOaklog extends QuestProgress {
         SkyblockPlayer player = (SkyblockPlayer) event.getPlayer();
         if (player.getActiveProfileData() == null) return;
 
-        Material mat = event.getBlock().registry().material();
-        if (mat == Material.OAK_LOG) {
+        Material mat = Material.fromKey(event.getBlock().key());
+        if (mat == Material.OAK_LOG || mat == Material.OAK_WOOD) {
             QuestData data = player.getActiveProfileData().getQuestData();
             Map.Entry<ActiveQuest, Boolean> quest = data.getQuest(QuestBreakOaklog.class);
             if (quest != null && !quest.getValue()) {

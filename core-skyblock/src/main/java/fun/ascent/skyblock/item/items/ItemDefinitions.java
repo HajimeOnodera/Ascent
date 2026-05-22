@@ -14,7 +14,9 @@ public class ItemDefinitions {
     private static final Map<String, ItemDefinition> DEFINITIONS = new HashMap<>();
 
     public static void init() {
-        Reflections reflections = new Reflections("fun.ascent.skyblock.item.items");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.item.items", ItemDefinitions.class.getClassLoader()))
+                .addClassLoaders(ItemDefinitions.class.getClassLoader()));
         Set<Class<? extends ItemDefinition>> classes = reflections.getSubTypesOf(ItemDefinition.class);
 
         for (Class<? extends ItemDefinition> clazz : classes) {

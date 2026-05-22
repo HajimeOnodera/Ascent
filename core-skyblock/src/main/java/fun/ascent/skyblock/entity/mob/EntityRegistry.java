@@ -46,7 +46,9 @@ public class EntityRegistry {
     }
 
     public static void scanAndRegister(String packageName) {
-        Reflections scanner = new Reflections(packageName);
+        Reflections scanner = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage(packageName, EntityRegistry.class.getClassLoader()))
+                .addClassLoaders(EntityRegistry.class.getClassLoader()));
         Set<Class<? extends SkyblockMobEntity>> found = scanner.getSubTypesOf(SkyblockMobEntity.class);
 
         for (Class<? extends SkyblockMobEntity> mobClass : found) {
