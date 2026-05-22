@@ -27,26 +27,46 @@ import static net.kyori.adventure.sound.Sound.*;
 public class CraftingMenu {
 
     private static final int[] GRID_SLOTS = {10, 11, 12, 19, 20, 21, 28, 29, 30};
-    private static final int RESULT_SLOT = 24;
+    private static final int RESULT_SLOT = 23;
     private static final int CLOSE_SLOT = 49;
+    private static final int[] QUICK_CRAFT_SLOTS = {16, 25, 34};
+    private static final int[] RED_PANE_SLOTS = {45, 46, 47, 48, 50, 51, 52, 53};
 
     public static void open(SkyblockPlayer player) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<grey>Crafting Table"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("Craft Item"));
 
-        // Fill background
+        // Fill background with gray stained glass panes
         ItemStack filler = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE).customName(Component.empty()).build();
         for (int i = 0; i < 54; i++) {
             inv.setItemStack(i, filler);
         }
 
-        // Clear grid slots and result slot
-        for (int slot : GRID_SLOTS) inv.setItemStack(slot, ItemStack.AIR);
-        inv.setItemStack(RESULT_SLOT, ItemStack.AIR);
+        // Fill red stained glass panes for Quick Craft
+        ItemStack quickCraftFiller = ItemStack.builder(Material.RED_STAINED_GLASS_PANE)
+                .customName(text("<red>Quick Craft"))
+                .lore(text("<gray>Slot Empty!"))
+                .build();
+        for (int slot : QUICK_CRAFT_SLOTS) {
+            inv.setItemStack(slot, quickCraftFiller);
+        }
 
-        inv.setItemStack(CLOSE_SLOT, ItemStack.builder(Material.BARRIER).customName(text("<red>Close")).build());
+        // Fill red stained glass panes for the bottom row
+        ItemStack redFiller = ItemStack.builder(Material.RED_STAINED_GLASS_PANE).customName(Component.empty()).build();
+        for (int slot : RED_PANE_SLOTS) {
+            inv.setItemStack(slot, redFiller);
+        }
+
+        // Clear grid slots
+        for (int slot : GRID_SLOTS) inv.setItemStack(slot, ItemStack.AIR);
+        
+        // Setup initial result slot
+        updateResult(inv, player);
+
+        // Setup close button (arrow) at slot 49
+        inv.setItemStack(CLOSE_SLOT, ItemStack.builder(Material.ARROW).customName(text("<red>Close")).build());
 
         inv.eventNode().addListener(InventoryPreClickEvent.class, event -> handleClick(event, player, inv));
-        inv.eventNode().addListener(InventoryCloseEvent.class, event -> {
+        inv.eventNode().addListener(InventoryCloseEvent.class, _ -> {
             for (int slot : GRID_SLOTS) {
                 ItemStack stack = inv.getItemStack(slot);
                 if (!stack.isAir()) {
@@ -140,7 +160,7 @@ public class CraftingMenu {
         if (slot == RESULT_SLOT) {
             event.setCancelled(true);
             ItemStack result = inv.getItemStack(RESULT_SLOT);
-            if (result.isAir()) {
+            if (result.isAir() || result.material() == Material.BARRIER) {
                 return;
             }
 
@@ -236,7 +256,13 @@ public class CraftingMenu {
     private static void updateResult(Inventory inv, SkyblockPlayer player) {
         SkyblockRecipe recipe = findCurrentRecipe(inv);
         if (recipe == null) {
-            inv.setItemStack(RESULT_SLOT, ItemStack.AIR);
+            inv.setItemStack(RESULT_SLOT, ItemStack.builder(Material.BARRIER)
+                    .customName(text("<red>Recipe Required"))
+                    .lore(
+                            text("<gray>Add the items for a valid recipe in"),
+                            text("<gray>the crafting grid to the left!")
+                    )
+                    .build());
             return;
         }
 
