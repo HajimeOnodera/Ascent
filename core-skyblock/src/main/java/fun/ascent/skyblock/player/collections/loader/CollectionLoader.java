@@ -53,14 +53,14 @@ public class CollectionLoader {
         List<CollectionCategory.ItemCollection> collections = new ArrayList<>();
         if (config.getCollections() != null) {
             for (CollectionConfig.CollectionEntry entry : config.getCollections()) {
-                collections.add(parseCollection(entry, type));
+                collections.add(parseCollection(entry));
             }
         }
 
         return new CollectionCategory(config.getName(), icon, type, collections);
     }
 
-    private static CollectionCategory.ItemCollection parseCollection(CollectionConfig.CollectionEntry entry, CollectionCategory.CollectionType categoryType) {
+    private static CollectionCategory.ItemCollection parseCollection(CollectionConfig.CollectionEntry entry) {
         String itemId = entry.getItemType();
         Material icon = parseMaterial(itemId);
         String name = formatName(itemId);
@@ -71,7 +71,7 @@ public class CollectionLoader {
                 List<CollectionUnlock> unlocks = new ArrayList<>();
                 if (rewardEntry.getRewards() != null) {
                     for (CollectionConfig.RewardAction action : rewardEntry.getRewards()) {
-                        CollectionUnlock unlock = parseUnlock(action, categoryType);
+                        CollectionUnlock unlock = parseUnlock(action);
                         if (unlock != null) unlocks.add(unlock);
                     }
                 }
@@ -82,7 +82,7 @@ public class CollectionLoader {
         return new CollectionCategory.ItemCollection(itemId, name, icon, rewards);
     }
 
-    private static CollectionUnlock parseUnlock(CollectionConfig.RewardAction action, CollectionCategory.CollectionType categoryType) {
+    private static CollectionUnlock parseUnlock(CollectionConfig.RewardAction action) {
         if (action.getType() == null) return null;
         String type = action.getType().toUpperCase();
         CollectionConfig.RewardData data = action.getData();

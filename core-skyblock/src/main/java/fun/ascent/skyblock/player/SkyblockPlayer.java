@@ -3,7 +3,6 @@ package fun.ascent.skyblock.player;
 import fun.ascent.database.PlayerRepository;
 import fun.ascent.skyblock.enchantment.EnchantmentNBT;
 import fun.ascent.skyblock.enchantment.EnchantmentRegistry;
-import fun.ascent.skyblock.entity.display.DroppedItemEntity;
 import fun.ascent.skyblock.hotm.HotmData;
 import fun.ascent.skyblock.player.actionbar.ActionBar;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -263,10 +262,5 @@ public class SkyblockPlayer extends Player {
         if (activeProfileData != null) {
             activeProfileData.playerCoins += amount;
         }
-    }
-
-    // ─── Cleanup on disconnect ───────────────────────────────────────
-    public void cleanupDroppedItems() {
-        DroppedItemEntity.clearDroppedItems(this);
     }
 }

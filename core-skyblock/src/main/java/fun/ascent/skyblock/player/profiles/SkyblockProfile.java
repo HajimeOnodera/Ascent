@@ -83,9 +83,7 @@ public class SkyblockProfile {
         if (currentProgress == 0 && newProgress > 0) {
             profilePlayers.forEach(pp -> {
                 if (pp.skyblockPlayer != null) {
-                    pp.skyblockPlayer.sendMessage("§e§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
                     pp.skyblockPlayer.sendMessage("  §6§lCOLLECTION UNLOCKED §e" + collectionDef.name());
-                    pp.skyblockPlayer.sendMessage("§e§l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
                     pp.skyblockPlayer.playSound(sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Source.MASTER, 1f, 0.5f));
                 }
             });

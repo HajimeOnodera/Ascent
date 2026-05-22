@@ -16,6 +16,5 @@ public class CustomUnlock extends CollectionUnlock {
 
     @Override
     public void apply(SkyblockProfile profile) {
-        // Handle custom awards (e.g., bag upgrades)
     }
 }

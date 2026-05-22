@@ -628,8 +628,8 @@ public class DungeonInstance {
                                       RoomTemplateLoader templates, Set<String> used) {
         return switch (room.type()) {
             case SPAWN -> templates.get("Special-Spawn");
-            case BLOOD -> pickFromNames(random, templates, used,
-                    "Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red");
+            case BLOOD -> pickFromNames(random, templates, used
+            );
             case FAIRY -> templates.get("Special-Fairy");
             case MINIBOSS -> templates.pickForType(random, RoomType.MINIBOSS, used);
             case TRAP -> {
@@ -645,12 +645,12 @@ public class DungeonInstance {
     }
 
     private RoomTemplate pickFromNames(Random random, RoomTemplateLoader templates,
-                                       Set<String> used, String... names) {
+                                       Set<String> used) {
         List<String> available = new ArrayList<>();
-        for (String name : names) {
+        for (String name : new String[]{"Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red"}) {
             if (!used.contains(name) && templates.get(name) != null) available.add(name);
         }
-        if (available.isEmpty()) available.addAll(Arrays.asList(names));
+        if (available.isEmpty()) available.addAll(Arrays.asList("Special-Blood-Pillarless", "Special-Blood-Plants", "Special-Blood-Red"));
         String picked = available.get(random.nextInt(available.size()));
         used.add(picked);
         return templates.get(picked);

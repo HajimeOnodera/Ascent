@@ -27,15 +27,15 @@ public class CollectionCategoryMenu {
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player, CollectionCategory category) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text(category.getName() + " Collections"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text(category.name() + " Collections"));
 
         CollectionMenuFormat.fill(inv);
 
-        inv.setItemStack(4, ItemStack.builder(category.getIcon())
-                .customName(text("<green>" + category.getName() + " Collections"))
+        inv.setItemStack(4, ItemStack.builder(category.icon())
+                .customName(text("<green>" + category.name() + " Collections"))
                 .build());
 
-        List<CollectionCategory.ItemCollection> collections = category.getCollections();
+        List<CollectionCategory.ItemCollection> collections = category.collections();
         for (int i = 0; i < collections.size() && i < ITEM_SLOTS.length; i++) {
             inv.setItemStack(ITEM_SLOTS[i], buildCollectionItem(player, collections.get(i)));
         }

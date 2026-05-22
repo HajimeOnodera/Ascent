@@ -29,11 +29,10 @@ public final class CollectionMenuFormat {
         }
     }
 
-    public static void addProgress(List<Component> lore, int current, int requirement, String prefix) {
+    public static void addProgress(List<Component> lore, int current, int requirement) {
         double progress = requirement <= 0 ? 1.0 : Math.clamp((double) current / requirement, 0.0, 1.0);
         int filled = (int) Math.round(progress * PROGRESS_BAR_SEGMENTS);
 
-        lore.add(text(prefix + "<yellow>" + String.format(Locale.US, "%.2f", progress * 100) + "<gold>%"));
         lore.add(text(
                 "<dark_green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
                         + "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))

@@ -40,7 +40,7 @@ public class CollectionItemMenu {
             inv.setItemStack(TIER_SLOTS[i], buildTierItem(collection, rewards.get(i), i + 1, currentTier, progress));
         }
 
-        inv.setItemStack(BACK_SLOT, CollectionMenuFormat.backButton(category.getName() + " Collection"));
+        inv.setItemStack(BACK_SLOT, CollectionMenuFormat.backButton(category.name() + " Collection"));
         inv.setItemStack(CLOSE_SLOT, CollectionMenuFormat.closeButton());
 
         inv.eventNode().addListener(InventoryPreClickEvent.class, event -> {
@@ -100,7 +100,7 @@ public class CollectionItemMenu {
         lore.add(Component.text(" "));
         
         if (playerTier == tier - 1) {
-            CollectionMenuFormat.addProgress(lore, currentProgress, reward.requirement(), "<gray>Progress: ");
+            CollectionMenuFormat.addProgress(lore, currentProgress, reward.requirement());
             lore.add(Component.text(" "));
         }
         

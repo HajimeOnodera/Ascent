@@ -5,25 +5,7 @@ import net.minestom.server.item.Material;
 
 import java.util.List;
 
-@Getter
-public class CollectionCategory {
-    private final String name;
-    private final Material icon;
-    private final CollectionType type;
-    private List<ItemCollection> collections;
-
-    public CollectionCategory(String name, Material icon, CollectionType type) {
-        this.name = name;
-        this.icon = icon;
-        this.type = type;
-    }
-
-    public CollectionCategory(String name, Material icon, CollectionType type, List<ItemCollection> collections) {
-        this.name = name;
-        this.icon = icon;
-        this.type = type;
-        this.collections = collections;
-    }
+public record CollectionCategory(String name, Material icon, CollectionType type, List<ItemCollection> collections) {
 
     public record ItemCollection(String itemId, String name, Material icon, List<CollectionReward> rewards) {
         public CollectionReward getRewardAtTier(int tier) {

@@ -22,8 +22,8 @@ public class CollectionRegistry {
     }
 
     public static void registerCategory(CollectionCategory category) {
-        CATEGORIES.put(category.getType(), category);
-        for (CollectionCategory.ItemCollection collection : category.getCollections()) {
+        CATEGORIES.put(category.type(), category);
+        for (CollectionCategory.ItemCollection collection : category.collections()) {
             COLLECTIONS_BY_ID.put(collection.itemId(), collection);
         }
     }
@@ -38,7 +38,7 @@ public class CollectionRegistry {
 
     public static CollectionCategory getCategoryFor(CollectionCategory.ItemCollection collection) {
         for (CollectionCategory category : CATEGORIES.values()) {
-            if (category.getCollections().contains(collection)) {
+            if (category.collections().contains(collection)) {
                 return category;
             }
         }

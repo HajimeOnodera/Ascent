@@ -109,10 +109,12 @@ public class CollectionOverviewMenu {
         double percent = total == 0 ? 0 : (double) unlocked / total * 100;
 
         lore.add(text("<gray>Collections Unlocked: <yellow>" + String.format("%.1f", percent) + "<gold>%"));
-        CollectionMenuFormat.addProgress(lore, unlocked, total, "");
+        CollectionMenuFormat.addProgress(lore, unlocked, total);
 
         lore.add(Component.text(" "));
-        lore.add(text("<yellow>Click to view!"));
+        lore.add(text("<dark_gray>Also accessible via /collection."));
+        lore.add(Component.text(" "));
+        lore.add(text("<yellow>Click to show rankings!"));
 
         return ItemStack.builder(Material.PAINTING)
                 .customName(text("<green>Collections"))
@@ -122,13 +124,13 @@ public class CollectionOverviewMenu {
 
     private static ItemStack buildCategoryItem(SkyblockPlayer player, CollectionCategory category) {
         List<Component> lore = new ArrayList<>();
-        lore.add(text("<gray>View your " + category.getName() + " Collections!"));
+        lore.add(text("<gray>View your " + category.name() + " Collections!"));
         lore.add(Component.text(" "));
 
-        int total = category.getCollections().size();
+        int total = category.collections().size();
         int unlocked = 0;
         if (player.getActiveProfile() != null) {
-            for (CollectionCategory.ItemCollection col : category.getCollections()) {
+            for (CollectionCategory.ItemCollection col : category.collections()) {
                 if (player.getActiveProfile().unlockedCollections.getOrDefault(col.itemId(), 0) > 0) {
                     unlocked++;
                 }
@@ -151,8 +153,8 @@ public class CollectionOverviewMenu {
         lore.add(Component.text(" "));
         lore.add(text("<yellow>Click to view!"));
 
-        return ItemStack.builder(category.getIcon())
-                .customName(text("<green>" + category.getName() + " Collections"))
+        return ItemStack.builder(category.icon())
+                .customName(text("<green>" + category.name() + " Collections"))
                 .lore(lore)
                 .build();
     }
