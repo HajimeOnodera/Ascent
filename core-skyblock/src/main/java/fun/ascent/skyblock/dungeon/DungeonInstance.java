@@ -426,7 +426,6 @@ public class DungeonInstance {
 
     private boolean shouldPlaceWitherBlock(Room roomA, Room roomB) {
         if (roomA.type() == RoomType.FAIRY || roomB.type() == RoomType.FAIRY) {
-            List<Room> mainPath = generator.mainPath();
             Room fairy = roomA.type() == RoomType.FAIRY ? roomA : roomB;
             Room other = roomA.type() == RoomType.FAIRY ? roomB : roomA;
             int fairyIdx = mainPathIndex(fairy);

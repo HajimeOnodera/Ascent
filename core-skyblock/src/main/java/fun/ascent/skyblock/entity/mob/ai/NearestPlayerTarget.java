@@ -1,7 +1,6 @@
 package fun.ascent.skyblock.entity.mob.ai;
 
 import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
-import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
 import net.minestom.server.entity.Entity;

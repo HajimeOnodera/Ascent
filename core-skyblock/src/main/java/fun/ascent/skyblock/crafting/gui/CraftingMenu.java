@@ -13,6 +13,7 @@ import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -35,13 +36,11 @@ public class CraftingMenu {
     public static void open(SkyblockPlayer player) {
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("Craft Item"));
 
-        // Fill background with gray stained glass panes
         ItemStack filler = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE).customName(Component.empty()).build();
         for (int i = 0; i < 54; i++) {
             inv.setItemStack(i, filler);
         }
 
-        // Fill red stained glass panes for Quick Craft
         ItemStack quickCraftFiller = ItemStack.builder(Material.RED_STAINED_GLASS_PANE)
                 .customName(text("<red>Quick Craft"))
                 .lore(text("<gray>Slot Empty!"))
@@ -50,21 +49,14 @@ public class CraftingMenu {
             inv.setItemStack(slot, quickCraftFiller);
         }
 
-        // Fill red stained glass panes for the bottom row
         ItemStack redFiller = ItemStack.builder(Material.RED_STAINED_GLASS_PANE).customName(Component.empty()).build();
         for (int slot : RED_PANE_SLOTS) {
             inv.setItemStack(slot, redFiller);
         }
 
-        // Clear grid slots
         for (int slot : GRID_SLOTS) inv.setItemStack(slot, ItemStack.AIR);
-        
-        // Setup initial result slot
         updateResult(inv, player);
-
-        // Setup close button (arrow) at slot 49
         inv.setItemStack(CLOSE_SLOT, ItemStack.builder(Material.ARROW).customName(text("<red>Close")).build());
-
         inv.eventNode().addListener(InventoryPreClickEvent.class, event -> handleClick(event, player, inv));
         inv.eventNode().addListener(InventoryCloseEvent.class, _ -> {
             for (int slot : GRID_SLOTS) {
@@ -75,20 +67,17 @@ public class CraftingMenu {
                 }
             }
         });
-
         player.openInventory(inv);
     }
 
     private static void handleClick(InventoryPreClickEvent event, SkyblockPlayer player, Inventory inv) {
         Click click = event.getClick();
 
-        // 1. Block drag clicks completely while GUI is open to prevent drag-painting exploits
         if (click instanceof Click.Drag) {
             event.setCancelled(true);
             return;
         }
 
-        // 2. Block double-clicking completely to prevent pulling items/duplication
         if (click instanceof Click.Double) {
             event.setCancelled(true);
             return;
@@ -103,27 +92,22 @@ public class CraftingMenu {
         }
 
         boolean isTopInventory = slot < inv.getSize() && event.getInventory() == inv;
-
-        // 3. Block hotbar swapping (number-key swaps) and offhand swapping in the top inventory
         if (isTopInventory && (click instanceof Click.HotbarSwap || click instanceof Click.OffhandSwap)) {
             event.setCancelled(true);
             return;
         }
 
-        // 4. Block drop clicks (Q/Ctrl+Q) in the top inventory
         if (isTopInventory && (click instanceof Click.DropSlot || click instanceof Click.DropCursor)) {
             event.setCancelled(true);
             return;
         }
 
-        // If clicking top inventory background slots (slots < 54), cancel
         if (isTopInventory && !isGridSlot(slot) && slot != RESULT_SLOT) {
             event.setCancelled(true);
             return;
         }
 
-        // Handle clicks in bottom inventory (player inventory)
-        boolean isBottomClick = (event.getInventory() instanceof net.minestom.server.inventory.PlayerInventory) || (slot >= inv.getSize());
+        boolean isBottomClick = (event.getInventory() instanceof PlayerInventory) || (slot >= inv.getSize());
         if (isBottomClick) {
             boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
             if (isShift) {
@@ -131,18 +115,16 @@ public class CraftingMenu {
                 ItemStack toDistribute = event.getClickedItem();
                 if (!toDistribute.isAir()) {
                     ItemStack remaining = distributeToGrid(inv, toDistribute);
-                    int playerSlot = (event.getInventory() instanceof net.minestom.server.inventory.PlayerInventory) ? slot : (slot - inv.getSize());
+                    int playerSlot = (event.getInventory() instanceof PlayerInventory) ? slot : (slot - inv.getSize());
                     player.getInventory().setItemStack(playerSlot, remaining);
                     updateResult(inv, player);
                 }
             } else {
-                // Let normal click pass so they can interact with their inventory, but update result next tick
                 MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateResult(inv, player));
             }
             return;
         }
 
-        // Handle shift click on grid slots (to return items back to player inventory)
         boolean isGridShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
         if (isGridSlot(slot) && isGridShift) {
             event.setCancelled(true);
@@ -156,7 +138,6 @@ public class CraftingMenu {
             return;
         }
 
-        // Handle click on result slot
         if (slot == RESULT_SLOT) {
             event.setCancelled(true);
             ItemStack result = inv.getItemStack(RESULT_SLOT);
@@ -248,8 +229,6 @@ public class CraftingMenu {
             updateResult(inv, player);
             return;
         }
-
-        // For grid slot clicks, update results after the click is processed
         MinecraftServer.getSchedulerManager().scheduleNextTick(() -> updateResult(inv, player));
     }
 
@@ -282,7 +261,6 @@ public class CraftingMenu {
             resultStack = ItemStack.of(material, recipe.getResultAmount());
         }
 
-        // Add "Click to craft" lore or lock warning
         List<Component> lore = new ArrayList<>(resultStack.get(DataComponents.LORE, List.of()));
         lore.add(Component.empty());
 
@@ -317,8 +295,6 @@ public class CraftingMenu {
     private static ItemStack distributeToGrid(Inventory inv, ItemStack toDistribute) {
         if (toDistribute.isAir()) return toDistribute;
         int remainingAmount = toDistribute.amount();
-
-        // Phase 1: Try to merge with existing items of the same type in the grid slots
         for (int slot : GRID_SLOTS) {
             if (remainingAmount <= 0) break;
             ItemStack stack = inv.getItemStack(slot);
@@ -333,7 +309,6 @@ public class CraftingMenu {
             }
         }
 
-        // Phase 2: Place in first empty grid slot
         for (int slot : GRID_SLOTS) {
             if (remainingAmount <= 0) break;
             ItemStack stack = inv.getItemStack(slot);

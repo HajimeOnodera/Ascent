@@ -2,6 +2,7 @@ package fun.ascent.skyblock.quest;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import lombok.Getter;
+import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jetbrains.annotations.Nullable;
@@ -9,25 +10,17 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 public class QuestData {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestData.class);
     private static final HashMap<String, Quest> questRegistry = new HashMap<>();
 
-    private List<ActiveQuest> activeQuests = new ArrayList<>();
-    private List<ActiveQuest> completedQuests = new ArrayList<>();
+    private final List<ActiveQuest> activeQuests = new ArrayList<>();
+    private final List<ActiveQuest> completedQuests = new ArrayList<>();
     
+    @Setter
     private transient SkyblockPlayer skyblockPlayer;
-
-    public void setSkyBlockPlayer(SkyblockPlayer player) {
-        this.skyblockPlayer = player;
-    }
-
-    public void setSkyblockPlayer(SkyblockPlayer player) {
-        this.skyblockPlayer = player;
-    }
 
     public Map.Entry<ActiveQuest, Boolean> getQuest(String questID) {
         for (ActiveQuest quest : activeQuests) {
@@ -85,7 +78,7 @@ public class QuestData {
         Quest quest = getQuestFromCache(questID);
         if (quest == null) return;
 
-        ActiveQuest activeQuest = new ActiveQuest(questID, 0, quest instanceof QuestProgress);
+        ActiveQuest activeQuest = new ActiveQuest(questID, 0);
         
         Map<String, Object> data = quest.onStart(getSkyblockPlayer(), activeQuest);
         if (data != null) {

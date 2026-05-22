@@ -22,7 +22,6 @@ public class GUIRecipeBook {
     public static void open(SkyblockPlayer player) {
         Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<grey>Recipe Book"));
 
-        // Fill background
         ItemStack filler = ItemStack.builder(Material.GRAY_STAINED_GLASS_PANE).customName(Component.empty()).build();
         for (int i = 0; i < 54; i++) {
             inv.setItemStack(i, filler);
@@ -70,8 +69,7 @@ public class GUIRecipeBook {
                 player.closeInventory();
                 return;
             }
-            
-            // Go back to Skyblock Menu
+
             if (slot == 48) {
                 SkyblockMenu.open(player);
                 return;

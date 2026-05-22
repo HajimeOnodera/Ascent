@@ -16,22 +16,19 @@ public class ActiveQuest {
     private long startedTime;
     private long endedTime;
     private int progress;
-    private boolean isProgress;
     private Map<String, Object> customData;
 
-    public ActiveQuest(String questID, int progress, boolean isProgress) {
+    public ActiveQuest(String questID, int progress) {
         this.questID = questID;
         this.progress = progress;
-        this.isProgress = isProgress;
         this.startedTime = System.currentTimeMillis();
         this.customData = new HashMap<>();
         this.endedTime = 0L;
     }
 
-    public ActiveQuest(String questID, int progress, boolean isProgress, long startedTime, Map<String, Object> customData, long endedTime) {
+    public ActiveQuest(String questID, int progress, long startedTime, Map<String, Object> customData, long endedTime) {
         this.questID = questID;
         this.progress = progress;
-        this.isProgress = isProgress;
         this.startedTime = startedTime;
         this.customData = customData;
         this.endedTime = endedTime;

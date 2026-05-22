@@ -14,6 +14,7 @@ import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.skill.gui.SkillOverviewMenu;
 import fun.ascent.skyblock.player.stats.Stat;
+import fun.ascent.skyblock.quest.gui.GUIQuestLog;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -261,9 +262,7 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
         set(new GUIClickableItem(23) {
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
-                if (player instanceof SkyblockPlayer sp) {
-                    new fun.ascent.skyblock.quest.gui.GUIQuestLog(false).open(player);
-                }
+                new GUIQuestLog(false).open(player);
             }
 
             @Override

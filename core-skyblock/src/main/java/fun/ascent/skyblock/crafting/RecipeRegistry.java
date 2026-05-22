@@ -4,16 +4,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.google.gson.*;
 import fun.ascent.skyblock.config.ConfigPaths;
 import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
-import fun.ascent.skyblock.player.collections.CollectionCategory;
 import net.minestom.server.item.ItemStack;
 import org.yaml.snakeyaml.Yaml;
 
@@ -178,13 +174,13 @@ public class RecipeRegistry {
         // Miscellaneous
         registerVanillaShaped("SHEARS", 1, new String[]{" I", "I "}, Map.of('I', "IRON_INGOT"));
         registerVanillaShaped("BUCKET", 1, new String[]{"I I", " I "}, Map.of('I', "IRON_INGOT"));
-        registerVanillaShapeless("FLINT_AND_STEEL", 1, List.of("FLINT", "IRON_INGOT"));
+        registerVanillaShapeless("FLINT_AND_STEEL", List.of("FLINT", "IRON_INGOT"));
         registerVanillaShaped("BOW", 1, new String[]{" S#", "S #", " S#"}, Map.of('S', "STICK", '#', "STRING"));
         registerVanillaShaped("ARROW", 4, new String[]{"F", "S", "W"}, Map.of('F', "FLINT", 'S', "STICK", 'W', "FEATHER"));
         registerVanillaShaped("FISHING_ROD", 1, new String[]{"  S", " S#", "S #"}, Map.of('S', "STICK", '#', "STRING"));
         registerVanillaShaped("BREAD", 1, new String[]{"WWW"}, Map.of('W', "WHEAT"));
         registerVanillaShaped("PAPER", 3, new String[]{"SSS"}, Map.of('S', "SUGAR_CANE"));
-        registerVanillaShapeless("BOOK", 1, List.of("PAPER", "PAPER", "PAPER", "LEATHER"));
+        registerVanillaShapeless("BOOK", List.of("PAPER", "PAPER", "PAPER", "LEATHER"));
         registerVanillaShaped("BOOKSHELF", 1, new String[]{"PPP", "BBB", "PPP"}, Map.of('P', "OAK_PLANKS", 'B', "BOOK"));
     }
 
@@ -202,12 +198,12 @@ public class RecipeRegistry {
         register(recipe);
     }
 
-    private static void registerVanillaShapeless(String id, int resultAmount, List<String> ingredientIds) {
+    private static void registerVanillaShapeless(String id, List<String> ingredientIds) {
         List<RecipeIngredient> ingredients = new ArrayList<>();
         for (String ingredientId : ingredientIds) {
             ingredients.add(new RecipeIngredient(ingredientId, 1));
         }
-        ShapelessRecipe recipe = new ShapelessRecipe(id, id, resultAmount, SkyblockRecipe.RecipeType.NONE, ingredients);
+        ShapelessRecipe recipe = new ShapelessRecipe(id, id, 1, SkyblockRecipe.RecipeType.NONE, ingredients);
         recipe.setCanCraft((player) -> new SkyblockRecipe.CraftingResult(true, null));
         register(recipe);
     }
@@ -354,7 +350,6 @@ public class RecipeRegistry {
         loadYamlRecipesRecursively(folder);
     }
 
-    @SuppressWarnings("unchecked")
     private static void loadYamlRecipesRecursively(File directory) {
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -369,11 +364,7 @@ public class RecipeRegistry {
                     if (data == null) continue;
 
                     String id = (String) data.get("id");
-                    if (id == null) {
-                        id = file.getName().substring(0, file.getName().lastIndexOf('.')).toUpperCase();
-                    } else {
-                        id = id.toUpperCase();
-                    }
+                    id = Objects.requireNonNullElseGet(id, () -> file.getName().substring(0, file.getName().lastIndexOf('.'))).toUpperCase();
 
                     String typeStr = (String) data.getOrDefault("type", "SHAPED");
                     
@@ -459,7 +450,6 @@ public class RecipeRegistry {
                         recipe.setRequiredCollections(requiredCollections);
                         recipe.setRequiredSkills(requiredSkills);
 
-                        final String finalId = id;
                         final Map<String, Integer> finalReqCols = requiredCollections;
                         final Map<String, Integer> finalReqSkills = requiredSkills;
 
@@ -519,7 +509,6 @@ public class RecipeRegistry {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static void loadItemYamlRecipesRecursively(File directory) {
         File[] files = directory.listFiles();
         if (files == null) return;
@@ -532,16 +521,14 @@ public class RecipeRegistry {
                     Map<String, Object> data = yaml.load(inputStream);
                     if (data != null && data.containsKey("items")) {
                         Object itemsObj = data.get("items");
-                        if (itemsObj instanceof List) {
-                            List<?> itemsList = (List<?>) itemsObj;
+                        if (itemsObj instanceof List<?> itemsList) {
                             for (Object itemObj : itemsList) {
                                 if (itemObj instanceof Map) {
                                     Map<String, Object> itemMap = (Map<String, Object>) itemObj;
                                     String id = (String) itemMap.get("id");
                                     if (id != null) {
                                         Object componentsObj = itemMap.get("components");
-                                        if (componentsObj instanceof List) {
-                                            List<?> componentsList = (List<?>) componentsObj;
+                                        if (componentsObj instanceof List<?> componentsList) {
                                             for (Object compObj : componentsList) {
                                                 if (compObj instanceof Map) {
                                                     Map<String, Object> compMap = (Map<String, Object>) compObj;
@@ -577,7 +564,6 @@ public class RecipeRegistry {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static void parseAndRegisterItemRecipe(String itemId, Map<String, Object> recipeData) {
         String typeStr = (String) recipeData.getOrDefault("type", "SHAPED");
         
@@ -688,7 +674,6 @@ public class RecipeRegistry {
             recipe.setRequiredCollections(requiredCollections);
             recipe.setRequiredSkills(requiredSkills);
 
-            final String finalId = recipeId;
             final Map<String, Integer> finalReqCols = requiredCollections;
             final Map<String, Integer> finalReqSkills = requiredSkills;
 
