@@ -222,6 +222,10 @@ public class SkyblockDataHandler {
                 QuestData qd = player.getActiveProfileData().getQuestData();
                 return new DatapointObject<>("quests", qd, QuestData.class);
             }),
+
+        DROP_ALERTS_DISABLED("drop_alerts_disabled", DatapointBoolean.class, new DatapointBoolean("drop_alerts_disabled", false),
+            (player, dp) -> player.setDropAlertsDisabled(dp.getValue() != null && (Boolean) dp.getValue()),
+            (player) -> new DatapointBoolean("drop_alerts_disabled", player.hasDropAlertsDisabled())),
         ;
 
         @Getter private final String key;

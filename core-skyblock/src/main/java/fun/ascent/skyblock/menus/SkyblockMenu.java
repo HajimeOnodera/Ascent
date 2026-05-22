@@ -4,10 +4,12 @@ import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.gui.RefreshingGUI;
 import fun.ascent.common.item.GUIClickableItem;
+import fun.ascent.skyblock.crafting.RecipeRegistry;
 import fun.ascent.skyblock.crafting.gui.CraftingMenu;
 import fun.ascent.skyblock.crafting.gui.GUIRecipeBook;
 import fun.ascent.skyblock.menus.command.skyblockMenu.EquipmentMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
 import fun.ascent.skyblock.player.level.gui.SkyblockLevelMenu;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -212,13 +214,18 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 lore.add(Component.empty());
 
                 int unlocked = ((SkyblockPlayer) player).getActiveProfile().unlockedRecipes.size();
-                int total = 50;
-                double percent = (double) unlocked / total * 100;
-                int bars = (int) Math.round(percent / 5);
-                bars = Math.clamp(bars, 0, 20);
-                String progressBar = "<yellow>" + "▬".repeat(bars) + "<gray>" + "▬".repeat(20 - bars);
+                int total = RecipeRegistry.getTotalRecipesCount();
+                double percent = total == 0 ? 0.0 : (double) unlocked / total * 100;
+                int totalBars = 20;
+                int completed = total == 0 ? 0 : (int) Math.round(((double) unlocked / total) * totalBars);
+                completed = Math.clamp(completed, 0, totalBars);
+                int remaining = totalBars - completed;
 
-                lore.add(miniMessage().deserialize("<gray>Recipes Unlocked: <yellow>" + unlocked + "/" + total + " <gray>(" + (int) percent + "%)").decoration(TextDecoration.ITALIC, false));
+                String progressBar = "<dark_green><strikethrough>" + "─".repeat(completed)
+                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                        + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
+
+                lore.add(miniMessage().deserialize("<gray>Recipes Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));
                 lore.add(miniMessage().deserialize(progressBar).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
                 lore.add(miniMessage().deserialize("<yellow>Click to view!"));
@@ -363,13 +370,18 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 lore.add(Component.empty());
 
                 int unlocked = ((SkyblockPlayer) player).getActiveProfile().unlockedCollections.size();
-                int total = 50;
-                double percent = (double) unlocked / total * 100;
-                int bars = (int) Math.round(percent / 5);
-                bars = Math.clamp(bars, 0, 20);
-                String progressBar = "<yellow>" + "▬".repeat(bars) + "<gray>" + "▬".repeat(20 - bars);
+                int total = CollectionRegistry.getTotalCollectionsCount();
+                double percent = total == 0 ? 0.0 : (double) unlocked / total * 100;
+                int totalBars = 20;
+                int completed = total == 0 ? 0 : (int) Math.round(((double) unlocked / total) * totalBars);
+                completed = Math.clamp(completed, 0, totalBars);
+                int remaining = totalBars - completed;
 
-                lore.add(miniMessage().deserialize("<gray>Collections Unlocked: <yellow>" + unlocked + "/" + total + " <gray>(" + (int) percent + "%)").decoration(TextDecoration.ITALIC, false));
+                String progressBar = "<dark_green><strikethrough>" + "─".repeat(completed)
+                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                        + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
+
+                lore.add(miniMessage().deserialize("<gray>Collections Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));
                 lore.add(miniMessage().deserialize(progressBar).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
                 lore.add(miniMessage().deserialize("<yellow>Click to view!"));
