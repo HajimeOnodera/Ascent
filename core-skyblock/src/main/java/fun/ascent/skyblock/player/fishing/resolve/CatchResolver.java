@@ -2,6 +2,8 @@ package fun.ascent.skyblock.player.fishing.resolve;
 
 import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
 import fun.ascent.skyblock.events.EventManager;
+import fun.ascent.skyblock.events.impl.RodInteractionHandler;
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.SkillType;
@@ -33,7 +35,7 @@ public final class CatchResolver {
         Instance instance = hook.getInstance();
         if (instance == null) return null;
 
-        String activeBait = player.getTag(fun.ascent.skyblock.events.impl.RodInteractionHandler.ACTIVE_BAIT_TAG);
+        String activeBait = player.getTag(RodInteractionHandler.ACTIVE_BAIT_TAG);
         BaitEffect bait = BaitDefinitions.get(activeBait);
 
         double seaCreatureChance = player.playerStat(Stats.SEA_CREATURE_CHANCE) + (bait.seaCreatureModifier() * 100.0);
@@ -54,27 +56,25 @@ public final class CatchResolver {
             result = triggerNormalCatch(player, instance, hook.getPosition());
         }
 
-        if (result != null) {
-            SkillRegistry.grantXp(player, SkillType.FISHING, result.fishingXp());
+        SkillRegistry.grantXp(player, SkillType.FISHING, result.fishingXp());
 
-            if (result.category() == CatchCategory.NORMAL_CATCH || result.category() == CatchCategory.TREASURE) {
-                if (result.rewardStack() != null && !result.rewardStack().isAir()) {
-                    String materialName = result.rewardStack().material().name();
-                    String collectionId = materialName;
-                    if (materialName.equals("COD")) {
-                        collectionId = "RAW_FISH";
-                    } else if (materialName.equals("SALMON")) {
-                        collectionId = "RAW_SALMON";
-                    }
+        if (result.category() == CatchCategory.NORMAL_CATCH || result.category() == CatchCategory.TREASURE) {
+            if (result.rewardStack() != null && !result.rewardStack().isAir()) {
+                String materialName = result.rewardStack().material().name();
+                String collectionId = materialName;
+                if (materialName.equals("COD")) {
+                    collectionId = "RAW_FISH";
+                } else if (materialName.equals("SALMON")) {
+                    collectionId = "RAW_SALMON";
+                }
 
-                    if (player.getActiveProfile() != null) {
-                        player.getActiveProfile().updateCollection(collectionId, result.rewardStack().amount());
-                    }
+                if (player.getActiveProfile() != null) {
+                    player.getActiveProfile().updateCollection(collectionId, result.rewardStack().amount());
                 }
             }
-
-            EventManager.handler.call(new FishCaughtEvent(player, result));
         }
+
+        EventManager.handler.call(new FishCaughtEvent(player, result));
 
         return result;
     }
@@ -98,7 +98,7 @@ public final class CatchResolver {
     private static CatchResult triggerTreasure(SkyblockPlayer player, Instance instance, Pos pos) {
         FishLootEntry entry = TreasureLootPool.get().roll();
         int amount = entry.rollAmount();
-        ItemStack stack = ItemStack.of(entry.material()).withAmount(amount);
+        ItemStack stack = ItemRegistry.createSkyblockOrVanillaStack(entry.material(), amount);
 
         ItemEntity entity = new ItemEntity(stack);
         entity.setInstance(instance, pos.add(0, 0.5, 0));
@@ -128,7 +128,7 @@ public final class CatchResolver {
     private static CatchResult triggerNormalCatch(SkyblockPlayer player, Instance instance, Pos pos) {
         FishLootEntry entry = StandardFishPool.get().roll();
         int amount = entry.rollAmount();
-        ItemStack stack = ItemStack.of(entry.material()).withAmount(amount);
+        ItemStack stack = ItemRegistry.createSkyblockOrVanillaStack(entry.material(), amount);
 
         ItemEntity entity = new ItemEntity(stack);
         entity.setInstance(instance, pos.add(0, 0.5, 0));

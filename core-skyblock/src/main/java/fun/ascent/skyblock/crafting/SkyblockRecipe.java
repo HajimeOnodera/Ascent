@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.crafting;
 
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -71,12 +72,8 @@ public abstract class SkyblockRecipe {
         if (normalizeId(reqId).equalsIgnoreCase(normalizeId(matName))) {
             return true;
         }
-        
-        if (siId != null && normalizeId(reqId).equalsIgnoreCase(normalizeId(siId))) {
-            return true;
-        }
 
-        return false;
+        return siId != null && normalizeId(reqId).equalsIgnoreCase(normalizeId(siId));
     }
 
     private String normalizeId(String id) {
@@ -87,7 +84,7 @@ public abstract class SkyblockRecipe {
         if (normalized.equals("MELON_SLICE") || normalized.equals("MELON")) {
             return "MELON";
         }
-        return normalized;
+        return ItemRegistry.canonicalizeId(normalized);
     }
 
     public record CraftingResult(boolean allowed, String errorMessage) {}

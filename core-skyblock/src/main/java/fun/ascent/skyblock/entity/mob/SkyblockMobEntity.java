@@ -1,16 +1,22 @@
 package fun.ascent.skyblock.entity.mob;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.entity.display.DroppedItemEntity;
 import fun.ascent.skyblock.entity.display.FloatingTextEntity;
 import fun.ascent.skyblock.entity.loot.DropTable;
 import fun.ascent.skyblock.entity.loot.MobDrop;
 import fun.ascent.skyblock.entity.mob.impl.SkinOverride;
+import fun.ascent.skyblock.item.ItemNBT;
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
@@ -18,6 +24,7 @@ import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.damage.Damage;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.display.TextDisplayMeta;
 import net.minestom.server.instance.Instance;
@@ -41,15 +48,8 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     private FloatingTextEntity nameplate;
     private Component currentNameplate;
     private final AtomicLong lastAttackMillis = new AtomicLong(0);
+    @Setter
     private String zoneId;
-
-    public String getZoneId() {
-        return zoneId;
-    }
-
-    public void setZoneId(String zoneId) {
-        this.zoneId = zoneId;
-    }
 
     protected SkyblockMobEntity(EntityType type) {
         super(type);
@@ -61,9 +61,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         }
 
         currentNameplate = buildNameplateComponent(baseStat(HEALTH), baseStat(HEALTH));
-        nameplate = new FloatingTextEntity(currentNameplate, meta -> {
-            meta.setTranslation(new net.minestom.server.coordinate.Vec(0, nameplateOffset(), 0));
-        });
+        nameplate = new FloatingTextEntity(currentNameplate, meta -> meta.setTranslation(new Vec(0, nameplateOffset(), 0)));
 
         onSetup();
     }
@@ -128,7 +126,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             nameplate = null;
         }
 
-        fun.ascent.skyblock.player.combat.CombatListener.cleanMobData(getUuid());
+        CombatListener.cleanMobData(getUuid());
 
         activeMobs.remove(this);
         super.kill();
@@ -136,15 +134,18 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         assert getLastDamageSource() != null;
         if (!(getLastDamageSource().getAttacker() instanceof SkyblockPlayer killer)) return;
 
-        onKilledBy(killer);
+        onKilledBy();
 
         DropTable table = dropTable();
         if (table == null || getInstance() == null) return;
 
         Pos dropPos = getPosition().add(0, 0.5, 0);
         for (MobDrop drop : table.roll(killer)) {
-            DroppedItemEntity dropped = new DroppedItemEntity(
-                    drop.item().withAmount(drop.rolledAmount()), killer);
+            ItemStack stack = drop.item().withAmount(drop.rolledAmount());
+            if (ItemNBT.getItemId(stack) == null) {
+                stack = ItemRegistry.createSkyblockOrVanillaStack(stack.material(), stack.amount());
+            }
+            DroppedItemEntity dropped = new DroppedItemEntity(stack, killer);
             dropped.setInstance(getInstance(), dropPos);
         }
     }
@@ -201,7 +202,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
     private Component buildNameplateComponent(float hp, float max) {
         MobCategory primary = categories().getFirst();
-        return fun.ascent.common.StringUtility.text(
+        return StringUtility.text(
                 "<dark_gray>[<gray>Lv" + level() + "<dark_gray>] "
                         + primary.prefix() + " <red>"
                         + displayName()
@@ -225,7 +226,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
     public void onSpawn() {}
 
-    public void onKilledBy(SkyblockPlayer killer) {}
+    public void onKilledBy() {}
 
     public abstract String displayName();
 

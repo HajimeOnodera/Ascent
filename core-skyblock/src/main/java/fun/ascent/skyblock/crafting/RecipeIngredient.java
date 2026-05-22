@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.crafting;
 
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import lombok.Getter;
 
@@ -15,6 +16,8 @@ public class RecipeIngredient {
 
     public boolean matches(SkyblockItem item) {
         if (item == null) return false;
-        return item.getItemId().equals(itemId);
+        String thisId = ItemRegistry.canonicalizeId(itemId);
+        String thatId = ItemRegistry.canonicalizeId(item.getItemId());
+        return thisId.equalsIgnoreCase(thatId);
     }
 }

@@ -44,7 +44,16 @@ public class ShapedRecipe extends SkyblockRecipe {
 
         List<String> normalized = new ArrayList<>();
         for (int r = minRow; r <= maxRow; r++) {
-            normalized.add(original[r].substring(minCol, maxCol + 1));
+            String row = original[r];
+            StringBuilder sb = new StringBuilder();
+            for (int c = minCol; c <= maxCol; c++) {
+                if (c < row.length()) {
+                    sb.append(row.charAt(c));
+                } else {
+                    sb.append(' ');
+                }
+            }
+            normalized.add(sb.toString());
         }
         return normalized;
     }

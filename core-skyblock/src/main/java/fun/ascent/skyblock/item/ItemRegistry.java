@@ -46,19 +46,15 @@ public class ItemRegistry {
                     Map<String, Object> data = yaml.load(inputStream);
                     if (data != null && data.containsKey("items")) {
                         Object itemsObj = data.get("items");
-                        if (itemsObj instanceof List) {
-                            List<?> itemsList = (List<?>) itemsObj;
+                        if (itemsObj instanceof List<?> itemsList) {
                             for (Object itemObj : itemsList) {
-                                if (itemObj instanceof Map) {
-                                    Map<?, ?> itemMap = (Map<?, ?>) itemObj;
+                                if (itemObj instanceof Map<?, ?> itemMap) {
                                     String id = (String) itemMap.get("id");
                                     if (id != null) {
                                         Object componentsObj = itemMap.get("components");
-                                        if (componentsObj instanceof List) {
-                                            List<?> componentsList = (List<?>) componentsObj;
+                                        if (componentsObj instanceof List<?> componentsList) {
                                             for (Object compObj : componentsList) {
-                                                if (compObj instanceof Map) {
-                                                    Map<?, ?> compMap = (Map<?, ?>) compObj;
+                                                if (compObj instanceof Map<?, ?> compMap) {
                                                     Object compId = compMap.get("id");
                                                     if ("STACKABLE".equals(compId)) {
                                                         YAML_STACKABLE_OVERRIDES.put(id.toUpperCase(), false);
@@ -75,6 +71,149 @@ public class ItemRegistry {
                     }
                 } catch (Exception e) {
                     LOGGER.error("Failed to load YAML item config: {}", file.getName(), e);
+                }
+            }
+        }
+    }
+
+    private static String formatName(String id) {
+        if (id == null) return "";
+        String[] words = id.split("_");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (word.isEmpty()) continue;
+            sb.append(Character.toUpperCase(word.charAt(0)));
+            if (word.length() > 1) {
+                sb.append(word.substring(1).toLowerCase(Locale.ROOT));
+            }
+            if (i < words.length - 1) {
+                sb.append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void loadYamlItems() {
+        File folder = new File("configuration/skyblock/items");
+        if (folder.exists() && folder.isDirectory()) {
+            loadYamlItemsRecursively(folder);
+        }
+        LOGGER.info("Registered custom items from YAML configs. Total items in registry: {}", ITEMS.size());
+    }
+
+    private static void loadYamlItemsRecursively(File directory) {
+        File[] files = directory.listFiles();
+        if (files == null) return;
+        for (File file : files) {
+            if (file.isDirectory()) {
+                loadYamlItemsRecursively(file);
+            } else if (file.getName().endsWith(".yml") || file.getName().endsWith(".yaml")) {
+                try (InputStream inputStream = new FileInputStream(file)) {
+                    Yaml yaml = new Yaml();
+                    Map<String, Object> data = yaml.load(inputStream);
+                    if (data != null && data.containsKey("items")) {
+                        Object itemsObj = data.get("items");
+                        if (itemsObj instanceof List<?> itemsList) {
+                            for (Object itemObj : itemsList) {
+                                if (itemObj instanceof Map<?, ?> itemMap) {
+                                    String id = (String) itemMap.get("id");
+                                    String matStr = (String) itemMap.get("material");
+                                    String rarityStr = (String) itemMap.get("rarity");
+                                    
+                                    if (id != null && matStr != null) {
+                                        if (matStr.startsWith("minecraft:")) {
+                                            matStr = matStr.substring(10);
+                                        }
+                                        Material material = Material.fromKey(matStr.toLowerCase(Locale.ROOT));
+                                        if (material == null) {
+                                            material = Material.fromKey(matStr.toUpperCase(Locale.ROOT));
+                                        }
+                                        if (material == null) {
+                                            LOGGER.warn("Skipping item {} because material {} is invalid.", id, matStr);
+                                            continue;
+                                        }
+                                        
+                                        Rarity rarity = Rarity.COMMON;
+                                        if (rarityStr != null) {
+                                            try {
+                                                rarity = Rarity.valueOf(rarityStr.toUpperCase(Locale.ROOT));
+                                            } catch (IllegalArgumentException ignored) {}
+                                        }
+                                        
+                                        SkyblockItem.Builder builder = SkyblockItem.builder(id, material, rarity);
+                                        
+                                        // 1. Determine Display Name
+                                        String displayName = formatName(id);
+                                        
+                                        // 2. Parse components
+                                        ItemType itemType = ItemType.NONE;
+                                        Boolean unstackable = null;
+                                        
+                                        Object componentsObj = itemMap.get("components");
+                                        if (componentsObj instanceof List<?> componentsList) {
+                                            for (Object compObj : componentsList) {
+                                                if (compObj instanceof Map<?, ?> compMap) {
+                                                    Object compId = compMap.get("id");
+                                                    if (compId instanceof String compIdStr) {
+                                                        switch (compIdStr) {
+                                                            case "CUSTOM_DISPLAY_NAME" -> {
+                                                                Object customName = compMap.get("display_name");
+                                                                if (customName instanceof String) {
+                                                                    displayName = (String) customName;
+                                                                }
+                                                            }
+                                                            case "STACKABLE" -> unstackable = false;
+                                                            case "UNSTACKABLE" -> unstackable = true;
+                                                            default -> {
+                                                                try {
+                                                                    ItemType type = ItemType.valueOf(compIdStr.toUpperCase(Locale.ROOT));
+                                                                    itemType = type;
+                                                                } catch (IllegalArgumentException ignored) {
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                        builder.displayName(displayName);
+                                        builder.itemType(itemType);
+                                        if (unstackable != null) {
+                                            builder.unstackable(unstackable);
+                                        }
+                                        
+                                        // 3. Parse stats
+                                        Object statsObj = itemMap.get("default_statistics");
+                                        if (statsObj instanceof Map<?, ?> statsMap) {
+                                            for (Map.Entry<?, ?> entry : statsMap.entrySet()) {
+                                                if (entry.getKey() instanceof String statKey && entry.getValue() instanceof Number statVal) {
+                                                    try {
+                                                        Stats stat = Stats.valueOf(statKey.toUpperCase(Locale.ROOT));
+                                                        builder.stat(stat, statVal.doubleValue());
+                                                    } catch (IllegalArgumentException ignored) {}
+                                                }
+                                            }
+                                        }
+                                        
+                                        // 4. Overrides/definitions applying
+                                        ItemDefinition def = ItemDefinitions.get(id);
+                                        if (def != null) {
+                                            builder = def.apply(builder);
+                                        }
+                                        
+                                        SkyblockItem item = builder.build();
+                                        ITEMS.put(id, item);
+                                        ITEMS.put(id.toUpperCase(Locale.ROOT), item);
+                                        ITEMS.put(id.toLowerCase(Locale.ROOT), item);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    LOGGER.error("Failed to register custom item from YAML config: {}", file.getName(), e);
                 }
             }
         }
@@ -132,6 +271,8 @@ public class ItemRegistry {
                 ItemRepository.saveItems(docsToSave);
                 LOGGER.info("Loaded and cached {} items from Hypixel API.", ITEMS.size());
             }
+            // Register YAML custom items now!
+            loadYamlItems();
         } catch (Exception e) {
             LOGGER.error("Failed to load items: {}", e.getMessage());
             e.printStackTrace();
@@ -248,13 +389,47 @@ public class ItemRegistry {
         return builder.build();
     }
 
+    public static String canonicalizeId(String id) {
+        if (id == null) return null;
+        String upper = id.toUpperCase();
+        return switch (upper) {
+            case "OAK_LOG", "OAK_WOOD" -> "LOG";
+            case "SPRUCE_LOG", "SPRUCE_WOOD" -> "LOG:1";
+            case "BIRCH_LOG", "BIRCH_WOOD" -> "LOG:2";
+            case "JUNGLE_LOG", "JUNGLE_WOOD" -> "LOG:3";
+            case "ACACIA_LOG", "ACACIA_WOOD" -> "LOG_2";
+            case "DARK_OAK_LOG", "DARK_OAK_WOOD" -> "LOG_2:1";
+            default -> id;
+        };
+    }
+
     public static SkyblockItem getItem(String id) {
         if (id == null) return null;
-        SkyblockItem item = ITEMS.get(id);
+        String resolvedId = canonicalizeId(id);
+        SkyblockItem item = ITEMS.get(resolvedId);
         if (item != null) return item;
-        item = ITEMS.get(id.toUpperCase());
+        item = ITEMS.get(resolvedId.toUpperCase());
         if (item != null) return item;
-        return ITEMS.get(id.toLowerCase());
+        item = ITEMS.get(resolvedId.toLowerCase());
+        if (item != null) return item;
+
+        // Dynamic Fallback: if it's a valid vanilla material, construct a COMMON Skyblock item for it!
+        String cleanId = resolvedId.toUpperCase(Locale.ROOT).replace("MINECRAFT:", "");
+        Material material = Material.fromKey(cleanId.toLowerCase(Locale.ROOT));
+        if (material == null) {
+            material = Material.fromKey(cleanId.toUpperCase(Locale.ROOT));
+        }
+        if (material != null && material != Material.AIR) {
+            SkyblockItem fallbackItem = SkyblockItem.builder(cleanId, material, Rarity.COMMON)
+                    .displayName(formatName(cleanId))
+                    .build();
+            ITEMS.put(cleanId, fallbackItem);
+            ITEMS.put(cleanId.toUpperCase(Locale.ROOT), fallbackItem);
+            ITEMS.put(cleanId.toLowerCase(Locale.ROOT), fallbackItem);
+            return fallbackItem;
+        }
+
+        return null;
     }
 
     public static SkyblockItem getItemByMaterial(Material material) {
@@ -271,6 +446,12 @@ public class ItemRegistry {
             case "SALMON" -> "RAW_SALMON";
             case "STONE" -> "COBBLESTONE";
             case "GLOWSTONE" -> "GLOWSTONE_DUST";
+            case "OAK_LOG", "OAK_WOOD" -> "LOG";
+            case "SPRUCE_LOG", "SPRUCE_WOOD" -> "LOG:1";
+            case "BIRCH_LOG", "BIRCH_WOOD" -> "LOG:2";
+            case "JUNGLE_LOG", "JUNGLE_WOOD" -> "LOG:3";
+            case "ACACIA_LOG", "ACACIA_WOOD" -> "LOG_2";
+            case "DARK_OAK_LOG", "DARK_OAK_WOOD" -> "LOG_2:1";
             default -> null;
         };
         
@@ -280,7 +461,10 @@ public class ItemRegistry {
         }
         
         // 2. Try the material name directly (ensure it's not an enchanted item)
-        SkyblockItem itemNameMatch = getItem(matName);
+        SkyblockItem itemNameMatch = ITEMS.get(matName);
+        if (itemNameMatch == null) itemNameMatch = ITEMS.get(matName.toUpperCase());
+        if (itemNameMatch == null) itemNameMatch = ITEMS.get(matName.toLowerCase());
+        
         if (itemNameMatch != null) {
             if (!itemNameMatch.getItemId().toUpperCase().startsWith("ENCHANTED_")) {
                 return itemNameMatch;
@@ -307,8 +491,15 @@ public class ItemRegistry {
                 return item;
             }
         }
-        
-        return null;
+
+        // 4. Dynamic Fallback: construct and cache a Skyblock item for this material!
+        SkyblockItem fallbackItem = SkyblockItem.builder(matName, material, Rarity.COMMON)
+                .displayName(formatName(matName))
+                .build();
+        ITEMS.put(matName, fallbackItem);
+        ITEMS.put(matName.toUpperCase(Locale.ROOT), fallbackItem);
+        ITEMS.put(matName.toLowerCase(Locale.ROOT), fallbackItem);
+        return fallbackItem;
     }
 
     public static ItemStack createSkyblockOrVanillaStack(Material material, int amount) {

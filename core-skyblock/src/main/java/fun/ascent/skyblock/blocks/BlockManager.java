@@ -397,7 +397,7 @@ public class BlockManager {
                             else if (material == Material.REDSTONE_ORE) dropMaterial = Material.REDSTONE;
                             else if (material == Material.NETHER_QUARTZ_ORE) dropMaterial = Material.QUARTZ;
                         }
-                        player.getInventory().addItemStack(ItemStack.of(dropMaterial, 1));
+                        player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(dropMaterial, 1));
                     }
                     instance.setBlock(pos, Block.AIR);
                 } catch (Exception e) {
@@ -448,7 +448,7 @@ public class BlockManager {
 
         ItemStack dropStack;
         if (usedSilkTouchOnOre) {
-            dropStack = ItemStack.of(sbBlock.vanillaMaterial, 1);
+            dropStack = ItemRegistry.createSkyblockOrVanillaStack(sbBlock.vanillaMaterial, 1);
         } else {
             SkyblockItem skyItem = sbBlock.skyblockItemId != null ?
                 ItemRegistry.getItem(sbBlock.skyblockItemId) : null;
@@ -456,7 +456,7 @@ public class BlockManager {
             if (skyItem != null) {
                 dropStack = skyItem.buildItemStack(player).withAmount(dropAmount);
             } else {
-                dropStack = ItemStack.of(sbBlock.vanillaMaterial, dropAmount);
+                dropStack = ItemRegistry.createSkyblockOrVanillaStack(sbBlock.vanillaMaterial, dropAmount);
             }
         }
 
