@@ -1,0 +1,11 @@
+id: REDSTONE_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: REDSTONE
+result:
+  item: REDSTONE_BLOCK
+  amount: 1

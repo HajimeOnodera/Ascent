@@ -1,0 +1,12 @@
+id: MANGROVE_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: MANGROVE_PLANKS
+  B: STICK
+result:
+  item: MANGROVE_SIGN
+  amount: 3

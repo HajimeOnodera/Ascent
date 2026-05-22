@@ -1,0 +1,8 @@
+id: LIGHT_GRAY_DYE
+type: SHAPELESS
+ingredients:
+  - BLACK_DYE
+  - {item: WHITE_DYE, amount: 2}
+result:
+  item: LIGHT_GRAY_DYE
+  amount: 3

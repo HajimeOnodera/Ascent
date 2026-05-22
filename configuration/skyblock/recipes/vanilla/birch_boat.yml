@@ -1,0 +1,10 @@
+id: BIRCH_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: BIRCH_PLANKS
+result:
+  item: BIRCH_BOAT
+  amount: 1

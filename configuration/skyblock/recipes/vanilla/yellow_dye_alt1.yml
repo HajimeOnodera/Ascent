@@ -1,0 +1,7 @@
+id: YELLOW_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - SUNFLOWER
+result:
+  item: YELLOW_DYE
+  amount: 2

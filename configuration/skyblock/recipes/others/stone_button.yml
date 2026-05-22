@@ -1,0 +1,9 @@
+id: STONE_BUTTON
+type: SHAPED
+pattern:
+  - "A"
+ingredients:
+  A: STONE
+result:
+  item: STONE_BUTTON
+  amount: 1

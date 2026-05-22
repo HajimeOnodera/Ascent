@@ -1,0 +1,8 @@
+id: BLUE_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - BLUE_DYE
+result:
+  item: BLUE_WOOL
+  amount: 1

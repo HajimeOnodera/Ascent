@@ -1,0 +1,11 @@
+id: POLISHED_GRANITE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: POLISHED_GRANITE
+result:
+  item: POLISHED_GRANITE_STAIRS
+  amount: 4

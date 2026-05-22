@@ -1,0 +1,9 @@
+id: POLISHED_GRANITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: POLISHED_GRANITE
+result:
+  item: POLISHED_GRANITE_SLAB
+  amount: 6

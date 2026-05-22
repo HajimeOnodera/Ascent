@@ -1,0 +1,11 @@
+id: CHERRY_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_STAIRS
+  amount: 4

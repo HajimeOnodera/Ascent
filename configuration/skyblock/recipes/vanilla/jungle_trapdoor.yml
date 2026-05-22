@@ -1,0 +1,10 @@
+id: JUNGLE_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: JUNGLE_PLANKS
+result:
+  item: JUNGLE_TRAPDOOR
+  amount: 2

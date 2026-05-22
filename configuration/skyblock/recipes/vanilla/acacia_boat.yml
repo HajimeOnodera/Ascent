@@ -1,0 +1,10 @@
+id: ACACIA_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: ACACIA_PLANKS
+result:
+  item: ACACIA_BOAT
+  amount: 1

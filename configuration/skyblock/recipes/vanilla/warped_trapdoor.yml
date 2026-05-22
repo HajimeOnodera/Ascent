@@ -1,0 +1,10 @@
+id: WARPED_TRAPDOOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: WARPED_PLANKS
+result:
+  item: WARPED_TRAPDOOR
+  amount: 2

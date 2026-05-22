@@ -1,0 +1,9 @@
+id: ANDESITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: ANDESITE
+result:
+  item: ANDESITE_SLAB
+  amount: 6

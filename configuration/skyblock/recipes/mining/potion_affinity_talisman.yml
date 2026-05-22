@@ -1,0 +1,14 @@
+id: POTION_AFFINITY_TALISMAN
+type: SHAPED
+requirements:
+  collections:
+    NETHER_WART: 3
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: {item: NETHER_WART, amount: 16}
+result:
+  item: POTION_AFFINITY_TALISMAN
+  amount: 1

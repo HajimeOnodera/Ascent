@@ -1,0 +1,11 @@
+id: SPRUCE_FENCE_GATE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: STICK
+  B: SPRUCE_PLANKS
+result:
+  item: SPRUCE_FENCE_GATE
+  amount: 1

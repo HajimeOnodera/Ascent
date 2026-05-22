@@ -1,0 +1,12 @@
+id: BAMBOO_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_BAMBOO_BLOCK
+result:
+  item: BAMBOO_HANGING_SIGN
+  amount: 6

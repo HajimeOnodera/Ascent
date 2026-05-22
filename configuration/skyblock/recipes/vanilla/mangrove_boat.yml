@@ -1,0 +1,10 @@
+id: MANGROVE_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: MANGROVE_PLANKS
+result:
+  item: MANGROVE_BOAT
+  amount: 1

@@ -1,0 +1,12 @@
+id: GLISTERING_MELON
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GOLD_NUGGET
+  B: MELON_SLICE
+result:
+  item: GLISTERING_MELON
+  amount: 1

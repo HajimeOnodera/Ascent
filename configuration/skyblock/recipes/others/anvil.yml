@@ -1,0 +1,12 @@
+id: ANVIL
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - "BBB"
+ingredients:
+  A: IRON_BLOCK
+  B: IRON_INGOT
+result:
+  item: ANVIL
+  amount: 1

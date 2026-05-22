@@ -1,0 +1,12 @@
+id: GREEN_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: GREEN_DYE
+result:
+  item: GREEN_TERRACOTTA
+  amount: 8

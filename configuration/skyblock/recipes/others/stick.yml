@@ -1,0 +1,10 @@
+id: STICK
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: STICK
+  amount: 4

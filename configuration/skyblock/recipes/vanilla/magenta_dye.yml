@@ -1,0 +1,7 @@
+id: MAGENTA_DYE
+type: SHAPELESS
+ingredients:
+  - ALLIUM
+result:
+  item: MAGENTA_DYE
+  amount: 1

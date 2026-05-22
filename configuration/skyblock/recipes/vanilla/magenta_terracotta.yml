@@ -1,0 +1,12 @@
+id: MAGENTA_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: MAGENTA_DYE
+result:
+  item: MAGENTA_TERRACOTTA
+  amount: 8

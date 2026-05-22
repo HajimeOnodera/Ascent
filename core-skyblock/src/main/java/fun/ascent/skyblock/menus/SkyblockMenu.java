@@ -261,6 +261,9 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
         set(new GUIClickableItem(23) {
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
+                if (player instanceof SkyblockPlayer sp) {
+                    new fun.ascent.skyblock.quest.gui.GUIQuestLog(false).open(player);
+                }
             }
 
             @Override

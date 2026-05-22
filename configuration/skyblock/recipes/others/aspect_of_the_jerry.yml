@@ -1,0 +1,12 @@
+id: ASPECT_OF_THE_JERRY
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: MOVE_JERRY
+  B: STICK
+result:
+  item: ASPECT_OF_THE_JERRY
+  amount: 1

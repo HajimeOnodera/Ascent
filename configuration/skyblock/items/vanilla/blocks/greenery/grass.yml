@@ -1,0 +1,43 @@
+items:
+- id: SHORT_GRASS
+  rarity: COMMON
+  material: SHORT_GRASS
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions:
+        broken_with: SHEARS
+      drops:
+      - item: SHORT_GRASS
+        chance: 1.0
+        amount: 1
+    - conditions: null
+      drops:
+      - item: SEEDS
+        chance: 0.125
+        amount: 1
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: TALL_GRASS
+  rarity: COMMON
+  material: TALL_GRASS
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions:
+        broken_with: SHEARS
+      drops:
+      - item: TALL_GRASS
+        chance: 1.0
+        amount: 1
+    - conditions: null
+      drops:
+      - item: SEEDS
+        chance: 0.125
+        amount: 1
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE

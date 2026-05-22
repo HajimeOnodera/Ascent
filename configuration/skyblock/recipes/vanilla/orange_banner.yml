@@ -1,0 +1,12 @@
+id: ORANGE_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: ORANGE_WOOL
+  B: STICK
+result:
+  item: ORANGE_BANNER
+  amount: 1

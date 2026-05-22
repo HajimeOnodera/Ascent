@@ -1,0 +1,6 @@
+items:
+- id: AIR
+  rarity: COMMON
+  material: AIR
+  components:
+  - id: STACKABLE

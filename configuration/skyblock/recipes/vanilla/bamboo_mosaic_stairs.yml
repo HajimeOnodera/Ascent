@@ -1,0 +1,11 @@
+id: BAMBOO_MOSAIC_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: BAMBOO_MOSAIC
+result:
+  item: BAMBOO_MOSAIC_STAIRS
+  amount: 4

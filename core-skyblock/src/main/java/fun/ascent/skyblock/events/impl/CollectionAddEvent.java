@@ -38,7 +38,7 @@ public class CollectionAddEvent extends SEvent<InventoryItemAddEvent> {
 
         if (material == null || material == Material.AIR) return null;
 
-        String matName = material.name().toUpperCase();
+        String matName = material.name().toUpperCase().replace("MINECRAFT:", "");
         return switch (matName) {
             // Farming
             case "WHEAT" -> "WHEAT";

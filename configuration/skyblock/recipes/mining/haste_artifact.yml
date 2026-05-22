@@ -1,0 +1,15 @@
+id: HASTE_ARTIFACT
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 9
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_COBBLESTONE, amount: 32}
+  B: HASTE_RING
+result:
+  item: HASTE_ARTIFACT
+  amount: 1

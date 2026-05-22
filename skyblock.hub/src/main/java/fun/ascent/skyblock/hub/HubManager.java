@@ -43,7 +43,9 @@ public class HubManager {
     }
 
     private static void spawnHubNPCs(Instance instance) {
-        Reflections reflections = new Reflections("fun.ascent.skyblock.hub.npc");
+        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
+                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.hub.npc", HubManager.class.getClassLoader()))
+                .addClassLoaders(HubManager.class.getClassLoader()));
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
         LOGGER.info("Trying to spawn {} NPCs in Hub", npcs.size());
 

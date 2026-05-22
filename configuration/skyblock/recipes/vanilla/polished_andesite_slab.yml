@@ -1,0 +1,9 @@
+id: POLISHED_ANDESITE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: POLISHED_ANDESITE
+result:
+  item: POLISHED_ANDESITE_SLAB
+  amount: 6

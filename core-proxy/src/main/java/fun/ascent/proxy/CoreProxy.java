@@ -61,6 +61,7 @@ public final class CoreProxy {
         serviceRegistryManager = new ServiceRegistryManager(logger);
         serviceRegistryManager.start();
 
+        proxy.getEventManager().register(this, this);
         proxy.getEventManager().register(this, new ConnectionListener());
     }
 

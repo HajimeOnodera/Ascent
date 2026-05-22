@@ -1,0 +1,12 @@
+id: PINK_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: PINK_WOOL
+  B: STICK
+result:
+  item: PINK_BANNER
+  amount: 1

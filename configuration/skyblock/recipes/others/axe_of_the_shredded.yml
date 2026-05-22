@@ -1,0 +1,13 @@
+id: AXE_OF_THE_SHREDDED
+type: SHAPED
+pattern:
+  - "ABA"
+  - "BCB"
+  - "ABA"
+ingredients:
+  A: {item: REVENANT_VISCERA, amount: 64}
+  B: SHARD_OF_THE_SHREDDED
+  C: REAPER_FALCHION
+result:
+  item: AXE_OF_THE_SHREDDED
+  amount: 1

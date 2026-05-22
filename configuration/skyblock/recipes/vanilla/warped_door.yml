@@ -1,0 +1,11 @@
+id: WARPED_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: WARPED_PLANKS
+result:
+  item: WARPED_DOOR
+  amount: 1

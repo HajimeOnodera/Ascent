@@ -1,0 +1,11 @@
+id: DARK_OAK_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: DARK_OAK_BOAT
+result:
+  item: DARK_OAK_CHEST_BOAT
+  amount: 1

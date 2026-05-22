@@ -1,0 +1,11 @@
+id: OAK_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: OAK_DOOR
+  amount: 1

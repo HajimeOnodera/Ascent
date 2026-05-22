@@ -1,0 +1,11 @@
+id: ACACIA_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: ACACIA_PLANKS
+result:
+  item: ACACIA_STAIRS
+  amount: 4

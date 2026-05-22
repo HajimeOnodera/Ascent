@@ -1,0 +1,12 @@
+id: ORANGE_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: ORANGE_DYE
+result:
+  item: ORANGE_TERRACOTTA
+  amount: 8

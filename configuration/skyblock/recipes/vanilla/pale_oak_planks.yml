@@ -1,0 +1,7 @@
+id: PALE_OAK_PLANKS
+type: SHAPELESS
+ingredients:
+  - PALE_OAK_LOG
+result:
+  item: PALE_OAK_PLANKS
+  amount: 4

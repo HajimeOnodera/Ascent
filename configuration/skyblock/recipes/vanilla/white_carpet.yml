@@ -1,0 +1,9 @@
+id: WHITE_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: WHITE_WOOL
+result:
+  item: WHITE_CARPET
+  amount: 3

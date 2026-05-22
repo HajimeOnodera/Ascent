@@ -1,0 +1,15 @@
+id: ARTIFACT_POTION_AFFINITY
+type: SHAPED
+requirements:
+  collections:
+    NETHER_WART: 9
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_NETHER_WART, amount: 32}
+  B: RING_POTION_AFFINITY
+result:
+  item: ARTIFACT_POTION_AFFINITY
+  amount: 1

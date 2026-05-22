@@ -1,0 +1,12 @@
+id: GOLDEN_HOE
+type: SHAPED
+pattern:
+  - "AA"
+  - " B"
+  - " B"
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+result:
+  item: GOLDEN_HOE
+  amount: 1

@@ -1,0 +1,11 @@
+id: JUNGLE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: JUNGLE_PLANKS
+result:
+  item: JUNGLE_STAIRS
+  amount: 4

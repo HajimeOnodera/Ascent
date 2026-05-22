@@ -1,0 +1,11 @@
+id: DARK_OAK_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: DARK_OAK_PLANKS
+result:
+  item: DARK_OAK_DOOR
+  amount: 1

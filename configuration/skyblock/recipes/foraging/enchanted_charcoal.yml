@@ -1,0 +1,15 @@
+id: ENCHANTED_CHARCOAL
+type: SHAPED
+requirements:
+  collections:
+    COAL: 5
+pattern:
+  - " A "
+  - "ABA"
+  - " A "
+ingredients:
+  A: {item: COAL, amount: 32}
+  B: {item: OAK_LOG, amount: 32}
+result:
+  item: ENCHANTED_CHARCOAL
+  amount: 1

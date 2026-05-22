@@ -1,0 +1,16 @@
+id: LARGE_ENCHANTED_AGRONOMY_SACK
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 11
+pattern:
+  - "ABA"
+  - "ACA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_HAY_BALE, amount: 3}
+  B: {item: ENCHANTED_STRING, amount: 16}
+  C: {item: ENCHANTED_LEATHER, amount: 12}
+result:
+  item: LARGE_ENCHANTED_AGRONOMY_SACK
+  amount: 1

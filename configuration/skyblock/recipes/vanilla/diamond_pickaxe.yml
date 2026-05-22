@@ -1,0 +1,12 @@
+id: DIAMOND_PICKAXE
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - " B "
+ingredients:
+  A: DIAMOND
+  B: STICK
+result:
+  item: DIAMOND_PICKAXE
+  amount: 1

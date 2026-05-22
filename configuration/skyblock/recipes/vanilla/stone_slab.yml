@@ -1,0 +1,9 @@
+id: STONE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: STONE
+result:
+  item: STONE_SLAB
+  amount: 6

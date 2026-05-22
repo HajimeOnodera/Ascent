@@ -1,0 +1,11 @@
+id: POLISHED_ANDESITE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: POLISHED_ANDESITE
+result:
+  item: POLISHED_ANDESITE_STAIRS
+  amount: 4

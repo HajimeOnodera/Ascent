@@ -1,0 +1,9 @@
+id: LIME_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: LIME_WOOL
+result:
+  item: LIME_CARPET
+  amount: 3

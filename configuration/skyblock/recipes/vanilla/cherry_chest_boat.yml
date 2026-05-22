@@ -1,0 +1,11 @@
+id: CHERRY_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: CHERRY_BOAT
+result:
+  item: CHERRY_CHEST_BOAT
+  amount: 1

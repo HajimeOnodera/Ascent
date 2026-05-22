@@ -1,0 +1,7 @@
+id: LIGHT_GRAY_DYE_ALT2
+type: SHAPELESS
+ingredients:
+  - AZURE_BLUET
+result:
+  item: LIGHT_GRAY_DYE
+  amount: 1

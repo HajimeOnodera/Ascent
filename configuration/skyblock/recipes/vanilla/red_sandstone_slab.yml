@@ -1,0 +1,9 @@
+id: RED_SANDSTONE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: RED_SANDSTONE
+result:
+  item: RED_SANDSTONE_SLAB
+  amount: 6

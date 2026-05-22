@@ -1,0 +1,15 @@
+id: HYPER_FURNACE
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 8
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_COBBLESTONE, amount: 8}
+  B: {item: ENCHANTED_COAL, amount: 8}
+result:
+  item: HYPER_FURNACE
+  amount: 1

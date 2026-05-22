@@ -1,0 +1,11 @@
+id: STONE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: STONE
+result:
+  item: STONE_STAIRS
+  amount: 4

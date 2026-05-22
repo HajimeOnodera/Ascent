@@ -1,0 +1,12 @@
+id: RED_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: RED_DYE
+result:
+  item: RED_TERRACOTTA
+  amount: 8

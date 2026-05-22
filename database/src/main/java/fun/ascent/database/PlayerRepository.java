@@ -56,6 +56,21 @@ public final class PlayerRepository {
         return collection().deleteOne(Filters.eq("_id", uuid.toString())).getDeletedCount() > 0;
     }
 
+    /**
+     * Gets a player's UUID by their username (case-insensitive).
+     */
+    public static UUID getUUIDByName(String username) {
+        Document doc = collection().find(Filters.eq("profile.name", username)).first();
+        if (doc == null) {
+            // Case-insensitive fallback
+            doc = collection().find(Filters.regex("profile.name", "^" + username + "$", "i")).first();
+        }
+        if (doc != null) {
+            return UUID.fromString(doc.getString("_id"));
+        }
+        return null;
+    }
+
     // ── Section-based operations ────────────────────────────────────────────
 
     /**

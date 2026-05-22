@@ -1,0 +1,15 @@
+id: AUTO_SMELTER
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 3
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: COBBLESTONE, amount: 8}
+  B: COAL
+result:
+  item: AUTO_SMELTER
+  amount: 1

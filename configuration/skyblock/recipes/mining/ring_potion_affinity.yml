@@ -1,0 +1,15 @@
+id: RING_POTION_AFFINITY
+type: SHAPED
+requirements:
+  collections:
+    NETHER_WART: 7
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: ENCHANTED_NETHER_WART
+  B: POTION_AFFINITY_TALISMAN
+result:
+  item: RING_POTION_AFFINITY
+  amount: 1

@@ -1,0 +1,13 @@
+id: DETECTOR_RAIL
+type: SHAPED
+pattern:
+  - "A A"
+  - "ABA"
+  - "ACA"
+ingredients:
+  A: IRON_INGOT
+  B: STONE_PRESSURE_PLATE
+  C: REDSTONE
+result:
+  item: DETECTOR_RAIL
+  amount: 6

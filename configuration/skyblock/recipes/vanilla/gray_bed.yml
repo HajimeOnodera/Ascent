@@ -1,0 +1,11 @@
+id: GRAY_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: GRAY_WOOL
+  B: OAK_PLANKS
+result:
+  item: GRAY_BED
+  amount: 1

@@ -1,0 +1,12 @@
+id: WOODEN_PICKAXE
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - " B "
+ingredients:
+  A: OAK_PLANKS
+  B: STICK
+result:
+  item: WOODEN_PICKAXE
+  amount: 1

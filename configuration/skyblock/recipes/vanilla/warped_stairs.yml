@@ -1,0 +1,11 @@
+id: WARPED_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: WARPED_PLANKS
+result:
+  item: WARPED_STAIRS
+  amount: 4

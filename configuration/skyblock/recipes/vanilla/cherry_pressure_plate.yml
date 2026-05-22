@@ -1,0 +1,9 @@
+id: CHERRY_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_PRESSURE_PLATE
+  amount: 1

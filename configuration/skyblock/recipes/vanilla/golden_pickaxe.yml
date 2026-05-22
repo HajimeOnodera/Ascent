@@ -1,0 +1,12 @@
+id: GOLDEN_PICKAXE
+type: SHAPED
+pattern:
+  - "AAA"
+  - " B "
+  - " B "
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+result:
+  item: GOLDEN_PICKAXE
+  amount: 1

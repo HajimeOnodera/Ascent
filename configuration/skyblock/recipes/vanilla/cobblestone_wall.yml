@@ -1,0 +1,10 @@
+id: COBBLESTONE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: COBBLESTONE
+result:
+  item: COBBLESTONE_WALL
+  amount: 6

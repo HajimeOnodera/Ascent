@@ -1,0 +1,13 @@
+id: FARM_SUIT_BOOTS
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 3
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: HAY_BALE
+result:
+  item: FARM_SUIT_BOOTS
+  amount: 1

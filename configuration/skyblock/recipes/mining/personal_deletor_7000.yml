@@ -1,0 +1,15 @@
+id: PERSONAL_DELETOR_7000
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 12
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: ENCHANTED_IRON_BLOCK
+  B: PERSONAL_DELETOR_6000
+result:
+  item: PERSONAL_DELETOR_7000
+  amount: 1

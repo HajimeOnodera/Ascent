@@ -1,0 +1,11 @@
+id: IRON_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: IRON_BLOCK
+  amount: 1

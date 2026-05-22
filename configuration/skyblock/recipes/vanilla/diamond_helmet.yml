@@ -1,0 +1,10 @@
+id: DIAMOND_HELMET
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+ingredients:
+  A: DIAMOND
+result:
+  item: DIAMOND_HELMET
+  amount: 1

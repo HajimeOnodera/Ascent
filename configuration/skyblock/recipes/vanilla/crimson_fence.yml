@@ -1,0 +1,11 @@
+id: CRIMSON_FENCE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: CRIMSON_PLANKS
+  B: STICK
+result:
+  item: CRIMSON_FENCE
+  amount: 3

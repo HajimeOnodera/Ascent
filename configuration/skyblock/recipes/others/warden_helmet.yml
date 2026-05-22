@@ -1,0 +1,12 @@
+id: WARDEN_HELMET
+type: SHAPED
+pattern:
+  - "ABA"
+  - "C C"
+ingredients:
+  A: REVIVED_HEART
+  B: WARDEN_HEART
+  C: {item: ENCHANTED_IRON_BLOCK, amount: 64}
+result:
+  item: WARDEN_HELMET
+  amount: 1

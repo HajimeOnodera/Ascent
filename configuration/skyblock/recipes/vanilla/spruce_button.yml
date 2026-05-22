@@ -1,0 +1,7 @@
+id: SPRUCE_BUTTON
+type: SHAPELESS
+ingredients:
+  - SPRUCE_PLANKS
+result:
+  item: SPRUCE_BUTTON
+  amount: 1

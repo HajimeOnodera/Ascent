@@ -35,4 +35,8 @@ public class IslandDatabase {
     public static boolean exists(UUID islandId) {
         return collection.find(Filters.eq("_id", islandId.toString())).first() != null;
     }
+
+    public static void deleteIsland(UUID islandId) {
+        collection.deleteOne(Filters.eq("_id", islandId.toString()));
+    }
 }

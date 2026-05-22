@@ -1,0 +1,16 @@
+id: SEA_CREATURE_RING
+type: SHAPED
+requirements:
+  collections:
+    SPONGE: 6
+pattern:
+  - "ABA"
+  - "ACA"
+  - "ABA"
+ingredients:
+  A: SPONGE
+  B: ENCHANTED_SPONGE
+  c: SEA_CREATURE_TALISMAN
+result:
+  item: SEA_CREATURE_RING
+  amount: 1

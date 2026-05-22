@@ -1,0 +1,11 @@
+id: COAL_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: COAL
+result:
+  item: COAL_BLOCK
+  amount: 1

@@ -1,0 +1,8 @@
+id: GRAY_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - GRAY_DYE
+result:
+  item: GRAY_WOOL
+  amount: 1

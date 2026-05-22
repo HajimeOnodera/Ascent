@@ -1,0 +1,9 @@
+id: BROWN_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: BROWN_WOOL
+result:
+  item: BROWN_CARPET
+  amount: 3

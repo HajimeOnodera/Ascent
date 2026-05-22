@@ -1,0 +1,8 @@
+id: LIGHT_GRAY_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - GRAY_DYE
+  - WHITE_DYE
+result:
+  item: LIGHT_GRAY_DYE
+  amount: 2

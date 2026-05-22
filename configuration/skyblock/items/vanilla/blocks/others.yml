@@ -1,0 +1,155 @@
+items:
+- id: BOOKSHELF
+  material: BOOKSHELF
+  rarity: COMMON
+  components:
+  - id: CUSTOM_DROP
+    rules:
+    - conditions:
+        silk_touch: true
+      drops:
+      - item: BOOKSHELF
+        chance: 1.0
+        amount: 1
+    - conditions: null
+      drops:
+      - item: BOOK
+        chance: 1.0
+        amount: 3
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 20
+  - id: DEFAULT_CRAFTABLE
+    recipes:
+    - type: SHAPED
+      recipe-type: NONE
+      pattern:
+      - AAA
+      - BBB
+      - AAA
+      ingredients:
+        A:
+          type: OAK_PLANKS
+          amount: 1
+        B:
+          type: BOOK
+          amount: 1
+      result:
+        type: BOOKSHELF
+        amount: 1
+  - id: STACKABLE
+- id: BRICKS
+  rarity: COMMON
+  material: BRICKS
+  components:
+  - id: STACKABLE
+- id: BRICK_SLAB
+  rarity: COMMON
+  material: BRICK_SLAB
+  components:
+  - id: STACKABLE
+- id: BRICK_STAIRS
+  rarity: COMMON
+  material: BRICK_STAIRS
+  components:
+  - id: STACKABLE
+- id: BROWN_MUSHROOM
+  rarity: COMMON
+  material: BROWN_MUSHROOM
+  components:
+  - id: STACKABLE
+- id: BROWN_MUSHROOM_BLOCK
+  rarity: COMMON
+  material: BROWN_MUSHROOM_BLOCK
+  components:
+  - id: STACKABLE
+- id: ENDER_CHEST
+  rarity: COMMON
+  material: ENDER_CHEST
+  components:
+  - id: STACKABLE
+- id: END_ROD
+  rarity: COMMON
+  material: END_ROD
+  components:
+  - id: UNSTACKABLE
+- id: FLOWER_POT
+  rarity: COMMON
+  material: FLOWER_POT
+  components:
+  - id: STACKABLE
+- id: IRON_BARS
+  rarity: COMMON
+  material: IRON_BARS
+  components:
+  - id: STACKABLE
+- id: IRON_DOOR
+  rarity: COMMON
+  material: IRON_DOOR
+  components:
+  - id: STACKABLE
+- id: IRON_TRAPDOOR
+  rarity: COMMON
+  material: IRON_TRAPDOOR
+  components:
+  - id: STACKABLE
+- id: JACK_O_LANTERN
+  rarity: COMMON
+  material: JACK_O_LANTERN
+  components:
+  - id: STACKABLE
+- id: PURPUR_BLOCK
+  rarity: COMMON
+  material: PURPUR_BLOCK
+  components:
+  - id: STACKABLE
+- id: PURPUR_PILLAR
+  rarity: COMMON
+  material: PURPUR_PILLAR
+  components:
+  - id: STACKABLE
+- id: PURPUR_SLAB
+  rarity: COMMON
+  material: PURPUR_SLAB
+  components:
+  - id: STACKABLE
+- id: PURPUR_STAIRS
+  rarity: COMMON
+  material: PURPUR_STAIRS
+  components:
+  - id: STACKABLE
+- id: RED_MUSHROOM_BLOCK
+  rarity: COMMON
+  material: RED_MUSHROOM_BLOCK
+  components:
+  - id: STACKABLE
+- id: REDSTONE_LAMP
+  rarity: COMMON
+  material: REDSTONE_LAMP
+  components:
+  - id: STACKABLE
+- id: SEA_LANTERN
+  rarity: COMMON
+  material: SEA_LANTERN
+  components:
+  - id: STACKABLE
+- id: SOUL_SAND
+  rarity: COMMON
+  material: SOUL_SAND
+  components:
+  - id: STACKABLE
+- id: TORCH
+  rarity: COMMON
+  material: TORCH
+  components:
+  - id: STACKABLE
+- id: VINES
+  rarity: COMMON
+  material: VINE
+  components:
+  - id: STACKABLE
+- id: WET_SPONGE
+  rarity: COMMON
+  material: WET_SPONGE
+  components:
+  - id: STACKABLE

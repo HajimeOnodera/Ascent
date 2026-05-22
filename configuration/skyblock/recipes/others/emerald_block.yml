@@ -1,0 +1,11 @@
+id: EMERALD_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: EMERALD
+result:
+  item: EMERALD_BLOCK
+  amount: 1

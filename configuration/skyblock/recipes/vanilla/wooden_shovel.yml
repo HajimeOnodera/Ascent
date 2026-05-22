@@ -1,0 +1,12 @@
+id: WOODEN_SHOVEL
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "B"
+ingredients:
+  A: OAK_PLANKS
+  B: STICK
+result:
+  item: WOODEN_SHOVEL
+  amount: 1

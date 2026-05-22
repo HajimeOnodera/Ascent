@@ -1,0 +1,7 @@
+id: CRIMSON_PLANKS
+type: SHAPELESS
+ingredients:
+  - CRIMSON_STEM
+result:
+  item: CRIMSON_PLANKS
+  amount: 4

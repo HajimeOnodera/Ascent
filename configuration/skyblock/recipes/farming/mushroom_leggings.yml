@@ -1,0 +1,14 @@
+id: MUSHROOM_LEGGINGS
+type: SHAPED
+requirements:
+  collections:
+    RED_MUSHROOM: 3
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: RED_MUSHROOM
+result:
+  item: MUSHROOM_LEGGINGS
+  amount: 1

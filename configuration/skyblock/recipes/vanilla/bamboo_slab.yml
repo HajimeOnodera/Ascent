@@ -1,0 +1,9 @@
+id: BAMBOO_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: BAMBOO_PLANKS
+result:
+  item: BAMBOO_SLAB
+  amount: 6

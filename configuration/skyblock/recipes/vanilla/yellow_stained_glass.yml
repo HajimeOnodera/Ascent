@@ -1,0 +1,12 @@
+id: YELLOW_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: YELLOW_DYE
+result:
+  item: YELLOW_STAINED_GLASS
+  amount: 8

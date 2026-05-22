@@ -1,0 +1,14 @@
+id: PUMPKIN_CHESTPLATE
+type: SHAPED
+requirements:
+  collections:
+    PUMPKIN: 2
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: PUMPKIN
+result:
+  item: PUMPKIN_CHESTPLATE
+  amount: 1

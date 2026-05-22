@@ -1,0 +1,7 @@
+id: DARK_OAK_BUTTON
+type: SHAPELESS
+ingredients:
+  - DARK_OAK_PLANKS
+result:
+  item: DARK_OAK_BUTTON
+  amount: 1

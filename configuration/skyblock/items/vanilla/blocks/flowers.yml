@@ -1,0 +1,164 @@
+items:
+- id: DANDELION
+  material: dandelion
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: POPPY
+  material: poppy
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: BLUE_ORCHID
+  material: blue_orchid
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: ALLIUM
+  rarity: COMMON
+  material: ALLIUM
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: AZURE_BLUET
+  material: azure_bluet
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: RED_TULIP
+  material: red_tulip
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: ORANGE_TULIP
+  material: orange_tulip
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: WHITE_TULIP
+  material: white_tulip
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: PINK_TULIP
+  material: pink_tulip
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: OXEYE_DAISY
+  material: oxeye_daisy
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: SUNFLOWER
+  material: sunflower
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: LILAC
+  material: lilac
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: ROSE_BUSH
+  material: rose_bush
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: PEONY
+  material: peony
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: CORNFLOWER
+  material: cornflower
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: LILY_OF_THE_VALLEY
+  material: lily_of_the_valley
+  rarity: COMMON
+  components:
+  - id: SELLABLE
+    value: 1.0
+  - id: PLACEABLE
+  - id: STACKABLE
+- id: DEAD_BUSH
+  rarity: COMMON
+  material: DEAD_BUSH
+  components:
+  - id: STACKABLE
+- id: MOONFLOWER
+  rarity: COMMON
+  material: BLUE_ORCHID
+  components:
+  - id: STACKABLE
+- id: PINK_PETALS
+  rarity: COMMON
+  material: PINK_PETALS
+  components:
+  - id: STACKABLE
+- id: PITCHER_PLANT
+  rarity: COMMON
+  material: PITCHER_PLANT
+  components:
+  - id: STACKABLE
+- id: TORCHFLOWER
+  rarity: COMMON
+  material: TORCHFLOWER
+  components:
+  - id: STACKABLE
+- id: WILD_ROSE
+  rarity: COMMON
+  material: ROSE_BUSH
+  components:
+  - id: STACKABLE
+- id: WITHER_ROSE
+  rarity: COMMON
+  material: WITHER_ROSE
+  components:
+  - id: STACKABLE

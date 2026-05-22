@@ -1,0 +1,12 @@
+id: DIAMOND_SHOVEL
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "B"
+ingredients:
+  A: DIAMOND
+  B: STICK
+result:
+  item: DIAMOND_SHOVEL
+  amount: 1

@@ -1,0 +1,12 @@
+id: MANGROVE_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_MANGROVE_LOG
+result:
+  item: MANGROVE_HANGING_SIGN
+  amount: 6

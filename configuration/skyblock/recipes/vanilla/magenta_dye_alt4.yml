@@ -1,0 +1,9 @@
+id: MAGENTA_DYE_ALT4
+type: SHAPELESS
+ingredients:
+  - BLUE_DYE
+  - {item: RED_DYE, amount: 2}
+  - WHITE_DYE
+result:
+  item: MAGENTA_DYE
+  amount: 4

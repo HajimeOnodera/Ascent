@@ -1,0 +1,14 @@
+id: HOT_POTATO_BOOK
+type: SHAPED
+requirements:
+  collections:
+    POTATO: 8
+pattern:
+  - "AA"
+  - "AB"
+ingredients:
+  A: PAPER
+  B: ENCHANTED_BAKED_POTATO
+result:
+  item: HOT_POTATO_BOOK
+  amount: 1

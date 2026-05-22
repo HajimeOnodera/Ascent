@@ -1,0 +1,10 @@
+id: GOLDEN_BOOTS
+type: SHAPED
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: GOLD_INGOT
+result:
+  item: GOLDEN_BOOTS
+  amount: 1

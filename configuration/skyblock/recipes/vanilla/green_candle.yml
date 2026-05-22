@@ -1,0 +1,8 @@
+id: GREEN_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - GREEN_DYE
+result:
+  item: GREEN_CANDLE
+  amount: 1

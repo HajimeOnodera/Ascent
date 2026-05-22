@@ -61,6 +61,7 @@ public class Main {
         CollectionRegistry.init();
         SkyBlockLevelRequirement.loadFromYaml();
         RecipeRegistry.init();
+        fun.ascent.skyblock.quest.QuestRegistry.init();
         CommandHandler.initialise();
         EntityRegistry.scanAndRegister("fun.ascent.skyblock.entity.mob.mobs");
         FishingModule.init();

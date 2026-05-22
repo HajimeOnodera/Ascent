@@ -1,0 +1,11 @@
+id: DIAMOND_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: DIAMOND
+result:
+  item: DIAMOND_BLOCK
+  amount: 1

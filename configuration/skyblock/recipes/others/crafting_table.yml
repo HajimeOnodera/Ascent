@@ -1,0 +1,10 @@
+id: CRAFTING_TABLE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: OAK_PLANKS
+result:
+  item: CRAFTING_TABLE
+  amount: 1

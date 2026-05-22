@@ -1,0 +1,15 @@
+id: ASPECT_OF_THE_END
+type: SHAPED
+requirements:
+  collections:
+    ENDER_PEARL: 8
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: {item: ENCHANTED_EYE_OF_ENDER, amount: 16}
+  B: ENCHANTED_DIAMOND
+result:
+  item: ASPECT_OF_THE_END
+  amount: 1

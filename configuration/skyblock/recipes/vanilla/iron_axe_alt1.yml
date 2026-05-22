@@ -1,0 +1,12 @@
+id: IRON_AXE_ALT1
+type: SHAPED
+pattern:
+  - "AA"
+  - "BA"
+  - "B"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: IRON_AXE
+  amount: 1

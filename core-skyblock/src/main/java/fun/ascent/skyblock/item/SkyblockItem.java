@@ -115,6 +115,8 @@ public class SkyblockItem {
     private final int kills;
     private final boolean artOfPeace;
     @Getter
+    private final boolean unstackable;
+    @Getter
     private final UUID uuid;
 
     private SkyblockItem(Builder builder) {
@@ -150,6 +152,7 @@ public class SkyblockItem {
         this.bookOfStats = builder.bookOfStats;
         this.kills = builder.kills;
         this.artOfPeace = builder.artOfPeace;
+        this.unstackable = builder.unstackable;
         this.uuid = builder.uuid != null ? builder.uuid : UUID.randomUUID();
     }
 
@@ -288,9 +291,12 @@ public class SkyblockItem {
 
     private CustomData buildCustomData() {
         CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder()
-                .putString("id", itemId)
-                .putString("uuid", uuid.toString())
-                .putLong("timestamp", System.currentTimeMillis());
+                .putString("id", itemId);
+
+        if (unstackable) {
+            tag.putString("uuid", uuid.toString())
+               .putLong("timestamp", System.currentTimeMillis());
+        }
 
         if (recombobulated) {
             tag.putByte("rarity_upgrades", (byte) 1);
@@ -536,6 +542,7 @@ public class SkyblockItem {
         Builder b = new Builder(itemId, material, rarity);
         b.displayName = displayName;
         b.itemType = itemType;
+        b.unstackable = unstackable;
         b.baseStats.putAll(baseStats);
         b.description.addAll(description);
         b.abilities.addAll(abilities);
@@ -607,6 +614,7 @@ public class SkyblockItem {
         private boolean bookOfStats = false;
         private int kills = 0;
         private boolean artOfPeace = false;
+        private Boolean unstackable = null;
         private UUID uuid = null;
 
         private Builder(String itemId, Material material, Rarity rarity) {
@@ -643,9 +651,19 @@ public class SkyblockItem {
         public Builder bookOfStats(boolean bookOfStats) { this.bookOfStats = bookOfStats; return this; }
         public Builder kills(int kills) { this.kills = kills; return this; }
         public Builder artOfPeace(boolean artOfPeace) { this.artOfPeace = artOfPeace; return this; }
+        public Builder unstackable(boolean unstackable) { this.unstackable = unstackable; return this; }
         public Builder uuid(UUID uuid) { this.uuid = uuid; return this; }
 
-        public SkyblockItem build() { return new SkyblockItem(this); }
+        public SkyblockItem build() {
+            if (this.unstackable == null) {
+                if (itemType.isWeapon() || itemType.isArmor() || itemType.isTool() || itemType.isEquipment() || itemType.isAccessory()) {
+                    this.unstackable = true;
+                } else {
+                    this.unstackable = false;
+                }
+            }
+            return new SkyblockItem(this);
+        }
     }
 }
 

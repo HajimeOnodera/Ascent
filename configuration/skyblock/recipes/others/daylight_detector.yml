@@ -1,0 +1,13 @@
+id: DAYLIGHT_DETECTOR
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+  - "CCC"
+ingredients:
+  A: GLASS
+  B: QUARTZ
+  C: OAK_SLAB
+result:
+  item: DAYLIGHT_DETECTOR
+  amount: 1

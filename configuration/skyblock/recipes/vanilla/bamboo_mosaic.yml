@@ -1,0 +1,10 @@
+id: BAMBOO_MOSAIC
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+ingredients:
+  A: BAMBOO_SLAB
+result:
+  item: BAMBOO_MOSAIC
+  amount: 1

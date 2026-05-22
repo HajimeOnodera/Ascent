@@ -1,0 +1,11 @@
+id: MELON_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: MELON_SLICE
+result:
+  item: MELON_BLOCK
+  amount: 1

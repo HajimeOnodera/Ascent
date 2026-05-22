@@ -1,0 +1,12 @@
+id: WHITE_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: WHITE_WOOL
+  B: STICK
+result:
+  item: WHITE_BANNER
+  amount: 1

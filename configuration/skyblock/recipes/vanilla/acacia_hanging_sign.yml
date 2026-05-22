@@ -1,0 +1,12 @@
+id: ACACIA_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_ACACIA_LOG
+result:
+  item: ACACIA_HANGING_SIGN
+  amount: 6

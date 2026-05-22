@@ -1,0 +1,9 @@
+id: YELLOW_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: YELLOW_WOOL
+result:
+  item: YELLOW_CARPET
+  amount: 3

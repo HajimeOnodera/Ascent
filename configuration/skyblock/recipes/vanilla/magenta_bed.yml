@@ -1,0 +1,11 @@
+id: MAGENTA_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: MAGENTA_WOOL
+  B: OAK_PLANKS
+result:
+  item: MAGENTA_BED
+  amount: 1

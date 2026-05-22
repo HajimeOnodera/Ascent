@@ -1,0 +1,11 @@
+id: SPRUCE_CHEST_BOAT
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: SPRUCE_BOAT
+result:
+  item: SPRUCE_CHEST_BOAT
+  amount: 1

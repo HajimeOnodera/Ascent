@@ -1,0 +1,15 @@
+id: MEDIUM_MINING_SACK
+type: SHAPED
+requirements:
+  collections:
+    COAL: 7
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_COAL, amount: 4}
+  B: SMALL_MINING_SACK
+result:
+  item: MEDIUM_MINING_SACK
+  amount: 1

@@ -1,0 +1,8 @@
+id: LIGHT_BLUE_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - LIGHT_BLUE_DYE
+result:
+  item: LIGHT_BLUE_CANDLE
+  amount: 1

@@ -1,0 +1,7 @@
+id: WHITE_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - LILY_OF_THE_VALLEY
+result:
+  item: WHITE_DYE
+  amount: 1

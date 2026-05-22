@@ -1,0 +1,12 @@
+id: TNT
+type: SHAPED
+pattern:
+  - "ABA"
+  - "BAB"
+  - "ABA"
+ingredients:
+  A: GUNPOWDER
+  B: SAND
+result:
+  item: TNT
+  amount: 1

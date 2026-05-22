@@ -1,0 +1,9 @@
+id: RED_CARPET
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: RED_WOOL
+result:
+  item: RED_CARPET
+  amount: 3

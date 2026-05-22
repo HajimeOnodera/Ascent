@@ -1,0 +1,14 @@
+id: SEA_CREATURE_TALISMAN
+type: SHAPED
+requirements:
+  collections:
+    SPONGE: 3
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: {item: SPONGE, amount: 2}
+result:
+  item: SEA_CREATURE_TALISMAN
+  amount: 1

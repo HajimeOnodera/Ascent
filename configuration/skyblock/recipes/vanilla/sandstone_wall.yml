@@ -1,0 +1,10 @@
+id: SANDSTONE_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: SANDSTONE
+result:
+  item: SANDSTONE_WALL
+  amount: 6

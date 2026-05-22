@@ -1,0 +1,15 @@
+id: SUPER_COMPACTOR_3000
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 10
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: {item: ENCHANTED_COBBLESTONE, amount: 64}
+  B: ENCHANTED_REDSTONE_BLOCK
+result:
+  item: SUPER_COMPACTOR_3000
+  amount: 1

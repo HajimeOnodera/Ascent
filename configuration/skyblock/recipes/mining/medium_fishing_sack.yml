@@ -1,0 +1,15 @@
+id: MEDIUM_FISHING_SACK
+type: SHAPED
+requirements:
+  collections:
+    PUFFERFISH: 7
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_PUFFERFISH, amount: 4}
+  B: SMALL_FISHING_SACK
+result:
+  item: MEDIUM_FISHING_SACK
+  amount: 1

@@ -1,0 +1,7 @@
+id: BIRCH_PLANKS
+type: SHAPELESS
+ingredients:
+  - BIRCH_LOG
+result:
+  item: BIRCH_PLANKS
+  amount: 4

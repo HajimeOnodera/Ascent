@@ -1,0 +1,8 @@
+id: YELLOW_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - YELLOW_DYE
+result:
+  item: YELLOW_CANDLE
+  amount: 1

@@ -1,0 +1,9 @@
+id: HEAVY_WEIGHTED_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: HEAVY_WEIGHTED_PRESSURE_PLATE
+  amount: 1

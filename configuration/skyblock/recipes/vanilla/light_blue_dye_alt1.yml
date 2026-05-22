@@ -1,0 +1,7 @@
+id: LIGHT_BLUE_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - BLUE_ORCHID
+result:
+  item: LIGHT_BLUE_DYE
+  amount: 1

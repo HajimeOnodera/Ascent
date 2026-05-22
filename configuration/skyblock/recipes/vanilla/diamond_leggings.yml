@@ -1,0 +1,11 @@
+id: DIAMOND_LEGGINGS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: DIAMOND
+result:
+  item: DIAMOND_LEGGINGS
+  amount: 1

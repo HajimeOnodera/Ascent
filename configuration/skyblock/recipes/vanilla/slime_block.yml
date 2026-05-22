@@ -1,0 +1,11 @@
+id: SLIME_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: SLIME_BALL
+result:
+  item: SLIME_BLOCK
+  amount: 1

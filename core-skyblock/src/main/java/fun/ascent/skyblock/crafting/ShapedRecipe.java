@@ -61,11 +61,19 @@ public class ShapedRecipe extends SkyblockRecipe {
                 
                 RecipeIngredient ingredient = ingredients.get(symbol);
                 if (ingredient != null) {
-                    SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId());
+                    SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId().toUpperCase().replace("MINECRAFT:", ""));
                     if (item != null) {
                         grid[r * 3 + c] = item.buildItemStack(player).withAmount(ingredient.getAmount());
                     } else {
-                        grid[r * 3 + c] = ItemStack.of(Material.fromKey("minecraft:" + ingredient.getItemId().toLowerCase())).withAmount(ingredient.getAmount());
+                        String matName = ingredient.getItemId().toLowerCase().replace("minecraft:", "");
+                        Material mat = Material.fromKey("minecraft:" + matName);
+                        if (mat == null) {
+                            mat = Material.fromKey(matName);
+                        }
+                        if (mat == null) {
+                            mat = Material.PAPER;
+                        }
+                        grid[r * 3 + c] = ItemStack.of(mat).withAmount(ingredient.getAmount());
                     }
                 }
             }
@@ -106,12 +114,7 @@ public class ShapedRecipe extends SkyblockRecipe {
                         if (ingredient == null) return false;
                         if (stack == null || stack.isAir()) return false;
                         
-                        SkyblockItem si = SkyblockItem.fromStack(stack);
-                        if (si == null) {
-                            if (!stack.material().name().equals(ingredient.getItemId())) return false;
-                        } else {
-                            if (!ingredient.getItemId().equals(si.getItemId())) return false;
-                        }
+                        if (!matchesIngredient(stack, ingredient.getItemId())) return false;
                         
                         if (stack.amount() < ingredient.getAmount()) return false;
                     }
@@ -136,10 +139,11 @@ public class ShapedRecipe extends SkyblockRecipe {
                             char symbol = pattern.get(r).charAt(c);
                             if (symbol == ' ') continue;
                             
-                            RecipeIngredient ingredient = ingredients.get(symbol);
-                            int slot = gridSlots[(startRow + r) * 3 + (startCol + c)];
-                            ItemStack stack = inv.getItemStack(slot);
-                            inv.setItemStack(slot, stack.withAmount(stack.amount() - ingredient.getAmount()));
+                             RecipeIngredient ingredient = ingredients.get(symbol);
+                             int slot = gridSlots[(startRow + r) * 3 + (startCol + c)];
+                             ItemStack stack = inv.getItemStack(slot);
+                             int newAmount = stack.amount() - ingredient.getAmount();
+                             inv.setItemStack(slot, newAmount <= 0 ? ItemStack.AIR : stack.withAmount(newAmount));
                         }
                     }
                     return;

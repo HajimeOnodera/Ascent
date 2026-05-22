@@ -1,0 +1,10 @@
+id: SCARFS_GRIMOIRE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SCARFS_THESIS
+result:
+  item: SCARFS_GRIMOIRE
+  amount: 1

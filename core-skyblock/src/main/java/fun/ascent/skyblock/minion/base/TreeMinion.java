@@ -29,7 +29,7 @@ public abstract class TreeMinion extends SkyblockMinion {
             return;
         }
         setCurrentTask(MinionTask.HARVEST);
-        List<ItemStack> drops = List.of(ItemStack.of(getProfile().outputMaterial(), 3));
+        List<ItemStack> drops = List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(getProfile().outputMaterial(), 3));
         if (canStoreDrops(drops)) {
             return;
         }

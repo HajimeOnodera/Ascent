@@ -1,0 +1,8 @@
+id: CYAN_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - CYAN_DYE
+result:
+  item: CYAN_CANDLE
+  amount: 1

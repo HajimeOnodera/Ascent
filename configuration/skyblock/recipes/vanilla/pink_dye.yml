@@ -1,0 +1,7 @@
+id: PINK_DYE
+type: SHAPELESS
+ingredients:
+  - PINK_TULIP
+result:
+  item: PINK_DYE
+  amount: 1

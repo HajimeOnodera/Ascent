@@ -1,0 +1,12 @@
+id: NOTE_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: OAK_PLANKS
+  B: REDSTONE
+result:
+  item: NOTE_BLOCK
+  amount: 1

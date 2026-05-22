@@ -1,0 +1,15 @@
+id: PERSONAL_COMPACTOR_4000
+type: SHAPED
+requirements:
+  collections:
+    REDSTONE: 9
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: {item: ENCHANTED_REDSTONE, amount: 64}
+  B: SUPER_COMPACTOR_3000
+result:
+  item: PERSONAL_COMPACTOR_4000
+  amount: 1

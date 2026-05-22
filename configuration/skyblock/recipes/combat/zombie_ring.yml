@@ -1,0 +1,13 @@
+id: ZOMBIE_RING
+type: SHAPED
+requirements:
+  skills:
+    skyblock: 10
+pattern:
+  - "ABA"
+ingredients:
+  A: {item: REVENANT_FLESH, amount: 32}
+  B: ZOMBIE_TALISMAN
+result:
+  item: ZOMBIE_RING
+  amount: 1

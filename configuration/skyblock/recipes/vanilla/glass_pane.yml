@@ -1,0 +1,10 @@
+id: GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: GLASS
+result:
+  item: GLASS_PANE
+  amount: 16

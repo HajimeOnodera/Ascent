@@ -1,0 +1,129 @@
+items:
+- id: WHITE_GLAZED_TERRACOTTA
+  material: WHITE_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: ORANGE_GLAZED_TERRACOTTA
+  material: ORANGE_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: MAGENTA_GLAZED_TERRACOTTA
+  material: MAGENTA_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: LIGHT_BLUE_GLAZED_TERRACOTTA
+  material: LIGHT_BLUE_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: YELLOW_GLAZED_TERRACOTTA
+  material: YELLOW_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: LIME_GLAZED_TERRACOTTA
+  material: LIME_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: PINK_GLAZED_TERRACOTTA
+  material: PINK_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: GRAY_GLAZED_TERRACOTTA
+  material: GRAY_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: LIGHT_GRAY_GLAZED_TERRACOTTA
+  material: LIGHT_GRAY_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: CYAN_GLAZED_TERRACOTTA
+  material: CYAN_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: PURPLE_GLAZED_TERRACOTTA
+  material: PURPLE_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: BLUE_GLAZED_TERRACOTTA
+  material: BLUE_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: BROWN_GLAZED_TERRACOTTA
+  material: BROWN_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: GREEN_GLAZED_TERRACOTTA
+  material: GREEN_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: RED_GLAZED_TERRACOTTA
+  material: RED_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE
+- id: BLACK_GLAZED_TERRACOTTA
+  material: BLACK_GLAZED_TERRACOTTA
+  rarity: COMMON
+  components:
+  - id: PLACEABLE
+  - id: SELLABLE
+    value: 1.0
+  - id: STACKABLE

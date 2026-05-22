@@ -1,0 +1,14 @@
+id: SMALL_BACKPACK
+type: SHAPED
+requirements:
+  collections:
+    LEATHER: 3
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: {item: LEATHER, amount: 10}
+result:
+  item: SMALL_BACKPACK
+  amount: 1

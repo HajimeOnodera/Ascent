@@ -29,6 +29,14 @@ public class RegionListener {
             String currentId = current != null ? current.getId() : "none";
 
             if (!currentId.equals(lastRegionId)) {
+                RegionType fromType = null;
+                if (lastRegionId != null && !lastRegionId.equals("none")) {
+                    try {
+                        Region lastRegion = RegionManager.getRegion(lastRegionId);
+                        if (lastRegion != null) fromType = lastRegion.getType();
+                    } catch (Exception ignored) {}
+                }
+                
                 player.setTag(LAST_REGION, currentId);
                 if (current != null) {
                     ActionBar.of(player.getUuid()).addReplacement(
@@ -36,6 +44,10 @@ public class RegionListener {
                             "<gray> ⏣ " + current.getType().getColor() + current.getType().getName(),
                             20, 10);
                     checkNewZoneDiscovery(player, current.getType());
+                    
+                    net.minestom.server.MinecraftServer.getGlobalEventHandler().call(
+                        new fun.ascent.skyblock.events.PlayerRegionChangeEvent(player, fromType, current.getType())
+                    );
                 }
             }
         });

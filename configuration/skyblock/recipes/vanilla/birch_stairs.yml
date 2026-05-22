@@ -1,0 +1,11 @@
+id: BIRCH_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: BIRCH_PLANKS
+result:
+  item: BIRCH_STAIRS
+  amount: 4

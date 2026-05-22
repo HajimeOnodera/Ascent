@@ -1,0 +1,15 @@
+id: SMALL_COMBAT_SACK
+type: SHAPED
+requirements:
+  collections:
+    ROTTEN_FLESH: 5
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_ROTTEN_FLESH, amount: 2}
+  B: ENCHANTED_LEATHER
+result:
+  item: SMALL_COMBAT_SACK
+  amount: 1

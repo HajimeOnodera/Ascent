@@ -1,0 +1,13 @@
+id: MUSHROOM_BOOTS
+type: SHAPED
+requirements:
+  collections:
+    RED_MUSHROOM: 3
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: RED_MUSHROOM
+result:
+  item: MUSHROOM_BOOTS
+  amount: 1

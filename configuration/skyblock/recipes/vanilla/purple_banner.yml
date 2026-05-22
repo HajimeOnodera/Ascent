@@ -1,0 +1,12 @@
+id: PURPLE_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: PURPLE_WOOL
+  B: STICK
+result:
+  item: PURPLE_BANNER
+  amount: 1

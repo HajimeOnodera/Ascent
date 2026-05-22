@@ -1,0 +1,10 @@
+id: LIGHT_BLUE_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: LIGHT_BLUE_STAINED_GLASS
+result:
+  item: LIGHT_BLUE_STAINED_GLASS_PANE
+  amount: 16

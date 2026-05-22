@@ -1,0 +1,13 @@
+id: REAPER_FALCHION_ALT1
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "C"
+ingredients:
+  A: CRYSTALLIZED_HEART
+  B: UNDEAD_CATALYST
+  C: UNDEAD_SWORD
+result:
+  item: REAPER_FALCHION
+  amount: 1

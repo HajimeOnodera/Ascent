@@ -1,0 +1,15 @@
+id: GREATER_BACKPACK
+type: SHAPED
+requirements:
+  collections:
+    LEATHER: 10
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_LEATHER, amount: 4}
+  B: LARGE_BACKPACK
+result:
+  item: GREATER_BACKPACK
+  amount: 1

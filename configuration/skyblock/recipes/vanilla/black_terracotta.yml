@@ -1,0 +1,12 @@
+id: BLACK_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: BLACK_DYE
+result:
+  item: BLACK_TERRACOTTA
+  amount: 8

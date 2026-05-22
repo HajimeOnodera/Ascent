@@ -1,0 +1,9 @@
+id: MANGROVE_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: MANGROVE_PLANKS
+result:
+  item: MANGROVE_PRESSURE_PLATE
+  amount: 1

@@ -1,0 +1,10 @@
+id: PINK_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: PINK_STAINED_GLASS
+result:
+  item: PINK_STAINED_GLASS_PANE
+  amount: 16

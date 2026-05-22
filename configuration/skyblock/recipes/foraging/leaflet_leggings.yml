@@ -1,0 +1,14 @@
+id: LEAFLET_LEGGINGS
+type: SHAPED
+requirements:
+  collections:
+    OAK_LOG: 3
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: OAK_LEAVES
+result:
+  item: LEAFLET_LEGGINGS
+  amount: 1

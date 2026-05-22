@@ -1,0 +1,11 @@
+id: LEVER
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: STICK
+  B: COBBLESTONE
+result:
+  item: LEVER
+  amount: 1

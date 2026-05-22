@@ -1,0 +1,9 @@
+id: CRIMSON_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: CRIMSON_PLANKS
+result:
+  item: CRIMSON_PRESSURE_PLATE
+  amount: 1

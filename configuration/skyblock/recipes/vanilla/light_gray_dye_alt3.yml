@@ -1,0 +1,7 @@
+id: LIGHT_GRAY_DYE_ALT3
+type: SHAPELESS
+ingredients:
+  - OXEYE_DAISY
+result:
+  item: LIGHT_GRAY_DYE
+  amount: 1

@@ -1,0 +1,15 @@
+id: PRISMARINE_BLADE
+type: SHAPED
+requirements:
+  collections:
+    PRISMARINE_SHARD: 2
+pattern:
+  - "A"
+  - "A"
+  - "B"
+ingredients:
+  A: {item: PRISMARINE_SHARD, amount: 32}
+  B: STICK
+result:
+  item: PRISMARINE_BLADE
+  amount: 1

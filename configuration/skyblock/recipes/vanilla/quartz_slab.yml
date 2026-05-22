@@ -1,0 +1,9 @@
+id: QUARTZ_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: QUARTZ_BLOCK
+result:
+  item: QUARTZ_SLAB
+  amount: 6

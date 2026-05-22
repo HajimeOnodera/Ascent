@@ -1,0 +1,13 @@
+id: REAPER_FALCHION
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "C"
+ingredients:
+  A: REVIVED_HEART
+  B: REVENANT_CATALYST
+  C: REVENANT_FALCHION
+result:
+  item: REAPER_FALCHION
+  amount: 1

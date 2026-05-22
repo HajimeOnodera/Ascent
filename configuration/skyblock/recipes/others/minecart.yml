@@ -1,0 +1,10 @@
+id: MINECART
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: MINECART
+  amount: 1

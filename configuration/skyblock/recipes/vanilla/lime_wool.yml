@@ -1,0 +1,8 @@
+id: LIME_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - LIME_DYE
+result:
+  item: LIME_WOOL
+  amount: 1

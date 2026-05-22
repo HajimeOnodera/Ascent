@@ -1,0 +1,12 @@
+id: BLAST_O_LANTERN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GREEN_CANDY
+  B: PUMPKIN_GUTS
+result:
+  item: BLAST_O_LANTERN
+  amount: 32

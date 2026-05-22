@@ -1,0 +1,14 @@
+id: SILVER_FANG
+type: SHAPED
+requirements:
+  collections:
+    GHAST_TEAR: 5
+pattern:
+  - " A "
+  - "AAA"
+  - " A "
+ingredients:
+  A: {item: ENCHANTED_GHAST_TEAR, amount: 5}
+result:
+  item: SILVER_FANG
+  amount: 1

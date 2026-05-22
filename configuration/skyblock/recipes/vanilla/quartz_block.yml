@@ -1,0 +1,10 @@
+id: QUARTZ_BLOCK
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: QUARTZ
+result:
+  item: QUARTZ_BLOCK
+  amount: 1

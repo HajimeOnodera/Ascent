@@ -1,0 +1,11 @@
+id: PACKED_ICE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: ICE
+result:
+  item: PACKED_ICE
+  amount: 1

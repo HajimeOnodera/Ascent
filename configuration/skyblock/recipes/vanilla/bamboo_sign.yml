@@ -1,0 +1,12 @@
+id: BAMBOO_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: BAMBOO_PLANKS
+  B: STICK
+result:
+  item: BAMBOO_SIGN
+  amount: 3

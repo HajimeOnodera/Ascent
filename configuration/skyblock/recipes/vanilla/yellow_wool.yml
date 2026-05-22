@@ -1,0 +1,8 @@
+id: YELLOW_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - YELLOW_DYE
+result:
+  item: YELLOW_WOOL
+  amount: 1

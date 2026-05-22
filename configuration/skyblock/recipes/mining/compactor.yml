@@ -1,0 +1,15 @@
+id: COMPACTOR
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 5
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: ENCHANTED_COBBLESTONE
+  B: ENCHANTED_REDSTONE
+result:
+  item: COMPACTOR
+  amount: 1

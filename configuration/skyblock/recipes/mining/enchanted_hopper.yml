@@ -1,0 +1,15 @@
+id: ENCHANTED_HOPPER
+type: SHAPED
+requirements:
+  collections:
+    IRON_INGOT: 9
+pattern:
+  - "A A"
+  - "ABA"
+  - " A "
+ingredients:
+  A: ENCHANTED_IRON_BLOCK
+  B: CHEST
+result:
+  item: ENCHANTED_HOPPER
+  amount: 1

@@ -1,0 +1,12 @@
+id: DARK_OAK_HANGING_SIGN
+type: SHAPED
+pattern:
+  - "A A"
+  - "BBB"
+  - "BBB"
+ingredients:
+  A: CHAIN
+  B: STRIPPED_DARK_OAK_LOG
+result:
+  item: DARK_OAK_HANGING_SIGN
+  amount: 6

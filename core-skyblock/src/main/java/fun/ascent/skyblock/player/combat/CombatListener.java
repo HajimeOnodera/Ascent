@@ -148,6 +148,7 @@ public class CombatListener {
         }
 
         if (mob.isDead()) {
+            net.minestom.server.MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.PlayerKillMobEvent(player, mob));
             int scavengerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SCAVENGER);
             if (scavengerLevel > 0) {
                 double extraCoins = scavengerLevel * 1.5;
@@ -208,6 +209,7 @@ public class CombatListener {
         mob.damage(new Damage(DamageType.PLAYER_ATTACK, player, player, player.getPosition(), result.damageFloat()));
 
         if (mob.isDead()) {
+            net.minestom.server.MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.PlayerKillMobEvent(player, mob));
             int scavengerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SCAVENGER);
             if (scavengerLevel > 0) {
                 double extraCoins = scavengerLevel * 1.5;

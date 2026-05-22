@@ -1,0 +1,9 @@
+id: CHERRY_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: CHERRY_PLANKS
+result:
+  item: CHERRY_SLAB
+  amount: 6

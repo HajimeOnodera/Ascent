@@ -1,0 +1,12 @@
+id: RAIL
+type: SHAPED
+pattern:
+  - "A A"
+  - "ABA"
+  - "A A"
+ingredients:
+  A: IRON_INGOT
+  B: STICK
+result:
+  item: RAIL
+  amount: 16

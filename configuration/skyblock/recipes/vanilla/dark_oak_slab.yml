@@ -1,0 +1,9 @@
+id: DARK_OAK_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: DARK_OAK_PLANKS
+result:
+  item: DARK_OAK_SLAB
+  amount: 6

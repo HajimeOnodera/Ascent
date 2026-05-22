@@ -1,0 +1,11 @@
+id: HAY_BALE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: WHEAT
+result:
+  item: HAY_BALE
+  amount: 1

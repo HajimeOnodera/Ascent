@@ -1,0 +1,11 @@
+id: PURPLE_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: PURPLE_WOOL
+  B: OAK_PLANKS
+result:
+  item: PURPLE_BED
+  amount: 1

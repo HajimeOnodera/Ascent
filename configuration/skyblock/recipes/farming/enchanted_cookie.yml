@@ -1,0 +1,15 @@
+id: ENCHANTED_COOKIE
+type: SHAPED
+requirements:
+  collections:
+    COCOA_BEANS: 6
+pattern:
+  - " A "
+  - "ABA"
+  - " A "
+ingredients:
+  A: {item: ENCHANTED_COCOA_BEANS, amount: 32}
+  B: {item: WHEAT, amount: 32}
+result:
+  item: ENCHANTED_COOKIE
+  amount: 1

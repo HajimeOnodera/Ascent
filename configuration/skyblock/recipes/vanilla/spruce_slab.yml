@@ -1,0 +1,9 @@
+id: SPRUCE_SLAB
+type: SHAPED
+pattern:
+  - "AAA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_SLAB
+  amount: 6

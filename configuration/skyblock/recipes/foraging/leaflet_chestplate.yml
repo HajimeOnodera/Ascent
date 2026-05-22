@@ -1,0 +1,14 @@
+id: LEAFLET_CHESTPLATE
+type: SHAPED
+requirements:
+  collections:
+    OAK_LOG: 3
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: OAK_LEAVES
+result:
+  item: LEAFLET_CHESTPLATE
+  amount: 1

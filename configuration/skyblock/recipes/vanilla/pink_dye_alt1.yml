@@ -1,0 +1,7 @@
+id: PINK_DYE_ALT1
+type: SHAPELESS
+ingredients:
+  - PEONY
+result:
+  item: PINK_DYE
+  amount: 2

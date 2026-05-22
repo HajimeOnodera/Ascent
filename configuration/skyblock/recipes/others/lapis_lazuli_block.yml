@@ -1,0 +1,11 @@
+id: LAPIS_LAZULI_BLOCK
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: LAPIS_LAZULI
+result:
+  item: LAPIS_LAZULI_BLOCK
+  amount: 1

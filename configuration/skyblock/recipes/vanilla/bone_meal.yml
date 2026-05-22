@@ -1,0 +1,7 @@
+id: BONE_MEAL
+type: SHAPELESS
+ingredients:
+  - BONE
+result:
+  item: BONE_MEAL
+  amount: 3

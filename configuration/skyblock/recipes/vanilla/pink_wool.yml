@@ -1,0 +1,8 @@
+id: PINK_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - PINK_DYE
+result:
+  item: PINK_WOOL
+  amount: 1

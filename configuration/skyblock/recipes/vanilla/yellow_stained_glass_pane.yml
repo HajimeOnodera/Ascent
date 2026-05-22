@@ -1,0 +1,10 @@
+id: YELLOW_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: YELLOW_STAINED_GLASS
+result:
+  item: YELLOW_STAINED_GLASS_PANE
+  amount: 16

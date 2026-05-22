@@ -1,0 +1,11 @@
+id: MOSSY_COBBLESTONE_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: MOSSY_COBBLESTONE
+result:
+  item: MOSSY_COBBLESTONE_STAIRS
+  amount: 4

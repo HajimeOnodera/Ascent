@@ -1,0 +1,15 @@
+id: PERSONAL_COMPACTOR_7000
+type: SHAPED
+requirements:
+  collections:
+    REDSTONE: 14
+pattern:
+  - "AAA"
+  - "A A"
+  - "ABA"
+ingredients:
+  A: {item: ENCHANTED_REDSTONE_BLOCK, amount: 8}
+  B: PERSONAL_COMPACTOR_6000
+result:
+  item: PERSONAL_COMPACTOR_7000
+  amount: 1

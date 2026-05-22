@@ -1,0 +1,10 @@
+id: DARK_OAK_BOAT
+type: SHAPED
+pattern:
+  - "A A"
+  - "AAA"
+ingredients:
+  A: DARK_OAK_PLANKS
+result:
+  item: DARK_OAK_BOAT
+  amount: 1

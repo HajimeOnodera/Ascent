@@ -1,0 +1,12 @@
+id: REVIVED_HEART
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: ZOMBIE_HEART
+  B: CRYSTALLIZED_HEART
+result:
+  item: REVIVED_HEART
+  amount: 1

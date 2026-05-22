@@ -1,0 +1,8 @@
+id: STICKY_PISTON
+type: SHAPELESS
+ingredients:
+  - PISTON
+  - SLIME_BALL
+result:
+  item: STICKY_PISTON
+  amount: 1

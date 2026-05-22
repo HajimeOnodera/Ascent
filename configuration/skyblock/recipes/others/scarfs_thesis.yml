@@ -1,0 +1,10 @@
+id: SCARFS_THESIS
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SCARFS_STUDIES
+result:
+  item: SCARFS_THESIS
+  amount: 1

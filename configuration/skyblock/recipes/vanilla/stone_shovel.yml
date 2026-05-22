@@ -1,0 +1,12 @@
+id: STONE_SHOVEL
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "B"
+ingredients:
+  A: COBBLESTONE
+  B: STICK
+result:
+  item: STONE_SHOVEL
+  amount: 1

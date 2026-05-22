@@ -1,0 +1,11 @@
+id: CYAN_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: CYAN_WOOL
+  B: OAK_PLANKS
+result:
+  item: CYAN_BED
+  amount: 1

@@ -1,0 +1,10 @@
+id: DIAMOND_BOOTS
+type: SHAPED
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: DIAMOND
+result:
+  item: DIAMOND_BOOTS
+  amount: 1

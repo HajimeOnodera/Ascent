@@ -1,0 +1,9 @@
+id: LIGHT_WEIGHTED_PRESSURE_PLATE
+type: SHAPED
+pattern:
+  - "AA"
+ingredients:
+  A: GOLD_INGOT
+result:
+  item: LIGHT_WEIGHTED_PRESSURE_PLATE
+  amount: 1

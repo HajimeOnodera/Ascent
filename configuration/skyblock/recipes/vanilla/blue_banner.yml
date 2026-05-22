@@ -1,0 +1,12 @@
+id: BLUE_BANNER
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: BLUE_WOOL
+  B: STICK
+result:
+  item: BLUE_BANNER
+  amount: 1

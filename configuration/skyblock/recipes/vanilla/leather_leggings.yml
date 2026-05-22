@@ -1,0 +1,11 @@
+id: LEATHER_LEGGINGS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+  - "A A"
+ingredients:
+  A: LEATHER
+result:
+  item: LEATHER_LEGGINGS
+  amount: 1

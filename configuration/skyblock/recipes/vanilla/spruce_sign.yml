@@ -1,0 +1,12 @@
+id: SPRUCE_SIGN
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+  - " B "
+ingredients:
+  A: SPRUCE_PLANKS
+  B: STICK
+result:
+  item: SPRUCE_SIGN
+  amount: 3

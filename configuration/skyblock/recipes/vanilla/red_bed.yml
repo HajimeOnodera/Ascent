@@ -1,0 +1,11 @@
+id: RED_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: RED_WOOL
+  B: OAK_PLANKS
+result:
+  item: RED_BED
+  amount: 1

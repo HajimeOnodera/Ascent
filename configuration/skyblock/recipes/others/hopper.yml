@@ -1,0 +1,12 @@
+id: HOPPER
+type: SHAPED
+pattern:
+  - "A A"
+  - "ABA"
+  - " A "
+ingredients:
+  A: IRON_INGOT
+  B: CHEST
+result:
+  item: HOPPER
+  amount: 1

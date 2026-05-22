@@ -1,0 +1,8 @@
+id: BLACK_WOOL
+type: SHAPELESS
+ingredients:
+  - WHITE_WOOL
+  - BLACK_DYE
+result:
+  item: BLACK_WOOL
+  amount: 1

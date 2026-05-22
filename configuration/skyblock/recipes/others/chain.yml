@@ -1,0 +1,12 @@
+id: CHAIN
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "A"
+ingredients:
+  A: IRON_NUGGET
+  B: IRON_INGOT
+result:
+  item: CHAIN
+  amount: 1

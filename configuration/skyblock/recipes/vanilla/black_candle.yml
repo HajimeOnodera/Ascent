@@ -1,0 +1,8 @@
+id: BLACK_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - BLACK_DYE
+result:
+  item: BLACK_CANDLE
+  amount: 1

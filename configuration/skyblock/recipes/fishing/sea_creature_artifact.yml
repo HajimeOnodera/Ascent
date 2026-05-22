@@ -1,0 +1,15 @@
+id: SEA_CREATURE_ARTIFACT
+type: SHAPED
+requirements:
+  collections:
+    SPONGE: 8
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_SPONGE, amount: 8}
+  B: SEA_CREATURE_RING
+result:
+  item: SEA_CREATURE_ARTIFACT
+  amount: 1

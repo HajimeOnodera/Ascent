@@ -1,0 +1,10 @@
+id: IRON_BOOTS
+type: SHAPED
+pattern:
+  - "A A"
+  - "A A"
+ingredients:
+  A: IRON_INGOT
+result:
+  item: IRON_BOOTS
+  amount: 1

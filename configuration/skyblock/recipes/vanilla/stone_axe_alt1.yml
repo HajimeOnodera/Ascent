@@ -1,0 +1,12 @@
+id: STONE_AXE_ALT1
+type: SHAPED
+pattern:
+  - "AA"
+  - "BA"
+  - "B"
+ingredients:
+  A: COBBLESTONE
+  B: STICK
+result:
+  item: STONE_AXE
+  amount: 1

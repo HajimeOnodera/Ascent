@@ -1,0 +1,15 @@
+id: SPEED_RING
+type: SHAPED
+requirements:
+  collections:
+    SUGAR_CANE: 5
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_SUGAR, amount: 12}
+  B: SPEED_TALISMAN
+result:
+  item: SPEED_RING
+  amount: 1

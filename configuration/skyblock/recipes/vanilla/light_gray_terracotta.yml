@@ -1,0 +1,12 @@
+id: LIGHT_GRAY_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: LIGHT_GRAY_DYE
+result:
+  item: LIGHT_GRAY_TERRACOTTA
+  amount: 8

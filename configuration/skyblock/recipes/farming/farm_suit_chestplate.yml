@@ -1,0 +1,14 @@
+id: FARM_SUIT_CHESTPLATE
+type: SHAPED
+requirements:
+  collections:
+    WHEAT: 3
+pattern:
+  - "A A"
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: HAY_BALE
+result:
+  item: FARM_SUIT_CHESTPLATE
+  amount: 1

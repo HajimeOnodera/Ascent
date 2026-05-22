@@ -24,11 +24,19 @@ public class ShapelessRecipe extends SkyblockRecipe {
         for (int i = 0; i < 9; i++) grid[i] = ItemStack.AIR;
         for (int i = 0; i < ingredients.size() && i < 9; i++) {
             RecipeIngredient ingredient = ingredients.get(i);
-            SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId());
+            SkyblockItem item = ItemRegistry.getItem(ingredient.getItemId().toUpperCase().replace("MINECRAFT:", ""));
             if (item != null) {
                 grid[i] = item.buildItemStack(player).withAmount(ingredient.getAmount());
             } else {
-                grid[i] = ItemStack.of(Material.fromKey("minecraft:" + ingredient.getItemId().toLowerCase())).withAmount(ingredient.getAmount());
+                String matName = ingredient.getItemId().toLowerCase().replace("minecraft:", "");
+                Material mat = Material.fromKey("minecraft:" + matName);
+                if (mat == null) {
+                    mat = Material.fromKey(matName);
+                }
+                if (mat == null) {
+                    mat = Material.PAPER;
+                }
+                grid[i] = ItemStack.of(mat).withAmount(ingredient.getAmount());
             }
         }
         return grid;
@@ -45,18 +53,10 @@ public class ShapelessRecipe extends SkyblockRecipe {
 
         List<RecipeIngredient> needed = new ArrayList<>(ingredients);
         for (ItemStack stack : gridItems) {
-            SkyblockItem si = SkyblockItem.fromStack(stack);
             boolean matched = false;
             for (int i = 0; i < needed.size(); i++) {
                 RecipeIngredient req = needed.get(i);
-                boolean idMatches;
-                if (si == null) {
-                    idMatches = stack.material().name().equals(req.getItemId());
-                } else {
-                    idMatches = si.getItemId().equals(req.getItemId());
-                }
-
-                if (idMatches && stack.amount() >= req.getAmount()) {
+                if (matchesIngredient(stack, req.getItemId()) && stack.amount() >= req.getAmount()) {
                     needed.remove(i);
                     matched = true;
                     break;
@@ -75,18 +75,11 @@ public class ShapelessRecipe extends SkyblockRecipe {
             ItemStack stack = inv.getItemStack(slot);
             if (stack.isAir()) continue;
 
-            SkyblockItem si = SkyblockItem.fromStack(stack);
             for (int i = 0; i < needed.size(); i++) {
                 RecipeIngredient req = needed.get(i);
-                boolean idMatches;
-                if (si == null) {
-                    idMatches = stack.material().name().equals(req.getItemId());
-                } else {
-                    idMatches = si.getItemId().equals(req.getItemId());
-                }
-
-                if (idMatches && stack.amount() >= req.getAmount()) {
-                    inv.setItemStack(slot, stack.withAmount(stack.amount() - req.getAmount()));
+                if (matchesIngredient(stack, req.getItemId()) && stack.amount() >= req.getAmount()) {
+                    int newAmount = stack.amount() - req.getAmount();
+                    inv.setItemStack(slot, newAmount <= 0 ? ItemStack.AIR : stack.withAmount(newAmount));
                     needed.remove(i);
                     break;
                 }

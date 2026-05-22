@@ -1,0 +1,8 @@
+id: GRAY_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - GRAY_DYE
+result:
+  item: GRAY_CANDLE
+  amount: 1

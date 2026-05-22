@@ -1,0 +1,8 @@
+id: LIME_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - LIME_DYE
+result:
+  item: LIME_CANDLE
+  amount: 1

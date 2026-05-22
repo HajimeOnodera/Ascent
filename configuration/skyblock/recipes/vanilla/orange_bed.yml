@@ -1,0 +1,11 @@
+id: ORANGE_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: ORANGE_WOOL
+  B: OAK_PLANKS
+result:
+  item: ORANGE_BED
+  amount: 1

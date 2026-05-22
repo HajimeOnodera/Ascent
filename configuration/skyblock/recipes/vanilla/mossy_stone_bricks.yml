@@ -1,0 +1,10 @@
+id: MOSSY_STONE_BRICKS
+type: SHAPED
+pattern:
+  - "AB"
+ingredients:
+  A: STONE_BRICKS
+  B: VINES
+result:
+  item: MOSSY_STONE_BRICKS
+  amount: 1

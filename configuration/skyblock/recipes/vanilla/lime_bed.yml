@@ -1,0 +1,11 @@
+id: LIME_BED
+type: SHAPED
+pattern:
+  - "AAA"
+  - "BBB"
+ingredients:
+  A: LIME_WOOL
+  B: OAK_PLANKS
+result:
+  item: LIME_BED
+  amount: 1

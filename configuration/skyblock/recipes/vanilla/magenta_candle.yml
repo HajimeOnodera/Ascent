@@ -1,0 +1,8 @@
+id: MAGENTA_CANDLE
+type: SHAPELESS
+ingredients:
+  - CANDLE
+  - MAGENTA_DYE
+result:
+  item: MAGENTA_CANDLE
+  amount: 1

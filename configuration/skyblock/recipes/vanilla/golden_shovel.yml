@@ -1,0 +1,12 @@
+id: GOLDEN_SHOVEL
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+  - "B"
+ingredients:
+  A: GOLD_INGOT
+  B: STICK
+result:
+  item: GOLDEN_SHOVEL
+  amount: 1

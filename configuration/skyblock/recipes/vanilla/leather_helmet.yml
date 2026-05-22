@@ -1,0 +1,10 @@
+id: LEATHER_HELMET
+type: SHAPED
+pattern:
+  - "AAA"
+  - "A A"
+ingredients:
+  A: LEATHER
+result:
+  item: LEATHER_HELMET
+  amount: 1

@@ -1,0 +1,12 @@
+id: WHITE_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: WHITE_DYE
+result:
+  item: WHITE_TERRACOTTA
+  amount: 8

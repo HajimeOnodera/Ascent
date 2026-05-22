@@ -77,6 +77,24 @@ public final class RedisManager {
         }
     }
 
+    public void setTransferTarget(String playerUuid, String targetServerType) {
+        try (Jedis jedis = getResource()) {
+            jedis.setex("ascent:transfer:" + playerUuid, 10, targetServerType);
+        }
+    }
+
+    public String getTransferTarget(String playerUuid) {
+        try (Jedis jedis = getResource()) {
+            return jedis.get("ascent:transfer:" + playerUuid);
+        }
+    }
+
+    public void clearTransferTarget(String playerUuid) {
+        try (Jedis jedis = getResource()) {
+            jedis.del("ascent:transfer:" + playerUuid);
+        }
+    }
+
     public void close() {
         pool.close();
     }

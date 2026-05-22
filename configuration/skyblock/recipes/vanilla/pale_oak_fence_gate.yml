@@ -1,0 +1,11 @@
+id: PALE_OAK_FENCE_GATE
+type: SHAPED
+pattern:
+  - "ABA"
+  - "ABA"
+ingredients:
+  A: STICK
+  B: PALE_OAK_PLANKS
+result:
+  item: PALE_OAK_FENCE_GATE
+  amount: 1

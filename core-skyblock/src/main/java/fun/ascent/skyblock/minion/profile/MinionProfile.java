@@ -40,15 +40,18 @@ public interface MinionProfile {
 
     default List<ItemStack> createHarvestDrops() {
         return switch (type()) {
-            case WHEAT -> List.of(ItemStack.of(Material.WHEAT, 2), ItemStack.of(Material.WHEAT_SEEDS, 1));
-            case MELON -> List.of(ItemStack.of(Material.MELON_SLICE, 3));
-            case PUMPKIN -> List.of(ItemStack.of(Material.PUMPKIN, 1));
-            case CARROT -> List.of(ItemStack.of(Material.CARROT, 2));
-            case POTATO -> List.of(ItemStack.of(Material.POTATO, 2));
-            case SUGARCANE -> List.of(ItemStack.of(Material.SUGAR_CANE, 2));
-            case CACTUS -> List.of(ItemStack.of(Material.CACTUS, 1));
-            case COCOA -> List.of(ItemStack.of(Material.COCOA_BEANS, 3));
-            default -> List.of(ItemStack.of(outputMaterial(), 1));
+            case WHEAT -> List.of(
+                    fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.WHEAT, 2),
+                    fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.WHEAT_SEEDS, 1)
+            );
+            case MELON -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.MELON_SLICE, 3));
+            case PUMPKIN -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.PUMPKIN, 1));
+            case CARROT -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.CARROT, 2));
+            case POTATO -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.POTATO, 2));
+            case SUGARCANE -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.SUGAR_CANE, 2));
+            case CACTUS -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.CACTUS, 1));
+            case COCOA -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(Material.COCOA_BEANS, 3));
+            default -> List.of(fun.ascent.skyblock.item.ItemRegistry.createSkyblockOrVanillaStack(outputMaterial(), 1));
         };
     }
 

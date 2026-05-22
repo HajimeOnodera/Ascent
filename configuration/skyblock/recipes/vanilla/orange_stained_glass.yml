@@ -1,0 +1,12 @@
+id: ORANGE_STAINED_GLASS
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: GLASS
+  B: ORANGE_DYE
+result:
+  item: ORANGE_STAINED_GLASS
+  amount: 8

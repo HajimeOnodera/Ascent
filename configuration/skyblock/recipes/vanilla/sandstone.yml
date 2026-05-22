@@ -1,0 +1,10 @@
+id: SANDSTONE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: SAND
+result:
+  item: SANDSTONE
+  amount: 1

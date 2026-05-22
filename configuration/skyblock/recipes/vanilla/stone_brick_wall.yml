@@ -1,0 +1,10 @@
+id: STONE_BRICK_WALL
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: STONE_BRICKS
+result:
+  item: STONE_BRICK_WALL
+  amount: 6

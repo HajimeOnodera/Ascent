@@ -42,6 +42,9 @@ public record JerryNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
+        if (player instanceof fun.ascent.skyblock.player.SkyblockPlayer sp) {
+            net.minestom.server.MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.JerryClickedEvent(sp));
+        }
         npc.speak(player, "Jerry!");
     }
 }

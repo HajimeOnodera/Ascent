@@ -1,0 +1,7 @@
+id: BLUE_DYE
+type: SHAPELESS
+ingredients:
+  - LAPIS_LAZULI
+result:
+  item: BLUE_DYE
+  amount: 1

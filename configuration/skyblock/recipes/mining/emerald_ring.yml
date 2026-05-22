@@ -1,0 +1,14 @@
+id: EMERALD_RING
+type: SHAPED
+requirements:
+  collections:
+    EMERALD: 5
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_EMERALD, amount: 4}
+result:
+  item: EMERALD_RING
+  amount: 1

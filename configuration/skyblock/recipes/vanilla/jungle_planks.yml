@@ -1,0 +1,7 @@
+id: JUNGLE_PLANKS
+type: SHAPELESS
+ingredients:
+  - JUNGLE_LOG
+result:
+  item: JUNGLE_PLANKS
+  amount: 4

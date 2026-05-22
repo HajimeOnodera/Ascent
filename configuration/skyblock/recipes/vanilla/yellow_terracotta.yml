@@ -1,0 +1,12 @@
+id: YELLOW_TERRACOTTA
+type: SHAPED
+pattern:
+  - "AAA"
+  - "ABA"
+  - "AAA"
+ingredients:
+  A: TERRACOTTA
+  B: YELLOW_DYE
+result:
+  item: YELLOW_TERRACOTTA
+  amount: 8

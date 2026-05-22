@@ -1,0 +1,10 @@
+id: POLISHED_DIORITE
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+ingredients:
+  A: DIORITE
+result:
+  item: POLISHED_DIORITE
+  amount: 4

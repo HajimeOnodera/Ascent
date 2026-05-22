@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import fun.ascent.skyblock.player.stats.playerStat.Speed;
+import fun.ascent.skyblock.quest.QuestData;
 
 import static fun.ascent.common.StringUtility.text;
 
@@ -45,6 +46,17 @@ public class ProfilePlayer {
     public PlayerSkillData skillData = new PlayerSkillData();
     public SkyblockLevel level = new SkyblockLevel();
     public HotmData hotmData = new HotmData();
+    public fun.ascent.skyblock.quest.QuestData questData = new fun.ascent.skyblock.quest.QuestData();
+
+    public fun.ascent.skyblock.quest.QuestData getQuestData() {
+        if (questData == null) {
+            questData = new fun.ascent.skyblock.quest.QuestData();
+        }
+        if (skyblockPlayer != null) {
+            questData.setSkyblockPlayer(skyblockPlayer);
+        }
+        return questData;
+    }
 
     public List<ItemStack> inventory = new ArrayList<>();
     public List<ItemStack> armor = new ArrayList<>();
@@ -95,8 +107,12 @@ public class ProfilePlayer {
         if (level == null) level = new SkyblockLevel();
         if (hotmData == null) hotmData = new HotmData();
         hotmData.postLoad();
+        if (questData == null) questData = new QuestData();
         if (playerUUID != null) {
             this.skyblockPlayer = WorldHandler.getPlayer(playerUUID);
+            if (this.skyblockPlayer != null) {
+                questData.setSkyblockPlayer(this.skyblockPlayer);
+            }
         }
     }
 

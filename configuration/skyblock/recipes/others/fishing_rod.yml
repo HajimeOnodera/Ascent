@@ -1,0 +1,12 @@
+id: FISHING_ROD
+type: SHAPED
+pattern:
+  - "A"
+  - "AB"
+  - "A B"
+ingredients:
+  A: STICK
+  B: STRING
+result:
+  item: FISHING_ROD
+  amount: 1

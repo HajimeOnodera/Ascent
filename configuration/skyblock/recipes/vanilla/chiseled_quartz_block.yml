@@ -1,0 +1,10 @@
+id: CHISELED_QUARTZ_BLOCK
+type: SHAPED
+pattern:
+  - "A"
+  - "A"
+ingredients:
+  A: QUARTZ_SLAB
+result:
+  item: CHISELED_QUARTZ_BLOCK
+  amount: 1

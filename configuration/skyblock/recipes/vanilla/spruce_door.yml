@@ -1,0 +1,11 @@
+id: SPRUCE_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: SPRUCE_PLANKS
+result:
+  item: SPRUCE_DOOR
+  amount: 1

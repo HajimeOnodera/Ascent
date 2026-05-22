@@ -1,0 +1,11 @@
+id: CHEST_MINECART
+type: SHAPED
+pattern:
+  - "A"
+  - "B"
+ingredients:
+  A: CHEST
+  B: MINECART
+result:
+  item: CHEST_MINECART
+  amount: 1

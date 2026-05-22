@@ -1,0 +1,15 @@
+id: FEATHER_RING
+type: SHAPED
+requirements:
+  collections:
+    FEATHER: 7
+pattern:
+  - "ABA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: ENCHANTED_FEATHER
+  B: FEATHER_TALISMAN
+result:
+  item: FEATHER_RING
+  amount: 1

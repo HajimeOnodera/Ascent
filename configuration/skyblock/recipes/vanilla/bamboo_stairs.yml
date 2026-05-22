@@ -1,0 +1,11 @@
+id: BAMBOO_STAIRS
+type: SHAPED
+pattern:
+  - "A"
+  - "AA"
+  - "AAA"
+ingredients:
+  A: BAMBOO_PLANKS
+result:
+  item: BAMBOO_STAIRS
+  amount: 4

@@ -1,0 +1,13 @@
+id: REAPER_SCYTHE
+type: SHAPED
+pattern:
+  - "ABC"
+  - "  C"
+  - "  C"
+ingredients:
+  A: SCYTHE_BLADE
+  B: {item: REVENANT_VISCERA, amount: 64}
+  C: REAPER_FALCHION
+result:
+  item: REAPER_SCYTHE
+  amount: 1

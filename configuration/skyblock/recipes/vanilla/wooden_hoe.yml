@@ -1,0 +1,12 @@
+id: WOODEN_HOE
+type: SHAPED
+pattern:
+  - "AA"
+  - " B"
+  - " B"
+ingredients:
+  A: OAK_PLANKS
+  B: STICK
+result:
+  item: WOODEN_HOE
+  amount: 1

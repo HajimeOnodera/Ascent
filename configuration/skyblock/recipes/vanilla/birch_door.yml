@@ -1,0 +1,11 @@
+id: BIRCH_DOOR
+type: SHAPED
+pattern:
+  - "AA"
+  - "AA"
+  - "AA"
+ingredients:
+  A: BIRCH_PLANKS
+result:
+  item: BIRCH_DOOR
+  amount: 1

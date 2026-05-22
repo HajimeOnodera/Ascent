@@ -1,0 +1,14 @@
+id: HASTE_RING
+type: SHAPED
+requirements:
+  collections:
+    COBBLESTONE: 7
+pattern:
+  - "AAA"
+  - "A A"
+  - "AAA"
+ingredients:
+  A: {item: ENCHANTED_COBBLESTONE, amount: 16}
+result:
+  item: HASTE_RING
+  amount: 1

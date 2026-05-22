@@ -1,0 +1,10 @@
+id: MAGENTA_STAINED_GLASS_PANE
+type: SHAPED
+pattern:
+  - "AAA"
+  - "AAA"
+ingredients:
+  A: MAGENTA_STAINED_GLASS
+result:
+  item: MAGENTA_STAINED_GLASS_PANE
+  amount: 16
