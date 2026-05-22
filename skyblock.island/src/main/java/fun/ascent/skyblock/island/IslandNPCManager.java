@@ -3,7 +3,7 @@ package fun.ascent.skyblock.island;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.skyblock.events.definitions.IslandLoadEvent;
-import fun.ascent.skyblock.events.definitions.IslandSaveEvent;
+import fun.ascent.skyblock.events.definitions.IslandUnloadEvent;
 import fun.ascent.skyblock.npc.SkyblockNPCManager;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.event.GlobalEventHandler;
@@ -30,7 +30,7 @@ public class IslandNPCManager {
 
         handler.addListener(IslandLoadEvent.class, event -> spawnIslandNPCs(event.instance()));
 
-        handler.addListener(IslandSaveEvent.class, event -> removeIslandNPCs(event.island().getInstance()));
+        handler.addListener(IslandUnloadEvent.class, event -> removeIslandNPCs(event.island().getInstance()));
     }
 
     private static void spawnIslandNPCs(Instance instance) {

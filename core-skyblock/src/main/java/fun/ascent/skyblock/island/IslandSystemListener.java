@@ -2,6 +2,7 @@ package fun.ascent.skyblock.island;
 
 import fun.ascent.skyblock.events.definitions.IslandLoadEvent;
 import fun.ascent.skyblock.events.definitions.IslandSaveEvent;
+import fun.ascent.skyblock.events.definitions.IslandUnloadEvent;
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.service.MinionManager;
 import fun.ascent.skyblock.minion.service.MinionPersistence;
@@ -60,6 +61,17 @@ public class IslandSystemListener {
                 }
             }
             island.setMinionData(minionDocs);
+        });
+
+        handler.addListener(IslandUnloadEvent.class, event -> {
+            Island island = event.island();
+            System.out.println("[IslandSync] Handling Unload for island " + island.getIslandId());
+            
+            // Clean up minions from global MinionManager to prevent memory leak
+            Collection<SkyblockMinion> minions = new ArrayList<>(MinionManager.getOwnedMinions(island.getIslandId()));
+            for (SkyblockMinion minion : minions) {
+                MinionManager.removeMinion(minion);
+            }
             
             // Clean up internal tracking so they can respawn on next load
             island.getSpawnedMinionUuids().clear();

@@ -3,6 +3,7 @@ package fun.ascent.skyblock.island;
 import fun.ascent.common.world.WorldRegistry;
 import fun.ascent.skyblock.events.definitions.IslandLoadEvent;
 import fun.ascent.skyblock.events.definitions.IslandSaveEvent;
+import fun.ascent.skyblock.events.definitions.IslandUnloadEvent;
 import fun.ascent.skyblock.island.data.IslandDatabase;
 import lombok.Getter;
 import lombok.Setter;
@@ -134,6 +135,7 @@ public class Island {
 
     public void unload() {
         if (instance != null) {
+            MinecraftServer.getGlobalEventHandler().call(new IslandUnloadEvent(this));
             MinecraftServer.getInstanceManager().unregisterInstance(instance);
             instance = null;
         }
