@@ -114,13 +114,7 @@ public class ShapedRecipe extends SkyblockRecipe {
                         if (ingredient == null) return false;
                         if (stack == null || stack.isAir()) return false;
                         
-                        SkyblockItem si = SkyblockItem.fromStack(stack);
-                        String ingredientId = ingredient.getItemId().toUpperCase().replace("MINECRAFT:", "");
-                        if (si == null) {
-                            if (!stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(ingredientId)) return false;
-                        } else {
-                            if (!si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(ingredientId)) return false;
-                        }
+                        if (!matchesIngredient(stack, ingredient.getItemId())) return false;
                         
                         if (stack.amount() < ingredient.getAmount()) return false;
                     }
@@ -145,10 +139,11 @@ public class ShapedRecipe extends SkyblockRecipe {
                             char symbol = pattern.get(r).charAt(c);
                             if (symbol == ' ') continue;
                             
-                            RecipeIngredient ingredient = ingredients.get(symbol);
-                            int slot = gridSlots[(startRow + r) * 3 + (startCol + c)];
-                            ItemStack stack = inv.getItemStack(slot);
-                            inv.setItemStack(slot, stack.withAmount(stack.amount() - ingredient.getAmount()));
+                             RecipeIngredient ingredient = ingredients.get(symbol);
+                             int slot = gridSlots[(startRow + r) * 3 + (startCol + c)];
+                             ItemStack stack = inv.getItemStack(slot);
+                             int newAmount = stack.amount() - ingredient.getAmount();
+                             inv.setItemStack(slot, newAmount <= 0 ? ItemStack.AIR : stack.withAmount(newAmount));
                         }
                     }
                     return;

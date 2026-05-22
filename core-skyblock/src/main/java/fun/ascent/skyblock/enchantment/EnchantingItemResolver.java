@@ -43,7 +43,7 @@ public final class EnchantingItemResolver {
     }
 
     private static ItemType inferItemType(Material material) {
-        String name = material.name();
+        String name = material.name().toUpperCase().replace("MINECRAFT:", "");
         if (name.endsWith("_SWORD")) return ItemType.SWORD;
         if (name.endsWith("_HELMET")) return ItemType.HELMET;
         if (name.endsWith("_CHESTPLATE")) return ItemType.CHESTPLATE;

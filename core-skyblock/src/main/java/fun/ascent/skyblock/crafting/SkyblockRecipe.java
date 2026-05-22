@@ -43,6 +43,53 @@ public abstract class SkyblockRecipe {
 
     public abstract void consume(Inventory inv, int[] gridSlots);
 
+    protected boolean matchesIngredient(ItemStack stack, String ingredientId) {
+        if (stack == null || stack.isAir()) return false;
+        if (ingredientId == null) return false;
+
+        String reqId = ingredientId.toUpperCase().replace("MINECRAFT:", "");
+        
+        // 1. Get raw material name from stack
+        String matName = stack.material().name().toUpperCase().replace("MINECRAFT:", "");
+
+        // 2. Get SkyblockItem ID if it exists
+        fun.ascent.skyblock.item.SkyblockItem si = fun.ascent.skyblock.item.SkyblockItem.fromStack(stack);
+        String siId = si != null ? si.getItemId().toUpperCase().replace("MINECRAFT:", "") : null;
+
+        // Perform matching checks
+        // a. Direct match with SkyblockItem ID
+        if (siId != null && siId.equalsIgnoreCase(reqId)) {
+            return true;
+        }
+
+        // b. Direct match with material name
+        if (matName.equalsIgnoreCase(reqId)) {
+            return true;
+        }
+
+        // c. Normalize comparison (e.g. CARROT_ITEM vs CARROT, POTATO_ITEM vs POTATO, MELON vs MELON_SLICE)
+        if (normalizeId(reqId).equalsIgnoreCase(normalizeId(matName))) {
+            return true;
+        }
+        
+        if (siId != null && normalizeId(reqId).equalsIgnoreCase(normalizeId(siId))) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private String normalizeId(String id) {
+        String normalized = id.toUpperCase();
+        if (normalized.endsWith("_ITEM")) {
+            normalized = normalized.substring(0, normalized.length() - 5);
+        }
+        if (normalized.equals("MELON_SLICE") || normalized.equals("MELON")) {
+            return "MELON";
+        }
+        return normalized;
+    }
+
     public record CraftingResult(boolean allowed, String errorMessage) {}
 
     @Getter

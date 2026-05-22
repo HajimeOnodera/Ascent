@@ -60,6 +60,20 @@ public class CraftingMenu {
     }
 
     private static void handleClick(InventoryPreClickEvent event, SkyblockPlayer player, Inventory inv) {
+        Click click = event.getClick();
+
+        // 1. Block drag clicks completely while GUI is open to prevent drag-painting exploits
+        if (click instanceof Click.Drag) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // 2. Block double-clicking completely to prevent pulling items/duplication
+        if (click instanceof Click.Double) {
+            event.setCancelled(true);
+            return;
+        }
+
         int slot = event.getSlot();
 
         if (slot == CLOSE_SLOT) {
@@ -68,8 +82,21 @@ public class CraftingMenu {
             return;
         }
 
-        // If clicking top inventory background slots (slots < 54), cancel
         boolean isTopInventory = slot < inv.getSize() && event.getInventory() == inv;
+
+        // 3. Block hotbar swapping (number-key swaps) and offhand swapping in the top inventory
+        if (isTopInventory && (click instanceof Click.HotbarSwap || click instanceof Click.OffhandSwap)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // 4. Block drop clicks (Q/Ctrl+Q) in the top inventory
+        if (isTopInventory && (click instanceof Click.DropSlot || click instanceof Click.DropCursor)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        // If clicking top inventory background slots (slots < 54), cancel
         if (isTopInventory && !isGridSlot(slot) && slot != RESULT_SLOT) {
             event.setCancelled(true);
             return;
@@ -129,12 +156,20 @@ public class CraftingMenu {
                 return;
             }
 
+            ItemStack craftedItem;
             SkyblockItem resultItem = ItemRegistry.getItem(recipe.getResultItemId());
-            if (resultItem == null) {
-                return;
+            if (resultItem != null) {
+                craftedItem = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
+            } else {
+                Material material = Material.fromKey("minecraft:" + recipe.getResultItemId().toLowerCase());
+                if (material == null) {
+                    material = Material.fromKey(recipe.getResultItemId().toLowerCase());
+                }
+                if (material == null || material == Material.AIR) {
+                    return;
+                }
+                craftedItem = ItemStack.of(material, recipe.getResultAmount());
             }
-
-            ItemStack craftedItem = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
 
             boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
             if (isShift) {
@@ -205,10 +240,21 @@ public class CraftingMenu {
             return;
         }
 
+        ItemStack resultStack;
         SkyblockItem resultItem = ItemRegistry.getItem(recipe.getResultItemId());
-        if (resultItem == null) return;
-
-        ItemStack resultStack = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
+        if (resultItem != null) {
+            resultStack = resultItem.buildItemStack(player).withAmount(recipe.getResultAmount());
+        } else {
+            Material material = Material.fromKey("minecraft:" + recipe.getResultItemId().toLowerCase());
+            if (material == null) {
+                material = Material.fromKey(recipe.getResultItemId().toLowerCase());
+            }
+            if (material == null || material == Material.AIR) {
+                inv.setItemStack(RESULT_SLOT, ItemStack.AIR);
+                return;
+            }
+            resultStack = ItemStack.of(material, recipe.getResultAmount());
+        }
 
         // Add "Click to craft" lore or lock warning
         List<Component> lore = new ArrayList<>(resultStack.get(DataComponents.LORE, List.of()));

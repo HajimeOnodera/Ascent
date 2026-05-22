@@ -53,19 +53,10 @@ public class ShapelessRecipe extends SkyblockRecipe {
 
         List<RecipeIngredient> needed = new ArrayList<>(ingredients);
         for (ItemStack stack : gridItems) {
-            SkyblockItem si = SkyblockItem.fromStack(stack);
             boolean matched = false;
             for (int i = 0; i < needed.size(); i++) {
                 RecipeIngredient req = needed.get(i);
-                boolean idMatches;
-                String reqId = req.getItemId().toUpperCase().replace("MINECRAFT:", "");
-                if (si == null) {
-                    idMatches = stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
-                } else {
-                    idMatches = si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
-                }
-
-                if (idMatches && stack.amount() >= req.getAmount()) {
+                if (matchesIngredient(stack, req.getItemId()) && stack.amount() >= req.getAmount()) {
                     needed.remove(i);
                     matched = true;
                     break;
@@ -84,19 +75,11 @@ public class ShapelessRecipe extends SkyblockRecipe {
             ItemStack stack = inv.getItemStack(slot);
             if (stack.isAir()) continue;
 
-            SkyblockItem si = SkyblockItem.fromStack(stack);
             for (int i = 0; i < needed.size(); i++) {
                 RecipeIngredient req = needed.get(i);
-                boolean idMatches;
-                String reqId = req.getItemId().toUpperCase().replace("MINECRAFT:", "");
-                if (si == null) {
-                    idMatches = stack.material().name().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
-                } else {
-                    idMatches = si.getItemId().toUpperCase().replace("MINECRAFT:", "").equalsIgnoreCase(reqId);
-                }
-
-                if (idMatches && stack.amount() >= req.getAmount()) {
-                    inv.setItemStack(slot, stack.withAmount(stack.amount() - req.getAmount()));
+                if (matchesIngredient(stack, req.getItemId()) && stack.amount() >= req.getAmount()) {
+                    int newAmount = stack.amount() - req.getAmount();
+                    inv.setItemStack(slot, newAmount <= 0 ? ItemStack.AIR : stack.withAmount(newAmount));
                     needed.remove(i);
                     break;
                 }

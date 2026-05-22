@@ -259,7 +259,7 @@ public class ItemRegistry {
 
     public static SkyblockItem getItemByMaterial(Material material) {
         if (material == null || material == Material.AIR) return null;
-        String matName = material.name().toUpperCase();
+        String matName = material.name().toUpperCase().replace("MINECRAFT:", "");
         
         // 1. Explicit Skyblock special mappings
         String targetId = switch (matName) {
@@ -279,14 +279,30 @@ public class ItemRegistry {
             if (item != null) return item;
         }
         
-        // 2. Try the material name directly
+        // 2. Try the material name directly (ensure it's not an enchanted item)
         SkyblockItem itemNameMatch = getItem(matName);
         if (itemNameMatch != null) {
-            return itemNameMatch;
+            if (!itemNameMatch.getItemId().toUpperCase().startsWith("ENCHANTED_")) {
+                return itemNameMatch;
+            }
         }
         
         // 3. Fallback: Search all registered Skyblock items by matching material
+        // Prioritize exact match of item ID to material name first (ignoring enchanted)
         for (SkyblockItem item : ITEMS.values()) {
+            if (item.getItemId().toUpperCase().startsWith("ENCHANTED_")) {
+                continue;
+            }
+            if (item.getItemId().equalsIgnoreCase(matName)) {
+                return item;
+            }
+        }
+        
+        // Then search by material match (ignoring enchanted)
+        for (SkyblockItem item : ITEMS.values()) {
+            if (item.getItemId().toUpperCase().startsWith("ENCHANTED_")) {
+                continue;
+            }
             if (item.getMaterial() == material) {
                 return item;
             }
