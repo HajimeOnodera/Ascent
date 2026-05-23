@@ -1,22 +1,28 @@
-package fun.ascent.skyblock.bazaar.vars;
+    package fun.ascent.skyblock.bazaar.vars;
 
-import lombok.AllArgsConstructor;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.minestom.server.item.Material;
 
-@AllArgsConstructor
 public enum BazaarCategory {
 
-    FARMING("<gray>Bazaar ➜ Farming",null),
-    MINING("<gray>Bazaar ➜ Mining",null),
-    COMBAT("<gray>Bazaar ➜ Combat",null),
-    FISHING_WOOD("<gray>Bazaar ➜ Woods & Fishes",null),
-    ODDITIES("<gray>Bazaar ➜ Oddities",null),
-    ;
-    public final String titleMiniMessage;
-    public final BazaarCategory parent;
+    FARMING("<gold>Bazaar ➔ Farming", "FARMING", Material.GOLDEN_HOE, Material.YELLOW_STAINED_GLASS_PANE),
+    MINING("<gold>Bazaar ➔ Mining", "MINING", Material.DIAMOND_PICKAXE, Material.LIGHT_BLUE_STAINED_GLASS_PANE),
+    COMBAT("<gold>Bazaar ➔ Combat", "COMBAT", Material.IRON_SWORD, Material.RED_STAINED_GLASS_PANE),
+    FISHING_WOOD("<gold>Bazaar ➔ Woods & Fishes", "WOODS_FISHES", Material.FISHING_ROD, Material.ORANGE_STAINED_GLASS_PANE),
+    ODDITIES("<gold>Bazaar ➔ Oddities", "ODDITIES", Material.ENCHANTING_TABLE, Material.MAGENTA_STAINED_GLASS_PANE);
 
-    public Component getTitle(){
-        return MiniMessage.miniMessage().deserialize(titleMiniMessage);
+    public final String titleMiniMessage;
+    public final String name;
+    public final Material icon;
+    public final Material pane;
+
+    BazaarCategory(String titleMiniMessage, String name, Material icon, Material pane) {
+        this.titleMiniMessage = titleMiniMessage;
+        this.name = name;
+        this.icon = icon;
+        this.pane = pane;
+    }
+
+    public String getTitle() {
+        return titleMiniMessage;
     }
 }

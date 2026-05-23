@@ -10,7 +10,11 @@ public class AuctionItem {
 
     public SkyblockItemData item;
     public UUID sellerUUID;
-    public double sellPrice;
-    public UUID buyerUUID;
+    public String sellerName;
+    public double startingBid;
+    public double highestBid;
+    public UUID highestBidder;
+    public boolean isBin;
+    public long endTime;
 
 }

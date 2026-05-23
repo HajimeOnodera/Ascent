@@ -30,6 +30,8 @@ public class CommandHandler {
         commandManager = MinecraftServer.getCommandManager();
         register(new SpawnMobCommand());
         register(new ItemCommand());
+        register(new fun.ascent.skyblock.bazaar.command.BazaarCommand());
+        register(new fun.ascent.skyblock.auction.command.AuctionCommand());
         register(new SetReforgeCommand());
         register(new SkillsCommand());
         register(new MinionCommand());
