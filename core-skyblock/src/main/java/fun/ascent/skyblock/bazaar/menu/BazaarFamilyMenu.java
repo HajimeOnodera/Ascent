@@ -57,7 +57,7 @@ public class BazaarFamilyMenu {
                 String productId = family.productIds.get(i);
                 SkyblockItem sbItem = ItemRegistry.getItem(productId);
                 Material material = sbItem != null ? sbItem.getMaterial() : Material.STONE;
-                String displayName = sbItem != null ? sbItem.name() : productId;
+                String displayName = sbItem != null ? sbItem.getDisplayName() : productId;
 
                 Price price = BazaarPriceRegistry.itemPrices.get(productId);
                 double buyPrice = price != null ? price.getBuyPrice() : 0.0;

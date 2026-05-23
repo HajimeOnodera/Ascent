@@ -35,7 +35,7 @@ public class BazaarRegistry {
             for (BazaarCategory category : BazaarCategory.values()) {
                 if (data.containsKey(category.name)) {
                     for (FamilyModel model : data.get(category.name)) {
-                        Material material = Material.fromNamespaceId("minecraft:" + model.icon.toLowerCase());
+                        Material material = Material.fromKey("minecraft:" + model.icon.toLowerCase());
                         if (material == null) material = Material.STONE;
                         familyList.get(category).add(new BazaarItemFamily(model.name, material, model.productIds));
                     }

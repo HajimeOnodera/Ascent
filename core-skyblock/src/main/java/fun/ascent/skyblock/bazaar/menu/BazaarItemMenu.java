@@ -20,7 +20,7 @@ public class BazaarItemMenu {
 
     public static void open(SkyblockPlayer player, BazaarItem item, BazaarCategory activeCategory, fun.ascent.skyblock.bazaar.BazaarItemFamily family) {
         SkyblockItem sbItem = ItemRegistry.getItem(item.getProductId());
-        String displayName = sbItem != null ? sbItem.name() : item.getProductId();
+        String displayName = sbItem != null ? sbItem.getDisplayName() : item.getProductId();
         
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, MiniMessage.miniMessage().deserialize("<dark_gray>" + displayName));
         

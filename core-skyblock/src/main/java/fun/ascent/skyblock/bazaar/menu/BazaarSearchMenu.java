@@ -43,7 +43,7 @@ public class BazaarSearchMenu {
                 BazaarItem bItem = items.get(startIndex + i);
                 SkyblockItem sbItem = ItemRegistry.getItem(bItem.getProductId());
                 Material material = sbItem != null ? sbItem.getMaterial() : Material.STONE;
-                String displayName = sbItem != null ? sbItem.name() : bItem.getProductId();
+                String displayName = sbItem != null ? sbItem.getDisplayName() : bItem.getProductId();
 
                 Price price = BazaarPriceRegistry.itemPrices.get(bItem.getProductId());
                 double buyPrice = price != null ? price.getBuyPrice() : 0.0;

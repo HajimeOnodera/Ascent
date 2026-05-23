@@ -2,7 +2,6 @@ package fun.ascent.skyblock.bazaar.price;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.vars.BazaarCategory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,7 +50,8 @@ public class BazaarPriceRegistry {
                                 itemPrices.put(productId, price);
                                 
                                 BazaarCategory category = guessCategory(productId);
-                                BazaarRegistry.registerItem(productId, category);
+//                                BazaarRegistry.registerItem(productId, category);
+                                //TODO: Fix
                                 count++;
                             }
                             LOGGER.info("Loaded " + count + " items from Hypixel Bazaar API.");
