@@ -46,7 +46,7 @@ public class BazaarEntry {
     public void initializeTransientFields(@Nullable BazaarEntry parent) {
         this.parentEntry = parent;
         if (this.icon != null) {
-            this.iconItem = ItemRegistry.getItem(this.icon);
+            this.iconItem = ItemRegistry.getItem(this.icon.toLowerCase());
         }
         if (this.id != null) {
             this.itemToSell = ItemRegistry.getItem(this.id);

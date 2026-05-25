@@ -12,7 +12,7 @@ public class BZCommand extends Command {
 
         setDefaultExecutor(((sender, context) -> {
             if(!(sender instanceof SkyblockPlayer player)) return;
-            BazaarCategoryMenu.openMenu(player, BazaarRegistry.bazaarData.getFarming());
+            BazaarCategoryMenu.openMenu(player, BazaarRegistry.bazaarItemList.getFarming());
         }));
     }
 }

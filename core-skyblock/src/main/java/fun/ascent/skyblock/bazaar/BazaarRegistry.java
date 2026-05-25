@@ -8,15 +8,15 @@ import java.io.InputStreamReader;
 
 public class BazaarRegistry {
 
-    public static BazaarData bazaarData;
+    public static BazaarData bazaarItemList;
 
     public static void initialise(){
-        bazaarData = loadDataFromJSON();
-        if (bazaarData != null && bazaarData.bazaarData != null) {
-            for (BazaarEntry entry : bazaarData.bazaarData) {
+        bazaarItemList = loadDataFromJSON();
+        if (bazaarItemList != null && bazaarItemList.bazaarData != null) {
+            for (BazaarEntry entry : bazaarItemList.bazaarData) {
                 entry.initializeTransientFields(null);
             }
-            BZPriceRegistry.initialise(bazaarData);
+            BZPriceRegistry.initialise(bazaarItemList);
         }
     }
 
