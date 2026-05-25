@@ -1,85 +1,249 @@
 {
-  "FARMING": [
-    {"name": "Wheat", "icon": "WHEAT", "productIds": ["WHEAT", "ENCHANTED_BREAD", "HAY_BLOCK", "ENCHANTED_HAY_BLOCK"]},
-    {"name": "Carrot", "icon": "CARROT", "productIds": ["CARROT_ITEM", "ENCHANTED_CARROT", "ENCHANTED_GOLDEN_CARROT"]},
-    {"name": "Potato", "icon": "POTATO", "productIds": ["POTATO_ITEM", "ENCHANTED_POTATO", "ENCHANTED_BAKED_POTATO"]},
-    {"name": "Pumpkin", "icon": "PUMPKIN", "productIds": ["PUMPKIN", "ENCHANTED_PUMPKIN"]},
-    {"name": "Melon", "icon": "MELON_SLICE", "productIds": ["MELON", "ENCHANTED_MELON", "ENCHANTED_GLISTERING_MELON"]},
-    {"name": "Mushroom", "icon": "RED_MUSHROOM", "productIds": ["RED_MUSHROOM", "BROWN_MUSHROOM", "ENCHANTED_RED_MUSHROOM", "ENCHANTED_BROWN_MUSHROOM", "ENCHANTED_MUSHROOM_BLOCK"]},
-    {"name": "Seeds", "icon": "WHEAT_SEEDS", "productIds": ["SEEDS", "ENCHANTED_SEEDS"]},
-    {"name": "Cactus", "icon": "CACTUS", "productIds": ["CACTUS", "ENCHANTED_CACTUS", "ENCHANTED_CACTUS_GREEN"]},
-    {"name": "Sugar Cane", "icon": "SUGAR_CANE", "productIds": ["SUGAR_CANE", "ENCHANTED_SUGAR", "ENCHANTED_SUGAR_CANE"]},
-    {"name": "Sunflower", "icon": "SUNFLOWER", "productIds": ["SUNFLOWER"]},
-    {"name": "Blue Orchid", "icon": "BLUE_ORCHID", "productIds": ["BLUE_ORCHID"]},
-    {"name": "Rose Bush", "icon": "ROSE_BUSH", "productIds": ["ROSE_BUSH"]},
-    {"name": "Leather", "icon": "LEATHER", "productIds": ["LEATHER", "ENCHANTED_LEATHER"]},
-    {"name": "Porkchop", "icon": "PORKCHOP", "productIds": ["PORK", "ENCHANTED_PORK", "ENCHANTED_GRILLED_PORK"]},
-    {"name": "Chicken", "icon": "CHICKEN", "productIds": ["RAW_CHICKEN", "ENCHANTED_RAW_CHICKEN"]},
-    {"name": "Mutton", "icon": "MUTTON", "productIds": ["MUTTON", "ENCHANTED_MUTTON", "ENCHANTED_COOKED_MUTTON"]},
-    {"name": "Rabbit", "icon": "RABBIT_FOOT", "productIds": ["RABBIT", "ENCHANTED_RABBIT_FOOT", "ENCHANTED_RABBIT_HIDE", "ENCHANTED_RAW_RABBIT"]},
-    {"name": "Nether Wart", "icon": "NETHER_WART", "productIds": ["NETHER_STALK", "ENCHANTED_NETHER_STALK", "MUTANT_NETHER_STALK"]},
-    {"name": "Cocoa Beans", "icon": "COCOA_BEANS", "productIds": ["INK_SACK:3", "ENCHANTED_COCOA", "ENCHANTED_COOKIE"]}
-  ],
-  "MINING": [
-    {"name": "Cobblestone", "icon": "COBBLESTONE", "productIds": ["COBBLESTONE", "ENCHANTED_COBBLESTONE"]},
-    {"name": "Coal", "icon": "COAL", "productIds": ["COAL", "ENCHANTED_COAL", "ENCHANTED_COAL_BLOCK"]},
-    {"name": "Iron", "icon": "IRON_INGOT", "productIds": ["IRON_INGOT", "ENCHANTED_IRON", "ENCHANTED_IRON_BLOCK"]},
-    {"name": "Gold", "icon": "GOLD_INGOT", "productIds": ["GOLD_INGOT", "ENCHANTED_GOLD", "ENCHANTED_GOLD_BLOCK"]},
-    {"name": "Diamond", "icon": "DIAMOND", "productIds": ["DIAMOND", "ENCHANTED_DIAMOND", "ENCHANTED_DIAMOND_BLOCK"]},
-    {"name": "Lapis Lazuli", "icon": "LAPIS_LAZULI", "productIds": ["INK_SACK:4", "ENCHANTED_LAPIS_LAZULI", "ENCHANTED_LAPIS_LAZULI_BLOCK"]},
-    {"name": "Emerald", "icon": "EMERALD", "productIds": ["EMERALD", "ENCHANTED_EMERALD", "ENCHANTED_EMERALD_BLOCK"]},
-    {"name": "Redstone", "icon": "REDSTONE", "productIds": ["REDSTONE", "ENCHANTED_REDSTONE", "ENCHANTED_REDSTONE_BLOCK"]},
-    {"name": "Obsidian", "icon": "OBSIDIAN", "productIds": ["OBSIDIAN", "ENCHANTED_OBSIDIAN"]},
-    {"name": "End Stone", "icon": "END_STONE", "productIds": ["ENDER_STONE", "ENCHANTED_ENDSTONE"]},
-    {"name": "Gravel", "icon": "GRAVEL", "productIds": ["GRAVEL", "FLINT", "ENCHANTED_FLINT"]},
-    {"name": "Sand", "icon": "SAND", "productIds": ["SAND", "ENCHANTED_SAND"]},
-    {"name": "Ice", "icon": "ICE", "productIds": ["ICE", "PACKED_ICE", "ENCHANTED_ICE", "ENCHANTED_PACKED_ICE"]},
-    {"name": "Snow", "icon": "SNOW_BLOCK", "productIds": ["SNOW_BALL", "SNOW_BLOCK", "ENCHANTED_SNOW_BLOCK"]},
-    {"name": "Stone", "icon": "STONE", "productIds": ["STONE"]},
-    {"name": "Redstone Block", "icon": "REDSTONE_BLOCK", "productIds": ["REDSTONE_BLOCK"]},
-    {"name": "Ghast Tear", "icon": "GHAST_TEAR", "productIds": ["GHAST_TEAR", "ENCHANTED_GHAST_TEAR"]},
-    {"name": "Mithril", "icon": "PRISMARINE_CRYSTALS", "productIds": ["MITHRIL", "ENCHANTED_MITHRIL", "TITANIUM"]},
-    {"name": "Hard Stone", "icon": "COBBLED_DEEPSLATE", "productIds": ["HARD_STONE", "ENCHANTED_HARD_STONE"]},
-    {"name": "Ruby", "icon": "REDSTONE_BLOCK", "productIds": ["ROUGH_RUBY", "FLAWED_RUBY", "FINE_RUBY"]},
-    {"name": "Magma", "icon": "MAGMA_CREAM", "productIds": ["MAGMA_CREAM", "ENCHANTED_MAGMA_CREAM"]}
-  ],
-  "COMBAT": [
-    {"name": "Rotten Flesh", "icon": "ROTTEN_FLESH", "productIds": ["ROTTEN_FLESH", "ENCHANTED_ROTTEN_FLESH"]},
-    {"name": "Bone", "icon": "BONE", "productIds": ["BONE", "ENCHANTED_BONE", "ENCHANTED_BONE_BLOCK"]},
-    {"name": "String", "icon": "STRING", "productIds": ["STRING", "ENCHANTED_STRING"]},
-    {"name": "Gunpowder", "icon": "GUNPOWDER", "productIds": ["SULPHUR", "ENCHANTED_GUNPOWDER", "ENCHANTED_FIREWORK_ROCKET"]},
-    {"name": "Ender Pearl", "icon": "ENDER_PEARL", "productIds": ["ENDER_PEARL", "ENCHANTED_ENDER_PEARL"]},
-    {"name": "Ghast Tear", "icon": "GHAST_TEAR", "productIds": ["GHAST_TEAR", "ENCHANTED_GHAST_TEAR"]},
-    {"name": "Slimeball", "icon": "SLIME_BALL", "productIds": ["SLIME_BALL", "ENCHANTED_SLIME_BALL", "ENCHANTED_SLIME_BLOCK"]},
-    {"name": "Magma Cream", "icon": "MAGMA_CREAM", "productIds": ["MAGMA_CREAM", "ENCHANTED_MAGMA_CREAM"]},
-    {"name": "Blaze Rod", "icon": "BLAZE_ROD", "productIds": ["BLAZE_ROD", "ENCHANTED_BLAZE_POWDER", "ENCHANTED_BLAZE_ROD"]},
-    {"name": "Obsidian", "icon": "OBSIDIAN", "productIds": ["OBSIDIAN", "ENCHANTED_OBSIDIAN"]},
-    {"name": "Magma Block", "icon": "MAGMA_BLOCK", "productIds": ["MAGMA_BLOCK"]},
-    {"name": "Wither Skull", "icon": "WITHER_SKELETON_SKULL", "productIds": ["WITHER_SKELETON_SKULL"]}
-  ],
-  "WOODS_FISHES": [
-    {"name": "Oak Wood", "icon": "OAK_LOG", "productIds": ["LOG", "ENCHANTED_OAK_LOG"]},
-    {"name": "Raw Fish", "icon": "COD", "productIds": ["RAW_FISH", "ENCHANTED_RAW_FISH"]},
-    {"name": "Poppy", "icon": "POPPY", "productIds": ["REDROSE"]},
-    {"name": "Prismarine Shard", "icon": "PRISMARINE_SHARD", "productIds": ["PRISMARINE_SHARD", "ENCHANTED_PRISMARINE_SHARD"]},
-    {"name": "Clay", "icon": "CLAY_BALL", "productIds": ["CLAY_BALL", "ENCHANTED_CLAY_BALL"]},
-    {"name": "Sponge", "icon": "SPONGE", "productIds": ["SPONGE", "ENCHANTED_SPONGE", "ENCHANTED_WET_SPONGE"]},
-    {"name": "Lily Pad", "icon": "LILY_PAD", "productIds": ["WATER_LILY", "ENCHANTED_WATER_LILY"]},
-    {"name": "Ink Sac", "icon": "INK_SAC", "productIds": ["INK_SACK", "ENCHANTED_INK_SACK"]},
-    {"name": "Spruce Wood", "icon": "SPRUCE_LOG", "productIds": ["LOG:1", "ENCHANTED_SPRUCE_LOG"]},
-    {"name": "Birch Wood", "icon": "BIRCH_LOG", "productIds": ["LOG:2", "ENCHANTED_BIRCH_LOG"]},
-    {"name": "Dark Oak Wood", "icon": "DARK_OAK_LOG", "productIds": ["LOG_2:1", "ENCHANTED_DARK_OAK_LOG"]},
-    {"name": "Acacia Wood", "icon": "ACACIA_LOG", "productIds": ["LOG_2", "ENCHANTED_ACACIA_LOG"]},
-    {"name": "Jungle Wood", "icon": "JUNGLE_LOG", "productIds": ["LOG:3", "ENCHANTED_JUNGLE_LOG"]}
-  ],
-  "ODDITIES": [
-    {"name": "Booster Cookie", "icon": "COOKIE", "productIds": ["BOOSTER_COOKIE"]},
-    {"name": "Enchanting Table", "icon": "ENCHANTING_TABLE", "productIds": ["ENCHANTING_TABLE"]},
-    {"name": "Experience Bottle", "icon": "EXPERIENCE_BOTTLE", "productIds": ["EXP_BOTTLE", "TITANIC_EXP_BOTTLE"]},
-    {"name": "Super Compactor", "icon": "DROPPER", "productIds": ["SUPER_COMPACTOR_3000"]},
-    {"name": "Summoning Eye", "icon": "ENDER_EYE", "productIds": ["SUMMONING_EYE"]},
-    {"name": "Paper", "icon": "PAPER", "productIds": ["PAPER", "ENCHANTED_PAPER"]},
-    {"name": "Catalyst", "icon": "END_CRYSTAL", "productIds": ["CATALYST", "HYPER_CATALYST"]},
-    {"name": "Stock of Stonks", "icon": "GOLD_NUGGET", "productIds": ["STOCK_OF_STONKS"]}
+  "bazaarData": [
+    {
+      "id": "FARMING",
+      "icon": "GOLDEN_HOE",
+      "parent": null,
+      "slot": 0,
+      "itemName": "<yellow>Farming</yellow>",
+      "title": "<gray>Bazaar ➔ Farming</gray>",
+      "children": [
+        {
+          "id": "WHEAT_SEEDS",
+          "icon": "WHEAT",
+          "parent": "FARMING",
+          "slot": 11,
+          "itemName": "<yellow>Wheat & Seeds</yellow>",
+          "title": "<gray>Farming ➔ Wheat & Seeds",
+          "children": [
+            {
+              "id": "WHEAT",
+              "icon": "WHEAT",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<white>Wheat</white>",
+              "title": "<gray>Wheat & Seeds ➔ Wheat</gray>",
+              "slot": 10,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_BREAD",
+              "icon": "ENCHANTED_BREAD",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<white>Enchanted Bread</white>",
+              "title": "<gray> Wheat & Seeds ➔ Enchanted Bread</gray>",
+              "slot": 11,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_WHEAT",
+              "icon": "ENCHANTED_WHEAT",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<green>Enchanted Wheat</green>",
+              "title": "<gray>Wheat & Seeds ➔ Enchanted Wheat</gray>",
+              "slot": 12,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_HAY_BALE",
+              "icon": "ENCHANTED_HAY_BALE",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<blue>Enchanted Hay Bale",
+              "slot": 13,
+              "title": "<gray>Wheat & Seeds ➔ Enchanted Hay Bale</gray>",
+              "children": null
+            },
+            {
+              "id": "SEEDS",
+              "icon": "SEEDS",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<white>Seeds</white>",
+              "title": "<gray>Wheat & Seeds ➔ Seeds</gray>",
+              "slot": 14,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_SEEDS",
+              "icon": "ENCHANTED_SEEDS",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<green>Enchanted Seeds</green>",
+              "title": "<gray>Wheat & Seeds ➔ Enchanted Seeds</gray>",
+              "slot": 15,
+              "children": null
+            },
+            {
+              "id": "BOX_OF_SEEDS",
+              "icon": "BOX_OF_SEEDS",
+              "parent": "WHEAT_SEEDS",
+              "itemName": "<blue>Box of Seeds</blue>",
+              "title": "<gray>Wheat & Seeds ➔ Box of Seeds</gray>",
+              "slot":16,
+              "children": null
+            }
+          ]
+        },
+        {
+          "id": "CARROT_ITEM",
+          "icon": "CARROT_ITEM",
+          "parent": "FARMING",
+          "itemName": "<yellow>Carrot </yellow>",
+          "title": "<gray>Farming ➔ Carrot</gray>",
+          "slot": 11,
+          "children": []
+        },
+        {
+          "id": "POTATO_ITEM",
+          "icon": "POTATO_ITEM",
+          "parent": "FARMING",
+          "itemName": "<yellow>Potato</yellow>",
+          "title": "<gray>Farming ➔ Potato</gray>",
+          "slot":12,
+          "children": []
+        },
+        {
+          "id": "PUMPKIN",
+          "icon": "PUMPKIN",
+          "parent": "FARMING",
+          "itemName": "<yellow>Pumpkin</yellow>",
+          "title": "<gray>Farming ➔ Pumpkin</gray>",
+          "slot": 13,
+          "children": []
+        },
+        {
+          "id": "MELON",
+          "icon": "MELON",
+          "parent": "FARMING",
+          "itemName": "<yellow>Melon</yellow>",
+          "title": "<gray>Farming ➔ Melon</gray>",
+          "slot":14 ,
+          "children": []
+        },
+        {
+          "id": "RED_MUSHROOM",
+          "icon": "RED_MUSHROOM",
+          "parent": "FARMING",
+          "itemName": "<yellow>Mushrooms</yellow>",
+          "title": "<gray>Farming ➔ Mushrooms</gray>",
+          "slot":15 ,
+          "children": []
+        },
+        {
+          "id": "INK_SACK:3",
+          "icon": "INK_SACK:3",
+          "parent": "FARMING",
+          "itemName": "<yellow>Cocoa Beans</yellow>",
+          "title": "<gray>Farming ➔ Cocoa Beans</gray>",
+          "slot": 20,
+          "children": []
+        },
+        {
+          "id": "CACTUS",
+          "icon": "CACTUS",
+          "parent": "FARMING",
+          "itemName": "<yellow>Cactus</yellow>",
+          "title": "<gray>Farming ➔ Cactus</gray>",
+          "slot":21 ,
+          "children": []
+        },
+        {
+          "id": "SUGAR_CANE",
+          "icon": "SUGAR_CANE",
+          "parent": "FARMING",
+          "itemName": "<yellow>Sugar Cane</yellow>",
+          "title": "<gray>Farming ➔ Sugar Cane</gray>",
+          "slot": 22,
+          "children": []
+        },
+        {
+          "id": "DOUBLE_PLANT",
+          "icon": "DOUBLE_PLANT",
+          "parent": "FARMING",
+          "itemName": "<yellow>Sunflower</yellow>",
+          "title": "<gray>Farming ➔ Sunflower</gray>",
+          "slot": 23,
+          "children": []
+        },
+        {
+          "id": "MOONFLOWER",
+          "icon": "MOONFLOWER",
+          "parent": "FARMING",
+          "itemName": "<yellow>Moonflower</yellow>",
+          "title": "<gray>Farming ➔ Moonflower</gray>",
+          "slot": 24,
+          "children": []
+        },
+        {
+          "id": "WILD_ROSE",
+          "icon": "WILD_ROSE",
+          "parent": "FARMING",
+          "itemName": "<yellow>Wild Rose</yellow>",
+          "title": "<gray>Farming ➔ Wild Rose</gray>",
+          "slot": 25,
+          "children": []
+        },
+        {
+          "id": "LEATHER",
+          "icon": "LEATHER",
+          "parent": "FARMING",
+          "itemName": "<yellow>Leather & Beef</yellow>",
+          "title": "<gray>Farming ➔ Leather & Beef</gray>",
+          "slot": 29,
+          "children": []
+        },
+        {
+          "id": "PORK",
+          "icon": "PORK",
+          "parent": "FARMING",
+          "itemName": "<yellow>Pork</yellow>",
+          "title": "<gray>Farming ➔ Pork</gray>",
+          "slot":30 ,
+          "children": []
+        },
+        {
+          "id": "RAW_CHICKEN",
+          "icon": "RAW_CHICKEN",
+          "parent": "FARMING",
+          "itemName": "<yellow>Chicken & Feather</yellow>",
+          "title": "<gray>Farming ➔ Chicken & Feather</gray>",
+          "slot": 31,
+          "children": []
+        },
+        {
+          "id": "MUTTON",
+          "icon": "MUTTON",
+          "parent": "FARMING",
+          "itemName": "<yellow>Mutton & Wool</yellow>",
+          "title": "<gray>Farming ➔ Mutton & Wool</gray>",
+          "slot": 32,
+          "children": []
+        },
+        {
+          "id": "RABBIT",
+          "icon": "RABBIT",
+          "parent": "FARMING",
+          "itemName": "<yellow>Rabbit</yellow>",
+          "title": "<gray>Farming ➔ Rabbit</gray>",
+          "slot":33 ,
+          "children": []
+        },
+        {
+          "id": "NETHER_STALK",
+          "icon": "NETHER_STALK",
+          "parent": "FARMING",
+          "itemName": "<yellow>Nether Warts</yellow>",
+          "title": "<gray>Farming ➔ Nether Warts</gray>",
+          "slot": 34,
+          "children": []
+        },
+        {
+          "id": "GARDEN",
+          "icon": "CROPIE",
+          "parent": "FARMING",
+          "itemName": "<yellow>Garden</yellow>",
+          "title": "<gray>Farming ➔ Garden</gray>",
+          "slot":38 ,
+          "children": []
+        }
+      ]
+    }
   ]
 }
