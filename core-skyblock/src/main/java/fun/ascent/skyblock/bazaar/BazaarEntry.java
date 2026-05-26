@@ -113,14 +113,25 @@ public class BazaarEntry {
             if (color == null) color = net.kyori.adventure.text.format.NamedTextColor.WHITE;
             
             Component component = Component.text("▶").color(color);
-            String msg = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(component);
-            String plainText = StringUtility.getTextFromComponent(child.nameComp);
-            msg += " <gray>" + StringUtility.capitalize(plainText.toLowerCase());
+            String msg = MiniMessage.miniMessage().serialize(component);
+            double sellPrice = BZPriceRegistry.getSell(child);
+            double buyPrice = BZPriceRegistry.getBuy(child);
+            msg += " <gray>" + child.iconItem.getDisplayName() +
+            " <red>" + formatPrice(sellPrice) + "<dark_gray> | <green>" + formatPrice(buyPrice);
             lore.add(StringUtility.text(msg));
         });
         lore.add(Component.empty());
         lore.add(StringUtility.text("<yellow>Click to view products"));
         return base.withCustomName(this.nameComp).withLore(lore);
+    }
+
+    public String formatPrice(double val) {
+        if (val <= 0.0) return "0";
+        if (val < 1.0) {
+            String formatted = String.format(java.util.Locale.US, "%.1f", val);
+            return formatted.startsWith("0.") ? formatted.substring(1) : formatted;
+        }
+        return String.valueOf((int) val);
     }
 
     public String getRarity(SkyblockItem item){

@@ -149,7 +149,7 @@ public class BazaarChildCategoryMenu {
     }
 
     public static void fill(Inventory inventory){
-        ItemStack stack = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE)
+        ItemStack stack = ItemStack.of(Material.BLACK_STAINED_GLASS_PANE)
                 .withCustomName(Component.empty()).withLore(List.of())
                 .with(DataComponents.TOOLTIP_DISPLAY,new TooltipDisplay(true, Set.of()));
         for(int i = 0; i < inventory.getInnerSize();i++){

@@ -19,7 +19,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -65,43 +64,7 @@ public class BazaarCategoryMenu {
 
     private static void mouseClick(int slot, ItemStack clickedItem, SkyblockPlayer player, AbstractInventory inventory) {
         if(slot == 45){
-            player.closeInventory();
-            Point pos = player.getPosition();
-            
-            ListBinaryTag messages = ListBinaryTag.builder()
-                    .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
-                    .add(StringBinaryTag.stringBinaryTag("{\"text\":\"^^^^^^^^^^^^^^^\"}"))
-                    .add(StringBinaryTag.stringBinaryTag("{\"text\":\"Enter query\"}"))
-                    .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
-                    .build();
-            CompoundBinaryTag frontText = CompoundBinaryTag.builder()
-                    .put("messages", messages)
-                    .build();
-            Block signBlock = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
-                    .put("front_text", frontText)
-                    .build());
-                    
-            player.sendPacket(new BlockChangePacket(pos, signBlock));
-            player.sendPacket(new OpenSignEditorPacket(pos, true));
-            
-            EventListener<PlayerEditSignEvent> listener = EventListener.builder(PlayerEditSignEvent.class)
-                    .handler(event -> {
-                        String query = event.getLines().getFirst();
-                        if(query.isBlank()){
-                            BazaarCategoryMenu.openMenu(player,BazaarRegistry.bazaarItemList.getFarming());
-                            return;
-                        }
-                        // TODO: Open Search Results
-                        BazaarSearchMenu.open(player,query);
-                        player.sendMessage(StringUtility.text("<green>Searching for: " + query));
-                        
-                        Block original = player.getInstance().getBlock(pos);
-                        player.sendPacket(new BlockChangePacket(pos, original));
-                    })
-                    .expireCount(1)
-                    .build();
-            player.eventNode().addListener(listener);
-            return;
+            openSearchBar(player);
         }
         if(slot == 47){
             sellInventory(player, null);
@@ -134,6 +97,43 @@ public class BazaarCategoryMenu {
             }
         }
 
+    }
+
+    public static void openSearchBar(SkyblockPlayer player) {
+        player.closeInventory();
+        Point pos = player.getPosition();
+        ListBinaryTag messages = ListBinaryTag.builder()
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"^^^^^^^^^^^^^^^\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"Enter query\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
+                .build();
+        CompoundBinaryTag frontText = CompoundBinaryTag.builder()
+                .put("messages", messages)
+                .build();
+        Block signBlock = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
+                .put("front_text", frontText)
+                .build());
+
+        player.sendPacket(new BlockChangePacket(pos, signBlock));
+        player.sendPacket(new OpenSignEditorPacket(pos, true));
+
+        EventListener<PlayerEditSignEvent> listener = EventListener.builder(PlayerEditSignEvent.class)
+                .handler(event -> {
+                    String query = event.getLines().getFirst();
+                    if(query.isBlank()){
+                        BazaarCategoryMenu.openMenu(player,BazaarRegistry.bazaarItemList.getFarming());
+                        return;
+                    }
+                    BazaarSearchMenu.open(player,query);
+                    player.sendMessage(StringUtility.text("<green>Searching for: " + query));
+                    Block original = player.getInstance().getBlock(pos);
+                    player.sendPacket(new BlockChangePacket(pos, original));
+                })
+                .expireCount(1)
+                .build();
+        player.eventNode().addListener(listener);
+        return;
     }
 
     public static void sellInventory(SkyblockPlayer player, BazaarEntry category) {
@@ -251,7 +251,6 @@ public class BazaarCategoryMenu {
         ).withLore(StringUtility.text("<gray>You don't have any ongoing orders."),
                 Component.empty(),StringUtility.text("<yellow>Click to manage!"));
         inventory.setItemStack(50,manage);
-        //TODO: Add Other Items
     }
 
     public static void addChildren(Inventory inventory, BazaarEntry category){
@@ -281,6 +280,10 @@ public class BazaarCategoryMenu {
         for(int i = 0; i < data.bazaarData.size();i++){
             int slot = 9 * i;
             BazaarEntry entry = data.bazaarData.get(i);
+            if(curCategory == null){
+                inventory.setItemStack(slot,entry.getStack(false));
+                continue;
+            }
             inventory.setItemStack(slot,entry.getStack(curCategory.id.equals(entry.id)));
         }
     }

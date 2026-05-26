@@ -3,6 +3,7 @@ package fun.ascent.skyblock.bazaar.ui;
 import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
+import fun.ascent.skyblock.bazaar.ui.buySell.BazaarInstantBuyMenu;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.text.Component;
@@ -40,23 +41,22 @@ public class BazaarItemBuyMenu {
 
     private static void mouseClick(int slot, ItemStack clickedItem, SkyblockPlayer player, AbstractInventory inventory) {
         int slotBase = inventory.getInnerSize() - 5;
+        BazaarEntry cur = curItem.get(player);
+        if(cur == null || cur.parentEntry == null) return;
         if (slot == slotBase) {
-            BazaarEntry cur = curItem.get(player);
-            if(cur != null && cur.parentEntry != null) {
-                BazaarEntry parent = cur.parentEntry;
-                while (parent.parentEntry != null){
-                    parent = parent.parentEntry;
-                }
-                BazaarCategoryMenu.openMenu(player,parent);
-                return;
+            BazaarEntry parent = cur.parentEntry;
+            while (parent.parentEntry != null){
+                parent = parent.parentEntry;
             }
+            BazaarCategoryMenu.openMenu(player,parent);
+            return;
         }
         if (slot == slotBase - 1) {
-            BazaarEntry cur = curItem.get(player);
-            if(cur != null && cur.parentEntry != null) {
-                BazaarChildCategoryMenu.open(player, cur.parentEntry);
-            }
+            BazaarChildCategoryMenu.open(player, cur.parentEntry);
             return;
+        }
+        if(slot == 10){
+            BazaarInstantBuyMenu.open(player,cur);
         }
     }
 
@@ -137,7 +137,7 @@ public class BazaarItemBuyMenu {
     }
 
     public static void fill(Inventory inventory){
-        ItemStack stack = ItemStack.of(Material.GRAY_STAINED_GLASS_PANE)
+        ItemStack stack = ItemStack.of(Material.BLACK_STAINED_GLASS_PANE)
                 .withCustomName(Component.empty()).withLore(List.of())
                 .with(DataComponents.TOOLTIP_DISPLAY,new TooltipDisplay(true, Set.of()));
         for(int i = 0; i < inventory.getInnerSize();i++){
