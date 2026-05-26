@@ -10,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class GUIBanker extends InventoryGUI implements RefreshingGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Store your coins safely in the bank"));
                 lore.add(text("<gray>to earn interest and prevent losing"));
@@ -81,7 +82,7 @@ public class GUIBanker extends InventoryGUI implements RefreshingGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Withdraw your coins from the bank"));
                 lore.add(text("<gray>to use them for buying items or"));
