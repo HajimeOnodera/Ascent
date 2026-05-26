@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.collections;
 
+import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 
 public class CustomUnlock extends CollectionUnlock {
@@ -11,7 +12,7 @@ public class CustomUnlock extends CollectionUnlock {
 
     @Override
     public String getDisplay() {
-        return "§6" + award.replace("_", " ");
+        return "§6" + ItemRegistry.formatName(award);
     }
 
     @Override

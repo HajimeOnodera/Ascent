@@ -34,11 +34,27 @@ public final class CollectionMenuFormat {
         int filled = (int) Math.round(progress * PROGRESS_BAR_SEGMENTS);
 
         lore.add(text(
-                "<dark_green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
-                        + "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
+                "<green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
+                        + "<dark_gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
                         + "<reset> <yellow>" + formatNumber(current)
-                        + "<gold>/<yellow>" + formatNumber(requirement)
+                        + "<gold>/<yellow>" + formatRequirement(requirement)
         ));
+    }
+
+    public static String formatRequirement(double value) {
+        if (value < 1000) {
+            return String.valueOf((int) value);
+        }
+        if (value >= 1_000_000_000) {
+            double bill = value / 1_000_000_000.0;
+            return (bill == (int) bill ? String.valueOf((int) bill) : String.format(Locale.US, "%.1f", bill)) + "b";
+        }
+        if (value >= 1_000_000) {
+            double mill = value / 1_000_000.0;
+            return (mill == (int) mill ? String.valueOf((int) mill) : String.format(Locale.US, "%.1f", mill)) + "m";
+        }
+        double k = value / 1000.0;
+        return (k == (int) k ? String.valueOf((int) k) : String.format(Locale.US, "%.1f", k)) + "k";
     }
 
     public static ItemStack closeButton() {

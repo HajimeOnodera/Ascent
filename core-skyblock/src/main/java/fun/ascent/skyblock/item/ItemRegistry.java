@@ -76,7 +76,7 @@ public class ItemRegistry {
         }
     }
 
-    private static String formatName(String id) {
+    public static String formatName(String id) {
         if (id == null) return "";
         String[] words = id.split("_");
         StringBuilder sb = new StringBuilder();
@@ -509,15 +509,7 @@ public class ItemRegistry {
         return ItemStack.of(material, amount);
     }
 
-    public static boolean hasItem(String id) {
-        return ITEMS.containsKey(id);
-    }
-
     public static Collection<SkyblockItem> getAllItems() {
         return Collections.unmodifiableCollection(ITEMS.values());
-    }
-
-    public static Map<String, SkyblockItem> getItemMap() {
-        return Collections.unmodifiableMap(ITEMS);
     }
 }
