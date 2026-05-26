@@ -35,7 +35,6 @@ import java.util.*;
 public class BazaarCategoryMenu {
 
     public static final HashMap<SkyblockPlayer,BazaarEntry> curCategory = new HashMap<>();
-    private static final List<Integer> utilitySlots = Arrays.asList(47,49,50,51,52);
     public static void openMenu(SkyblockPlayer player, BazaarEntry category){
         if(category.parent != null){
             System.err.println("[ERROR] User Tried to open category menu for a non category");
@@ -133,10 +132,6 @@ public class BazaarCategoryMenu {
                     return;
                 }
             }
-        }
-
-        if(utilitySlots.contains(slot)){
-            //TODO: Utility Stuff
         }
 
     }
