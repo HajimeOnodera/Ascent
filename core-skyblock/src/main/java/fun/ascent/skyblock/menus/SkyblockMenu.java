@@ -221,8 +221,8 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 completed = Math.clamp(completed, 0, totalBars);
                 int remaining = totalBars - completed;
 
-                String progressBar = "<dark_green><strikethrough>" + "─".repeat(completed)
-                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                String progressBar = "<green><strikethrough>" + "─".repeat(completed)
+                        + "<dark_gray><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Recipes Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));
@@ -377,8 +377,8 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 completed = Math.clamp(completed, 0, totalBars);
                 int remaining = totalBars - completed;
 
-                String progressBar = "<dark_green><strikethrough>" + "─".repeat(completed)
-                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                String progressBar = "<green><strikethrough>" + "─".repeat(completed)
+                        + "<dark_gray><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Collections Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));

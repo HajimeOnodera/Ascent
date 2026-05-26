@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.collections.gui;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import net.kyori.adventure.text.Component;
@@ -17,8 +18,7 @@ import static fun.ascent.common.StringUtility.text;
 public class CollectionItemMenu {
 
     private static final int[] TIER_SLOTS = {
-            19, 20, 21, 22, 23, 24, 25,
-            28, 29, 30, 31, 32, 33, 34
+            18, 19, 20, 21, 22, 23, 24, 25, 26, 27
     };
 
     private static final int INFO_SLOT = 4;
@@ -26,14 +26,14 @@ public class CollectionItemMenu {
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player, CollectionCategory.ItemCollection collection, CollectionCategory category) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<yellow>" + collection.name() + " Collection"));
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, text("<dark_gray>" + collection.name() + " Collection"));
 
         CollectionMenuFormat.fill(inv);
 
         int progress = player.getActiveProfile().unlockedCollections.getOrDefault(collection.itemId(), 0);
         int currentTier = collection.getTierFromProgress(progress);
 
-        inv.setItemStack(INFO_SLOT, buildInfoItem(collection, progress));
+        inv.setItemStack(INFO_SLOT, buildInfoItem(collection, progress, currentTier));
 
         List<CollectionCategory.CollectionReward> rewards = collection.rewards();
         for (int i = 0; i < rewards.size() && i < TIER_SLOTS.length; i++) {
@@ -60,9 +60,11 @@ public class CollectionItemMenu {
         player.openInventory(inv);
     }
 
-    private static ItemStack buildInfoItem(CollectionCategory.ItemCollection collection, int progress) {
+    private static ItemStack buildInfoItem(CollectionCategory.ItemCollection collection, int progress, int currentTier) {
+        String roman = StringUtility.getAsRomanNumeral(currentTier);
+        String name = collection.name() + (roman.isEmpty() ? "" : " " + roman);
         return ItemStack.builder(collection.icon())
-                .customName(text("<yellow>" + collection.name()))
+                .customName(text("<yellow>" + name))
                 .lore(List.of(
                         text("<gray>View all your " + collection.name() + " Collection"),
                         text("<gray>progress and rewards!"),
@@ -75,39 +77,40 @@ public class CollectionItemMenu {
     private static ItemStack buildTierItem(CollectionCategory.ItemCollection collection, CollectionCategory.CollectionReward reward, int tier, int playerTier, int currentProgress) {
         Material material;
         String color;
-        String status;
 
         if (playerTier >= tier) {
             material = Material.LIME_STAINED_GLASS_PANE;
             color = "<green>";
-            status = "<green>UNLOCKED";
         } else if (playerTier == tier - 1) {
             material = Material.YELLOW_STAINED_GLASS_PANE;
             color = "<yellow>";
-            status = "<yellow>IN PROGRESS";
         } else {
             material = Material.RED_STAINED_GLASS_PANE;
             color = "<red>";
-            status = "<red>LOCKED";
         }
 
         List<Component> lore = new ArrayList<>();
-        lore.add(Component.text(" "));
-        lore.add(text("<gray>Requirement: <yellow>" + CollectionMenuFormat.formatNumber(reward.requirement())));
+        
+        // Progress: X%
+        double progressRatio = reward.requirement() <= 0 ? 1.0 : Math.clamp((double) currentProgress / reward.requirement(), 0.0, 1.0);
+        int percentInt = (int) Math.floor(progressRatio * 100);
+        String percentColor = (percentInt >= 100) ? "<green>" : "<yellow>";
+        lore.add(text("<gray>Progress: " + percentColor + percentInt + "%"));
+        
+        // Progress bar
+        CollectionMenuFormat.addProgress(lore, currentProgress, reward.requirement());
+        
         lore.add(Component.text(" "));
         lore.add(text("<gray>Rewards:"));
-        reward.unlocks().forEach(u -> lore.add(text("  <green>" + u.getDisplay())));
+        reward.unlocks().forEach(u -> lore.add(text("  " + u.getDisplay())));
+        
         lore.add(Component.text(" "));
-        
-        if (playerTier == tier - 1) {
-            CollectionMenuFormat.addProgress(lore, currentProgress, reward.requirement());
-            lore.add(Component.text(" "));
-        }
-        
-        lore.add(text(status));
+        lore.add(text("<yellow>Click to view rewards!"));
 
+        String roman = StringUtility.getAsRomanNumeral(tier);
         return ItemStack.builder(material)
-                .customName(text(color + collection.name() + " " + tier))
+                .amount(tier)
+                .customName(text(color + collection.name() + " " + roman))
                 .lore(lore)
                 .build();
     }
