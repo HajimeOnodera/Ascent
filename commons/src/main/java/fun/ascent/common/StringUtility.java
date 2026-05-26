@@ -20,7 +20,9 @@ import java.util.stream.Collectors;
 
 public class StringUtility {
     private static final DecimalFormat INTEGER_FORMAT = new DecimalFormat("#,###");
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.builder().postProcessor(
+            comp -> comp.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
+    ).build();
     private static final Map<Character, String> LEGACY_COLOR_TAGS = Map.ofEntries(
             Map.entry('0', "black"),
             Map.entry('1', "dark_blue"),

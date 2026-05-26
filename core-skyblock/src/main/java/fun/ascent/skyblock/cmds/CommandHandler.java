@@ -51,6 +51,8 @@ public class CommandHandler {
                 .addClassLoaders(CommandHandler.class.getClassLoader()));
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> cmd : commands) {
+            if (java.lang.reflect.Modifier.isAbstract(cmd.getModifiers()) || cmd.isInterface()) continue;
+            if (cmd.isAnonymousClass() || cmd.isLocalClass() || (cmd.isMemberClass() && !java.lang.reflect.Modifier.isStatic(cmd.getModifiers()))) continue;
             try {
                 register(cmd.getDeclaredConstructor().newInstance());
             } catch (Exception e) {
@@ -61,6 +63,9 @@ public class CommandHandler {
     }
 
     public static void register(Command command) {
+        if (commandManager.commandExists(command.getName())) {
+            return;
+        }
         commandManager.register(command);
     }
 }

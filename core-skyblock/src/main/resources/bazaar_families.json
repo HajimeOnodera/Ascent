@@ -4,24 +4,27 @@
       "id": "FARMING",
       "icon": "GOLDEN_HOE",
       "parent": null,
+      "guiSize": 6,
       "slot": 0,
       "itemName": "<yellow>Farming</yellow>",
-      "title": "<gray>Bazaar ➔ Farming</gray>",
+      "title": "<dark_gray>Bazaar ➔ Farming</dark_gray>",
       "children": [
         {
           "id": "WHEAT_SEEDS",
           "icon": "WHEAT",
           "parent": "FARMING",
           "slot": 11,
+          "guiSize": 4,
           "itemName": "<yellow>Wheat & Seeds</yellow>",
-          "title": "<gray>Farming ➔ Wheat & Seeds",
+          "title": "<dark_gray>Farming ➔ Wheat & Seeds",
           "children": [
             {
               "id": "WHEAT",
               "icon": "WHEAT",
               "parent": "WHEAT_SEEDS",
               "itemName": "<white>Wheat</white>",
-              "title": "<gray>Wheat & Seeds ➔ Wheat</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray>Wheat & Seeds ➔ Wheat</dark_gray>",
               "slot": 10,
               "children": null
             },
@@ -30,7 +33,8 @@
               "icon": "ENCHANTED_BREAD",
               "parent": "WHEAT_SEEDS",
               "itemName": "<white>Enchanted Bread</white>",
-              "title": "<gray> Wheat & Seeds ➔ Enchanted Bread</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray> Wheat & Seeds ➔ Enchanted Bread</dark_gray>",
               "slot": 11,
               "children": null
             },
@@ -39,7 +43,8 @@
               "icon": "ENCHANTED_WHEAT",
               "parent": "WHEAT_SEEDS",
               "itemName": "<green>Enchanted Wheat</green>",
-              "title": "<gray>Wheat & Seeds ➔ Enchanted Wheat</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray>Wheat & Seeds ➔ Enchanted Wheat</dark_gray>",
               "slot": 12,
               "children": null
             },
@@ -48,8 +53,9 @@
               "icon": "ENCHANTED_HAY_BALE",
               "parent": "WHEAT_SEEDS",
               "itemName": "<blue>Enchanted Hay Bale",
+              "guiSize": 4,
               "slot": 13,
-              "title": "<gray>Wheat & Seeds ➔ Enchanted Hay Bale</gray>",
+              "title": "<dark_gray>Wheat & Seeds ➔ Enchanted Hay Bale</dark_gray>",
               "children": null
             },
             {
@@ -57,7 +63,8 @@
               "icon": "SEEDS",
               "parent": "WHEAT_SEEDS",
               "itemName": "<white>Seeds</white>",
-              "title": "<gray>Wheat & Seeds ➔ Seeds</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray>Wheat & Seeds ➔ Seeds</dark_gray>",
               "slot": 14,
               "children": null
             },
@@ -66,7 +73,8 @@
               "icon": "ENCHANTED_SEEDS",
               "parent": "WHEAT_SEEDS",
               "itemName": "<green>Enchanted Seeds</green>",
-              "title": "<gray>Wheat & Seeds ➔ Enchanted Seeds</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray>Wheat & Seeds ➔ Enchanted Seeds</dark_gray>",
               "slot": 15,
               "children": null
             },
@@ -75,28 +83,31 @@
               "icon": "BOX_OF_SEEDS",
               "parent": "WHEAT_SEEDS",
               "itemName": "<blue>Box of Seeds</blue>",
-              "title": "<gray>Wheat & Seeds ➔ Box of Seeds</gray>",
+              "guiSize": 4,
+              "title": "<dark_gray>Wheat & Seeds ➔ Box of Seeds</dark_gray>",
               "slot":16,
               "children": null
             }
           ]
         },
         {
-          "id": "CARROT_ITEM",
-          "icon": "CARROT_ITEM",
+          "id": "CARROT",
+          "icon": "CARROT",
           "parent": "FARMING",
           "itemName": "<yellow>Carrot </yellow>",
-          "title": "<gray>Farming ➔ Carrot</gray>",
-          "slot": 11,
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Carrot</dark_gray>",
+          "slot": 12,
           "children": []
         },
         {
-          "id": "POTATO_ITEM",
-          "icon": "POTATO_ITEM",
+          "id": "POTATO",
+          "icon": "POTATO",
           "parent": "FARMING",
           "itemName": "<yellow>Potato</yellow>",
-          "title": "<gray>Farming ➔ Potato</gray>",
-          "slot":12,
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Potato</dark_gray>",
+          "slot":13,
           "children": []
         },
         {
@@ -104,8 +115,9 @@
           "icon": "PUMPKIN",
           "parent": "FARMING",
           "itemName": "<yellow>Pumpkin</yellow>",
-          "title": "<gray>Farming ➔ Pumpkin</gray>",
-          "slot": 13,
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Pumpkin</dark_gray>",
+          "slot": 14,
           "children": []
         },
         {
@@ -113,8 +125,9 @@
           "icon": "MELON",
           "parent": "FARMING",
           "itemName": "<yellow>Melon</yellow>",
-          "title": "<gray>Farming ➔ Melon</gray>",
-          "slot":14 ,
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Melon</dark_gray>",
+          "slot":15 ,
           "children": []
         },
         {
@@ -122,8 +135,9 @@
           "icon": "RED_MUSHROOM",
           "parent": "FARMING",
           "itemName": "<yellow>Mushrooms</yellow>",
-          "title": "<gray>Farming ➔ Mushrooms</gray>",
-          "slot":15 ,
+          "guiSize": 5,
+          "title": "<dark_gray>Farming ➔ Mushrooms</dark_gray>",
+          "slot":16 ,
           "children": []
         },
         {
@@ -131,7 +145,8 @@
           "icon": "INK_SACK:3",
           "parent": "FARMING",
           "itemName": "<yellow>Cocoa Beans</yellow>",
-          "title": "<gray>Farming ➔ Cocoa Beans</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Cocoa Beans</dark_gray>",
           "slot": 20,
           "children": []
         },
@@ -140,7 +155,8 @@
           "icon": "CACTUS",
           "parent": "FARMING",
           "itemName": "<yellow>Cactus</yellow>",
-          "title": "<gray>Farming ➔ Cactus</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Cactus</dark_gray>",
           "slot":21 ,
           "children": []
         },
@@ -149,7 +165,8 @@
           "icon": "SUGAR_CANE",
           "parent": "FARMING",
           "itemName": "<yellow>Sugar Cane</yellow>",
-          "title": "<gray>Farming ➔ Sugar Cane</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Sugar Cane</dark_gray>",
           "slot": 22,
           "children": []
         },
@@ -158,7 +175,8 @@
           "icon": "DOUBLE_PLANT",
           "parent": "FARMING",
           "itemName": "<yellow>Sunflower</yellow>",
-          "title": "<gray>Farming ➔ Sunflower</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Sunflower</dark_gray>",
           "slot": 23,
           "children": []
         },
@@ -167,7 +185,8 @@
           "icon": "MOONFLOWER",
           "parent": "FARMING",
           "itemName": "<yellow>Moonflower</yellow>",
-          "title": "<gray>Farming ➔ Moonflower</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Moonflower</dark_gray>",
           "slot": 24,
           "children": []
         },
@@ -176,7 +195,8 @@
           "icon": "WILD_ROSE",
           "parent": "FARMING",
           "itemName": "<yellow>Wild Rose</yellow>",
-          "title": "<gray>Farming ➔ Wild Rose</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Wild Rose</dark_gray>",
           "slot": 25,
           "children": []
         },
@@ -185,7 +205,8 @@
           "icon": "LEATHER",
           "parent": "FARMING",
           "itemName": "<yellow>Leather & Beef</yellow>",
-          "title": "<gray>Farming ➔ Leather & Beef</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Leather & Beef</dark_gray>",
           "slot": 29,
           "children": []
         },
@@ -194,7 +215,8 @@
           "icon": "PORK",
           "parent": "FARMING",
           "itemName": "<yellow>Pork</yellow>",
-          "title": "<gray>Farming ➔ Pork</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Pork</dark_gray>",
           "slot":30 ,
           "children": []
         },
@@ -203,7 +225,8 @@
           "icon": "RAW_CHICKEN",
           "parent": "FARMING",
           "itemName": "<yellow>Chicken & Feather</yellow>",
-          "title": "<gray>Farming ➔ Chicken & Feather</gray>",
+          "guiSize": 6,
+          "title": "<dark_gray>Farming ➔ Chicken & Feather</dark_gray>",
           "slot": 31,
           "children": []
         },
@@ -212,7 +235,8 @@
           "icon": "MUTTON",
           "parent": "FARMING",
           "itemName": "<yellow>Mutton & Wool</yellow>",
-          "title": "<gray>Farming ➔ Mutton & Wool</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Mutton & Wool</dark_gray>",
           "slot": 32,
           "children": []
         },
@@ -221,7 +245,8 @@
           "icon": "RABBIT",
           "parent": "FARMING",
           "itemName": "<yellow>Rabbit</yellow>",
-          "title": "<gray>Farming ➔ Rabbit</gray>",
+          "guiSize": 5,
+          "title": "<dark_gray>Farming ➔ Rabbit</dark_gray>",
           "slot":33 ,
           "children": []
         },
@@ -230,7 +255,8 @@
           "icon": "NETHER_STALK",
           "parent": "FARMING",
           "itemName": "<yellow>Nether Warts</yellow>",
-          "title": "<gray>Farming ➔ Nether Warts</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Nether Warts</dark_gray>",
           "slot": 34,
           "children": []
         },
@@ -239,11 +265,52 @@
           "icon": "CROPIE",
           "parent": "FARMING",
           "itemName": "<yellow>Garden</yellow>",
-          "title": "<gray>Farming ➔ Garden</gray>",
+          "guiSize": 4,
+          "title": "<dark_gray>Farming ➔ Garden</dark_gray>",
           "slot":38 ,
           "children": []
         }
       ]
+    },
+    {
+      "id": "MINING",
+      "icon": "DIAMOND_PICKAXE",
+      "parent": null,
+      "slot": 9,
+      "guiSize": 6,
+      "itemName": "<aqua>Mining</aqua>",
+      "title": "<dark_gray>Bazaar ➔ Mining</dark_gray>",
+      "children": []
+    },
+    {
+      "id": "COMBAT",
+      "icon": "IRON_SWORD",
+      "parent": null,
+      "slot": 18,
+      "guiSize": 6,
+      "itemName": "<red>Combat</red>",
+      "title": "<dark_gray>Bazaar ➔ Combat</dark_gray>",
+      "children": []
+    },
+    {
+      "id": "WOOD_FISHES",
+      "icon": "FISHING_ROD",
+      "parent": null,
+      "slot": 27,
+      "guiSize": 6,
+      "itemName": "<GOLD>Woods & Fishes</GOLD>",
+      "title": "<dark_gray>Bazaar ➔ Woods & Fishes</dark_gray>",
+      "children": []
+    },
+    {
+      "id": "ODDITIES",
+      "icon": "ENCHANTMENT_TABLE",
+      "parent": null,
+      "slot": 36,
+      "guiSize": 6,
+      "itemName": "<LIGHT_PURPLE>Oddities</LIGHT_PURPLE>",
+      "title": "<dark_gray>Bazaar ➔ Oddities</dark_gray>",
+      "children": []
     }
   ]
 }

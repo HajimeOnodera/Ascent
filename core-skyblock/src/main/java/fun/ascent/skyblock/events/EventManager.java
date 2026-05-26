@@ -29,6 +29,12 @@ public class EventManager {
             if (Modifier.isAbstract(event.getModifiers()) || event.isInterface()) {
                 continue;
             }
+            if (event.isAnonymousClass() || event.isLocalClass() || (event.isMemberClass() && !Modifier.isStatic(event.getModifiers()))) {
+                continue;
+            }
+            if (!Modifier.isPublic(event.getModifiers())) {
+                continue;
+            }
             try {
                 SEvent definition  = event.getDeclaredConstructor().newInstance();
                 registerEvent(definition);

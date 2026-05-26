@@ -3,13 +3,16 @@ package fun.ascent.skyblock.hub.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
+import fun.ascent.skyblock.bazaar.BazaarRegistry;
+import fun.ascent.skyblock.bazaar.ui.BazaarCategoryMenu;
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 
 public record BazaarNPC(Instance instance) implements NpcDefinition {
     @Override public String id() { return "hub_bazaar"; }
-    @Override public String name() { return "<green>Bazaar"; }
+    @Override public String name() { return "<gold>Bazaar"; }
     @Override public NpcSkin skin() {
         return new NpcSkin(
                 "eyJ0aW1lc3RhbXAiOjE1NzMyMjM2NDc4NDcsInByb2ZpbGVJZCI6IjQxZDNhYmMyZDc0OTQwMGM5MDkwZDU0MzRkMDM4MzFiIiwicHJvZmlsZU5hbWUiOiJNZWdha2xvb24iLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2MyMzJlMzgyMDg5NzQyOTE1NzYxOWIwZWUwOTlmZWMwNjI4ZjYwMmZmZjEyYjY5NWRlNTRhZWYxMWQ5MjNhZDcifX19",
@@ -17,5 +20,9 @@ public record BazaarNPC(Instance instance) implements NpcDefinition {
     @Override public Pos position() { return new Pos(-33.5, 73, -22.5, -180, 0); }
     @Override public String[] firstInteractionMessages() { return new String[]{"Welcome to the Bazaar!", "Here you can instantly buy and sell resources at market prices.", "Supply and demand drive the prices, so keep an eye on trends!"}; }
     @Override public void onFirstInteract(Player player, AscentNpc npc) { npc.speak(player, firstInteractionMessages()); }
-    @Override public void onInteract(Player player, AscentNpc npc) { npc.speak(player, "The market is open! Buy or sell resources instantly."); }
+    @Override public void onInteract(Player player, AscentNpc npc) {
+        //TODO: Implement Level Check
+        BazaarCategoryMenu.openMenu((SkyblockPlayer) player, BazaarRegistry.bazaarItemList.getFarming());
+//        npc.speak(player, "The market is open! Buy or sell resources instantly.");
+    }
 }

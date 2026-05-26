@@ -15,6 +15,7 @@ import java.util.HashMap;
 public class BZPriceRegistry {
 
     public static HashMap<BazaarEntry, Price> priceTable = new HashMap<>();
+    private static long lastUpdate = 0;
 
     public static void initialise(BazaarData data){
         if (data != null && data.bazaarData != null) {
@@ -47,6 +48,7 @@ public class BZPriceRegistry {
             connection.setReadTimeout(5000);
 
             if (connection.getResponseCode() == 200) {
+                lastUpdate = System.currentTimeMillis();
                 JsonObject response = JsonParser.parseReader(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
                 if (response.has("products")) {
                     JsonObject products = response.getAsJsonObject("products");
@@ -56,8 +58,8 @@ public class BZPriceRegistry {
                             JsonObject product = products.getAsJsonObject(entry.id);
                             if (product.has("quick_status")) {
                                 JsonObject quickStatus = product.getAsJsonObject("quick_status");
-                                price.buyPrice = quickStatus.has("buyPrice") ? quickStatus.get("buyPrice").getAsDouble() : 0;
-                                price.sellPrice = quickStatus.has("sellPrice") ? quickStatus.get("sellPrice").getAsDouble() : 0;
+                                price.buyPrice = quickStatus.has("buyPrice") ? Math.round(quickStatus.get("buyPrice").getAsDouble() * 100.0) / 100.0 : 0;
+                                price.sellPrice = quickStatus.has("sellPrice") ? Math.round(quickStatus.get("sellPrice").getAsDouble() * 100.0) / 100.0 : 0;
                             }
                         }
                     });
@@ -69,4 +71,17 @@ public class BZPriceRegistry {
         }
     }
 
+    public static double getBuy(BazaarEntry item) {
+        if(System.currentTimeMillis() - lastUpdate > 300000){
+            updatePrices();
+        }
+        return priceTable.get(item).buyPrice;
+    }
+
+    public static double getSell(BazaarEntry item) {
+        if(System.currentTimeMillis() - lastUpdate > 300000){
+            updatePrices();
+        }
+        return priceTable.get(item).sellPrice;
+    }
 }

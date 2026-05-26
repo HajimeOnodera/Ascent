@@ -125,9 +125,9 @@ public class ItemRegistry {
                                         if (matStr.startsWith("minecraft:")) {
                                             matStr = matStr.substring(10);
                                         }
-                                        Material material = Material.fromKey(matStr.toLowerCase(Locale.ROOT));
+                                        Material material = Material.fromKey("minecraft:" + matStr.toLowerCase(Locale.ROOT));
                                         if (material == null) {
-                                            material = Material.fromKey(matStr.toUpperCase(Locale.ROOT));
+                                            material = Material.fromKey(matStr.toLowerCase(Locale.ROOT));
                                         }
                                         if (material == null) {
                                             LOGGER.warn("Skipping item {} because material {} is invalid.", id, matStr);
@@ -417,9 +417,6 @@ public class ItemRegistry {
         Material material = Material.fromKey("minecraft:" + cleanId.toLowerCase(Locale.ROOT));
         if (material == null) {
             material = Material.fromKey(cleanId.toLowerCase(Locale.ROOT));
-        }
-        if (material == null) {
-            material = Material.fromKey(cleanId.toUpperCase(Locale.ROOT));
         }
         if (material != null && material != Material.AIR) {
             SkyblockItem fallbackItem = SkyblockItem.builder(cleanId, material, Rarity.COMMON)

@@ -5,9 +5,9 @@ import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import org.jspecify.annotations.Nullable;
 
@@ -18,7 +18,7 @@ import java.util.List;
 public class BazaarEntry {
 
     public String id,icon,parent,itemName,title;
-    public int slot;
+    public int slot,guiSize = -1;
     public List<BazaarEntry> children;
 
     public transient BazaarEntry parentEntry;
@@ -52,10 +52,10 @@ public class BazaarEntry {
             this.itemToSell = ItemRegistry.getItem(this.id);
         }
         if (this.itemName != null) {
-            this.nameComp = MiniMessage.miniMessage().deserialize(this.itemName);
+            this.nameComp = StringUtility.text(this.itemName);
         }
         if (this.title != null) {
-            this.titleComp = MiniMessage.miniMessage().deserialize(this.title);
+            this.titleComp = StringUtility.text(this.title);
         }
         if (this.children != null) {
             for (BazaarEntry child : this.children) {
@@ -64,16 +64,27 @@ public class BazaarEntry {
         }
     }
 
+    public InventoryType getSize(){
+       return switch (this.guiSize){
+           case 2 -> InventoryType.CHEST_2_ROW;
+           case 3 -> InventoryType.CHEST_3_ROW;
+           case 4 -> InventoryType.CHEST_4_ROW;
+           case 5 -> InventoryType.CHEST_5_ROW;
+           case 6 -> InventoryType.CHEST_6_ROW;
+           default -> InventoryType.CHEST_1_ROW;
+       };
+    }
+
     public ItemStack getStack(boolean isActiveCategory) {
         if(this.parentEntry == null){
             ItemStack base = this.iconItem.buildItemStack();
             return base.withCustomName(this.nameComp)
                     .withLore(
-                            MiniMessage.miniMessage().deserialize("<dark_gray>Category"),
+                            StringUtility.text("<dark_gray>Category"),
                             Component.empty(),
                             (isActiveCategory) ?
-                                    MiniMessage.miniMessage().deserialize("<green>Currently viewing!"):
-                                    MiniMessage.miniMessage().deserialize("<yellow>Click to view!")
+                                    StringUtility.text("<green>Currently viewing!"):
+                                    StringUtility.text("<yellow>Click to view!")
                     );
         }
         if(this.children == null){
@@ -82,42 +93,38 @@ public class BazaarEntry {
 
             ItemStack base = this.iconItem.buildItemStack();
             return base.withCustomName(this.nameComp).withLore(
-                    MiniMessage.miniMessage().deserialize(getRarity(this.nameComp) + " commodity"),
+                    StringUtility.text(getRarity(this.itemToSell) + " commodity"),
                     Component.empty(),
-                    MiniMessage.miniMessage().deserialize("<gray>Buy Price: <gold>" + price.buyPrice + " coins"),
-                    MiniMessage.miniMessage().deserialize("<gray>Sell Price: <gold>" + price.sellPrice + " coins"),
+                    StringUtility.text("<gray>Buy Price: <gold>" + price.buyPrice + " coins"),
+                    StringUtility.text("<gray>Sell Price: <gold>" + price.sellPrice + " coins"),
                     Component.empty(),
-                    MiniMessage.miniMessage().deserialize("<yellow>Click to view details")
+                    StringUtility.text("<yellow>Click to view details")
             );
         }
         ItemStack base =  this.iconItem.buildItemStack();
         List<Component> lore = new ArrayList<>();
-        lore.add(MiniMessage.miniMessage().deserialize("<gray>" + this.children.size() + " products"));
+        lore.add(StringUtility.text("<dark_gray>" + this.children.size() + " products"));
         lore.add(Component.empty());
         this.children.forEach(child -> {
             TextColor color = child.nameComp.color();
-            if(color == null) return;
+            if (color == null && !child.nameComp.children().isEmpty()) {
+                color = child.nameComp.children().getFirst().color();
+            }
+            if (color == null) color = net.kyori.adventure.text.format.NamedTextColor.WHITE;
+            
             Component component = Component.text("▶").color(color);
-            String msg = MiniMessage.miniMessage().serialize(component);
-            msg += " <gray>" + StringUtility.capitalize(((TextComponent)child.nameComp).content().toLowerCase());
-            lore.add(MiniMessage.miniMessage().deserialize(msg));
+            String msg = net.kyori.adventure.text.minimessage.MiniMessage.miniMessage().serialize(component);
+            String plainText = StringUtility.getTextFromComponent(child.nameComp);
+            msg += " <gray>" + StringUtility.capitalize(plainText.toLowerCase());
+            lore.add(StringUtility.text(msg));
         });
         lore.add(Component.empty());
-        lore.add(MiniMessage.miniMessage().deserialize("<yellow>Click to view products"));
+        lore.add(StringUtility.text("<yellow>Click to view products"));
         return base.withCustomName(this.nameComp).withLore(lore);
     }
 
-    public String getRarity(Component comp){
-        if(comp == null || comp.color() == null ) return "<gray> Unknown";
-        return switch (comp.color().asHexString()){
-            case "0xffffff" -> "<gray> Common";
-            case "0x55ff55" -> "<gray> Uncommon";
-            case "0x5555ff" -> "<gray> Rare";
-            case "0xaa00aa" -> "<gray> Epic";
-            case "0xffaa00" -> "<gray> Legendary";
-            case "0xff55ff" -> "<gray> Mythic";
-            case "0x55ffff" -> "<gray> Divine";
-            default -> "<gray> Unknown";
-        };
+    public String getRarity(SkyblockItem item){
+        if (item == null || item.getRarity() == null) return "<gray>Unknown";
+        return "<dark_gray>"+ StringUtility.capitalize(item.getRarity().name());
     }
 }
