@@ -16,9 +16,6 @@ public interface NpcDefinition {
     default String[] firstInteractionMessages() {
         return null;
     }
-    default String[] messages() {
-        return null;
-    }
     default String[] holograms() {
         return name() != null ? new String[] { name(), CLICK } : null;
     }

@@ -94,7 +94,7 @@ public class GUIQuestLog extends InventoryGUI {
                 lore.add(miniMessage().deserialize("<gray>View your active and completed").decoration(TextDecoration.ITALIC, false));
                 lore.add(miniMessage().deserialize("<gray>Quest chains here.").decoration(TextDecoration.ITALIC, false));
                 return ItemStackCreator.getStack(
-                        miniMessage().deserialize("<green>Quest Log " + (showCompleted ? "§8(Completed)" : "")),
+                        miniMessage().deserialize("<green>Quest Log " + (showCompleted ? "<dark_gray>(Completed)" : "")),
                         Material.WRITABLE_BOOK,
                         1,
                         lore

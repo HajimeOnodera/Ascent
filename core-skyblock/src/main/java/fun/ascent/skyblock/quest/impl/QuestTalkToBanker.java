@@ -14,6 +14,6 @@ public class QuestTalkToBanker extends Quest {
         quest.getObjectiveCompleteText(rewards).forEach(player::sendMessage);
         player.getActiveProfileData().getQuestData().startQuest(QuestDepositCoinsInBank.class);
     }
-    @Override public Set<RegionType> getValidRegions() { return Collections.singleton(RegionType.HUB); }
+    @Override public Set<RegionType> getValidRegions() { return Set.of(RegionType.HUB, RegionType.BANK); }
     @Override public Double getAttachedSkyBlockXP() { return 10D; }
 }

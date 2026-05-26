@@ -11,6 +11,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class GUIBankerWithdraw extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Withdraw all of the coins in your bank."));
                 lore.add(Component.empty());
@@ -70,7 +71,7 @@ public class GUIBankerWithdraw extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Withdraw half of the coins in your bank."));
                 lore.add(Component.empty());
@@ -93,7 +94,7 @@ public class GUIBankerWithdraw extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Withdraw 20% of the coins in your bank."));
                 lore.add(Component.empty());
@@ -130,7 +131,7 @@ public class GUIBankerWithdraw extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Enter a custom amount to withdraw."));
                 lore.add(Component.empty());

@@ -4,9 +4,15 @@ import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
 import fun.ascent.skyblock.menus.gui.banker.GUIBanker;
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.quest.ActiveQuest;
+import fun.ascent.skyblock.quest.QuestData;
+import fun.ascent.skyblock.quest.impl.QuestTalkToBanker;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+
+import java.util.Map;
 
 public record BankerNPC(Instance instance) implements NpcDefinition {
 
@@ -35,6 +41,17 @@ public record BankerNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
+        if (player instanceof SkyblockPlayer sp && sp.getActiveProfileData() != null) {
+            QuestData questData = sp.getActiveProfileData().getQuestData();
+            Map.Entry<ActiveQuest, Boolean> entry = questData.getQuest(QuestTalkToBanker.class);
+            if (entry != null && !entry.getValue()) {
+                sp.sendMessage("§e[NPC] Banker§f: Hello there!");
+                sp.sendMessage("§e[NPC] Banker§f: You may want to store your §6Coins §fin a safe place while you are off adventuring.");
+                sp.sendMessage("§e[NPC] Banker§f: Storing them in your §6Bank §fkeeps them safe and allows you to earn interest at the start of every season!");
+                questData.endQuest(QuestTalkToBanker.class);
+                return;
+            }
+        }
         new GUIBanker().open(player);
     }
 }

@@ -6,15 +6,20 @@ import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
+import fun.ascent.skyblock.quest.ActiveQuest;
+import fun.ascent.skyblock.quest.QuestData;
+import fun.ascent.skyblock.quest.impl.QuestDepositCoinsInBank;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static fun.ascent.common.StringUtility.*;
 
@@ -48,7 +53,7 @@ public class GUIBankerDeposit extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Deposit all of the coins in your purse."));
                 lore.add(Component.empty());
@@ -71,7 +76,7 @@ public class GUIBankerDeposit extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Deposit half of the coins in your purse."));
                 lore.add(Component.empty());
@@ -107,7 +112,7 @@ public class GUIBankerDeposit extends InventoryGUI {
             }
 
             @Override
-            public net.minestom.server.item.ItemStack.Builder getItem(Player pl) {
+            public ItemStack.Builder getItem(Player pl) {
                 List<Component> lore = new ArrayList<>();
                 lore.add(text("<gray>Enter a custom amount to deposit."));
                 lore.add(Component.empty());
@@ -156,6 +161,15 @@ public class GUIBankerDeposit extends InventoryGUI {
 
         player.sendMessage(text("<green>Successfully deposited <gold>" + commaify(amount) + " coins<green>! New bank balance: <gold>" + commaify(profile.bankCoins) + " coins."));
         ProfileManager.saveProfile(profile.profileID);
+
+        if (player.getActiveProfileData() != null) {
+            QuestData questData = player.getActiveProfileData().getQuestData();
+            Map.Entry<ActiveQuest, Boolean> questEntry = questData.getQuest(QuestDepositCoinsInBank.class);
+            if (questEntry != null && !questEntry.getValue()) {
+                questData.endQuest(QuestDepositCoinsInBank.class);
+            }
+        }
+
         new GUIBanker().open(player);
     }
 

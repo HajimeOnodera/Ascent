@@ -128,6 +128,12 @@ public class QuestData {
         }
     }
 
+    public void cancelQuest(Class<? extends Quest> questClass) {
+        String questID = getQuestIDFromClass(questClass);
+        if (questID == null) return;
+        activeQuests.removeIf(quest -> quest.getQuestID().equals(questID));
+    }
+
     public @Nullable QuestProgress getAsProgressQuest(String questID) {
         Quest quest = getQuestFromCache(questID);
         return (quest instanceof QuestProgress) ? (QuestProgress) quest : null;
