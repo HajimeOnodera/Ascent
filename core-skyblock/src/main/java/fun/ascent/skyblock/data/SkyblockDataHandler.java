@@ -12,6 +12,7 @@ import lombok.Getter;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import org.bson.Document;
+import fun.ascent.skyblock.player.profiles.SkyblockProfile.BankTransaction;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -226,6 +227,38 @@ public class SkyblockDataHandler {
         DROP_ALERTS_DISABLED("drop_alerts_disabled", DatapointBoolean.class, new DatapointBoolean("drop_alerts_disabled", false),
             (player, dp) -> player.setDropAlertsDisabled(dp.getValue() != null && (Boolean) dp.getValue()),
             (player) -> new DatapointBoolean("drop_alerts_disabled", player.hasDropAlertsDisabled())),
+
+        BANK_DATA("bank_data", DatapointBankData.class, new DatapointBankData("bank_data", new BankData()),
+            (player, dp) -> {
+                BankData bd = (BankData) dp.getValue();
+                if (bd == null) bd = new BankData();
+                if (player.getActiveProfile() != null) {
+                    player.getActiveProfile().bankCoins = bd.getAmount();
+                    player.getActiveProfile().bankLimit = bd.getBalanceLimit();
+                    player.getActiveProfile().lastClaimedInterestMonth = bd.getLastClaimedInterest();
+                    
+                    player.getActiveProfile().bankTransactions.clear();
+                    for (BankData.Transaction tx : bd.getTransactions()) {
+                        player.getActiveProfile().bankTransactions.add(new BankTransaction(
+                            tx.timestamp, tx.amount, tx.originator, tx.type
+                        ));
+                    }
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfile() == null) return null;
+                List<BankData.Transaction> txs = new ArrayList<>();
+                for (BankTransaction tx : player.getActiveProfile().bankTransactions) {
+                    txs.add(new BankData.Transaction(tx.timestamp(), tx.amount(), tx.originator(), tx.type()));
+                }
+                BankData bd = new BankData(
+                    player.getActiveProfile().lastClaimedInterestMonth,
+                    txs,
+                    player.getActiveProfile().bankCoins,
+                    player.getActiveProfile().bankLimit
+                );
+                return new DatapointBankData("bank_data", bd);
+            }),
         ;
 
         @Getter private final String key;

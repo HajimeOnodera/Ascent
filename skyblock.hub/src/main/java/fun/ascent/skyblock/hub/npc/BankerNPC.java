@@ -3,6 +3,7 @@ package fun.ascent.skyblock.hub.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
+import fun.ascent.skyblock.menus.gui.banker.GUIBanker;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -34,6 +35,6 @@ public record BankerNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
-        npc.speak(player, "Interaction should work now");
+        new GUIBanker().open(player);
     }
 }

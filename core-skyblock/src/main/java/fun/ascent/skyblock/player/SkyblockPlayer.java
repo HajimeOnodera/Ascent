@@ -67,10 +67,6 @@ public class SkyblockPlayer extends Player {
         return false;
     }
 
-    public SkyblockProfile loadProfileFromPlayer() {
-        return ProfileManager.getProfile(this.getTag(sbProfileID));
-    }
-
     public void loadProfiles() {
         ProfileManager.loadProfilesForPlayer(this);
         String lastProfileId = PlayerRepository.getField(getUuid(), "skyblock.last_profile_id", null);
@@ -109,6 +105,7 @@ public class SkyblockPlayer extends Player {
         }
         setTag(sbProfileID, this.activeProfile.profileID);
         PlayerRepository.setField(getUuid(), "skyblock.last_profile_id", profileID.toString());
+        this.activeProfile.claimInterest(this);
     }
 
     public void updatePlayer() {
@@ -261,6 +258,12 @@ public class SkyblockPlayer extends Player {
     public void addCoins(double amount) {
         if (activeProfileData != null) {
             activeProfileData.playerCoins += amount;
+        }
+    }
+
+    public void removeCoins(double amount) {
+        if (activeProfileData != null) {
+            activeProfileData.playerCoins = Math.max(0, activeProfileData.playerCoins - amount);
         }
     }
 }

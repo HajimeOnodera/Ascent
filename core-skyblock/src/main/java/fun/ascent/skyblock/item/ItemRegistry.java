@@ -24,6 +24,15 @@ import org.yaml.snakeyaml.Yaml;
 public class ItemRegistry {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemRegistry.class);
     private static final Map<String, SkyblockItem> ITEMS = new HashMap<>();
+
+    private static Material safeGetMaterial(String key) {
+        if (key == null) return null;
+        try {
+            return Material.fromKey(key);
+        } catch (Exception e) {
+            return null;
+        }
+    }
     private static final Map<String, Boolean> YAML_STACKABLE_OVERRIDES = new HashMap<>();
 
     public static void loadYamlOverrides() {
@@ -125,9 +134,9 @@ public class ItemRegistry {
                                         if (matStr.startsWith("minecraft:")) {
                                             matStr = matStr.substring(10);
                                         }
-                                        Material material = Material.fromKey("minecraft:" + matStr.toLowerCase(Locale.ROOT));
+                                        Material material = safeGetMaterial("minecraft:" + matStr.toLowerCase(Locale.ROOT));
                                         if (material == null) {
-                                            material = Material.fromKey(matStr.toLowerCase(Locale.ROOT));
+                                            material = safeGetMaterial(matStr.toLowerCase(Locale.ROOT));
                                         }
                                         if (material == null) {
                                             LOGGER.warn("Skipping item {} because material {} is invalid.", id, matStr);
@@ -305,7 +314,7 @@ public class ItemRegistry {
             materialStr = materialStr.substring(10);
         }
 
-        Material material = materialStr != null ? Material.fromKey(materialStr) : Material.PAPER;
+        Material material = materialStr != null ? safeGetMaterial(materialStr) : Material.PAPER;
         if (material == null) material = Material.PAPER;
 
         Boolean unstackableVal = doc.getBoolean("unstackable");
@@ -414,9 +423,9 @@ public class ItemRegistry {
 
         // Dynamic Fallback: if it's a valid vanilla material, construct a COMMON Skyblock item for it!
         String cleanId = resolvedId.toUpperCase(Locale.ROOT).replace("MINECRAFT:", "");
-        Material material = Material.fromKey("minecraft:" + cleanId.toLowerCase(Locale.ROOT));
+        Material material = safeGetMaterial("minecraft:" + cleanId.toLowerCase(Locale.ROOT));
         if (material == null) {
-            material = Material.fromKey(cleanId.toLowerCase(Locale.ROOT));
+            material = safeGetMaterial(cleanId.toLowerCase(Locale.ROOT));
         }
         if (material != null && material != Material.AIR) {
             SkyblockItem fallbackItem = SkyblockItem.builder(cleanId, material, Rarity.COMMON)

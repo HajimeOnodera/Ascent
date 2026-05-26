@@ -24,6 +24,22 @@ public class SkyblockPersistence {
             doc.put("collections", collections);
             doc.put("recipes", new ArrayList<>(profile.unlockedRecipes));
 
+            // Save bank details
+            doc.put("bank_coins", profile.bankCoins);
+            doc.put("bank_limit", profile.bankLimit);
+            doc.put("last_claimed_interest_month", profile.lastClaimedInterestMonth);
+
+            List<Document> bankTxDocs = new ArrayList<>();
+            for (SkyblockProfile.BankTransaction tx : profile.bankTransactions) {
+                Document txDoc = new Document();
+                txDoc.put("timestamp", tx.timestamp());
+                txDoc.put("amount", tx.amount());
+                txDoc.put("originator", tx.originator());
+                txDoc.put("type", tx.type());
+                bankTxDocs.add(txDoc);
+            }
+            doc.put("bank_transactions", bankTxDocs);
+
             // Save members
             Document members = new Document();
             for (ProfilePlayer pp : profile.profilePlayers) {
@@ -52,6 +68,24 @@ public class SkyblockPersistence {
         profile.profileID = profileID;
         profile.profileName = doc.getString("name");
         profile.minionSlots = doc.getInteger("minion_slots", 5);
+
+        // Load bank details
+        profile.bankCoins = doc.containsKey("bank_coins") ? doc.getDouble("bank_coins") : 0.0;
+        profile.bankLimit = doc.containsKey("bank_limit") ? doc.getDouble("bank_limit") : 50000000.0;
+        profile.lastClaimedInterestMonth = doc.containsKey("last_claimed_interest_month") ? doc.getLong("last_claimed_interest_month") : 0L;
+
+        List<Document> bankTxDocs = doc.getList("bank_transactions", Document.class);
+        if (bankTxDocs != null) {
+            profile.bankTransactions = new ArrayList<>();
+            for (Document txDoc : bankTxDocs) {
+                profile.bankTransactions.add(new SkyblockProfile.BankTransaction(
+                        txDoc.containsKey("timestamp") ? txDoc.getLong("timestamp") : 0L,
+                        txDoc.containsKey("amount") ? txDoc.getDouble("amount") : 0.0,
+                        txDoc.containsKey("originator") ? txDoc.getString("originator") : "",
+                        txDoc.containsKey("type") ? txDoc.getString("type") : "UNKNOWN"
+                ));
+            }
+        }
 
         // Load collections
         Document collections = doc.get("collections", Document.class);

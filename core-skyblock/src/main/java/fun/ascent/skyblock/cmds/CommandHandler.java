@@ -53,6 +53,7 @@ public class CommandHandler {
         for (Class<? extends Command> cmd : commands) {
             if (java.lang.reflect.Modifier.isAbstract(cmd.getModifiers()) || cmd.isInterface()) continue;
             if (cmd.isAnonymousClass() || cmd.isLocalClass() || (cmd.isMemberClass() && !java.lang.reflect.Modifier.isStatic(cmd.getModifiers()))) continue;
+            if (!cmd.getName().startsWith("fun.ascent")) continue;
             try {
                 register(cmd.getDeclaredConstructor().newInstance());
             } catch (Exception e) {
@@ -63,9 +64,13 @@ public class CommandHandler {
     }
 
     public static void register(Command command) {
-        if (commandManager.commandExists(command.getName())) {
-            return;
+        try {
+            if (commandManager.commandExists(command.getName())) {
+                return;
+            }
+            commandManager.register(command);
+        } catch (Exception e) {
+            System.err.println("[Skyblock] Warning: Could not register command '" + command.getName() + "': " + e.getMessage());
         }
-        commandManager.register(command);
     }
 }

@@ -23,6 +23,10 @@ public class SkyblockProfile {
     public Map<String, Integer> unlockedCollections = new HashMap<>();
     public Set<String> unlockedRecipes = new HashSet<>();
     public Island island;
+    public double bankCoins = 0.0;
+    public double bankLimit = 50000000.0;
+    public long lastClaimedInterestMonth = 0;
+    public List<BankTransaction> bankTransactions = new ArrayList<>();
     @Getter
     public Pos spawnPos;
     @Getter
@@ -43,6 +47,12 @@ public class SkyblockProfile {
         }
         if (unlockedRecipes == null) {
             unlockedRecipes = new HashSet<>();
+        }
+        if (bankTransactions == null) {
+            bankTransactions = new ArrayList<>();
+        }
+        if (bankLimit <= 0) {
+            bankLimit = 50000000.0;
         }
     }
 
@@ -151,5 +161,51 @@ public class SkyblockProfile {
         return null;
     }
 
+    public record BankTransaction(long timestamp, double amount, String originator, String type) {}
+
+    public void claimInterest(SkyblockPlayer player) {
+        long currentMonth = (System.currentTimeMillis() - 1560275700000L) / (1200L * 31 * 1000);
+        if (this.lastClaimedInterestMonth == 0) {
+            this.lastClaimedInterestMonth = currentMonth;
+            return;
+        }
+
+        long monthsOwed = currentMonth - this.lastClaimedInterestMonth;
+        if (monthsOwed <= 0) return;
+
+        int times = (int) Math.min(monthsOwed, 2);
+        double totalInterest = 0.0;
+        double currentTempBalance = this.bankCoins;
+
+        for (int i = 0; i < times; i++) {
+            double interest = currentTempBalance * 0.02;
+            if (currentTempBalance + interest > this.bankLimit) {
+                interest = this.bankLimit - currentTempBalance;
+            }
+            if (interest <= 0) break;
+            totalInterest += interest;
+            currentTempBalance += interest;
+        }
+
+        this.lastClaimedInterestMonth = currentMonth;
+
+        if (totalInterest > 0) {
+            this.bankCoins += totalInterest;
+            this.bankTransactions.add(new BankTransaction(
+                System.currentTimeMillis(),
+                totalInterest,
+                "§cBank Interest",
+                "INTEREST"
+            ));
+
+            if (this.bankTransactions.size() > 10) {
+                this.bankTransactions = new ArrayList<>(this.bankTransactions.subList(this.bankTransactions.size() - 10, this.bankTransactions.size()));
+            }
+
+            player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
+            player.sendMessage(fun.ascent.common.StringUtility.text("<green>You have just received <gold>" + fun.ascent.common.StringUtility.commaify(totalInterest) + " coins<green> as bank interest!"));
+            player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
+        }
+    }
 
 }

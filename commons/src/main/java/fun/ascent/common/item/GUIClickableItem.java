@@ -1,5 +1,6 @@
 package fun.ascent.common.item;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.common.gui.GUIItem;
 import fun.ascent.common.gui.InventoryGUI;
 import net.minestom.server.entity.Player;
@@ -41,7 +42,7 @@ public abstract class GUIClickableItem extends GUIItem {
             @Override
             public ItemStack.Builder getItem(Player player) {
                 return ItemStackCreator.getStack("<green>Go Back",
-                        Material.ARROW, 1, "<gray>To " + gui.getTitle());
+                        Material.ARROW, 1, "<gray>To " + StringUtility.getTextFromComponent(gui.getTitle()));
             }
         };
     }
