@@ -101,23 +101,29 @@ public class QuestData {
         Quest quest = getQuestFromCache(questID);
         if (quest != null) {
             quest.onEnd(getSkyblockPlayer(), activeQuest.getCustomData(), activeQuest);
-            
-            Double xp = quest.getAttachedSkyBlockXP();
-            if (xp != null && xp > 0) {
-                if (getSkyblockPlayer() != null && getSkyblockPlayer().getActiveProfileData() != null) {
-                    getSkyblockPlayer().getActiveProfileData().addSkyblockXp(xp.intValue());
-                }
-            }
         }
 
         activeQuest.setEndedTime(System.currentTimeMillis());
         activeQuests.remove(activeQuest);
         completedQuests.add(activeQuest);
 
-        if (getSkyblockPlayer() != null) {
-            getSkyblockPlayer().playSound(Sound.sound(
-                    Key.key("ui.toast.challenge_complete"),
-                    Sound.Source.PLAYER, 0.75f, 1f));
+        QuestSet questSet = QuestSet.getFromQuest(questID);
+        if (questSet != null && questSet.hasCompleted(getSkyblockPlayer())) {
+            questSet.grantRewards(getSkyblockPlayer());
+            if (getSkyblockPlayer() != null) {
+                ArrayList<String> setRewards = new ArrayList<>(questSet.getRewardsDisplay());
+                activeQuest.getQuestCompleteText(setRewards).forEach(getSkyblockPlayer()::sendMessage);
+                
+                getSkyblockPlayer().playSound(Sound.sound(
+                        Key.key("ui.toast.challenge_complete"),
+                        Sound.Source.PLAYER, 0.75f, 1f));
+            }
+        } else {
+            if (getSkyblockPlayer() != null) {
+                getSkyblockPlayer().playSound(Sound.sound(
+                        Key.key("entity.experience_orb.pickup"),
+                        Sound.Source.PLAYER, 0.5f, 1.2f));
+            }
         }
     }
 

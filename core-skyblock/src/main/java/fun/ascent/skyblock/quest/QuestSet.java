@@ -5,6 +5,8 @@ import fun.ascent.skyblock.quest.impl.*;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 @Getter
 public enum QuestSet {
     GETTING_STARTED(QuestBreakLog.class, QuestCraftWorkbench.class, QuestCraftWoodenPickaxe.class, QuestTalkJerry.class, QuestUseTeleporter.class),
@@ -34,7 +36,6 @@ public enum QuestSet {
                     if (quest != null && quest.getClass().equals(questClass)) {
                         return questSet;
                     }
-                    // Fallback to fresh instantiation check if not yet registered
                     if (questClass.getDeclaredConstructor().newInstance().getID().equalsIgnoreCase(questID)) {
                         return questSet;
                     }
@@ -68,5 +69,37 @@ public enum QuestSet {
             }
         }
         return null;
+    }
+
+    public List<String> getRewardsDisplay() {
+        return switch (this) {
+            case GETTING_STARTED -> List.of("");
+            case SAVING_UP -> List.of("5 SkyBlock XP");
+            case LIBRARY_CARD -> List.of("5 SkyBlock XP");
+            case AUCTIONEER -> List.of("5 SkyBlock XP");
+            case TIME_TO_MINE -> List.of("5 SkyBlock XP");
+            case TIME_TO_STRIKE -> List.of("5 SkyBlock XP");
+            case TIMBER -> List.of("5 SkyBlock XP");
+            case FIRST_HARVEST -> List.of("5 SkyBlock XP");
+            case BACK_AT_THE_BARNYARD -> List.of("5 SkyBlock XP");
+            case CARPENTRY -> List.of("5 SkyBlock XP");
+            case LOST_AND_FOUND -> List.of("5 SkyBlock XP");
+        };
+    }
+
+    public void grantRewards(SkyblockPlayer player) {
+        if (player.getActiveProfileData() == null) return;
+        switch (this) {
+            case SAVING_UP -> player.getActiveProfileData().addSkyblockXp(5);
+            case LIBRARY_CARD -> player.getActiveProfileData().addSkyblockXp(5);
+            case AUCTIONEER -> player.getActiveProfileData().addSkyblockXp(5);
+            case TIME_TO_MINE -> player.getActiveProfileData().addSkyblockXp(5);
+            case TIME_TO_STRIKE -> player.getActiveProfileData().addSkyblockXp(5);
+            case TIMBER -> player.getActiveProfileData().addSkyblockXp(5);
+            case FIRST_HARVEST -> player.getActiveProfileData().addSkyblockXp(5);
+            case BACK_AT_THE_BARNYARD -> player.getActiveProfileData().addSkyblockXp(5);
+            case CARPENTRY -> player.getActiveProfileData().addSkyblockXp(5);
+            case LOST_AND_FOUND -> player.getActiveProfileData().addSkyblockXp(5);
+        }
     }
 }

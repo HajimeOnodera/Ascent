@@ -68,19 +68,11 @@ public class QuestTalkJerry extends Quest {
 
     @Override
     public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        ArrayList<String> rewards = new ArrayList<>();
-        rewards.add("10 SkyBlock XP");
-        quest.getObjectiveCompleteText(rewards).forEach(player::sendMessage);
         player.getActiveProfileData().getQuestData().startQuest(QuestUseTeleporter.class);
     }
 
     @Override
     public Set<RegionType> getValidRegions() {
         return Collections.singleton(RegionType.PRIVATE_ISLAND);
-    }
-
-    @Override
-    public Double getAttachedSkyBlockXP() {
-        return 10D;
     }
 }

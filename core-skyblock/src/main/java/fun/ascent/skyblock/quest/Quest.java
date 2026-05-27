@@ -16,9 +16,6 @@ public abstract class Quest {
 
     public abstract Set<RegionType> getValidRegions();
 
-    public Double getAttachedSkyBlockXP() {
-        return 0D;
-    }
 
     public boolean hasStartedOrCompleted(SkyblockPlayer player) {
         if (player.getActiveProfileData() == null) return false;

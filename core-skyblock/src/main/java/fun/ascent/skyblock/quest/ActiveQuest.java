@@ -56,24 +56,19 @@ public class ActiveQuest {
     }
 
     public List<String> getObjectiveCompleteText(String title, ArrayList<String> rewards) {
-        Quest quest = QuestData.getQuestClass(questID);
-        String name = quest != null ? quest.getName() : questID;
-
         if (rewards == null || rewards.isEmpty())
             return Arrays.asList(
                     "§7 ",
                     "§6§l  " + title,
-                    "§f  " + name,
                     "§7 ");
 
         ArrayList<String> display = new ArrayList<>(Arrays.asList(
                 "§7 ",
                 "§6§l  " + title,
-                "§f  " + name,
                 "§7 ",
-                "§a§l    REWARDS"
+                "§a§l  REWARD"
         ));
-        display.addAll(rewards.stream().map(reward -> "§8    +" + reward).toList());
+        display.addAll(rewards.stream().map(reward -> "§8  +§b" + reward).toList());
         display.add("§7 ");
         return display;
     }
