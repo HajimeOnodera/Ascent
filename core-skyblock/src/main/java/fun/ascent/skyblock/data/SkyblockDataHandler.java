@@ -2,6 +2,7 @@ package fun.ascent.skyblock.data;
 
 import fun.ascent.skyblock.data.impl.*;
 import fun.ascent.skyblock.hotm.HotmData;
+import fun.ascent.skyblock.player.bestiary.BestiaryProgress;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.skill.SkillType;
@@ -170,6 +171,17 @@ public class SkyblockDataHandler {
                 var hotm = player.getSkyblockHotmData();
                 if (hotm == null) return null;
                 return new DatapointObject<>("hotm", hotm, HotmData.class);
+            }),
+
+        BESTIARY("bestiary", DatapointObject.class, new DatapointObject<>("bestiary", new BestiaryProgress(), BestiaryProgress.class),
+            (player, dp) -> {
+                if (player.getActiveProfileData() == null) return;
+                BestiaryProgress progress = (BestiaryProgress) dp.getValue();
+                player.getActiveProfileData().bestiaryProgress = progress != null ? progress : new BestiaryProgress();
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointObject<>("bestiary", player.getActiveProfileData().getBestiaryProgress(), BestiaryProgress.class);
             }),
 
         INVENTORY("inventory", DatapointInventory.class, new DatapointInventory("inventory", new ArrayList<>()),

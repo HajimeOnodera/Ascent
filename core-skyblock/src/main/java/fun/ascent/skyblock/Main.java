@@ -6,6 +6,7 @@ import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.island.IslandSystemListener;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.actionbar.ActionBarManager;
+import fun.ascent.skyblock.player.bestiary.BestiaryService;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.combat.CombatListener;
 import fun.ascent.skyblock.player.fishing.FishingModule;
@@ -71,6 +72,7 @@ public class Main {
         BazaarRegistry.initialise();
         AuctionRegistry.initialise();
         ShopRegistry.initialise();
+        BestiaryService.register(MinecraftServer.getGlobalEventHandler());
         RegionListener.register(MinecraftServer.getGlobalEventHandler());
         ProfileListener.register(MinecraftServer.getGlobalEventHandler());
         IslandSystemListener.register(MinecraftServer.getGlobalEventHandler());

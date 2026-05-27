@@ -3,6 +3,7 @@ package fun.ascent.skyblock.player.profiles;
 import fun.ascent.skyblock.data.SkyblockDataHandler;
 import fun.ascent.skyblock.data.impl.DatapointObject;
 import fun.ascent.skyblock.hotm.HotmData;
+import fun.ascent.skyblock.player.bestiary.BestiaryProgress;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
@@ -47,6 +48,7 @@ public class ProfilePlayer {
     public PlayerSkillData skillData = new PlayerSkillData();
     public SkyblockLevel level = new SkyblockLevel();
     public HotmData hotmData = new HotmData();
+    public BestiaryProgress bestiaryProgress = new BestiaryProgress();
     public fun.ascent.skyblock.quest.QuestData questData = new fun.ascent.skyblock.quest.QuestData();
 
     public fun.ascent.skyblock.quest.QuestData getQuestData() {
@@ -107,6 +109,7 @@ public class ProfilePlayer {
         if (skillData == null) skillData = new PlayerSkillData();
         if (level == null) level = new SkyblockLevel();
         if (hotmData == null) hotmData = new HotmData();
+        if (bestiaryProgress == null) bestiaryProgress = new BestiaryProgress();
         hotmData.postLoad();
 
         if (getDataHandler() != null) {
@@ -124,6 +127,11 @@ public class ProfilePlayer {
             if (hotmDp != null && hotmDp.getValue() != null) {
                 this.hotmData = (HotmData) hotmDp.getValue();
                 this.hotmData.postLoad();
+            }
+
+            var bestiaryDp = getDataHandler().get(SkyblockDataHandler.Data.BESTIARY, DatapointObject.class);
+            if (bestiaryDp != null && bestiaryDp.getValue() != null) {
+                this.bestiaryProgress = (BestiaryProgress) bestiaryDp.getValue();
             }
         }
 
@@ -249,6 +257,13 @@ public class ProfilePlayer {
             dataHandler = new SkyblockDataHandler(playerUUID, profileID);
         }
         return dataHandler;
+    }
+
+    public BestiaryProgress getBestiaryProgress() {
+        if (bestiaryProgress == null) {
+            bestiaryProgress = new BestiaryProgress();
+        }
+        return bestiaryProgress;
     }
 
 }

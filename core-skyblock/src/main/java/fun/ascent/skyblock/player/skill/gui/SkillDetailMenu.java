@@ -6,6 +6,7 @@ import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.skill.SkillDefinition;
 import fun.ascent.skyblock.player.skill.SkillReward;
 import fun.ascent.skyblock.player.skill.SkillType;
+import fun.ascent.skyblock.player.bestiary.gui.BestiaryOverviewMenu;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
@@ -27,6 +28,7 @@ public class SkillDetailMenu {
     private static final int CLOSE_SLOT = 49;
     private static final int NEXT_PAGE_SLOT = 50;
     private static final int SKILL_INFO_SLOT = 0;
+    private static final int BESTIARY_SLOT = 39;
 
     public static void open(SkyblockPlayer player, SkillType type, int page) {
         ProfilePlayer profileData = player.getActiveProfileData();
@@ -41,6 +43,9 @@ public class SkillDetailMenu {
         SkillMenuFormat.fill(inv);
 
         inv.setItemStack(SKILL_INFO_SLOT, buildInfoItem(type, def, skillData));
+        if (type == SkillType.COMBAT) {
+            inv.setItemStack(BESTIARY_SLOT, buildBestiaryItem(profileData));
+        }
 
         List<SkillReward> allRewards = List.of(def.rewards());
         int perPage = REWARD_SLOTS.length;
@@ -81,6 +86,10 @@ public class SkillDetailMenu {
         if (slot == PAGE_BACK_SLOT) {
             player.closeInventory();
             SkillOverviewMenu.open(player);
+            return;
+        }
+        if (slot == BESTIARY_SLOT && type == SkillType.COMBAT) {
+            BestiaryOverviewMenu.open(player);
             return;
         }
         if (slot == NEXT_PAGE_SLOT && hasNextPage) {
@@ -138,6 +147,18 @@ public class SkillDetailMenu {
 
         return ItemStack.builder(glass)
                 .customName(text(title))
+                .lore(lore)
+                .build();
+    }
+
+    private static ItemStack buildBestiaryItem(ProfilePlayer profileData) {
+        var progress = profileData.getBestiaryProgress();
+        List<Component> lore = new ArrayList<>(fun.ascent.skyblock.player.bestiary.gui.BestiaryMenuFormat.overallLore(progress));
+        lore.add(Component.text(" "));
+        lore.add(text("<yellow>Click to view!"));
+
+        return ItemStack.builder(Material.WRITABLE_BOOK)
+                .customName(text("Bestiary"))
                 .lore(lore)
                 .build();
     }
