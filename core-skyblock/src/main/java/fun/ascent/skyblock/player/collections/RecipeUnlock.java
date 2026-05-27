@@ -14,7 +14,13 @@ public class RecipeUnlock extends CollectionUnlock {
     @Override
     public String getDisplay() {
         SkyblockItem item = ItemRegistry.getItem(recipeName);
-        String name = (item != null) ? item.getDisplayName() : ItemRegistry.formatName(recipeName);
+        if (item == null) {
+            item = ItemRegistry.getItem(recipeName + "_1");
+        }
+        if (item == null) {
+            item = ItemRegistry.getItem(recipeName + "_I");
+        }
+        String name = ItemRegistry.formatName(recipeName);
         name = name.replaceAll("<[^>]*>", "");
         name = name.replaceAll("§[0-9a-fk-orA-FK-OR]", "");
 

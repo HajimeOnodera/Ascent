@@ -51,7 +51,7 @@ public final class MinionMenu {
 
     public static void open(SkyblockPlayer player, SkyblockMinion minion) {
         ensureUpdater();
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, minion.getType().getDisplayName());
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, minion.getType().getDisplayName() + " " + MinionItems.roman(minion.getTier()));
         OPEN_MENUS.put(inventory, minion);
         render(inventory, minion);
 
@@ -355,7 +355,8 @@ public final class MinionMenu {
     }
 
     private static String prettify(String value) {
-        return value.toLowerCase().replace('_', ' ');
+        String clean = value.toLowerCase().replace("minecraft:", "").replace('_', ' ');
+        return clean.isEmpty() ? "" : Character.toUpperCase(clean.charAt(0)) + clean.substring(1);
     }
 
     private static String taskStatus(SkyblockMinion minion) {
@@ -370,7 +371,11 @@ public final class MinionMenu {
 
     private static String formatUpgradeCost(SkyblockMinion minion) {
         MinionUpgradeCost cost = MinionUpgradeManager.getUpgradeCost(minion);
-        return cost.amount() + " " + prettify(cost.material().name());
+        SkyblockItem item = ItemRegistry.getItemByMaterial(cost.material());
+        if (item != null) {
+            return cost.amount() + " " + item.getRarity().getColor() + item.getDisplayName();
+        }
+        return cost.amount() + " <white>" + prettify(cost.material().name());
     }
 
     private static SkyblockPlayer findViewer(SkyblockMinion minion) {
