@@ -10,7 +10,9 @@ public class SkyblockPersistence {
 
     public static void saveProfile(SkyblockProfile profile) {
         // Set Redis lock to signal we are saving IMMEDIATELY
-        RedisManager.get().setSavingLock(profile.profileID.toString());
+        if (RedisManager.isInitialized()) {
+            RedisManager.get().setSavingLock(profile.profileID.toString());
+        }
         
         try {
             Document doc = new Document();
@@ -58,7 +60,9 @@ public class SkyblockPersistence {
             SkyblockRepository.saveProfile(profile.profileID, doc);
         } finally {
             // Clear Redis lock when done
-            RedisManager.get().clearSavingLock(profile.profileID.toString());
+            if (RedisManager.isInitialized()) {
+                RedisManager.get().clearSavingLock(profile.profileID.toString());
+            }
         }
     }
 

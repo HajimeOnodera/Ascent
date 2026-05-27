@@ -10,7 +10,6 @@ public class QuestTalkToFarmHand extends Quest {
     @Override public String getName() { return "Talk to the Farmhand"; }
     @Override public Map<String, Object> onStart(SkyblockPlayer player, ActiveQuest quest) { quest.getNewObjectiveText().forEach(player::sendMessage); return new HashMap<>(); }
     @Override public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        quest.getObjectiveCompleteText(new ArrayList<>()).forEach(player::sendMessage);
         player.getActiveProfileData().getQuestData().startQuest(QuestCraftWheatMinion.class);
     }
     @Override public Set<RegionType> getValidRegions() { return Collections.singleton(RegionType.HUB); }

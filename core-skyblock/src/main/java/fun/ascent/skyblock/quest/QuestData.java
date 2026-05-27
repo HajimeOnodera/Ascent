@@ -111,8 +111,13 @@ public class QuestData {
         if (questSet != null && questSet.hasCompleted(getSkyblockPlayer())) {
             questSet.grantRewards(getSkyblockPlayer());
             if (getSkyblockPlayer() != null) {
-                ArrayList<String> setRewards = new ArrayList<>(questSet.getRewardsDisplay());
-                activeQuest.getQuestCompleteText(setRewards).forEach(getSkyblockPlayer()::sendMessage);
+                ArrayList<String> setRewards = new ArrayList<>();
+                for (String r : questSet.getRewardsDisplay()) {
+                    if (r != null && !r.trim().isEmpty()) {
+                        setRewards.add(r);
+                    }
+                }
+                activeQuest.getObjectiveCompleteText(setRewards).forEach(getSkyblockPlayer()::sendMessage);
                 
                 getSkyblockPlayer().playSound(Sound.sound(
                         Key.key("ui.toast.challenge_complete"),
@@ -120,6 +125,7 @@ public class QuestData {
             }
         } else {
             if (getSkyblockPlayer() != null) {
+                activeQuest.getObjectiveCompleteText(new ArrayList<>()).forEach(getSkyblockPlayer()::sendMessage);
                 getSkyblockPlayer().playSound(Sound.sound(
                         Key.key("entity.experience_orb.pickup"),
                         Sound.Source.PLAYER, 0.5f, 1.2f));

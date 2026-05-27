@@ -23,7 +23,6 @@ public class QuestDepositCoinsInBank extends Quest {
     }
 
     @Override public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        quest.getObjectiveCompleteText(new ArrayList<>()).forEach(player::sendMessage);
     }
 
     @Override

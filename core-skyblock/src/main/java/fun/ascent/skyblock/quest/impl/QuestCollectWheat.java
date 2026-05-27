@@ -32,7 +32,6 @@ public class QuestCollectWheat extends QuestProgress {
 
     @Override public Map<String, Object> onStart(SkyblockPlayer player, ActiveQuest quest) { quest.getNewObjectiveText().forEach(player::sendMessage); return new HashMap<>(); }
     @Override public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        quest.getObjectiveCompleteText(new ArrayList<>()).forEach(player::sendMessage);
         player.getActiveProfileData().getQuestData().startQuest(QuestTalkToFarmerAgain.class);
     }
     @Override public Set<RegionType> getValidRegions() { return Collections.singleton(RegionType.HUB); }

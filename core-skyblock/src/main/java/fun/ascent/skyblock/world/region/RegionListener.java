@@ -79,7 +79,7 @@ public class RegionListener {
         int greetingPadding = Math.max(0, (56 - (21 + usernameLength)) / 2);
         String greetingSpaces = " ".repeat(greetingPadding);
 
-        player.sendMessage(text("<yellow><bold>" + "■".repeat(60)));
+        player.sendMessage(text("<yellow><bold>" + "■".repeat(45)));
         player.sendMessage(Component.empty());
         player.sendMessage(text(greetingSpaces + "<white><bold>Welcome to SkyBlock, <green><!bold>" + username + "<white><bold>!"));
         player.sendMessage(Component.empty());
@@ -90,7 +90,7 @@ public class RegionListener {
         player.sendMessage(text("               <yellow>your way through SkyBlock."));
         player.sendMessage(Component.empty());
         player.sendMessage(text("                       <white>Have fun!"));
-        player.sendMessage(text("<yellow><bold>" + "■".repeat(60)));
+        player.sendMessage(text("<yellow><bold>" + "■".repeat(45)));
         player.sendMessage(Component.empty());
     }
 

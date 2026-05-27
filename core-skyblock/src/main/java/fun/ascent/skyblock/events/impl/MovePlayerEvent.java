@@ -5,6 +5,7 @@ import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.world.WorldHandler;
 import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
@@ -34,6 +35,9 @@ public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
                     String targetServer = ServerLookup.findAnyByPrefix("island");
                     if (targetServer != null) {
                         sbPlayer.sendMessage("§aSending you to your island...");
+                        if (sbPlayer.getActiveProfile() != null) {
+                            ProfileManager.saveProfile(sbPlayer.getActiveProfile().profileID);
+                        }
                         if (RedisManager.isInitialized()) {
                             RedisManager.get().setTransferTarget(sbPlayer.getUuid().toString(), "island");
                         }
@@ -44,6 +48,9 @@ public class MovePlayerEvent extends SEvent<PlayerMoveEvent> {
                     String targetServer = ServerLookup.findAnyByPrefix("skyblock");
                     if (targetServer != null) {
                         sbPlayer.sendMessage("§aReturning to SkyBlock Hub...");
+                        if (sbPlayer.getActiveProfile() != null) {
+                            ProfileManager.saveProfile(sbPlayer.getActiveProfile().profileID);
+                        }
                         if (RedisManager.isInitialized()) {
                             RedisManager.get().setTransferTarget(sbPlayer.getUuid().toString(), "hub");
                         }

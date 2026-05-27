@@ -48,15 +48,17 @@ public class ProfileManager {
             UUID profileID = UUID.fromString(doc.getString("_id"));
             
             // ALWAYS wait for save lock from previous server
-            long start = System.currentTimeMillis();
-            while (RedisManager.get().isSaving(profileID.toString())) {
-                if (System.currentTimeMillis() - start > 5000) {
-                    System.err.println("[Profile] TIMEOUT waiting for save lock for " + profileID);
-                    break;
+            if (RedisManager.isInitialized()) {
+                long start = System.currentTimeMillis();
+                while (RedisManager.get().isSaving(profileID.toString())) {
+                    if (System.currentTimeMillis() - start > 5000) {
+                        System.err.println("[Profile] TIMEOUT waiting for save lock for " + profileID);
+                        break;
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ignored) {}
                 }
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ignored) {}
             }
             
             // ALWAYS reload from DB to ensure latest data
