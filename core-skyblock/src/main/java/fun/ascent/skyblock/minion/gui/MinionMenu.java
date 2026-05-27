@@ -91,7 +91,6 @@ public final class MinionMenu {
                         SkillRegistry.grantXp(clickingPlayer, skillType, stack.amount() * 0.1);
                     }
                 }
-                clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);
                 return;
             }
@@ -143,7 +142,6 @@ public final class MinionMenu {
                         SkillRegistry.grantXp(clickingPlayer, skillType, clickedStack.amount() * 0.1);
                     }
 
-                    clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from minion storage.</green>")));
                     render(inventory, minion);
                 } else {
                     clickingPlayer.sendMessage(StringUtility.text(text("<red>Your inventory is full!</red>")));
@@ -161,7 +159,12 @@ public final class MinionMenu {
                     clickingPlayer.sendMessage(StringUtility.text(text("<red>You need " + cost.amount() + " " + prettify(cost.material().name()) + " to upgrade this minion.</red>")));
                     return;
                 }
-                clickingPlayer.sendMessage(StringUtility.text(text("<green>Your minion is now Tier " + minion.getTier() + ".</green>")));
+                clickingPlayer.sendMessage("§aYou have upgraded your Minion to Tier " + MinionItems.roman(minion.getTier()));
+                var profile = clickingPlayer.getActiveProfile();
+                if (profile != null) {
+                    String upgradedId = minion.getType().name().toUpperCase() + "_GENERATOR_" + minion.getTier();
+                    profile.registerMinionCraft(clickingPlayer, upgradedId);
+                }
                 render(inventory, minion);
                 return;
             }

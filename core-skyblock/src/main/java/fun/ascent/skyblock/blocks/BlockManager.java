@@ -388,7 +388,7 @@ public class BlockManager {
                     if (material != null && material != Material.AIR) {
                         Material dropMaterial = material;
                         boolean shouldDrop = true;
-                        boolean isShearable = material == Material.SHORT_GRASS || material == Material.TALL_GRASS || material == Material.FERN || material == Material.LARGE_FERN || material.name().endsWith("_LEAVES") || material == Material.DEAD_BUSH;
+                        boolean isShearable = material == Material.SHORT_GRASS || material == Material.TALL_GRASS || material == Material.FERN || material == Material.LARGE_FERN || material.name().toUpperCase().endsWith("_LEAVES") || material == Material.DEAD_BUSH;
 
                         boolean hasShears = handItem.material() == Material.SHEARS;
 
@@ -406,11 +406,11 @@ public class BlockManager {
                                     }
                                 }
                                 // Leaves drop saplings (5% chance) or apples (0.5% chance for oak leaves)
-                                else if (material.name().endsWith("_LEAVES")) {
+                                else if (material.name().toUpperCase().endsWith("_LEAVES")) {
                                     double rand = ThreadLocalRandom.current().nextDouble();
                                     if (rand < 0.05) {
-                                        String saplingName = material.name().replace("_LEAVES", "_SAPLING");
-                                        Material saplingMaterial = Material.fromKey("minecraft:" + saplingName.toLowerCase());
+                                        String saplingName = material.name().toUpperCase().replace("_LEAVES", "_SAPLING");
+                                        Material saplingMaterial = Material.fromKey(saplingName.toLowerCase());
                                         if (saplingMaterial != null) {
                                             player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(saplingMaterial, 1));
                                         }

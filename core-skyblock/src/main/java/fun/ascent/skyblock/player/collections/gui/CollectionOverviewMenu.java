@@ -50,14 +50,48 @@ public class CollectionOverviewMenu {
             }
         }
 
+        var profile = player.getActiveProfile();
+        int minionsCrafted = profile != null ? profile.minionsCrafted : 1;
+        int minionSlots = profile != null ? profile.minionSlots : 5;
+
+        int nextSlot = minionSlots + 1;
+        int requiredForNext = getRequiredUniqueMinions(nextSlot);
+        int remaining = Math.max(0, requiredForNext - minionsCrafted);
+        String nextSlotStr = nextSlot + getOrdinalSuffix(nextSlot);
+
         inv.setItemStack(BACK_SLOT, CollectionMenuFormat.backButton("SkyBlock Menu"));
         inv.setItemStack(CLOSE_SLOT, CollectionMenuFormat.closeButton());
+
+        long registeredMinions = fun.ascent.skyblock.item.ItemRegistry.getAllItems().stream()
+                .filter(item -> {
+                    String id = item.getItemId().toUpperCase();
+                    return id.matches(".*_(MINION|GENERATOR)_\\d+");
+                })
+                .count();
+        int totalMinions = registeredMinions > 0 ? (int) registeredMinions : 713;
+
+        List<String> minionLore = new ArrayList<>(List.of(
+                "§7This menu shows all of the unique",
+                "§7minions that you have crafted so far.",
+                "",
+                "§7Crafted minions: §e" + minionsCrafted + "§7/§6" + totalMinions,
+                "§7Minion limit: §e" + minionSlots + "§7/§632",
+                ""
+        ));
+
+        if (minionSlots < 32) {
+            minionLore.add("§7Craft §b" + remaining + "§7 more §aunique§7 minions to unlock");
+            minionLore.add("§7your §b" + nextSlotStr + "§7 slot.");
+        } else {
+            minionLore.add("§aMaxed out!");
+        }
+
+        minionLore.add("");
+        minionLore.add("§eClick to view!");
+
         inv.setItemStack(CRAFTED_MINIONS_SLOT, fun.ascent.common.item.ItemStackCreator.getStackHead("§aCrafted Minions",
                 "ebcc099f3a00ece0e5c4b31d31c828e52b06348d0a4eac11f3fcbef3c05cb407", 1,
-                "§7View all the unique minions that you",
-                "§7have crafted.",
-                "",
-                "§eClick to view!").build());
+                minionLore.toArray(new String[0])).build());
 
         inv.eventNode().addListener(InventoryPreClickEvent.class, CollectionOverviewMenu::handleClick);
 
@@ -80,8 +114,7 @@ public class CollectionOverviewMenu {
         }
 
         if (slot == CRAFTED_MINIONS_SLOT) {
-            player.sendMessage("§cMinion recipes and crafted minions view is coming soon!");
-            player.playSound(net.kyori.adventure.sound.Sound.sound(net.minestom.server.sound.SoundEvent.BLOCK_NOTE_BLOCK_PLING, net.kyori.adventure.sound.Sound.Source.MASTER, 1f, 0.5f));
+            GUICraftedMinions.open(player);
             return;
         }
 
@@ -164,5 +197,43 @@ public class CollectionOverviewMenu {
                 .customName(text("<red>" + type.getDisplayName() + " Collections"))
                 .lore(List.of(text("<gray>Coming soon!")))
                 .build();
+    }
+
+    public static int getRequiredUniqueMinions(int slot) {
+        if (slot <= 5) return 0;
+        if (slot == 6) return 5;
+        if (slot == 7) return 15;
+        if (slot == 8) return 30;
+        if (slot == 9) return 50;
+        if (slot == 10) return 75;
+        if (slot == 11) return 100;
+        if (slot == 12) return 125;
+        if (slot == 13) return 150;
+        if (slot == 14) return 175;
+        if (slot == 15) return 200;
+        if (slot == 16) return 225;
+        if (slot == 17) return 250;
+        if (slot == 18) return 275;
+        if (slot == 19) return 300;
+        if (slot == 20) return 350;
+        if (slot == 21) return 400;
+        if (slot == 22) return 450;
+        if (slot == 23) return 500;
+        if (slot == 24) return 550;
+        if (slot == 25) return 600;
+        if (slot == 26) return 650;
+        return 700;
+    }
+
+    public static String getOrdinalSuffix(int value) {
+        if (value >= 11 && value <= 13) {
+            return "th";
+        }
+        return switch (value % 10) {
+            case 1 -> "st";
+            case 2 -> "nd";
+            case 3 -> "rd";
+            default -> "th";
+        };
     }
 }

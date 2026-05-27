@@ -172,6 +172,11 @@ public class CraftingMenu {
                 craftedItem = ItemRegistry.createSkyblockOrVanillaStack(material, recipe.getResultAmount());
             }
 
+            var profile = player.getActiveProfile();
+            if (profile != null) {
+                profile.registerMinionCraft(player, recipe.getResultItemId());
+            }
+
             boolean isShift = event.getClick() instanceof Click.LeftShift || event.getClick() instanceof Click.RightShift;
             if (isShift) {
                 int maxCraftsByInventory = getMaxCraftsByInventory(player, craftedItem, recipe.getResultAmount());
