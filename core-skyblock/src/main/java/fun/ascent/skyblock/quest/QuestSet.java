@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.quest;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 import fun.ascent.skyblock.quest.impl.*;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
@@ -90,16 +91,16 @@ public enum QuestSet {
     public void grantRewards(SkyblockPlayer player) {
         if (player.getActiveProfileData() == null) return;
         switch (this) {
-            case SAVING_UP -> player.getActiveProfileData().addSkyblockXp(5);
-            case LIBRARY_CARD -> player.getActiveProfileData().addSkyblockXp(5);
-            case AUCTIONEER -> player.getActiveProfileData().addSkyblockXp(5);
-            case TIME_TO_MINE -> player.getActiveProfileData().addSkyblockXp(5);
-            case TIME_TO_STRIKE -> player.getActiveProfileData().addSkyblockXp(5);
-            case TIMBER -> player.getActiveProfileData().addSkyblockXp(5);
-            case FIRST_HARVEST -> player.getActiveProfileData().addSkyblockXp(5);
-            case BACK_AT_THE_BARNYARD -> player.getActiveProfileData().addSkyblockXp(5);
-            case CARPENTRY -> player.getActiveProfileData().addSkyblockXp(5);
-            case LOST_AND_FOUND -> player.getActiveProfileData().addSkyblockXp(5);
+            case SAVING_UP -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case LIBRARY_CARD -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case AUCTIONEER -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case TIME_TO_MINE -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case TIME_TO_STRIKE -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case TIMBER -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case FIRST_HARVEST -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case BACK_AT_THE_BARNYARD -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case CARPENTRY -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
+            case LOST_AND_FOUND -> player.getActiveProfileData().addSkyblockXp(5, LevelCause.MISSION_CAUSE);
         }
     }
 }

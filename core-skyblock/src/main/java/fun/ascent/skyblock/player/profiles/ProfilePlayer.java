@@ -7,6 +7,7 @@ import fun.ascent.skyblock.player.bestiary.BestiaryProgress;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 import fun.ascent.skyblock.player.level.unlocks.SkyBlockLevelStatisticUnlock;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.stats.Stat;
@@ -163,19 +164,25 @@ public class ProfilePlayer {
     }
 
     public void addSkyblockXp(int xp) {
+        addSkyblockXp(xp, LevelCause.MISSION_CAUSE);
+    }
+
+    public void addSkyblockXp(int xp, LevelCause cause) {
         if (xp <= 0) return;
 
         int oldLevel = level.curLevel;
-        for (int i = 0; i < xp; i++) {
-            level.addExp(1);
-        }
+        int beforeProgress = level.progress.curProgress;
+        
+        level.addXP(xp);
+        
         int newLevel = level.curLevel;
 
         if (newLevel > oldLevel) {
             sendLevelUpMessage(oldLevel, newLevel);
         } else {
             if (skyblockPlayer != null) {
-                skyblockPlayer.sendActionBar(text("<dark_aqua>+" + xp + " SkyBlock XP <dark_gray>(" + level.progress.curProgress + "/100)"));
+                String msg = cause.formatMessage(xp, beforeProgress);
+                fun.ascent.skyblock.player.actionbar.ActionBar.of(skyblockPlayer.getUuid()).setAbsoluteOverride(msg, 60);
                 skyblockPlayer.playSound(Sound.sound(
                         Key.key("entity.experience_orb.pickup"),
                         Sound.Source.PLAYER, 0.5f, 1.5f));

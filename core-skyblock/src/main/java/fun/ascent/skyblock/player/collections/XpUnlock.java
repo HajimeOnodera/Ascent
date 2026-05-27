@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.player.collections;
 
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 
 public class XpUnlock extends CollectionUnlock {
     private final int amount;
@@ -16,6 +17,6 @@ public class XpUnlock extends CollectionUnlock {
 
     @Override
     public void apply(SkyblockProfile profile) {
-        profile.profilePlayers.forEach(pp -> pp.addSkyblockXp(amount));
+        profile.profilePlayers.forEach(pp -> pp.addSkyblockXp(amount, LevelCause.COLLECTION_CAUSE));
     }
 }

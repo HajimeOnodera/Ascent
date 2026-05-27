@@ -12,6 +12,7 @@ public class ActionBar {
 
     private final EnumMap<Section, PriorityQueue<Replacement>> replacements = new EnumMap<>(Section.class);
     private final EnumMap<Section, String> defaults = new EnumMap<>(Section.class);
+    private Replacement absoluteOverride = null;
 
     private ActionBar() {
         for (Section s : Section.VALUES) {
@@ -44,7 +45,26 @@ public class ActionBar {
         }
     }
 
+    public void setAbsoluteOverride(String display, int durationTicks) {
+        Replacement r = new Replacement(display, 100);
+        this.absoluteOverride = r;
+        if (durationTicks > 0) {
+            MinecraftServer.getSchedulerManager().scheduleTask(
+                    () -> {
+                        if (this.absoluteOverride == r) {
+                            this.absoluteOverride = null;
+                        }
+                    },
+                    TaskSchedule.tick(durationTicks),
+                    TaskSchedule.stop()
+            );
+        }
+    }
+
     public String build() {
+        if (absoluteOverride != null) {
+            return absoluteOverride.display();
+        }
         StringBuilder sb = new StringBuilder();
         for (Section section : Section.VALUES) {
             String display = resolve(section);

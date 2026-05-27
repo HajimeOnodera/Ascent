@@ -10,13 +10,58 @@ import java.util.Map;
 
 public class SkyblockLevel {
 
+    public int xp = 0;
     public int curLevel = 0;
-    public Progress progress = new Progress(0,100);
+    public Progress progress = new Progress(0, 100);
 
-    public void addExp(int amount){
-        if(progress.add(amount)){
-            curLevel++;
+    public int getXp() {
+        if (xp == 0 && (curLevel > 0 || progress.curProgress > 0)) {
+            xp = curLevel * 100 + progress.curProgress;
         }
+        return xp;
+    }
+
+    public void setXp(int xp) {
+        this.xp = xp;
+        this.curLevel = xp / 100;
+        this.progress.curProgress = xp % 100;
+    }
+
+    public int getLevel() {
+        return curLevel;
+    }
+
+    public void setLevel(int level) {
+        this.curLevel = level;
+        this.xp = level * 100 + this.progress.curProgress;
+    }
+
+    public void addXP(int amount) {
+        setXp(getXp() + amount);
+    }
+
+    public void addExp(int amount) {
+        addXP(amount);
+    }
+
+    public boolean removeXP(int xpAmount) {
+        if (getXp() - xpAmount >= 0) {
+            setXp(getXp() - xpAmount);
+            return true;
+        }
+        return false;
+    }
+
+    public void addLevel(int levelAmount) {
+        setLevel(getLevel() + levelAmount);
+    }
+
+    public boolean removeLevel(int levelAmount) {
+        if (getLevel() - levelAmount >= 0) {
+            setLevel(getLevel() - levelAmount);
+            return true;
+        }
+        return false;
     }
 
     public static String getLevelColour(int level) {
@@ -35,9 +80,9 @@ public class SkyblockLevel {
         return "<gray>";
     }
 
-    public static Map<String, ItemStack> getRewards(int oldLevel,int curLevel) {
+    public static Map<String, ItemStack> getRewards(int oldLevel, int curLevel) {
         Map<String, ItemStack> rewards = new LinkedHashMap<>();
-        for(int level = oldLevel; level <= curLevel; level++) {
+        for (int level = oldLevel; level <= curLevel; level++) {
 
             switch (level) {
                 case 3:
@@ -128,7 +173,7 @@ public class SkyblockLevel {
         return rewards;
     }
 
-    public static int getHealthReward(int oldLevel,int curLevel) {
+    public static int getHealthReward(int oldLevel, int curLevel) {
         int diff = curLevel - oldLevel;
         return (diff * 5);
     }
@@ -137,4 +182,3 @@ public class SkyblockLevel {
         return (curLevel / 5) - (oldLevel / 5);
     }
 }
-

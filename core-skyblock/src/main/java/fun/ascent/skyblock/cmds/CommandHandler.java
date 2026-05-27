@@ -12,6 +12,7 @@ import fun.ascent.skyblock.menus.command.GuiCommand;
 import fun.ascent.skyblock.minion.command.MinionCommand;
 import fun.ascent.skyblock.player.level.XpCommand;
 import fun.ascent.skyblock.player.level.command.LevelsCommand;
+import fun.ascent.skyblock.player.level.command.SetSbLevelCommand;
 import fun.ascent.skyblock.player.skill.command.SkillsCommand;
 import fun.ascent.skyblock.player.stats.command.StatCommand;
 import fun.ascent.common.command.RestartCommand;
@@ -40,6 +41,7 @@ public class CommandHandler {
         register(new MinionCommand());
         register(new XpCommand());
         register(new LevelsCommand());
+        register(new SetSbLevelCommand());
         register(new GuiCommand());
         register(new HotmCommand());
         register(new StatCommand());

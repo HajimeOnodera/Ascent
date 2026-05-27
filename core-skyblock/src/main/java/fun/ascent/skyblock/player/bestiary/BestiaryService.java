@@ -6,6 +6,7 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.stats.Stats;
 import net.kyori.adventure.key.Key;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.GlobalEventHandler;
@@ -58,7 +59,7 @@ public final class BestiaryService {
     private static void grantTierRewards(ProfilePlayer profile, int tier) {
         profile.addToStat(Stats.MAGIC_FIND, BestiaryMilestones.magicFindGain(tier));
         profile.addToStat(Stats.STRENGTH, BestiaryMilestones.strengthGain(tier));
-        profile.addSkyblockXp(1);
+        profile.addSkyblockXp(1, LevelCause.BESTIARY_PROGRESSION_CAUSE);
     }
 
     private static void sendTierMessage(SkyblockPlayer player, BestiaryFamily family, int oldTier, int newTier) {

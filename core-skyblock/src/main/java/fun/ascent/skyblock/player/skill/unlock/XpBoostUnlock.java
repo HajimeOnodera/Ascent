@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.player.skill.unlock;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 
 public class XpBoostUnlock extends SkillUnlock {
 
@@ -18,6 +19,6 @@ public class XpBoostUnlock extends SkillUnlock {
     @Override
     public void apply(SkyblockPlayer player) {
         if (player.getActiveProfileData() == null) return;
-        player.getActiveProfileData().addSkyblockXp(amount);
+        player.getActiveProfileData().addSkyblockXp(amount, LevelCause.SKILL_CAUSE);
     }
 }
