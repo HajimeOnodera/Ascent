@@ -7,13 +7,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.file.Path;
 import java.util.HashMap;
 
 public class BazaarRegistry {
 
     public static BazaarData bazaarItemList;
-    public static double buyTax = 1.2,sellTax = 1.2;
+    public static double sellTax = 1.2;
     public static final HashMap<String, BazaarEntry> itemToEntryMap = new HashMap<>();
 
     public static void initialise(){
@@ -39,11 +38,9 @@ public class BazaarRegistry {
     }
 
     private static BazaarData loadDataFromJSON() {
-        try (InputStream in = BazaarRegistry.class.getClassLoader().getResourceAsStream("bazaar_families.json")) {
-            if (in == null) {
-                System.err.println("bazaar_families.json not found in resources!");
-                return null;
-            }
+        File file = new File("configuration/skyblock/bazaar/bazaar_families.json");
+        if(!file.exists())return null;
+        try (InputStream in = new FileInputStream(file)) {
             return new Gson().fromJson(new InputStreamReader(in), BazaarData.class);
         } catch (Exception e) {
             e.printStackTrace();
