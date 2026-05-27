@@ -10,9 +10,7 @@ public class QuestTalkToFarmerAgain extends Quest {
     @Override public String getName() { return "Talk to the Farmer again"; }
     @Override public Map<String, Object> onStart(SkyblockPlayer player, ActiveQuest quest) { quest.getNewObjectiveText().forEach(player::sendMessage); return new HashMap<>(); }
     @Override public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        ArrayList<String> rewards = new ArrayList<>(List.of("10 SkyBlock XP"));
-        quest.getObjectiveCompleteText(rewards).forEach(player::sendMessage);
+        quest.getObjectiveCompleteText(new ArrayList<>()).forEach(player::sendMessage);
     }
     @Override public Set<RegionType> getValidRegions() { return Collections.singleton(RegionType.HUB); }
-    @Override public Double getAttachedSkyBlockXP() { return 10D; }
 }

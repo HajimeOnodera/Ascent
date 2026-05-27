@@ -42,21 +42,10 @@ public class QuestUseTeleporter extends Quest {
 
     @Override
     public void onEnd(SkyblockPlayer player, Map<String, Object> customData, ActiveQuest quest) {
-        ArrayList<String> rewards = new ArrayList<>(List.of("1000 Coins", "10 SkyBlock XP"));
-        quest.getObjectiveCompleteText(rewards).forEach(player::sendMessage);
-        
-        if (player.getActiveProfileData() != null) {
-            player.getActiveProfileData().playerCoins += 1000;
-        }
     }
 
     @Override
     public Set<RegionType> getValidRegions() {
         return Collections.singleton(RegionType.PRIVATE_ISLAND);
-    }
-
-    @Override
-    public Double getAttachedSkyBlockXP() {
-        return 10D;
     }
 }
