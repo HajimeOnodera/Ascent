@@ -387,7 +387,45 @@ public class BlockManager {
                     Material material = Material.fromKey(brokenBlock.key());
                     if (material != null && material != Material.AIR) {
                         Material dropMaterial = material;
-                        if (!hasSilkTouch) {
+                        boolean shouldDrop = true;
+                        boolean isShearable = material == Material.SHORT_GRASS || material == Material.TALL_GRASS || material == Material.FERN || material == Material.LARGE_FERN || material.name().toUpperCase().endsWith("_LEAVES") || material == Material.DEAD_BUSH;
+
+                        boolean hasShears = handItem.material() == Material.SHEARS;
+
+                        if (isShearable) {
+                            if (hasShears || hasSilkTouch) {
+                                dropMaterial = material;
+                            } else {
+                                shouldDrop = false;
+
+                                // Dead bush drops 0-2 sticks
+                                if (material == Material.DEAD_BUSH) {
+                                    int sticksCount = ThreadLocalRandom.current().nextInt(3);
+                                    if (sticksCount > 0) {
+                                        player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(Material.STICK, sticksCount));
+                                    }
+                                }
+                                // Leaves drop saplings (5% chance) or apples (0.5% chance for oak leaves)
+                                else if (material.name().toUpperCase().endsWith("_LEAVES")) {
+                                    double rand = ThreadLocalRandom.current().nextDouble();
+                                    if (rand < 0.05) {
+                                        String saplingName = material.name().toUpperCase().replace("_LEAVES", "_SAPLING");
+                                        Material saplingMaterial = Material.fromKey(saplingName.toLowerCase());
+                                        if (saplingMaterial != null) {
+                                            player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(saplingMaterial, 1));
+                                        }
+                                    } else if (material == Material.OAK_LEAVES && rand < 0.055) {
+                                        player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(Material.APPLE, 1));
+                                    }
+                                }
+                                // Short grass, tall grass, ferns drop wheat seeds sometimes (10% chance)
+                                else if (material == Material.SHORT_GRASS || material == Material.TALL_GRASS || material == Material.FERN || material == Material.LARGE_FERN) {
+                                    if (ThreadLocalRandom.current().nextDouble() < 0.10) {
+                                        player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(Material.WHEAT_SEEDS, 1));
+                                    }
+                                }
+                            }
+                        } else if (!hasSilkTouch) {
                             if (material == Material.STONE) dropMaterial = Material.COBBLESTONE;
                             else if (material == Material.GRASS_BLOCK) dropMaterial = Material.DIRT;
                             else if (material == Material.COAL_ORE) dropMaterial = Material.COAL;
@@ -397,7 +435,10 @@ public class BlockManager {
                             else if (material == Material.REDSTONE_ORE) dropMaterial = Material.REDSTONE;
                             else if (material == Material.NETHER_QUARTZ_ORE) dropMaterial = Material.QUARTZ;
                         }
-                        player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(dropMaterial, 1));
+
+                        if (shouldDrop) {
+                            player.getInventory().addItemStack(ItemRegistry.createSkyblockOrVanillaStack(dropMaterial, 1));
+                        }
                     }
                     instance.setBlock(pos, Block.AIR);
                 } catch (Exception e) {

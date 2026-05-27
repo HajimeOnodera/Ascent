@@ -216,13 +216,13 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 int unlocked = ((SkyblockPlayer) player).getActiveProfile().unlockedRecipes.size();
                 int total = RecipeRegistry.getTotalRecipesCount();
                 double percent = total == 0 ? 0.0 : (double) unlocked / total * 100;
-                int totalBars = 20;
+                int totalBars = 12;
                 int completed = total == 0 ? 0 : (int) Math.round(((double) unlocked / total) * totalBars);
                 completed = Math.clamp(completed, 0, totalBars);
                 int remaining = totalBars - completed;
 
                 String progressBar = "<green><strikethrough>" + "─".repeat(completed)
-                        + "<dark_gray><strikethrough>" + "─".repeat(remaining)
+                        + "<gray><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Recipes Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));
@@ -372,13 +372,13 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 int unlocked = ((SkyblockPlayer) player).getActiveProfile().unlockedCollections.size();
                 int total = CollectionRegistry.getTotalCollectionsCount();
                 double percent = total == 0 ? 0.0 : (double) unlocked / total * 100;
-                int totalBars = 20;
+                int totalBars = 12;
                 int completed = total == 0 ? 0 : (int) Math.round(((double) unlocked / total) * totalBars);
                 completed = Math.clamp(completed, 0, totalBars);
                 int remaining = totalBars - completed;
 
                 String progressBar = "<green><strikethrough>" + "─".repeat(completed)
-                        + "<dark_gray><strikethrough>" + "─".repeat(remaining)
+                        + "<gray><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Collections Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));

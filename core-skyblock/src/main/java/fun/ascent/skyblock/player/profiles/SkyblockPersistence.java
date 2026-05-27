@@ -16,6 +16,8 @@ public class SkyblockPersistence {
             Document doc = new Document();
             doc.put("name", profile.profileName);
             doc.put("minion_slots", profile.minionSlots);
+            doc.put("minions_crafted", profile.minionsCrafted);
+            doc.put("unique_minions_crafted", new ArrayList<>(profile.uniqueMinionsCrafted));
             doc.put("lastUpdated", System.currentTimeMillis());
             
             // Save collections
@@ -68,6 +70,11 @@ public class SkyblockPersistence {
         profile.profileID = profileID;
         profile.profileName = doc.getString("name");
         profile.minionSlots = doc.getInteger("minion_slots", 5);
+        profile.minionsCrafted = doc.getInteger("minions_crafted", 1);
+        List<String> uniqueMinions = doc.getList("unique_minions_crafted", String.class);
+        if (uniqueMinions != null) {
+            profile.uniqueMinionsCrafted.addAll(uniqueMinions);
+        }
 
         // Load bank details
         profile.bankCoins = doc.containsKey("bank_coins") ? doc.getDouble("bank_coins") : 0.0;

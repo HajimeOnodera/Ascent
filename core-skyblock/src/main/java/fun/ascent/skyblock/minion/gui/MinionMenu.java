@@ -51,7 +51,7 @@ public final class MinionMenu {
 
     public static void open(SkyblockPlayer player, SkyblockMinion minion) {
         ensureUpdater();
-        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, minion.getType().getDisplayName());
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, minion.getType().getDisplayName() + " " + MinionItems.roman(minion.getTier()));
         OPEN_MENUS.put(inventory, minion);
         render(inventory, minion);
 
@@ -91,7 +91,6 @@ public final class MinionMenu {
                         SkillRegistry.grantXp(clickingPlayer, skillType, stack.amount() * 0.1);
                     }
                 }
-                clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from your minion.</green>")));
                 render(inventory, minion);
                 return;
             }
@@ -143,7 +142,6 @@ public final class MinionMenu {
                         SkillRegistry.grantXp(clickingPlayer, skillType, clickedStack.amount() * 0.1);
                     }
 
-                    clickingPlayer.sendMessage(StringUtility.text(text("<green>Collected resources from minion storage.</green>")));
                     render(inventory, minion);
                 } else {
                     clickingPlayer.sendMessage(StringUtility.text(text("<red>Your inventory is full!</red>")));
@@ -161,7 +159,12 @@ public final class MinionMenu {
                     clickingPlayer.sendMessage(StringUtility.text(text("<red>You need " + cost.amount() + " " + prettify(cost.material().name()) + " to upgrade this minion.</red>")));
                     return;
                 }
-                clickingPlayer.sendMessage(StringUtility.text(text("<green>Your minion is now Tier " + minion.getTier() + ".</green>")));
+                clickingPlayer.sendMessage("§aYou have upgraded your Minion to Tier " + MinionItems.roman(minion.getTier()));
+                var profile = clickingPlayer.getActiveProfile();
+                if (profile != null) {
+                    String upgradedId = minion.getType().name().toUpperCase() + "_GENERATOR_" + minion.getTier();
+                    profile.registerMinionCraft(clickingPlayer, upgradedId);
+                }
                 render(inventory, minion);
                 return;
             }
@@ -352,7 +355,8 @@ public final class MinionMenu {
     }
 
     private static String prettify(String value) {
-        return value.toLowerCase().replace('_', ' ');
+        String clean = value.toLowerCase().replace("minecraft:", "").replace('_', ' ');
+        return clean.isEmpty() ? "" : Character.toUpperCase(clean.charAt(0)) + clean.substring(1);
     }
 
     private static String taskStatus(SkyblockMinion minion) {
@@ -367,7 +371,11 @@ public final class MinionMenu {
 
     private static String formatUpgradeCost(SkyblockMinion minion) {
         MinionUpgradeCost cost = MinionUpgradeManager.getUpgradeCost(minion);
-        return cost.amount() + " " + prettify(cost.material().name());
+        SkyblockItem item = ItemRegistry.getItemByMaterial(cost.material());
+        if (item != null) {
+            return cost.amount() + " " + item.getRarity().getColor() + item.getDisplayName();
+        }
+        return cost.amount() + " <white>" + prettify(cost.material().name());
     }
 
     private static SkyblockPlayer findViewer(SkyblockMinion minion) {

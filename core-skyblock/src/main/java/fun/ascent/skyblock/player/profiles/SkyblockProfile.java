@@ -5,6 +5,7 @@ import fun.ascent.skyblock.island.IslandManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
+import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
@@ -32,6 +33,10 @@ public class SkyblockProfile {
     @Getter
     @Setter
     public int minionSlots = 5;
+    @Getter
+    @Setter
+    public int minionsCrafted = 1;
+    public Set<String> uniqueMinionsCrafted = new HashSet<>();
     private boolean islandLoaded = false;
 
     public void postLoad(){
@@ -40,7 +45,15 @@ public class SkyblockProfile {
             //TODO: Notify Players of island corruption
         }
         if(spawnPos == null){spawnPos = new Pos(7,100, 5);}
-        if(minionSlots <= 0){minionSlots = 5;}
+        if(uniqueMinionsCrafted == null){
+            uniqueMinionsCrafted = new HashSet<>();
+        }
+        if(uniqueMinionsCrafted.isEmpty()){
+            uniqueMinionsCrafted.add("COBBLESTONE_GENERATOR_1");
+        }
+        minionsCrafted = uniqueMinionsCrafted.size();
+        if(minionSlots <= 0){minionSlots = getMinionSlotsFromUnique(minionsCrafted);}
+        if(minionsCrafted <= 0){minionsCrafted = 1;}
         if (unlockedCollections == null) {
             unlockedCollections = new HashMap<>();
             //TODO: Notify Players of Collections corruption
@@ -205,6 +218,91 @@ public class SkyblockProfile {
             player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
             player.sendMessage(fun.ascent.common.StringUtility.text("<green>You have just received <gold>" + fun.ascent.common.StringUtility.commaify(totalInterest) + " coins<green> as bank interest!"));
             player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
+        }
+    }
+
+    public int getMinionSlotsFromUnique(int uniqueCrafted) {
+        if (uniqueCrafted < 5) return 5;
+        if (uniqueCrafted < 15) return 6;
+        if (uniqueCrafted < 30) return 7;
+        if (uniqueCrafted < 50) return 8;
+        if (uniqueCrafted < 75) return 9;
+        if (uniqueCrafted < 100) return 10;
+        if (uniqueCrafted < 125) return 11;
+        if (uniqueCrafted < 150) return 12;
+        if (uniqueCrafted < 175) return 13;
+        if (uniqueCrafted < 200) return 14;
+        if (uniqueCrafted < 225) return 15;
+        if (uniqueCrafted < 250) return 16;
+        if (uniqueCrafted < 275) return 17;
+        if (uniqueCrafted < 300) return 18;
+        if (uniqueCrafted < 350) return 19;
+        if (uniqueCrafted < 400) return 20;
+        if (uniqueCrafted < 450) return 21;
+        if (uniqueCrafted < 500) return 22;
+        if (uniqueCrafted < 550) return 23;
+        if (uniqueCrafted < 600) return 24;
+        if (uniqueCrafted < 650) return 25;
+        return 26;
+    }
+
+    public void checkMinionSlotsUnlock(SkyblockPlayer player) {
+        int previousSlots = this.minionSlots;
+        int newSlots = getMinionSlotsFromUnique(this.minionsCrafted);
+        if (newSlots > previousSlots) {
+            this.minionSlots = newSlots;
+            player.sendMessage("§a§lUNLOCKED A NEW MINION SLOT! §7(§e" + previousSlots + " §7➜ §e" + newSlots + "§7)");
+            player.playSound(sound(SoundEvent.ENTITY_PLAYER_LEVELUP, Source.MASTER, 1f, 1.2f));
+        } else {
+            int nextSlot = newSlots + 1;
+            if (nextSlot <= 26) {
+                int requiredForNext = CollectionOverviewMenu.getRequiredUniqueMinions(nextSlot);
+                int remaining = Math.max(0, requiredForNext - this.minionsCrafted);
+                player.sendMessage("  §aCraft " + remaining + " more unique Minions to unlock your " + nextSlot + CollectionOverviewMenu.getOrdinalSuffix(nextSlot) + " Minion slot!");
+            }
+        }
+    }
+
+    public void registerMinionCraft(SkyblockPlayer player, String minionId) {
+        String canonicalId = minionId.toUpperCase();
+        if (!canonicalId.matches(".*_(MINION|GENERATOR)_\\d+")) {
+            return;
+        }
+        if (uniqueMinionsCrafted == null) {
+            uniqueMinionsCrafted = new HashSet<>();
+        }
+        if (uniqueMinionsCrafted.add(canonicalId)) {
+            this.minionsCrafted = uniqueMinionsCrafted.size();
+            
+            String displayName = "Minion";
+            int tierVal = 1;
+            try {
+                int lastUnderscore = canonicalId.lastIndexOf('_');
+                tierVal = Integer.parseInt(canonicalId.substring(lastUnderscore + 1));
+            } catch (Exception ignored) {}
+            
+            fun.ascent.skyblock.item.SkyblockItem item = fun.ascent.skyblock.item.ItemRegistry.getItem(canonicalId);
+            if (item != null) {
+                displayName = item.getDisplayName();
+                // If it ends with Roman numeral, let's strip it to keep the base minion name
+                String romanSuffix = " " + getRomanNumeral(tierVal);
+                if (displayName.endsWith(romanSuffix)) {
+                    displayName = displayName.substring(0, displayName.length() - romanSuffix.length());
+                }
+            } else {
+                int genIdx = canonicalId.indexOf("_GENERATOR_");
+                int minIdx = canonicalId.indexOf("_MINION_");
+                int splitIdx = genIdx >= 0 ? genIdx : minIdx;
+                if (splitIdx >= 0) {
+                    String materialPart = canonicalId.substring(0, splitIdx);
+                    displayName = fun.ascent.skyblock.item.ItemRegistry.formatName(materialPart) + " Minion";
+                }
+            }
+            
+            String romanTier = getRomanNumeral(tierVal);
+            player.sendMessage("§aYou crafted a Tier §e" + romanTier + " " + displayName + "§a! That's a new one!");
+            
+            checkMinionSlotsUnlock(player);
         }
     }
 
