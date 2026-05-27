@@ -2,10 +2,14 @@ package fun.ascent.skyblock.bazaar.ui;
 
 import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
+import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
 import fun.ascent.skyblock.bazaar.ui.buySell.BazaarInstantBuyMenu;
+import fun.ascent.skyblock.bazaar.ui.buySell.BazaarInstantSellMenu;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,6 +18,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.TooltipDisplay;
@@ -34,12 +39,12 @@ public class BazaarItemBuyMenu {
         addBuySell(inventory,item,player);
         inventory.eventNode().addListener(InventoryPreClickEvent.class, event -> {
             event.setCancelled(true);
-            mouseClick(event.getSlot(),event.getClickedItem(),(SkyblockPlayer) event.getPlayer(),event.getInventory());
+            mouseClick(event.getSlot(),event.getClickedItem(),event.getClick(),(SkyblockPlayer) event.getPlayer(),event.getInventory());
         });
         player.openInventory(inventory);
     }
 
-    private static void mouseClick(int slot, ItemStack clickedItem, SkyblockPlayer player, AbstractInventory inventory) {
+    private static void mouseClick(int slot, ItemStack clickedItem, Click click,SkyblockPlayer player, AbstractInventory inventory) {
         int slotBase = inventory.getInnerSize() - 5;
         BazaarEntry cur = curItem.get(player);
         if(cur == null || cur.parentEntry == null) return;
@@ -58,18 +63,42 @@ public class BazaarItemBuyMenu {
         if(slot == 10){
             BazaarInstantBuyMenu.open(player,cur);
         }
+        if(slot == 11){
+            int currentAmount = BazaarInstantSellMenu.getInventoryAmount(player,cur);
+           if(currentAmount > 0) {
+               if (click instanceof Click.Right) {
+                   BazaarInstantSellMenu.open(player, cur);
+               } else {
+                   sellAll(player, cur);
+               }
+           }
+            return;
+        }
+        if(slot == 15 || slot == 16){
+            player.sendMessage(StringUtility.text("<red>This feature is not yet implemented."));
+            return;
+        }
     }
 
-        public static void addBuySell(Inventory inventory, BazaarEntry item,SkyblockPlayer player) {
-        String itemText = "<dark_gray>" + ((TextComponent)item.nameComp).content();
-        int amount = 0;
-        for (ItemStack itemStack : player.getInventory().getItemStacks()) {
-            SkyblockItem sbItem = SkyblockItem.fromStack(itemStack);
-            if(sbItem == null || sbItem.getUuid() == null) continue;
-            if(sbItem.getItemId().equals(item.itemToSell.getItemId())){
-                amount += itemStack.amount();
-            }
+    private static void sellAll(SkyblockPlayer player, BazaarEntry cur) {
+        int currentAmount = BazaarInstantSellMenu.getInventoryAmount(player,cur);
+        if (currentAmount > 0) {
+            BazaarInstantSellMenu.removeItems(player, cur.itemToSell.getItemId(), currentAmount);
+            double coinsEarned = currentAmount * BZPriceRegistry.getSell(cur) * (1.0 - BazaarRegistry.sellTax / 100.0);
+            player.addCoins(coinsEarned);
+            player.sendMessage(StringUtility.text("<green>Sold " + currentAmount + " items for <gold>" + coinsEarned + " coins!"));
+            Sound sound = Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 1f, 1f);
+            player.playSound(sound);
+            BazaarItemBuyMenu.open(player, cur);
+        } else {
+            player.sendMessage(StringUtility.text("<red>You don't have any items to sell!"));
         }
+    }
+
+    public static void addBuySell(Inventory inventory, BazaarEntry item,SkyblockPlayer player) {
+        String itemText = "<dark_gray>" + item.itemToSell.getDisplayName();
+        int amount = BazaarInstantSellMenu.getInventoryAmount(player,item);
+
         List<Component> buyLore = List.of(
                 StringUtility.text(itemText),
                 Component.empty(),
@@ -91,8 +120,9 @@ public class BazaarItemBuyMenu {
         if(amount > 0){
             sellLore.add(Component.empty());
             sellLore.add(StringUtility.text("<gray>Amount: <green>" + amount + "<gray>x"));
-            sellLore.add(StringUtility.text("<gray>Total: <gold>" + (amount*BZPriceRegistry.getSell(item)) + " coins"));
-            sellLore.add(StringUtility.text("<dark_gray>Current tax: 0.0%"));
+            double total = amount * BZPriceRegistry.getSell(item) * (1.0 - BazaarRegistry.sellTax / 100.0);
+            sellLore.add(StringUtility.text("<gray>Total: <gold>" + total + " coins"));
+            sellLore.add(StringUtility.text("<dark_gray>Current tax: " + BazaarRegistry.sellTax + "%"));
             sellLore.add(Component.empty());
             sellLore.add(StringUtility.text("<aqua>Right-Click to pick amount!"));
             sellLore.add(StringUtility.text("<yellow>Click to sell!"));

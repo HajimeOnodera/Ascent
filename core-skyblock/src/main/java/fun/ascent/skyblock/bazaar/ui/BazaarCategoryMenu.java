@@ -5,6 +5,7 @@ import fun.ascent.skyblock.bazaar.BazaarData;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
 import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
+import fun.ascent.skyblock.bazaar.ui.extras.SellInvConfirmMenu;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -67,7 +68,7 @@ public class BazaarCategoryMenu {
             openSearchBar(player);
         }
         if(slot == 47){
-            sellInventory(player, null);
+            SellInvConfirmMenu.open(player,curCategory.get(player),null);
             return;
         }
         if(slot == 49){
@@ -136,7 +137,7 @@ public class BazaarCategoryMenu {
         return;
     }
 
-    public static void sellInventory(SkyblockPlayer player, BazaarEntry category) {
+    public static void sellInventory(SkyblockPlayer player, BazaarEntry category,BazaarEntry toReturn) {
         double totalCoins = 0.0;
         int itemsSold = 0;
         PlayerInventory inventory = player.getInventory();
@@ -164,7 +165,7 @@ public class BazaarCategoryMenu {
             
             int amount = stack.amount();
             double pricePerUnit = BZPriceRegistry.getSell(bzEntry);
-            totalCoins += amount * pricePerUnit;
+            totalCoins += amount * pricePerUnit * (1.0 - BazaarRegistry.sellTax / 100.0);
             itemsSold += amount;
             
             inventory.setItemStack(i, ItemStack.AIR);
@@ -177,6 +178,11 @@ public class BazaarCategoryMenu {
             player.playSound(sound);
         } else {
             player.sendMessage(StringUtility.text("<red>You don't have any items to sell!"));
+        }
+        if(toReturn.parent != null){
+            BazaarChildCategoryMenu.open(player,toReturn);
+        }else{
+            BazaarCategoryMenu.openMenu(player,toReturn);
         }
     }
 
@@ -225,7 +231,7 @@ public class BazaarCategoryMenu {
                 
                 double price = 0.0;
                 if (bzEntry != null) {
-                    price = amount * BZPriceRegistry.getSell(bzEntry);
+                    price = amount * BZPriceRegistry.getSell(bzEntry) * (1.0 - BazaarRegistry.sellTax / 100.0);
                 }
                 finalPrice[0] += price;
                 

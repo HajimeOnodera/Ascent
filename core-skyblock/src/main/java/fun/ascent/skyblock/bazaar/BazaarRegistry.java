@@ -3,16 +3,21 @@ package fun.ascent.skyblock.bazaar;
 import com.google.gson.Gson;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 public class BazaarRegistry {
 
     public static BazaarData bazaarItemList;
+    public static double buyTax = 1.2,sellTax = 1.2;
     public static final HashMap<String, BazaarEntry> itemToEntryMap = new HashMap<>();
 
     public static void initialise(){
+        bazaarItemList = null;
         bazaarItemList = loadDataFromJSON();
         if (bazaarItemList != null && bazaarItemList.bazaarData != null) {
             for (BazaarEntry entry : bazaarItemList.bazaarData) {

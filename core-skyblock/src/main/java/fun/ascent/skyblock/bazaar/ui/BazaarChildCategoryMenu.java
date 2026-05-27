@@ -4,6 +4,7 @@ import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
 import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
+import fun.ascent.skyblock.bazaar.ui.extras.SellInvConfirmMenu;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -16,8 +17,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.TooltipDisplay;
-import fun.ascent.skyblock.bazaar.BazaarRegistry;
-import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
 
 import java.util.*;
 
@@ -63,7 +62,7 @@ public class BazaarChildCategoryMenu {
         }
         if(slot == (slotBase - 2)){
             if (cur != null) {
-                BazaarCategoryMenu.sellInventory(player, cur);
+                SellInvConfirmMenu.open(player,curCategory.get(player),cur);
             }
             return;
         }
@@ -129,7 +128,7 @@ public class BazaarChildCategoryMenu {
                 
                 double price = 0.0;
                 if (bzEntry != null) {
-                    price = entry.getValue() * BZPriceRegistry.getSell(bzEntry);
+                    price = entry.getValue() * BZPriceRegistry.getSell(bzEntry) * (1.0 - BazaarRegistry.sellTax / 100.0);
                 }
                 finalPrice += price;
                 
@@ -142,7 +141,7 @@ public class BazaarChildCategoryMenu {
             sellLore.add(Component.empty());
             sellLore.add(StringUtility.text("<yellow>Click to sell!"));
         }
-        ItemStack sell = ItemStack.of(Material.CRAFTING_TABLE).withCustomName(StringUtility.text("<green>Sell Inventory Now"))
+        ItemStack sell = ItemStack.of(Material.CHEST).withCustomName(StringUtility.text("<green>Sell Inventory Now"))
                 .withLore(sellLore);
         int slot_sell = slot-2;
         inventory.setItemStack(slot_sell,sell);

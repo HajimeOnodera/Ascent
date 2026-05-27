@@ -4,6 +4,7 @@ import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
 import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
+import fun.ascent.skyblock.bazaar.ui.extras.SellInvConfirmMenu;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -136,7 +137,7 @@ public class BazaarSearchMenu {
 
     private static void mouseClick(int slot, ItemStack clickedItem, SkyblockPlayer player, AbstractInventory inventory) {
         if(slot == 47){
-            sellInventory(player, null);
+            SellInvConfirmMenu.open(player,BazaarRegistry.bazaarItemList.getFarming(),null);
             return;
         }
         if(slot == 49){
@@ -209,7 +210,7 @@ public class BazaarSearchMenu {
 
                 double price = 0.0;
                 if (bzEntry != null) {
-                    price = amount * BZPriceRegistry.getSell(bzEntry);
+                    price = amount * BZPriceRegistry.getSell(bzEntry) * (1.0 - BazaarRegistry.sellTax / 100.0);
                 }
                 finalPrice[0] += price;
 

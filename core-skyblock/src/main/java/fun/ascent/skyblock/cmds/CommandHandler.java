@@ -20,7 +20,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.builder.Command;
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
+import java.lang.reflect.Modifier;
 import java.util.Set;
 
 public class CommandHandler {
@@ -46,13 +49,13 @@ public class CommandHandler {
         register(new DroomCommand());
         register(new ShopCommand());
 
-        Reflections reflections = new Reflections(new org.reflections.util.ConfigurationBuilder()
-                .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.cmds.impl", CommandHandler.class.getClassLoader()))
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setUrls(ClasspathHelper.forPackage("fun.ascent.skyblock.cmds.impl", CommandHandler.class.getClassLoader()))
                 .addClassLoaders(CommandHandler.class.getClassLoader()));
         Set<Class<? extends Command>> commands = reflections.getSubTypesOf(Command.class);
         for (Class<? extends Command> cmd : commands) {
-            if (java.lang.reflect.Modifier.isAbstract(cmd.getModifiers()) || cmd.isInterface()) continue;
-            if (cmd.isAnonymousClass() || cmd.isLocalClass() || (cmd.isMemberClass() && !java.lang.reflect.Modifier.isStatic(cmd.getModifiers()))) continue;
+            if (Modifier.isAbstract(cmd.getModifiers()) || cmd.isInterface()) continue;
+            if (cmd.isAnonymousClass() || cmd.isLocalClass() || (cmd.isMemberClass() && !Modifier.isStatic(cmd.getModifiers()))) continue;
             if (!cmd.getName().startsWith("fun.ascent")) continue;
             try {
                 register(cmd.getDeclaredConstructor().newInstance());

@@ -117,7 +117,7 @@ public class BazaarEntry {
             double sellPrice = BZPriceRegistry.getSell(child);
             double buyPrice = BZPriceRegistry.getBuy(child);
             msg += " <gray>" + child.iconItem.getDisplayName() +
-            " <red>" + formatPrice(sellPrice) + "<dark_gray> | <green>" + formatPrice(buyPrice);
+            " <red>" + formatShortened(sellPrice) + "<dark_gray> | <green>" + formatShortened(buyPrice);
             lore.add(StringUtility.text(msg));
         });
         lore.add(Component.empty());
@@ -125,13 +125,34 @@ public class BazaarEntry {
         return base.withCustomName(this.nameComp).withLore(lore);
     }
 
-    public String formatPrice(double val) {
+    public String formatShortened(double val) {
         if (val <= 0.0) return "0";
         if (val < 1.0) {
             String formatted = String.format(java.util.Locale.US, "%.1f", val);
             return formatted.startsWith("0.") ? formatted.substring(1) : formatted;
         }
-        return String.valueOf((int) val);
+        if (val < 1000.0) {
+            return String.valueOf((int) val);
+        }
+
+        String[] suffixes = {"", "k", "m", "b", "t"};
+        int suffixIndex = 0;
+        double doubleVal = val;
+        while (doubleVal >= 1000.0 && suffixIndex < suffixes.length - 1) {
+            doubleVal /= 1000.0;
+            suffixIndex++;
+        }
+
+        double rounded = Math.round(doubleVal * 10.0) / 10.0;
+        if (rounded == (int) rounded) {
+            return (int) rounded + suffixes[suffixIndex];
+        } else {
+            return String.format(java.util.Locale.US, "%.1f", rounded) + suffixes[suffixIndex];
+        }
+    }
+
+    public String formatPrice(double val) {
+        return formatShortened(val);
     }
 
     public String getRarity(SkyblockItem item){
