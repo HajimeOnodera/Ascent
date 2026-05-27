@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.entity.metadata.avatar.MannequinMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.player.ResolvableProfile;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.timer.ExecutionType;
@@ -43,7 +44,7 @@ public class AscentNpc {
     public void spawn() {
         System.out.println("[NpcSpawn] Queueing spawn for " + definition.id() + " at " + position);
         
-        CompletableFuture<net.minestom.server.instance.Chunk> chunkFuture;
+        CompletableFuture<Chunk> chunkFuture;
         try {
             chunkFuture = definition.instance().loadChunk(position);
         } catch (Exception e) {

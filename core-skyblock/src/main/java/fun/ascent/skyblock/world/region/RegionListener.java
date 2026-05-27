@@ -65,8 +65,33 @@ public class RegionListener {
         visited.add(region.name());
         visitedRegions.setValue(visited);
 
-        String[] features = getFeaturesForRegion(region);
-        displayNewZone(player, region, features);
+        if (region == RegionType.PRIVATE_ISLAND) {
+            displayIslandWelcome(player);
+        } else {
+            String[] features = getFeaturesForRegion(region);
+            displayNewZone(player, region, features);
+        }
+    }
+
+    private static void displayIslandWelcome(SkyblockPlayer player) {
+        String username = player.getUsername();
+        int usernameLength = username.length();
+        int greetingPadding = Math.max(0, (56 - (21 + usernameLength)) / 2);
+        String greetingSpaces = " ".repeat(greetingPadding);
+
+        player.sendMessage(text("<yellow><bold>" + "■".repeat(60)));
+        player.sendMessage(Component.empty());
+        player.sendMessage(text(greetingSpaces + "<white><bold>Welcome to SkyBlock, <green><!bold>" + username + "<white><bold>!"));
+        player.sendMessage(Component.empty());
+        player.sendMessage(text("     <yellow>This is your island! The SkyBlock universe has"));
+        player.sendMessage(text("      <yellow>many lands to discover, secrets to uncover,"));
+        player.sendMessage(text("      <yellow>and people to meet. Collect resources, craft"));
+        player.sendMessage(text("       <yellow>items, and complete objectives to advance"));
+        player.sendMessage(text("               <yellow>your way through SkyBlock."));
+        player.sendMessage(Component.empty());
+        player.sendMessage(text("                       <white>Have fun!"));
+        player.sendMessage(text("<yellow><bold>" + "■".repeat(60)));
+        player.sendMessage(Component.empty());
     }
 
     private static void displayNewZone(SkyblockPlayer player, RegionType region, String... features) {
@@ -74,10 +99,8 @@ public class RegionListener {
         player.sendMessage(text("<gold><bold> NEW AREA DISCOVERED!"));
         player.sendMessage(text("<gray>  ⏣ " + region.getColor() + region.getName()));
         player.sendMessage(Component.empty());
-        if (features.length > 0) {
-            for (String feature : features) {
-                player.sendMessage(text("<gray>   ⬛ <white>" + feature));
-            }
+        for (String feature : features) {
+            player.sendMessage(text("<gray>   ⬛ <white>" + feature));
         }
         player.sendMessage(Component.empty());
 
