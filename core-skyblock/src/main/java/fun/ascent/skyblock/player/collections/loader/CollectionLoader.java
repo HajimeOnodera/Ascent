@@ -74,6 +74,14 @@ public class CollectionLoader {
                         CollectionUnlock unlock = parseUnlock(action);
                         if (unlock != null) unlocks.add(unlock);
                     }
+                    // Sort unlocks so that RecipeUnlock is first
+                    unlocks.sort((u1, u2) -> {
+                        boolean isRecipe1 = u1 instanceof RecipeUnlock;
+                        boolean isRecipe2 = u2 instanceof RecipeUnlock;
+                        if (isRecipe1 && !isRecipe2) return -1;
+                        if (!isRecipe1 && isRecipe2) return 1;
+                        return 0;
+                    });
                 }
                 rewards.add(new CollectionCategory.CollectionReward(rewardEntry.getAmount(), unlocks));
             }

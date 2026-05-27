@@ -17,7 +17,22 @@ public class RecipeUnlock extends CollectionUnlock {
         String name = (item != null) ? item.getDisplayName() : ItemRegistry.formatName(recipeName);
         name = name.replaceAll("<[^>]*>", "");
         name = name.replaceAll("§[0-9a-fk-orA-FK-OR]", "");
-        return "§f" + name + " §8Recipe";
+
+        String color = "§f";
+        if (item != null && item.getRarity() != null) {
+            color = switch (item.getRarity()) {
+                case COMMON -> "§f";
+                case UNCOMMON -> "§a";
+                case RARE -> "§9";
+                case EPIC -> "§5";
+                case LEGENDARY -> "§6";
+                case MYTHIC -> "§d";
+                case DIVINE -> "§b";
+                case SPECIAL, VERY_SPECIAL -> "§c";
+                case ULTIMATE, ADMIN -> "§4";
+            };
+        }
+        return color + name + " §8Recipe";
     }
 
     @Override

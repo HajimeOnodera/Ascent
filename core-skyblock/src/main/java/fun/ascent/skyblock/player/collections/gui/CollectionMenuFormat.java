@@ -35,7 +35,7 @@ public final class CollectionMenuFormat {
 
         lore.add(text(
                 "<green><strikethrough>" + "─".repeat(Math.min(filled, PROGRESS_BAR_SEGMENTS))
-                        + "<dark_gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
+                        + "<gray><strikethrough>" + "─".repeat(Math.max(PROGRESS_BAR_SEGMENTS - filled, 0))
                         + "<reset> <yellow>" + formatNumber(current)
                         + "<gold>/<yellow>" + formatRequirement(requirement)
         ));
