@@ -42,17 +42,14 @@ public class SkillListeners {
 
         SkillType type = event.skillType();
         double gained = event.xpGained();
-        double xpInLevel = profileData.skillData.getXpIntoCurrentLevel(type);
-        Integer nextLevel = profileData.skillData.getNextLevel(type);
 
-        String xpStr = gained % 1 == 0 ? String.format("%.0f", gained) : String.format("%.1f", gained);
-        String progressStr = nextLevel != null
-                ? String.format("%.0f/%.0f", xpInLevel, (double) type.definition().rewardAt(nextLevel).xpRequired())
-                : "MAX";
+        String xpStr = gained % 1 == 0 ? String.format(Locale.US, "%.0f", gained) : String.format(Locale.US, "%.1f", gained);
+        double progress = profileData.skillData.getProgressToNextLevel(type);
+        String pctStr = String.format(Locale.US, "%.2f", progress * 100) + "%";
 
         ActionBar.of(player.getUuid()).addReplacement(
-                ActionBar.Section.MANA,
-                "<dark_aqua>+" + xpStr + " " + type.getDisplayName() + " XP <dark_gray>(" + progressStr + ")",
+                ActionBar.Section.DEFENSE,
+                "<dark_aqua>+" + xpStr + " " + type.getDisplayName() + " (" + pctStr + ")",
                 60, 10
         );
     }
