@@ -122,7 +122,7 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 lore.add(Component.empty());
                 lore.add(miniMessage().deserialize("<gray>Progress to Level " + nextLevel + ":").decoration(TextDecoration.ITALIC, false));
 
-                int totalBars = 15;
+                int totalBars = 12;
                 double percent = plProfile.level.progress.reqProgress == 0 ? 0 : (double) plProfile.level.progress.curProgress / plProfile.level.progress.reqProgress;
                 int completed = (int) Math.round(percent * totalBars);
                 completed = Math.clamp(completed, 0, totalBars);

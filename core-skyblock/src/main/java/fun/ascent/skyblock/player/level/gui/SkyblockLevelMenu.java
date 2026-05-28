@@ -12,6 +12,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
+import fun.ascent.common.item.ItemStackCreator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,8 +181,8 @@ public class SkyblockLevelMenu {
         if (level == currentLevel + 1) {
             lore.add(Component.empty());
             lore.add(text("<gray>Progress to Level Up:"));
-            String bar = getProgressBar(currentXp, 100, 15);
-            lore.add(text(bar + " <yellow>" + (int) currentXp + "</yellow><gray>/</gray><green>100 XP</green>"));
+            String bar = getProgressBar(currentXp, 100, 12);
+            lore.add(text(bar + " <aqua>" + (int) currentXp + "</aqua><dark_gray>/</dark_gray><aqua>100 XP</aqua>"));
         }
 
         lore.add(Component.empty());
@@ -191,9 +192,9 @@ public class SkyblockLevelMenu {
         }
         lore.add(text("<yellow>Click to view rewards!"));
 
-        return ItemStack.builder(material)
+        return ItemStackCreator.clearAttributes(ItemStack.builder(material)
                 .customName(text(levelColor + "Level " + level))
-                .lore(lore)
+                .lore(lore))
                 .build();
     }
 

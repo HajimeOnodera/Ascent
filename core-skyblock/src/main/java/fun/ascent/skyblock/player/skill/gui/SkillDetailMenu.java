@@ -1,11 +1,13 @@
 package fun.ascent.skyblock.player.skill.gui;
 
+import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.skill.SkillDefinition;
 import fun.ascent.skyblock.player.skill.SkillReward;
 import fun.ascent.skyblock.player.skill.SkillType;
+import fun.ascent.skyblock.player.bestiary.gui.BestiaryMenuFormat;
 import fun.ascent.skyblock.player.bestiary.gui.BestiaryOverviewMenu;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -117,7 +119,7 @@ public class SkillDetailMenu {
         lore.add(text("<gray>View all rewards for this"));
         lore.add(text("<gray>Skill below."));
 
-        return ItemStack.builder(def.icon())
+        return ItemStackCreator.clearAttributes(ItemStack.builder(def.icon()))
                 .customName(text("<green>" + def.name() + " Skill"))
                 .lore(lore)
                 .build();
@@ -153,7 +155,7 @@ public class SkillDetailMenu {
 
     private static ItemStack buildBestiaryItem(ProfilePlayer profileData) {
         var progress = profileData.getBestiaryProgress();
-        List<Component> lore = new ArrayList<>(fun.ascent.skyblock.player.bestiary.gui.BestiaryMenuFormat.overallLore(progress));
+        List<Component> lore = new ArrayList<>(BestiaryMenuFormat.overallLore(progress));
         lore.add(Component.text(" "));
         lore.add(text("<yellow>Click to view!"));
 

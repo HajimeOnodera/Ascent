@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.skill.gui;
 
+import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.skill.SkillReward;
 import fun.ascent.skyblock.player.skill.SkillType;
@@ -60,7 +61,7 @@ final class SkillMenuFormat {
     }
 
     static ItemStack infoButton() {
-        return ItemStack.builder(Material.DIAMOND_SWORD)
+        return ItemStackCreator.clearAttributes(ItemStack.builder(Material.DIAMOND_SWORD))
                 .customName(text("<green>Skills"))
                 .lore(List.of(
                         text("<gray>View your Skill progression"),

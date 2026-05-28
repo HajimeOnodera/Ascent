@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.player.skill.gui;
 
+import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
@@ -27,7 +28,7 @@ public class SkillOverviewMenu {
     private static final int CLOSE_SLOT = 49;
 
     public static void open(SkyblockPlayer player) {
-        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "<green>Skills");
+        Inventory inv = new Inventory(InventoryType.CHEST_6_ROW, "Your Skills");
 
         SkillMenuFormat.fill(inv);
         inv.setItemStack(INFO_SLOT, SkillMenuFormat.infoButton());
@@ -92,7 +93,7 @@ public class SkillOverviewMenu {
         lore.add(Component.text(" "));
         lore.add(text("<yellow>Click to view!"));
 
-        return ItemStack.builder(type.definition().icon())
+        return ItemStackCreator.clearAttributes(ItemStack.builder(type.definition().icon()))
                 .customName(text(SkillMenuFormat.skillNameWithLevel(type, level)))
                 .lore(lore)
                 .build();

@@ -10,7 +10,6 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
