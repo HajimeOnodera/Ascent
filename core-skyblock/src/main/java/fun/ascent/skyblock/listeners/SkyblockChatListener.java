@@ -3,6 +3,7 @@ package fun.ascent.skyblock.listeners;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.User;
 import fun.ascent.common.user.UserManager;
+import fun.ascent.skyblock.player.level.gui.SkyblockLevelEmblemsMenu;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.player.PlayerChatEvent;
 import net.kyori.adventure.text.Component;
@@ -32,11 +33,20 @@ public class SkyblockChatListener {
             Component displayName = user.getDisplayName();
 
             int sbLevel = 0;
+            String activeEmblem = "";
             if (event.getPlayer() instanceof SkyblockPlayer sp && sp.getActiveProfileData() != null) {
                 sbLevel = sp.getActiveProfileData().level.curLevel;
+                activeEmblem = sp.getTag(SkyblockLevelEmblemsMenu.ACTIVE_EMBLEM_TAG);
+                if (activeEmblem == null) {
+                    activeEmblem = "";
+                }
+            }
+            String levelStr = String.valueOf(sbLevel);
+            if (!activeEmblem.isEmpty()) {
+                levelStr += " " + activeEmblem;
             }
             String levelColor = SkyblockLevel.getLevelColour(sbLevel);
-            Component levelPrefix = text("<dark_gray>[" + levelColor + sbLevel + "<dark_gray>] ");
+            Component levelPrefix = text("<dark_gray>[" + levelColor + levelStr + "<dark_gray>] ");
             Component finalDisplayName = levelPrefix.append(displayName);
 
             String messageColor = (user.getRank() == Rank.DEFAULT) ? "<gray>" : "<white>";

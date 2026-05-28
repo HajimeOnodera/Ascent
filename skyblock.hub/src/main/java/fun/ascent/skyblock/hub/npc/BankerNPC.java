@@ -8,9 +8,11 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.quest.ActiveQuest;
 import fun.ascent.skyblock.quest.QuestData;
 import fun.ascent.skyblock.quest.impl.QuestTalkToBanker;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.timer.TaskSchedule;
 
 import java.util.Map;
 
@@ -46,9 +48,17 @@ public record BankerNPC(Instance instance) implements NpcDefinition {
             Map.Entry<ActiveQuest, Boolean> entry = questData.getQuest(QuestTalkToBanker.class);
             if (entry != null && !entry.getValue()) {
                 sp.sendMessage("§e[NPC] Banker§f: Hello there!");
-                sp.sendMessage("§e[NPC] Banker§f: You may want to store your §6Coins §fin a safe place while you are off adventuring.");
-                sp.sendMessage("§e[NPC] Banker§f: Storing them in your §6Bank §fkeeps them safe and allows you to earn interest at the start of every season!");
-                questData.endQuest(QuestTalkToBanker.class);
+
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                    sp.sendMessage("§e[NPC] Banker§f: You may want to store your §6Coins §fin a safe place while you are off adventuring.");
+                }).delay(TaskSchedule.tick(30)).schedule();
+
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                    sp.sendMessage("§e[NPC] Banker§f: Storing them in your §6Bank §fkeeps them safe and allows you to earn interest at the start of every season!");
+                    questData.endQuest(QuestTalkToBanker.class);
+                    new GUIBanker().open(sp);
+                }).delay(TaskSchedule.tick(60)).schedule();
+
                 return;
             }
         }

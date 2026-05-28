@@ -14,7 +14,7 @@ public class QuestTalkJerry extends Quest {
 
     @QuestEvent
     public void onJerryClicked(JerryClickedEvent event) {
-        SkyblockPlayer player = event.getPlayer();
+        SkyblockPlayer player = event.player();
         if (player.getActiveProfileData() == null) return;
 
         QuestData data = player.getActiveProfileData().getQuestData();

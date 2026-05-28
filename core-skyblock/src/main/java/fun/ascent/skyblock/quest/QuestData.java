@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.quest;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.world.region.RegionType;
 import lombok.Getter;
 import lombok.Setter;
 import org.slf4j.Logger;
@@ -99,10 +100,6 @@ public class QuestData {
 
         ActiveQuest activeQuest = activeQuestOpt.get();
         Quest quest = getQuestFromCache(questID);
-        if (quest != null) {
-            quest.onEnd(getSkyblockPlayer(), activeQuest.getCustomData(), activeQuest);
-        }
-
         activeQuest.setEndedTime(System.currentTimeMillis());
         activeQuests.remove(activeQuest);
         completedQuests.add(activeQuest);
@@ -131,6 +128,10 @@ public class QuestData {
                         Sound.Source.PLAYER, 0.5f, 1.2f));
             }
         }
+
+        if (quest != null) {
+            quest.onEnd(getSkyblockPlayer(), activeQuest.getCustomData(), activeQuest);
+        }
     }
 
     public void endQuest(Class<? extends Quest> questClass) {
@@ -144,6 +145,15 @@ public class QuestData {
         String questID = getQuestIDFromClass(questClass);
         if (questID == null) return;
         activeQuests.removeIf(quest -> quest.getQuestID().equals(questID));
+    }
+
+    public void cancelIslandOnlyQuests() {
+        activeQuests.removeIf(aq -> {
+            Quest quest = getQuestFromCache(aq.getQuestID());
+            if (quest == null) return false;
+            Set<RegionType> regions = quest.getValidRegions();
+            return regions != null && regions.size() == 1 && regions.contains(RegionType.PRIVATE_ISLAND);
+        });
     }
 
     public @Nullable QuestProgress getAsProgressQuest(String questID) {

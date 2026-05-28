@@ -28,6 +28,9 @@ public class QuestBreakLog extends Quest {
         if (!(event.getPlayer() instanceof SkyblockPlayer sp)) return;
         if (sp.getActiveProfileData() == null) return;
 
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        if (!serverType.equalsIgnoreCase("ISLAND")) return;
+
         QuestData data = sp.getActiveProfileData().getQuestData();
         if (!data.isCurrentlyActive(QuestBreakLog.class) && !data.hasCompleted(QuestBreakLog.class)) {
             data.startQuest(QuestBreakLog.class);

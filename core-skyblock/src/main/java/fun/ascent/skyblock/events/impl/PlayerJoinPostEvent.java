@@ -72,7 +72,7 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
                                     RedisManager.get().setTransferTarget(player.getUuid().toString(), "island");
                                 }
                                 ProxyTransfer.send(player, targetServer);
-                                return; // Stop local spawn initialization
+                                return;
                             } else {
                                 player.sendMessage(text("<red>Island server is currently offline! Spawning you locally."));
                             }
@@ -88,7 +88,7 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
                                     RedisManager.get().setTransferTarget(player.getUuid().toString(), "hub");
                                 }
                                 ProxyTransfer.send(player, targetServer);
-                                return; // Stop local spawn initialization
+                                return;
                             } else {
                                 player.sendMessage(text("<red>SkyBlock Hub is currently offline! Staying on island."));
                             }
@@ -97,11 +97,17 @@ public class PlayerJoinPostEvent extends SEvent<PlayerSpawnEvent> {
                 }
 
                 // 3. Quest Initialization
-                if (player.getActiveProfileData() != null) {
+                if (player.getActiveProfileData() != null && serverType.equalsIgnoreCase("ISLAND")) {
                     QuestData questData = player.getActiveProfileData().getQuestData();
                     if (questData.getActiveQuests().isEmpty() && questData.getCompletedQuests().isEmpty()) {
                         questData.startQuest(QuestBreakLog.class);
                     }
+                }
+
+                // 4. Cancel island-only quests when on Hub
+                if (player.getActiveProfileData() != null && !serverType.equalsIgnoreCase("ISLAND")) {
+                    QuestData questData = player.getActiveProfileData().getQuestData();
+                    questData.cancelIslandOnlyQuests();
                 }
 
                 SkyblockProfile activeProfile = player.getActiveProfile();

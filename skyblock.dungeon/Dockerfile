@@ -1,7 +1,7 @@
 FROM amazoncorretto:25-alpine
 WORKDIR /app
 COPY skyblock.dungeon/build/libs/SkyblockDungeon.jar .
-COPY core-skyblock/akyblockResources/ ./core-skyblock/akyblockResources/
+COPY skyblock.dungeon/akyblockResources/ ./skyblock.dungeon/akyblockResources/
 COPY maps/ ./maps
 COPY configuration/ ./configuration/
 COPY proxy/forwarding.secret ./forwarding.secret

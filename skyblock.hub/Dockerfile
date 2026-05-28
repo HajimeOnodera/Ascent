@@ -3,7 +3,7 @@ WORKDIR /app
 COPY skyblock.hub/build/libs/SkyblockHub.jar .
 COPY maps/ ./maps
 COPY configuration/ ./configuration/
-COPY core-skyblock/akyblockResources/ ./core-skyblock/akyblockResources/
+COPY skyblock.dungeon/akyblockResources/ ./skyblock.dungeon/akyblockResources/
 COPY proxy/forwarding.secret ./forwarding.secret
 
 # Environment variables

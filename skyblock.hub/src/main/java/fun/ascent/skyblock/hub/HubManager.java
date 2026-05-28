@@ -47,7 +47,6 @@ public class HubManager {
                 .setUrls(org.reflections.util.ClasspathHelper.forPackage("fun.ascent.skyblock.hub.npc", HubManager.class.getClassLoader()))
                 .addClassLoaders(HubManager.class.getClassLoader()));
         Set<Class<? extends NpcDefinition>> npcs = reflections.getSubTypesOf(NpcDefinition.class);
-        LOGGER.info("Trying to spawn {} NPCs in Hub", npcs.size());
 
         java.util.Set<String> spawned = new java.util.HashSet<>();
         for (Class<? extends NpcDefinition> npc : npcs) {
@@ -63,14 +62,11 @@ public class HubManager {
                 NpcDefinition definition = constructor.newInstance(instance);
 
                 if (SkyblockNPCManager.getNPCbyID(definition.id()) != null) {
-                    LOGGER.warn("NPC {} is already registered, skipping...", definition.id());
                     continue;
                 }
 
                 AscentNpc newNpc = new AscentNpc(definition);
                 SkyblockNPCManager.registerNPC(newNpc);
-
-                LOGGER.info("Spawned Hub NPC: {} at {}", npc.getSimpleName(), newNpc.position());
             } catch (Exception e) {
                 LOGGER.error("Failed to spawn Hub NPC: {}", npc.getSimpleName(), e);
             }
