@@ -3,6 +3,9 @@ package fun.ascent.skyblock.menus.gui.profiles;
 import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;
 import fun.ascent.common.item.ItemStackCreator;
+import fun.ascent.common.redis.RedisManager;
+import fun.ascent.common.redis.ServerLookup;
+import fun.ascent.common.util.ProxyTransfer;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
@@ -102,22 +105,22 @@ public class GUIProfileCreate extends InventoryGUI {
 
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
         if (serverType.equalsIgnoreCase("HUB")) {
-            String targetServer = fun.ascent.common.redis.ServerLookup.findAnyByPrefix("island");
+            String targetServer = ServerLookup.findAnyByPrefix("island");
             if (targetServer != null) {
-                fun.ascent.skyblock.player.profiles.ProfileManager.saveProfile(profile.profileID);
-                if (fun.ascent.common.redis.RedisManager.isInitialized()) {
-                    fun.ascent.common.redis.RedisManager.get().setTransferTarget(player.getUuid().toString(), "island");
+                ProfileManager.saveProfile(profile.profileID);
+                if (RedisManager.isInitialized()) {
+                    RedisManager.get().setTransferTarget(player.getUuid().toString(), "island");
                 }
-                fun.ascent.common.util.ProxyTransfer.send(player, targetServer);
+                ProxyTransfer.send(player, targetServer);
             }
         } else {
-            String targetServer = fun.ascent.common.redis.ServerLookup.findAnyByPrefix("skyblock");
+            String targetServer = ServerLookup.findAnyByPrefix("skyblock");
             if (targetServer != null) {
-                fun.ascent.skyblock.player.profiles.ProfileManager.saveProfile(profile.profileID);
-                if (fun.ascent.common.redis.RedisManager.isInitialized()) {
-                    fun.ascent.common.redis.RedisManager.get().setTransferTarget(player.getUuid().toString(), "hub");
+                ProfileManager.saveProfile(profile.profileID);
+                if (RedisManager.isInitialized()) {
+                    RedisManager.get().setTransferTarget(player.getUuid().toString(), "hub");
                 }
-                fun.ascent.common.util.ProxyTransfer.send(player, targetServer);
+                ProxyTransfer.send(player, targetServer);
             }
         }
     }

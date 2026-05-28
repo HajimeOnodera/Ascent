@@ -25,7 +25,7 @@ import static fun.ascent.common.StringUtility.commaify;
 
 public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI {
 
-    private static final int[] SLOTS = {11, 12, 13, 14};
+    private static final int[] SLOTS = {11, 12, 13, 14, 15};
 
     public GUIProfileManagement() {
         super("Profile Management", InventoryType.CHEST_4_ROW);
@@ -44,12 +44,63 @@ public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI 
     public void refreshItems(Player player) {
         if (!(player instanceof SkyblockPlayer sp)) return;
 
+        fun.ascent.common.user.Rank playerRank = fun.ascent.common.user.UserManager.getUser(player.getUuid()).getRank();
+        int maxAllowed = 2;
+        if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.ADMIN)) {
+            maxAllowed = 5;
+        } else if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.MVP_PLUS)) {
+            maxAllowed = 4;
+        } else if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.VIP)) {
+            maxAllowed = 3;
+        }
+
         List<SkyblockProfile> profilesList = new ArrayList<>(sp.getPlayerProfiles().values());
         profilesList.sort(Comparator.comparing(p -> p.profileName));
 
         for (int i = 0; i < SLOTS.length; i++) {
             int slot = SLOTS[i];
-            if (i < profilesList.size()) {
+            
+            // Check rank limit locks
+            boolean isLocked = false;
+            String requiredRankName = "";
+            String requiredRankColor = "";
+
+            if (i == 2) {
+                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.VIP);
+                requiredRankName = "[VIP]";
+                requiredRankColor = "<green>";
+            } else if (i == 3) {
+                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.MVP_PLUS);
+                requiredRankName = "[MVP<red>+<aqua>]";
+                requiredRankColor = "<aqua>";
+            } else if (i == 4) {
+                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.ADMIN);
+                requiredRankName = "[ADMIN]";
+                requiredRankColor = "<red>";
+            }
+
+            if (isLocked) {
+                final String finalRankColor = requiredRankColor;
+                final String finalRankName = requiredRankName;
+                set(new GUIClickableItem(slot) {
+                    @Override
+                    public void run(InventoryPreClickEvent e, Player pl) {
+                        pl.playSound(Sound.sound(Key.key("block.note_block.bass"), Sound.Source.PLAYER, 0.5f, 0.5f));
+                        pl.sendMessage(text("<red>This profile slot is locked! Upgrade your rank to unlock it."));
+                    }
+
+                    @Override
+                    public ItemStack.Builder getItem(Player pl) {
+                        List<Component> lore = new ArrayList<>();
+                        lore.add(text("<gray>Unavailable"));
+                        lore.add(Component.empty());
+                        lore.add(text("<gray>Requires: " + finalRankColor + finalRankName));
+                        lore.add(text("<gold>https://store.hypixel.net"));
+
+                        return ItemStackCreator.getStack("<red>Locked profile slot", Material.BEDROCK, 1, lore);
+                    }
+                });
+            } else if (i < profilesList.size()) {
                 SkyblockProfile profile = profilesList.get(i);
                 boolean isActive = profile.profileID.equals(sp.getActiveProfile().profileID);
                 ProfilePlayer pp = profile.getPlayer(sp);
@@ -96,12 +147,13 @@ public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI 
                 }
             } else {
                 // Empty profile slot
+                final int finalMax = maxAllowed;
                 set(new GUIClickableItem(slot) {
                     @Override
                     public void run(InventoryPreClickEvent e, Player pl) {
-                        if (profilesList.size() >= 4) {
+                        if (profilesList.size() >= finalMax) {
                             pl.playSound(Sound.sound(Key.key("block.note_block.bass"), Sound.Source.PLAYER, 0.5f, 0.5f));
-                            pl.sendMessage(text("<red>You have reached the maximum limit of 4 profiles!"));
+                            pl.sendMessage(text("<red>You have reached the maximum limit of " + finalMax + " profiles!"));
                             return;
                         }
                         new GUIProfileCreate().open(pl);
