@@ -94,13 +94,12 @@ public class SkyblockPlayer extends Player {
                 this.activeProfileData = pp;
                 this.activeProfileData.skyblockPlayer = this;
 
-                // Clear inventory and equipment slots to prevent items carrying over between profiles
                 getInventory().clear();
                 setEquipment(EquipmentSlot.BOOTS, ItemStack.AIR);
                 setEquipment(EquipmentSlot.LEGGINGS, ItemStack.AIR);
                 setEquipment(EquipmentSlot.CHESTPLATE, ItemStack.AIR);
                 setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
-                setEquipment(EquipmentSlot.HAND, ItemStack.AIR);
+                setEquipment(EquipmentSlot.MAIN_HAND, ItemStack.AIR);
                 setEquipment(EquipmentSlot.OFF_HAND, ItemStack.AIR);
 
                 pp.getDataHandler().syncToPlayer(this);
