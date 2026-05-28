@@ -51,6 +51,7 @@ public class GUIProfileCreate extends InventoryGUI {
                 pl.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1f));
                 pl.sendMessage(text("<green>Created new profile: <gold>" + newProfile.profileName));
                 pl.closeInventory();
+                transferPlayerToIsland(sp);
             }
 
             @Override
@@ -93,5 +94,31 @@ public class GUIProfileCreate extends InventoryGUI {
     @Override
     public void onBottomClick(InventoryPreClickEvent e) {
         e.setCancelled(true);
+    }
+
+    private void transferPlayerToIsland(SkyblockPlayer player) {
+        SkyblockProfile profile = player.getActiveProfile();
+        if (profile == null) return;
+
+        String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
+        if (serverType.equalsIgnoreCase("HUB")) {
+            String targetServer = fun.ascent.common.redis.ServerLookup.findAnyByPrefix("island");
+            if (targetServer != null) {
+                fun.ascent.skyblock.player.profiles.ProfileManager.saveProfile(profile.profileID);
+                if (fun.ascent.common.redis.RedisManager.isInitialized()) {
+                    fun.ascent.common.redis.RedisManager.get().setTransferTarget(player.getUuid().toString(), "island");
+                }
+                fun.ascent.common.util.ProxyTransfer.send(player, targetServer);
+            }
+        } else {
+            String targetServer = fun.ascent.common.redis.ServerLookup.findAnyByPrefix("skyblock");
+            if (targetServer != null) {
+                fun.ascent.skyblock.player.profiles.ProfileManager.saveProfile(profile.profileID);
+                if (fun.ascent.common.redis.RedisManager.isInitialized()) {
+                    fun.ascent.common.redis.RedisManager.get().setTransferTarget(player.getUuid().toString(), "hub");
+                }
+                fun.ascent.common.util.ProxyTransfer.send(player, targetServer);
+            }
+        }
     }
 }
