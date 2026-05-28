@@ -1,14 +1,35 @@
-# Run stage only - build JAR locally with: ./gradlew :core-lobby:shadowJar
+# Stage 1: Build stage
+FROM amazoncorretto:25-alpine AS builder
+WORKDIR /builder
+
+# Install bash and findutils for Gradle Wrapper
+RUN apk add --no-cache bash findutils
+
+# Copy gradle configuration files
+COPY gradle/ ./gradle
+COPY gradlew build.gradle.kts settings.gradle.kts global_config.json ./
+COPY commons/ ./commons
+COPY database/ ./database
+COPY core-lobby/ ./core-lobby
+
+# Build the lobby shadow jar
+RUN ./gradlew :core-lobby:shadowJar
+
+# Stage 2: Run stage
 FROM amazoncorretto:25-alpine
 WORKDIR /app
-COPY core-lobby/build/libs/CoreLobby.jar .
+
+# Copy built jar and forwarding secret
+COPY --from=builder /builder/core-lobby/build/libs/CoreLobby.jar .
+COPY --from=builder /builder/proxy/forwarding.secret ./forwarding.secret
+
+# Copy game maps
 COPY maps/ ./maps
-COPY proxy/forwarding.secret ./forwarding.secret
 
-# Environment variables
-ENV MONGODB_URI=mongodb://host.docker.internal:27017
-ENV REDIS_HOST=host.docker.internal
+# Environment variables (Dynamically set by Railway/Docker)
+ENV REDIS_HOST=127.0.0.1
 ENV REDIS_PORT=6379
+ENV MONGODB_URI=
 
-EXPOSE 25565
+EXPOSE 25567
 CMD ["java", "-jar", "CoreLobby.jar"]
