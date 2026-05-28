@@ -28,6 +28,7 @@ import net.minestom.server.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fun.ascent.common.StringUtility.text;
 import static net.kyori.adventure.text.minimessage.MiniMessage.*;
 
 @SuppressWarnings("deprecation")
@@ -111,7 +112,6 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 int level = plProfile.level.curLevel;
                 int nextLevel = level + 1;
                 String curLevelDisplay = "<dark_gray>[" + SkyblockLevel.getLevelColour(level) + level + "<dark_gray>]";
-                String nextLevelDisplay = "<dark_gray>[" + SkyblockLevel.getLevelColour(nextLevel) + nextLevel + "<dark_gray>]";
 
                 lore.add(miniMessage().deserialize("<gray>Your SkyBlock Level: " + curLevelDisplay).decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
@@ -120,15 +120,17 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 lore.add(miniMessage().deserialize("<gray>rewards from completing unique").decoration(TextDecoration.ITALIC, false));
                 lore.add(miniMessage().deserialize("<gray>tasks.").decoration(TextDecoration.ITALIC, false));
                 lore.add(Component.empty());
-                lore.add(miniMessage().deserialize("<gray>Progress to Level " + nextLevelDisplay).decoration(TextDecoration.ITALIC, false));
+                lore.add(miniMessage().deserialize("<gray>Progress to Level " + nextLevel + ":").decoration(TextDecoration.ITALIC, false));
 
-                int totalBars = 20;
+                int totalBars = 15;
                 double percent = plProfile.level.progress.reqProgress == 0 ? 0 : (double) plProfile.level.progress.curProgress / plProfile.level.progress.reqProgress;
                 int completed = (int) Math.round(percent * totalBars);
                 completed = Math.clamp(completed, 0, totalBars);
                 int remaining = totalBars - completed;
-                String bar = "<dark_aqua>" + "▬".repeat(completed) + "<white>" + "▬".repeat(remaining) + " <aqua>" + plProfile.level.progress.curProgress + "/" + plProfile.level.progress.reqProgress + " XP";
+                String bar = "<green><st>" + "─".repeat(completed) + "</st></green><white><st>" + "─".repeat(remaining) + "</st></white> <aqua>" + plProfile.level.progress.curProgress + "/" + plProfile.level.progress.reqProgress + " XP";
                 lore.add(miniMessage().deserialize(bar).decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(text("<dark_gray>Also accessible via /levels"));
                 
                 lore.add(Component.empty());
                 lore.add(miniMessage().deserialize("<yellow>Click to view!"));
@@ -222,7 +224,7 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 int remaining = totalBars - completed;
 
                 String progressBar = "<green><strikethrough>" + "─".repeat(completed)
-                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                        + "<white><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Recipes Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));
@@ -378,7 +380,7 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                 int remaining = totalBars - completed;
 
                 String progressBar = "<green><strikethrough>" + "─".repeat(completed)
-                        + "<gray><strikethrough>" + "─".repeat(remaining)
+                        + "<white><strikethrough>" + "─".repeat(remaining)
                         + "<reset> <yellow>" + unlocked + "<gold>/<yellow>" + total;
 
                 lore.add(miniMessage().deserialize("<gray>Collections Unlocked: <yellow>" + (int) Math.round(percent) + "%").decoration(TextDecoration.ITALIC, false));

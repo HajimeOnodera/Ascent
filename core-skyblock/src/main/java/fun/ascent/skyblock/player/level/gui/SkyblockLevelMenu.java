@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.player.level.gui;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.menus.SkyblockMenu;
@@ -107,15 +108,15 @@ public class SkyblockLevelMenu {
         completed = Math.max(0, Math.min(size, completed));
 
         StringBuilder bar = new StringBuilder();
-        bar.append("<green>");
+        bar.append("<green><st>");
         for (int i = 0; i < completed; i++) {
-            bar.append("_");
+            bar.append("─");
         }
-        bar.append("</green><dark_gray>");
+        bar.append("</st></green><white><st>");
         for (int i = completed; i < size; i++) {
-            bar.append("_");
+            bar.append("─");
         }
-        bar.append("</dark_gray>");
+        bar.append("</st></white>");
         return bar.toString();
     }
 
@@ -123,8 +124,7 @@ public class SkyblockLevelMenu {
         String levelColor = SkyblockLevel.getLevelColour(level);
         Material material;
 
-        // Check if milestone level
-        fun.ascent.skyblock.player.level.SkyBlockLevelRequirement req = fun.ascent.skyblock.player.level.SkyBlockLevelRequirement.getLevel(level);
+        SkyBlockLevelRequirement req = SkyBlockLevelRequirement.getLevel(level);
         boolean isMilestone = req != null && req.isMilestone();
 
         if (level == currentLevel) {
@@ -146,7 +146,6 @@ public class SkyblockLevelMenu {
             lore.add(Component.empty());
         }
 
-        // Get unlocks display
         List<String> unlockStrings = new ArrayList<>();
         if (req != null) {
             req.getUnlocks().forEach(unlock -> {
@@ -154,7 +153,6 @@ public class SkyblockLevelMenu {
             });
         }
 
-        // If no unlocks, fallback to regular formula
         if (unlockStrings.isEmpty()) {
             unlockStrings.add("§8 +§a5 §c❤ Health");
             if (level % 5 == 0) {
@@ -179,11 +177,10 @@ public class SkyblockLevelMenu {
             lore.add(text(formatted));
         }
 
-        // Next Level shows progress bar
         if (level == currentLevel + 1) {
             lore.add(Component.empty());
             lore.add(text("<gray>Progress to Level Up:"));
-            String bar = getProgressBar(currentXp, 100, 20);
+            String bar = getProgressBar(currentXp, 100, 15);
             lore.add(text(bar + " <yellow>" + (int) currentXp + "</yellow><gray>/</gray><green>100 XP</green>"));
         }
 

@@ -92,9 +92,9 @@ public class CollectionTierMenu {
     }
 
     private static Component getProgressBar(int progress, int total) {
-        String bar = "--------------------";
+        String bar = "────────────────────";
         double ratio = (double) progress / total;
         int completed = (int) (ratio * bar.length());
-        return text("<green>" + bar.substring(0, completed) + "<gray>" + bar.substring(completed) + " <yellow>" + progress + "<gold>/<yellow>" + total);
+        return text("<green><st>" + bar.substring(0, completed) + "</st></green><gray><st>" + bar.substring(completed) + "</st></gray> <yellow>" + progress + "<gold>/<yellow>" + total);
     }
 }
