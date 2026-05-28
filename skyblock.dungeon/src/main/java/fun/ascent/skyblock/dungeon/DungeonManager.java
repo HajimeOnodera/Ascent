@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class DungeonManager {
 
-    private static final Path ROOMS_DIR = Path.of("core-skyblock", "akyblockResources", "dungeonRooms");
+    private static final Path ROOMS_DIR = Path.of("skyblock.dungeon", "akyblockResources", "dungeonRooms");
 
     private static DungeonManager instance;
 

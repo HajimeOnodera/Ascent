@@ -1,8 +1,7 @@
 package fun.ascent.skyblock.player.scoreboard;
 
 import fun.ascent.skyblock.calendar.Calendar;
-import fun.ascent.skyblock.dungeon.DungeonInstance;
-import fun.ascent.skyblock.dungeon.DungeonManager;
+import fun.ascent.skyblock.dungeon.DungeonServiceRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
@@ -135,9 +134,12 @@ public class AdvancedScoreboard {
         public List<String> render(SkyblockPlayer player) {
             String locStr = "<gray> ⏣</gray> <gray>None";
             try {
-                DungeonInstance dungeon = DungeonManager.get().getDungeon(player.getUuid());
-                if (dungeon != null && dungeon.instance() != null && dungeon.instance().equals(player.getInstance())) {
-                    locStr = "<gray> ⏣</gray> <red>The Catacombs <gray>(" + dungeon.floor().shortName() + ")";
+                String dName = null;
+                if (DungeonServiceRegistry.get() != null) {
+                    dName = DungeonServiceRegistry.get().getDungeonName(player.getUuid(), player.getInstance());
+                }
+                if (dName != null) {
+                    locStr = dName;
                 } else {
                     Region region = RegionManager.getRegion(player.getInstance(), player.getPosition());
                     if (region != null) {

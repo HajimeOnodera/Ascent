@@ -1,10 +1,8 @@
-package fun.ascent.skyblock.dungeon.commands;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.common.redis.ServerLookup;
 import fun.ascent.common.util.ProxyTransfer;
-import fun.ascent.skyblock.dungeon.DungeonFloor;
-import fun.ascent.skyblock.dungeon.DungeonInstance;
-import fun.ascent.skyblock.dungeon.DungeonManager;
+import fun.ascent.skyblock.dungeon.DungeonServiceRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfileManager;
 import net.minestom.server.command.builder.Command;
@@ -19,29 +17,25 @@ public class DungeonCommand extends Command {
 
         setDefaultExecutor((sender, _) -> {
             if (!(sender instanceof SkyblockPlayer player)) return;
-            startDungeon(player, DungeonFloor.FLOOR_7);
+            executeDungeon(player, "FLOOR_7");
         });
 
         addSyntax((sender, context) -> {
             if (!(sender instanceof SkyblockPlayer player)) return;
             String input = context.get(floorArg);
-            DungeonFloor floor = DungeonFloor.fromString(input);
-            if (floor == null) {
-                player.sendMessage("§cUnknown floor: " + input);
-                return;
-            }
-            startDungeon(player, floor);
+            executeDungeon(player, input);
         }, floorArg);
     }
 
-    private void startDungeon(SkyblockPlayer player, DungeonFloor floor) {
+    private void executeDungeon(SkyblockPlayer player, String floorInput) {
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
 
         if (serverType.equalsIgnoreCase("DUNGEON")) {
-            // We're on the dungeon server - create locally
-            DungeonInstance dungeon = DungeonManager.get().createDungeon(floor);
-            DungeonManager.get().addPlayer(player, dungeon);
-            player.sendMessage("§aTest dungeon " + floor.displayName() + ". Teleporting...");
+            if (DungeonServiceRegistry.get() != null) {
+                DungeonServiceRegistry.get().startDungeon(player, floorInput);
+            } else {
+                player.sendMessage("§cDungeon system is not initialized on this server.");
+            }
         } else {
             // Transfer to dungeon server
             String targetServer = ServerLookup.findAnyByPrefix("dungeon-");
@@ -52,7 +46,7 @@ public class DungeonCommand extends Command {
             if (player.getActiveProfile() != null) {
                 ProfileManager.saveProfile(player.getActiveProfile().profileID);
             }
-            player.sendMessage("§aTest dungeon " + floor.displayName() + ". Teleporting...");
+            player.sendMessage("§aTest dungeon. Teleporting...");
             ProxyTransfer.send(player, targetServer);
         }
     }

@@ -1,11 +1,9 @@
-package fun.ascent.skyblock.dungeon.commands;
+package fun.ascent.skyblock.dungeon;
 
 import fun.ascent.skyblock.dungeon.template.RoomTemplate;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceContainer;
@@ -23,51 +21,44 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DroomCommand extends Command {
+public class DroomCommandExecutor {
 
-    private static final Path ROOMS_DIR = Path.of("core-skyblock", "akyblockResources", "dungeonRooms");
+    private static final Path ROOMS_DIR = Path.of("skyblock.dungeon", "akyblockResources", "dungeonRooms");
     private static final int EDIT_BASE_Y = 0;
 
     private static final Map<UUID, EditSession> sessions = new ConcurrentHashMap<>();
 
-    public DroomCommand() {
-        super("droom");
-
-        var actionArg = ArgumentType.String("action");
-        var nameArg = ArgumentType.String("name");
-
-        setDefaultExecutor((sender, _) -> {
-            if (!(sender instanceof SkyblockPlayer player)) return;
+    public static void execute(SkyblockPlayer player, String action, String name) {
+        if (action == null) {
             sendHelp(player);
-        });
+            return;
+        }
 
-        addSyntax((sender, context) -> {
-            if (!(sender instanceof SkyblockPlayer player)) return;
-            String action = context.get(actionArg).toLowerCase();
+        action = action.toLowerCase();
 
-            switch (action) {
-                case "list" -> listSchematics(player);
-                case "save" -> saveSession(player, null);
-                case "leave" -> leaveSession(player);
-                default -> sendHelp(player);
+        switch (action) {
+            case "list" -> listSchematics(player);
+            case "save" -> saveSession(player, name);
+            case "leave" -> leaveSession(player);
+            case "edit" -> {
+                if (name == null) {
+                    player.sendMessage("§cUsage: /droom edit <name>");
+                    return;
+                }
+                editSchematic(player, name);
             }
-        }, actionArg);
-
-        addSyntax((sender, context) -> {
-            if (!(sender instanceof SkyblockPlayer player)) return;
-            String action = context.get(actionArg).toLowerCase();
-            String name = context.get(nameArg);
-
-            switch (action) {
-                case "edit" -> editSchematic(player, name);
-                case "save" -> saveSession(player, name);
-                case "new" -> newSchematic(player, name);
-                default -> sendHelp(player);
+            case "new" -> {
+                if (name == null) {
+                    player.sendMessage("§cUsage: /droom new <WxHxL> (e.g. 31x130x31)");
+                    return;
+                }
+                newSchematic(player, name);
             }
-        }, actionArg, nameArg);
+            default -> sendHelp(player);
+        }
     }
 
-    private void sendHelp(SkyblockPlayer player) {
+    private static void sendHelp(SkyblockPlayer player) {
         player.sendMessage("§e/droom edit <name> §7- Edit an existing .droom file");
         player.sendMessage("§e/droom new <WxHxL> §7- Create a new schematic (e.g. 31x130x31)");
         player.sendMessage("§e/droom save [name] §7- Save the current edit session");
@@ -75,7 +66,7 @@ public class DroomCommand extends Command {
         player.sendMessage("§e/droom list §7- List available .droom files");
     }
 
-    private void listSchematics(SkyblockPlayer player) {
+    private static void listSchematics(SkyblockPlayer player) {
         if (!Files.isDirectory(ROOMS_DIR)) {
             player.sendMessage("§cRooms directory not found: " + ROOMS_DIR);
             return;
@@ -101,7 +92,7 @@ public class DroomCommand extends Command {
         player.sendMessage(sb.toString());
     }
 
-    private void editSchematic(SkyblockPlayer player, String name) {
+    private static void editSchematic(SkyblockPlayer player, String name) {
         if (sessions.containsKey(player.getUuid())) {
             player.sendMessage("§cYou already have an edit session. Use /droom save or /droom leave first.");
             return;
@@ -145,7 +136,7 @@ public class DroomCommand extends Command {
         player.sendMessage("§7Pasted at §e(" + pasteX + ", " + EDIT_BASE_Y + ", " + pasteZ + ")");
     }
 
-    private void newSchematic(SkyblockPlayer player, String dimensions) {
+    private static void newSchematic(SkyblockPlayer player, String dimensions) {
         if (sessions.containsKey(player.getUuid())) {
             player.sendMessage("§cYou already have an edit session. Use /droom save or /droom leave first.");
             return;
@@ -188,7 +179,7 @@ public class DroomCommand extends Command {
         player.sendMessage("§7Use §e/droom save <name> §7to save.");
     }
 
-    private void saveSession(SkyblockPlayer player, String nameOverride) {
+    private static void saveSession(SkyblockPlayer player, String nameOverride) {
         EditSession session = sessions.get(player.getUuid());
         if (session == null) {
             player.sendMessage("§cNo active edit session. Use /droom edit <name> first.");
@@ -214,7 +205,7 @@ public class DroomCommand extends Command {
         cleanupSession(player);
     }
 
-    private void leaveSession(SkyblockPlayer player) {
+    private static void leaveSession(SkyblockPlayer player) {
         EditSession session = sessions.get(player.getUuid());
         if (session == null) {
             player.sendMessage("§cNo active edit session.");
@@ -225,7 +216,7 @@ public class DroomCommand extends Command {
         cleanupSession(player);
     }
 
-    private void cleanupSession(SkyblockPlayer player) {
+    private static void cleanupSession(SkyblockPlayer player) {
         EditSession session = sessions.remove(player.getUuid());
         if (session == null) return;
 
@@ -237,7 +228,7 @@ public class DroomCommand extends Command {
         MinecraftServer.getInstanceManager().unregisterInstance(session.instance);
     }
 
-    private void writeDroom(Path file, EditSession session) throws IOException {
+    private static void writeDroom(Path file, EditSession session) throws IOException {
         int blockCount = session.width * session.height * session.length;
         int fileSize = 5 + 1 + 12 + blockCount * 4;
 
@@ -272,7 +263,7 @@ public class DroomCommand extends Command {
         Files.write(file, buf.array());
     }
 
-    private void preloadChunks(InstanceContainer instance, int baseX, int baseZ, int width, int length) {
+    private static void preloadChunks(InstanceContainer instance, int baseX, int baseZ, int width, int length) {
         int minCX = baseX >> 4;
         int maxCX = (baseX + width - 1) >> 4;
         int minCZ = baseZ >> 4;

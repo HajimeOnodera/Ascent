@@ -1,8 +1,6 @@
 package fun.ascent.skyblock.events.impl;
 
-import fun.ascent.skyblock.dungeon.DungeonFloor;
-import fun.ascent.skyblock.dungeon.DungeonInstance;
-import fun.ascent.skyblock.dungeon.DungeonManager;
+import fun.ascent.skyblock.dungeon.DungeonServiceRegistry;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.WorldHandler;
@@ -18,11 +16,11 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
         String serverType = System.getenv().getOrDefault("ASCENT_SERVER_TYPE", "HUB");
 
         if (serverType.equalsIgnoreCase("DUNGEON")) {
-            // Create a dungeon instance for the player
-            DungeonInstance dungeon = DungeonManager.get().createDungeon(DungeonFloor.FLOOR_7);
-            DungeonManager.get().trackPlayer(player.getUuid(), dungeon);
-            event.setSpawningInstance(dungeon.instance());
-            player.setRespawnPoint(dungeon.spawnPosition());
+            if (DungeonServiceRegistry.get() != null) {
+                DungeonServiceRegistry.get().handlePlayerJoinPre(player, event);
+            } else {
+                System.err.println("[Dungeon] Dungeon system not initialized on this server!");
+            }
             return;
         }
 

@@ -21,7 +21,7 @@ import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.blocks.BlockManager;
 import fun.ascent.skyblock.cmds.CommandHandler;
 import fun.ascent.skyblock.crafting.RecipeRegistry;
-import fun.ascent.skyblock.dungeon.DungeonManager;
+import fun.ascent.skyblock.dungeon.DungeonServiceRegistry;
 import fun.ascent.skyblock.entity.mob.EntityRegistry;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.items.ItemDefinitions;
@@ -83,7 +83,9 @@ public class Main {
             IslandManager.runVacantLoop();
         }
         
-        DungeonManager.get().initialize();
+        if (DungeonServiceRegistry.get() != null) {
+            DungeonServiceRegistry.get().initialize();
+        }
 
         LOGGER.info("Core SkyBlock initialized successfully!");
     }
