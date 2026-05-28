@@ -15,6 +15,7 @@ import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.network.player.GameProfile;
@@ -92,6 +93,15 @@ public class SkyblockPlayer extends Player {
             if (pp.playerUUID.equals(getUuid())) {
                 this.activeProfileData = pp;
                 this.activeProfileData.skyblockPlayer = this;
+
+                // Clear inventory and equipment slots to prevent items carrying over between profiles
+                getInventory().clear();
+                setEquipment(EquipmentSlot.BOOTS, ItemStack.AIR);
+                setEquipment(EquipmentSlot.LEGGINGS, ItemStack.AIR);
+                setEquipment(EquipmentSlot.CHESTPLATE, ItemStack.AIR);
+                setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
+                setEquipment(EquipmentSlot.HAND, ItemStack.AIR);
+                setEquipment(EquipmentSlot.OFF_HAND, ItemStack.AIR);
 
                 pp.getDataHandler().syncToPlayer(this);
 
