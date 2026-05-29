@@ -116,7 +116,17 @@ public class BazaarEntry {
             String msg = MiniMessage.miniMessage().serialize(component);
             double sellPrice = BZPriceRegistry.getSell(child);
             double buyPrice = BZPriceRegistry.getBuy(child);
-            msg += " <gray>" + child.iconItem.getDisplayName() +
+            String name;
+            if(child.iconItem != null){
+                name = child.iconItem.getDisplayName();
+                System.err.println("ERROR: Icon Item of " + child.id + " is null");
+            }else if(child.itemToSell != null){
+                name = child.itemToSell.getDisplayName();
+                System.err.println("ERROR: Item to Sell of " + child.id + " is null");
+            }else {
+                name = "Unknown Item";
+            }
+            msg += " <gray>" + name +
             " <red>" + formatShortened(sellPrice) + "<dark_gray> | <green>" + formatShortened(buyPrice);
             lore.add(StringUtility.text(msg));
         });

@@ -85,7 +85,7 @@
               "itemName": "<blue>Box of Seeds</blue>",
               "guiSize": 4,
               "title": "<dark_gray>Wheat & Seeds ➜ Box of Seeds</dark_gray>",
-              "slot":16,
+              "slot": 16,
               "children": null
             }
           ]
@@ -148,7 +148,7 @@
           "itemName": "<yellow>Potato</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Potato</dark_gray>",
-          "slot":13,
+          "slot": 13,
           "children": [
             {
               "id": "POTATO",
@@ -250,7 +250,7 @@
           "itemName": "<yellow>Melon</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Melon</dark_gray>",
-          "slot":15 ,
+          "slot": 15,
           "children": [
             {
               "id": "MELON",
@@ -311,7 +311,7 @@
           "itemName": "<yellow>Mushrooms</yellow>",
           "guiSize": 5,
           "title": "<dark_gray>Farming ➜ Mushrooms</dark_gray>",
-          "slot":16 ,
+          "slot": 16,
           "children": [
             {
               "id": "RED_MUSHROOM",
@@ -396,124 +396,636 @@
           ]
         },
         {
-          "id": "INK_SACK:3",
+          "id": "COCOA_BEANS",
           "icon": "INK_SACK:3",
           "parent": "FARMING",
           "itemName": "<yellow>Cocoa Beans</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Cocoa Beans</dark_gray>",
           "slot": 20,
-          "children": []
+          "children": [
+            {
+              "id": "INK_SACK:3",
+              "icon": "INK_SACK:3",
+              "parent": "COCOA_BEANS",
+              "itemName": "<white>Cocoa Beans</white>",
+              "title": "<dark_gray>Farming ➜ Cocoa Beans</dark_gray>",
+              "guiSize": 4,
+              "slot": 11,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_COCOA",
+              "icon": "ENCHANTED_COCOA",
+              "parent": "COCOA_BEANS",
+              "itemName": "<GREEN>Enchanted Cocoa Beans",
+              "title": "<dark_gray>Cocoa Beans ➜ Enchanted Cocoa Beans",
+              "guiSize": 4,
+              "slot": 13,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_COOKIE",
+              "icon": "ENCHANTED_COOKIE",
+              "parent": "COCOA_BEANS",
+              "itemName": "<BLUE>Enchanted Cookie",
+              "title": "<dark_gray>Cocoa Beans ➜ Enchanted Cookie",
+              "guiSize": 4,
+              "slot": 15,
+              "children": null
+            }
+          ]
         },
         {
-          "id": "CACTUS",
+          "id": "CACTUS_CAT",
           "icon": "CACTUS",
           "parent": "FARMING",
           "itemName": "<yellow>Cactus</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Cactus</dark_gray>",
-          "slot":21 ,
-          "children": []
+          "slot": 21,
+          "children": [
+            {
+              "id": "CACTUS",
+              "icon": "CACTUS",
+              "parent": "CACTUS_CAT",
+              "itemName": "<white>Cactus",
+              "guiSize": 4,
+              "title": "<dark_gray>Farming ➜ Cactus",
+              "slot": 11,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_CACTUS_GREEN",
+              "icon": "ENCHANTED_CACTUS_GREEN",
+              "parent": "CACTUS_CAT",
+              "itemName": "<GREEN>Enchanted Cactus Green",
+              "guiSize": 4,
+              "title": "<dark_gray>Cactus ➜ Enchanted Cactus Green",
+              "slot": 13,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_CACTUS",
+              "icon": "ENCHANTED_CACTUS",
+              "parent": "CACTUS_CAT",
+              "itemName": "<blue>Enchanted Cactus",
+              "guiSize": 4,
+              "title": "<dark_gray>Cactus ➜ Enchanted Cactus",
+              "slot": 15,
+              "children": null
+            }
+          ]
         },
         {
-          "id": "SUGAR_CANE",
+          "id": "SUGARCANE",
           "icon": "SUGAR_CANE",
           "parent": "FARMING",
           "itemName": "<yellow>Sugar Cane</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Sugar Cane</dark_gray>",
           "slot": 22,
-          "children": []
+          "children": [
+            {
+              "id": "SUGAR_CANE",
+              "icon": "SUGAR_CANE",
+              "parent": "SUGARCANE",
+              "itemName": "<white>Sugar Cane</white>",
+              "guiSize": 4,
+              "title": "<dark_gray>Farming ➜ Sugar Cane</dark_gray>",
+              "slot": 10,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_SUGAR",
+              "icon": "ENCHANTED_SUGAR",
+              "parent": "SUGARCANE",
+              "itemName": "<green>Enchanted Sugar",
+              "guiSize": 4,
+              "title": "<dark_gray>Sugar Cane ➜ Enchanted Sugar</dark_gray>",
+              "slot": 12,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_PAPER",
+              "icon": "ENCHANTED_PAPER",
+              "parent": "SUGARCANE",
+              "itemName": "<green>Enchanted Paper",
+              "guiSize": 4,
+              "title": "<dark_gray>Sugar Cane ➜ Enchanted Paper</dark_gray>",
+              "slot": 14,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_SUGAR_CANE",
+              "icon": "ENCHANTED_SUGAR_CANE",
+              "parent": "SUGARCANE",
+              "itemName": "<blue>Enchanted Sugar Cane",
+              "guiSize": 4,
+              "title": "<dark_gray>Sugar Cane ➜ Enchanted Sugar Cane</dark_gray>",
+              "slot": 16,
+              "children": null
+            }
+          ]
         },
         {
-          "id": "DOUBLE_PLANT",
+          "id": "DOUBLEPLANT",
           "icon": "DOUBLE_PLANT",
           "parent": "FARMING",
           "itemName": "<yellow>Sunflower</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Sunflower</dark_gray>",
           "slot": 23,
-          "children": []
+          "children": [
+            {
+              "id": "DOUBLE_PLANT",
+              "icon": "DOUBLE_PLANT",
+              "parent": "DOUBLEPLANT",
+              "itemName": "<white>Sunflower",
+              "guiSize": 4,
+              "title": "<dark_gray>Farming ➜ Sunflower</dark_gray>",
+              "slot": 11,
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_SUNFLOWER",
+              "icon": "ENCHANTED_SUNFLOWER",
+              "parent": "DOUBLEPLANT",
+              "itemName": "<green>Enchanted Sunflower",
+              "guiSize": 4,
+              "title": "<dark_gray>Sunflower ➜ Enchanted Sunflower",
+              "slot": 13,
+              "children": null
+            },
+            {
+              "id": "COMPACTED_SUNFLOWER",
+              "icon": "COMPACTED_SUNFLOWER",
+              "parent": "DOUBLEPLANT",
+              "itemName": "<BLUE>Compacted Sunflower",
+              "guiSize": 4,
+              "title": "<dark_gray>Sunflower ➜ Compacted Sunflower",
+              "slot": 15,
+              "children": null
+            }
+          ]
         },
         {
-          "id": "MOONFLOWER",
+          "id": "MOON_FLOWER",
           "icon": "MOONFLOWER",
           "parent": "FARMING",
           "itemName": "<yellow>Moonflower</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Moonflower</dark_gray>",
           "slot": 24,
-          "children": []
+          "children": [
+            {
+              "id": "MOONFLOWER",
+              "icon": "MOONFLOWER",
+              "parent": "MOONF_LOWER",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Moonflower</white>",
+              "title": "<dark_gray>Moonflower ➜ Moonflower</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_MOONFLOWER",
+              "icon": "ENCHANTED_MOONFLOWER",
+              "parent": "MOONF_LOWER",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Moonflower</green>",
+              "title": "<dark_gray>Moonflower ➜ Enchanted Moonflower</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "COMPACTED_MOONFLOWER",
+              "icon": "COMPACTED_MOONFLOWER",
+              "parent": "MOONF_LOWER",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<blue>COMPACTED MOONFLOWER</blue>",
+              "title": "<dark_gray>Moonflower ➜ COMPACTED MOONFLOWER</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "WILD_ROSE",
+          "id": "WILDROSE",
           "icon": "WILD_ROSE",
           "parent": "FARMING",
           "itemName": "<yellow>Wild Rose</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Wild Rose</dark_gray>",
           "slot": 25,
-          "children": []
+          "children": [
+            {
+              "id": "WILD_ROSE",
+              "icon": "WILD_ROSE",
+              "parent": "WILDROSE",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Wild Rose</white>",
+              "title": "<dark_gray>Wild Rose ➜ Wild Rose</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_WILD_ROSE",
+              "icon": "ENCHANTED_WILD_ROSE",
+              "parent": "WILDROSE",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Wild Rose</green>",
+              "title": "<dark_gray>Wild Rose ➜ Enchanted Wild Rose</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "COMPACTED_WILD_ROSE",
+              "icon": "COMPACTED_WILD_ROSE",
+              "parent": "WILDROSE",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<blue>Compacted Wild Rose</blue>",
+              "title": "<dark_gray>Wild Rose ➜ Compacted Wild Rose</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "LEATHER",
+          "id": "LEATHER_CAT",
           "icon": "LEATHER",
           "parent": "FARMING",
           "itemName": "<yellow>Leather & Beef</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Leather & Beef</dark_gray>",
           "slot": 29,
-          "children": []
+          "children": [
+            {
+              "id": "LEATHER",
+              "icon": "LEATHER",
+              "parent": "LEATHER_CAT",
+              "slot": 10,
+              "guiSize": 4,
+              "itemName": "<white>Leather</white>",
+              "title": "<dark_gray>Leather & Beef ➜ Leather</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_LEATHER",
+              "icon": "ENCHANTED_LEATHER",
+              "parent": "LEATHER_CAT",
+              "slot": 12,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Leather</green>",
+              "title": "<dark_gray>Leather & Beef ➜ Enchanted Leather</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "RAW_BEEF",
+              "icon": "RAW_BEEF",
+              "parent": "LEATHER_CAT",
+              "slot": 14,
+              "guiSize": 4,
+              "itemName": "<white>Raw Beef</white>",
+              "title": "<dark_gray>Leather & Beef ➜ Raw Beef</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_RAW_BEEF",
+              "icon": "ENCHANTED_RAW_BEEF",
+              "parent": "LEATHER_CAT",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Raw Beef</green>",
+              "title": "<dark_gray>Leather & Beef ➜ Enchanted Raw Beef</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "PORK",
+          "id": "PORKCHOP",
           "icon": "PORK",
           "parent": "FARMING",
           "itemName": "<yellow>Pork</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Pork</dark_gray>",
-          "slot":30 ,
-          "children": []
+          "slot": 30,
+          "children": [
+            {
+              "id": "PORK",
+              "icon": "PORK",
+              "parent": "PORKCHOP",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Raw Porkchop</white>",
+              "title": "<dark_gray>Pork ➜ Raw Porkchop</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_PORK",
+              "icon": "ENCHANTED_PORK",
+              "parent": "PORKCHOP",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Raw Porkchop</green>",
+              "title": "<dark_gray>Pork ➜ Enchanted Raw Porkchop</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_GRILLED_PORK",
+              "icon": "ENCHANTED_GRILLED_PORK",
+              "parent": "PORKCHOP",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Cooked Porkchop</blue>",
+              "title": "<dark_gray>Pork ➜ Enchanted Cooked Porkchop</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "RAW_CHICKEN",
+          "id": "CHICKEN_FEATHERS",
           "icon": "RAW_CHICKEN",
           "parent": "FARMING",
           "itemName": "<yellow>Chicken & Feather</yellow>",
           "guiSize": 6,
           "title": "<dark_gray>Farming ➜ Chicken & Feather</dark_gray>",
           "slot": 31,
-          "children": []
+          "children": [
+            {
+              "id": "RAW_CHICKEN",
+              "icon": "RAW_CHICKEN",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Raw Chicken</white>",
+              "title": "<dark_gray>Chicken & Feather ➜ Raw Chicken</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_RAW_CHICKEN",
+              "icon": "ENCHANTED_RAW_CHICKEN",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 12,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Raw Chicken</green>",
+              "title": "<dark_gray>Chicken & Feather ➜ Enchanted Raw Chicken</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_CAKE",
+              "icon": "ENCHANTED_CAKE",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Cake</green>",
+              "title": "<dark_gray>Chicken & Feather ➜ Enchanted Cake</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "FEATHER",
+              "icon": "FEATHER",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 14,
+              "guiSize": 4,
+              "itemName": "<white>Feather</white>",
+              "title": "<dark_gray>Chicken & Feather ➜ Feather</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_FEATHER",
+              "icon": "ENCHANTED_FEATHER",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Feather</green>",
+              "title": "<dark_gray>Chicken & Feather ➜ Enchanted Feather</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "EGG",
+              "icon": "EGG",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 20,
+              "guiSize": 4,
+              "itemName": "<white>Egg</white>",
+              "title": "<dark_gray>Chicken & Feather ➜ Egg</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_EGG",
+              "icon": "ENCHANTED_EGG",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 21,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Egg</blue>",
+              "title": "<dark_gray>Chicken & Feather ➜ Enchanted Egg</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "SUPER_EGG",
+              "icon": "SUPER_EGG",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 23,
+              "guiSize": 4,
+              "itemName": "<blue>Super Enchanted Egg</blue>",
+              "title": "<dark_gray>Chicken & Feather ➜ Super Enchanted Egg</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "OMEGA_EGG",
+              "icon": "OMEGA_EGG",
+              "parent": "CHICKEN_FEATHERS",
+              "slot": 24,
+              "guiSize": 4,
+              "itemName": "<dark_purple>Omega Enchanted Egg</dark_purple>",
+              "title": "<dark_gray>Chicken & Feather ➜ Omega Enchanted Egg</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "MUTTON",
+          "id": "MUTTON_WOOL",
           "icon": "MUTTON",
           "parent": "FARMING",
           "itemName": "<yellow>Mutton & Wool</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Mutton & Wool</dark_gray>",
           "slot": 32,
-          "children": []
+          "children": [
+            {
+              "id": "MUTTON",
+              "icon": "MUTTON",
+              "parent": "MUTTON_WOOL",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Raw Mutton</white>",
+              "title": "<dark_gray>Mutton & Wool ➜ Raw Mutton</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_MUTTON",
+              "icon": "ENCHANTED_MUTTON",
+              "parent": "MUTTON_WOOL",
+              "slot": 12,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Mutton</green>",
+              "title": "<dark_gray>Mutton & Wool ➜ Enchanted Mutton</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_COOKED_MUTTON",
+              "icon": "ENCHANTED_COOKED_MUTTON",
+              "parent": "MUTTON_WOOL",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Cooked Mutton</blue>",
+              "title": "<dark_gray>Mutton & Wool ➜ Enchanted Cooked Mutton</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "WOOL",
+              "icon": "WOOL",
+              "parent": "MUTTON_WOOL",
+              "slot": 14,
+              "guiSize": 4,
+              "itemName": "<white>White Wool</white>",
+              "title": "<dark_gray>Mutton & Wool ➜ White Wool</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_WOOL",
+              "icon": "ENCHANTED_WOOL",
+              "parent": "MUTTON_WOOL",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Wool</green>",
+              "title": "<dark_gray>Mutton & Wool ➜ Enchanted Wool</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "RABBIT",
+          "id": "RABBIT_CAT",
           "icon": "RABBIT",
           "parent": "FARMING",
           "itemName": "<yellow>Rabbit</yellow>",
           "guiSize": 5,
           "title": "<dark_gray>Farming ➜ Rabbit</dark_gray>",
-          "slot":33 ,
-          "children": []
+          "slot": 33,
+          "children": [
+            {
+              "id": "RABBIT_FOOT",
+              "icon": "RABBIT_FOOT",
+              "parent": "RABBIT_CAT",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Rabbit's Foot</white>",
+              "title": "<dark_gray>Rabbit ➜ Rabbit's Foot</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_RABBIT_FOOT",
+              "icon": "ENCHANTED_RABBIT_FOOT",
+              "parent": "RABBIT_CAT",
+              "slot": 12,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Rabbit Foot</blue>",
+              "title": "<dark_gray>Rabbit ➜ Enchanted Rabbit Foot</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "RABBIT_HIDE",
+              "icon": "RABBIT_HIDE",
+              "parent": "RABBIT_CAT",
+              "slot": 14,
+              "guiSize": 4,
+              "itemName": "<white>Rabbit Hide</white>",
+              "title": "<dark_gray>Rabbit ➜ Rabbit Hide</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_RABBIT_HIDE",
+              "icon": "ENCHANTED_RABBIT_HIDE",
+              "parent": "RABBIT_CAT",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Rabbit Hide</blue>",
+              "title": "<dark_gray>Rabbit ➜ Enchanted Rabbit Hide</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "RABBIT",
+              "icon": "RABBIT",
+              "parent": "RABBIT_CAT",
+              "slot": 21,
+              "guiSize": 4,
+              "itemName": "<white>Raw Rabbit</white>",
+              "title": "<dark_gray>Rabbit ➜ Raw Rabbit</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_RABBIT",
+              "icon": "ENCHANTED_RABBIT",
+              "parent": "RABBIT_CAT",
+              "slot": 22,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Raw Rabbit</green>",
+              "title": "<dark_gray>Rabbit ➜ Enchanted Raw Rabbit</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_COOKED_RABBIT",
+              "icon": "ENCHANTED_COOKED_RABBIT",
+              "parent": "RABBIT_CAT",
+              "slot": 23,
+              "guiSize": 4,
+              "itemName": "<blue>Enchanted Cooked Rabbit</blue>",
+              "title": "<dark_gray>Rabbit ➜ Enchanted Cooked Rabbit</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
-          "id": "NETHER_STALK",
+          "id": "NETHERSTALK",
           "icon": "NETHER_STALK",
           "parent": "FARMING",
           "itemName": "<yellow>Nether Warts</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Nether Warts</dark_gray>",
           "slot": 34,
-          "children": []
+          "children": [
+            {
+              "id": "NETHER_STALK",
+              "icon": "NETHER_STALK",
+              "parent": "NETHERSTALK",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<white>Nether Wart</white>",
+              "title": "<dark_gray>Nether Warts ➜ Nether Wart</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "ENCHANTED_NETHER_STALK",
+              "icon": "ENCHANTED_NETHER_STALK",
+              "parent": "NETHERSTALK",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<green>Enchanted Nether Wart</green>",
+              "title": "<dark_gray>Nether Warts ➜ Enchanted Nether Wart</dark_gray>",
+              "children": null
+            },
+            {
+              "id": "MUTANT_NETHER_STALK",
+              "icon": "MUTANT_NETHER_STALK",
+              "parent": "NETHERSTALK",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<blue>Mutant Nether Wart</blue>",
+              "title": "<dark_gray>Nether Warts ➜ Mutant Nether Wart</dark_gray>",
+              "children": null
+            }
+          ]
         },
         {
           "id": "GARDEN",
@@ -522,8 +1034,474 @@
           "itemName": "<yellow>Garden</yellow>",
           "guiSize": 4,
           "title": "<dark_gray>Farming ➜ Garden</dark_gray>",
-          "slot":38 ,
-          "children": []
+          "slot": 38,
+          "children": [
+            {
+              "id": "RARE_CROPS",
+              "icon": "CROPIE",
+              "parent": "GARDEN",
+              "slot": 11,
+              "guiSize": 4,
+              "itemName": "<yellow>Rare Crops</yellow>",
+              "title": "<dark_gray>Garden ➜ Rare Crops</dark_gray>",
+              "children": [
+                {
+                  "id": "CROPIE",
+                  "icon": "CROPIE",
+                  "parent": "RARE_CROPS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<green>Cropie</green>",
+                  "title": "<dark_gray>Rare Crops ➜ Cropie</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "SQUASH",
+                  "icon": "SQUASH",
+                  "parent": "RARE_CROPS",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<blue>Squash</blue>",
+                  "title": "<dark_gray>Rare Crops ➜ Squash</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FERMENTO",
+                  "icon": "FERMENTO",
+                  "parent": "RARE_CROPS",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Fermento</dark_purple>",
+                  "title": "<dark_gray>Rare Crops ➜ Fermento</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CONDENSED_FERMENTO",
+                  "icon": "CONDENSED_FERMENTO",
+                  "parent": "RARE_CROPS",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Condensed Fermento</dark_purple>",
+                  "title": "<dark_gray>Rare Crops ➜ Condensed Fermento</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "HELIANTHUS",
+                  "icon": "HELIANTHUS",
+                  "parent": "RARE_CROPS",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<gold>Helianthus</gold>",
+                  "title": "<dark_gray>Rare Crops ➜ Helianthus</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CONDENSED_HELIANTHUS",
+                  "icon": "CONDENSED_HELIANTHUS",
+                  "parent": "RARE_CROPS",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<gold>Condensed Helianthus</gold>",
+                  "title": "<dark_gray>Rare Crops ➜ Condensed Helianthus</dark_gray>",
+                  "children": null
+                }
+              ]
+            },
+            {
+              "id": "SPRAYONATORS",
+              "icon": "SPRAYONATOR",
+              "parent": "GARDEN",
+              "slot": 12,
+              "guiSize": 4,
+              "itemName": "<yellow>Sprayonator</yellow>",
+              "title": "<dark_gray>Garden ➜ Sprayonator</dark_gray>",
+              "children": [
+                {
+                  "id": "COMPOST",
+                  "icon": "COMPOST",
+                  "parent": "SPRAYONATORS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<green>Compost</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Compost</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "DUNG",
+                  "icon": "DUNG",
+                  "parent": "SPRAYONATORS",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<green>Dung</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Dung</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CHEESE_FUEL",
+                  "icon": "CHEESE_FUEL",
+                  "parent": "SPRAYONATORS",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<green>Tasty Cheese</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Tasty Cheese</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "JELLY",
+                  "icon": "JELLY",
+                  "parent": "SPRAYONATORS",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<green>Jelly</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Jelly</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PLANT_MATTER",
+                  "icon": "PLANT_MATTER",
+                  "parent": "SPRAYONATORS",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<green>Plant Matter</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Plant Matter</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "HONEY_JAR",
+                  "icon": "HONEY_JAR",
+                  "parent": "SPRAYONATORS",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<green>Honey Jar</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Honey Jar</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "MOONDEW",
+                  "icon": "MOONDEW",
+                  "parent": "SPRAYONATORS",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Moondew</dark_purple>",
+                  "title": "<dark_gray>Sprayonator ➜ Moondew</dark_gray>",
+                  "children": null
+                }
+              ]
+            },
+            {
+              "id": "OTHER_GARDEN",
+              "icon": "ENCHANTED_COMPOST",
+              "parent": "GARDEN",
+              "slot": 13,
+              "guiSize": 4,
+              "itemName": "<yellow>Other</yellow>",
+              "title": "<dark_gray>Garden ➜ Other</dark_gray>",
+              "children": [
+                {
+                  "id": "ENCHANTED_COMPOST",
+                  "icon": "ENCHANTED_COMPOST",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<blue>Compost Bundle</blue>",
+                  "title": "<dark_gray>Other ➜ Compost Bundle</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "WRIGGLING_LARVA",
+                  "icon": "WRIGGLING_LARVA",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Wriggling Larva</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Wriggling Larva</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FINE_FLOUR",
+                  "icon": "FINE_FLOUR",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<green>Fine Flour</green>",
+                  "title": "<dark_gray>Other ➜ Fine Flour</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "POTTED_CACTUS",
+                  "icon": "POTTED_CACTUS",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<green>Potted Cactus</green>",
+                  "title": "<dark_gray>Other ➜ Potted Cactus</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "WARTY",
+                  "icon": "WARTY",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Warty</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Warty</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FIRE_IN_A_BOTTLE",
+                  "icon": "FIRE_IN_A_BOTTLE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<gold>Fire in a Bottle</gold>",
+                  "title": "<dark_gray>Other ➜ Fire in a Bottle</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "TOOL_EXP_CAPSULE",
+                  "icon": "TOOL_EXP_CAPSULE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<blue>Tool Exp Capsule</blue>",
+                  "title": "<dark_gray>Other ➜ Tool Exp Capsule</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PLOT_ERASER",
+                  "icon": "PLOT_ERASER",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 19,
+                  "guiSize": 4,
+                  "itemName": "<blue>Plot Eraser</blue>",
+                  "title": "<dark_gray>Other ➜ Plot Eraser</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FILLED_ROSEWATER_FLASK",
+                  "icon": "FILLED_ROSEWATER_FLASK",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 20,
+                  "guiSize": 4,
+                  "itemName": "<gold>Filled Rosewater Flask</gold>",
+                  "title": "<dark_gray>Other ➜ Filled Rosewater Flask</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PRICKLY_KISS",
+                  "icon": "PRICKLY_KISS",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 21,
+                  "guiSize": 4,
+                  "itemName": "<green>Prickly Kiss</green>",
+                  "title": "<dark_gray>Other ➜ Prickly Kiss</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "ETHEREAL_VINE",
+                  "icon": "ETHEREAL_VINE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 22,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Ethereal Vine</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Ethereal Vine</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "IRIDIUM",
+                  "icon": "IRIDIUM",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 23,
+                  "guiSize": 4,
+                  "itemName": "<gold>Iridium</gold>",
+                  "title": "<dark_gray>Other ➜ Iridium</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "DEAD_PLANT",
+                  "icon": "DEAD_PLANT",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 24,
+                  "guiSize": 4,
+                  "itemName": "<green>Dead Plant</green>",
+                  "title": "<dark_gray>Other ➜ Dead Plant</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "BACHELOR_ROSE",
+                  "icon": "BACHELOR_ROSE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 25,
+                  "guiSize": 4,
+                  "itemName": "<red>Bachelor's Rose</red>",
+                  "title": "<dark_gray>Other ➜ Bachelor's Rose</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "VISITOR_GRATITUDE",
+                  "icon": "VISITOR_GRATITUDE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 28,
+                  "guiSize": 4,
+                  "itemName": "<white>Visitor's Gratitude</white>",
+                  "title": "<dark_gray>Other ➜ Visitor's Gratitude</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "LOCUST_LARVA",
+                  "icon": "LOCUST_LARVA",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 29,
+                  "guiSize": 4,
+                  "itemName": "<green>Locust Larva</green>",
+                  "title": "<dark_gray>Other ➜ Locust Larva</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FRAGRANCED_BROWN_MUSHROOM_PASTE",
+                  "icon": "FRAGRANCED_BROWN_MUSHROOM_PASTE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 30,
+                  "guiSize": 4,
+                  "itemName": "<blue>\"Fragranced\" Brown Mushroom Paste</blue>",
+                  "title": "<dark_gray>Other ➜ \"Fragranced\" Brown Mushroom Paste</dark_gray>",
+                  "children": null
+                }
+              ]
+            },
+            {
+              "id": "GARDEN_CHIPS",
+              "icon": "VERMIN_VAPORIZER_GARDEN_CHIP",
+              "parent": "GARDEN",
+              "slot": 14,
+              "guiSize": 4,
+              "itemName": "<yellow>Garden Chips</yellow>",
+              "title": "<dark_gray>Garden ➜ Garden Chips</dark_gray>",
+              "children": [
+                {
+                  "id": "VERMIN_VAPORIZER_GARDEN_CHIP",
+                  "icon": "VERMIN_VAPORIZER_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<blue>Vermin Vaporizer Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Vermin Vaporizer Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "SYNTHESIS_GARDEN_CHIP",
+                  "icon": "SYNTHESIS_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<blue>Synthesis Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Synthesis Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "SOWLEDGE_GARDEN_CHIP",
+                  "icon": "SOWLEDGE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<blue>Sowledge Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Sowledge Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "MECHAMIND_GARDEN_CHIP",
+                  "icon": "MECHAMIND_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<blue>Mechamind Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Mechamind Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "HYPERCHARGE_GARDEN_CHIP",
+                  "icon": "HYPERCHARGE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<blue>Hypercharge Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Hypercharge Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "EVERGREEN_GARDEN_CHIP",
+                  "icon": "EVERGREEN_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<blue>Evergreen Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Evergreen Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "OVERDRIVE_GARDEN_CHIP",
+                  "icon": "OVERDRIVE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<blue>Overdrive Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Overdrive Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CROPSHOT_GARDEN_CHIP",
+                  "icon": "CROPSHOT_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 19,
+                  "guiSize": 4,
+                  "itemName": "<blue>Cropshot Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Cropshot Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "QUICKDRAW_GARDEN_CHIP",
+                  "icon": "QUICKDRAW_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 20,
+                  "guiSize": 4,
+                  "itemName": "<blue>Quickdraw Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Quickdraw Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "RAREFINDER_GARDEN_CHIP",
+                  "icon": "RAREFINDER_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 21,
+                  "guiSize": 4,
+                  "itemName": "<blue>Rarefinder Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Rarefinder Chip</dark_gray>",
+                  "children": null
+                }
+              ]
+            },
+            {
+              "id": "MUTATIONS",
+              "icon": "VEILSHROOM",
+              "parent": "GARDEN",
+              "slot": 15,
+              "guiSize": 4,
+              "itemName": "<yellow>Mutations</yellow>",
+              "title": "<dark_gray>Garden ➜ Mutations</dark_gray>",
+              "children": [
+                {
+                  "id": "VEILSHROOM",
+                  "icon": "VEILSHROOM",
+                  "parent": "MUTATIONS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<white>Veilshroom</white>",
+                  "title": "<dark_gray>Mutations ➜ Veilshroom</dark_gray>",
+                  "children": null
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -535,7 +1513,240 @@
       "guiSize": 6,
       "itemName": "<aqua>Mining</aqua>",
       "title": "<dark_gray>Bazaar ➜ Mining</dark_gray>",
-      "children": []
+      "children": [
+        {
+          "id": "COBBLESTONE_CAT",
+          "icon": "COBBLESTONE",
+          "parent": "MINING",
+          "slot": 11,
+          "guiSize": 4,
+          "itemName": "<aqua>Cobblestone",
+          "title": "<dark_gray>Mining ➜ Cobblestone",
+          "children": []
+        },
+        {
+          "id": "COAL",
+          "icon": "COAL",
+          "parent": "MINING",
+          "slot": 12,
+          "guiSize": 4,
+          "itemName": "<aqua>Coal",
+          "title": "<dark_gray>Mining ➜ Coal",
+          "children": []
+        },
+        {
+          "id": "IRON",
+          "icon": "IRON_INGOT",
+          "parent": "MINING",
+          "slot": 13,
+          "guiSize": 4,
+          "itemName": "<aqua>Iron",
+          "title": "<dark_gray>Mining ➜ Iron",
+          "children": []
+        },
+        {
+          "id": "GOLD",
+          "icon": "GOLD_INGOT",
+          "parent": "MINING",
+          "slot": 14,
+          "guiSize": 4,
+          "itemName": "<aqua>Gold",
+          "title": "<dark_gray>Mining ➜ Gold",
+          "children": []
+        },
+        {
+          "id": "DIAMOND_CAT",
+          "icon": "DIAMOND",
+          "parent": "MINING",
+          "slot": 15,
+          "guiSize": 4,
+          "itemName": "<aqua>Diamond",
+          "title": "<dark_gray>Mining ➜ Diamond",
+          "children": []
+        },
+        {
+          "id": "LAPIS_LAZULI",
+          "icon": "INK_SACK:4",
+          "parent": "MINING",
+          "slot": 16,
+          "guiSize": 4,
+          "itemName": "<aqua>Lapis",
+          "title": "<dark_gray>Mining ➜ Lapis",
+          "children": []
+        },
+        {
+          "id": "EMERALD_CAT",
+          "icon": "EMERALD",
+          "parent": "MINING",
+          "slot": 20,
+          "guiSize": 4,
+          "itemName": "<aqua>Emerald",
+          "title": "<dark_gray>Mining ➜ Emerald",
+          "children": []
+        },
+        {
+          "id": "REDSTONE_CAT",
+          "icon": "REDSTONE",
+          "parent": "MINING",
+          "slot": 21,
+          "guiSize": 4,
+          "itemName": "<aqua>Redstone",
+          "title": "<dark_gray>Mining ➜ Redstone",
+          "children": []
+        },
+        {
+          "id": "OBSIDIAN_CAT",
+          "icon": "OBSIDIAN",
+          "parent": "MINING",
+          "slot": 22,
+          "guiSize": 4,
+          "itemName": "<aqua>Obsidian",
+          "title": "<dark_gray>Mining ➜ Obsidian",
+          "children": []
+        },
+        {
+          "id": "ENDERSTONE",
+          "icon": "ENDER_STONE",
+          "parent": "MINING",
+          "slot": 23,
+          "guiSize": 4,
+          "itemName": "<aqua>End Stone",
+          "title": "<dark_gray>Mining ➜ End Stone",
+          "children": []
+        },
+        {
+          "id": "GRAVEL_FLINT",
+          "icon": "GRAVEL",
+          "parent": "MINING",
+          "slot": 24,
+          "guiSize": 4,
+          "itemName": "<aqua>Flint & Gravel",
+          "title": "<dark_gray>Mining ➜ Flint & Gravel",
+          "children": []
+        },
+        {
+          "id": " SAND_CAT",
+          "icon": "SAND",
+          "parent": "MINING",
+          "slot": 25,
+          "guiSize": 4,
+          "itemName": "<aqua>Sand",
+          "title": "<dark_gray>Mining ➜ Sand",
+          "children": []
+        },
+        {
+          "id": "ICE_CAT",
+          "icon": "ICE",
+          "parent": "MINING",
+          "slot": 29,
+          "guiSize": 4,
+          "itemName": "<aqua>Ice",
+          "title": "<dark_gray>Mining ➜ Ice",
+          "children": []
+        },
+        {
+          "id": "SNOW",
+          "icon": "SNOW_BLOCK",
+          "parent": "MINING",
+          "slot": 30,
+          "guiSize": 4,
+          "itemName": "<aqua>Snow",
+          "title": "<dark_gray>Mining ➜ Snow",
+          "children": []
+        },
+        {
+          "id": "HARDSTONE",
+          "icon": "HARD_STONE",
+          "parent": "MINING",
+          "slot": 31,
+          "guiSize": 4,
+          "itemName": "<aqua>Hard Stone",
+          "title": "<dark_gray>Mining ➜ Hard Stone",
+          "children": []
+        },
+        {
+          "id": "GEMSTONES",
+          "icon": "PERFECT_RUBY_GEM",
+          "parent": "MINING",
+          "slot": 32,
+          "guiSize": 4,
+          "itemName": "<aqua>Gemstones",
+          "title": "<dark_gray>Mining ➜ Gemstones",
+          "children": []
+        },
+        {
+          "id": "GOBLIN_EGGS",
+          "icon": "GOBLIN_EGG",
+          "parent": "MINING",
+          "slot": 33,
+          "guiSize": 4,
+          "itemName": "<aqua>Goblin Eggs",
+          "title": "<dark_gray>Mining ➜ Goblin Eggs",
+          "children": []
+        },
+        {
+          "id": "DWARVEN_MINES",
+          "icon": "MITHRIL_ORE",
+          "parent": "MINING",
+          "slot": 34,
+          "guiSize": 4,
+          "itemName": "<aqua>Dwarven Mines",
+          "title": "<dark_gray>Mining ➜ Dwarven Mines",
+          "children": []
+        },
+        {
+          "id": "FORGE",
+          "icon": "FURNACE",
+          "parent": "MINING",
+          "slot": 38,
+          "guiSize": 4,
+          "itemName": "<aqua>Forge",
+          "title": "<dark_gray>Mining ➜ Forge",
+          "children": []
+        },
+        {
+          "id": "CRYSTAL_HOLLOWS",
+          "icon": "CRYSTAL HOLLOWS",
+          "_comment": "TODO: Add a crystal hollows item for this",
+          "parent": "MINING",
+          "slot": 39,
+          "guiSize": 4,
+          "itemName": "<aqua>Crystal Hollows",
+          "title": "<dark_gray>Mining ➜ Crystal Hollows",
+          "children": []
+        },
+        {
+          "id": "CRIMSON_ISLE_MINING",
+          "icon": "CRIMSON_ISLE",
+          "_comment": "TODO: Add a CRIMSON ISLE item for this",
+          "parent": "MINING",
+          "slot": 40,
+          "guiSize": 4,
+          "itemName": "<aqua>Crimson Isle",
+          "title": "<dark_gray>Mining ➜ Crimson Isle",
+          "children": []
+        },
+        {
+          "id": "GLACITE_TUNNELS",
+          "icon": "GLACITE_AMALGAMATION",
+          "parent": "MINING",
+          "slot": 41,
+          "guiSize": 4,
+          "itemName": "<aqua>Glacite Tunnels",
+          "title": "<dark_gray>Mining ➜ Glacite Tunnels",
+          "children": []
+        },
+        {
+          "id": "FOSSILS",
+          "icon": "FOOTPRINT_FOSSIL",
+          "parent": "MINING",
+          "slot": 42,
+          "guiSize": 4,
+          "itemName": "<aqua>Fossils",
+          "title": "<dark_gray>Mining ➜ Fossils",
+          "children": []
+        }
+      ]
     },
     {
       "id": "COMBAT",
@@ -545,7 +1756,139 @@
       "guiSize": 6,
       "itemName": "<red>Combat</red>",
       "title": "<dark_gray>Bazaar ➜ Combat</dark_gray>",
-      "children": []
+      "children": [
+        {
+          "id": "ROTTENFLESH",
+          "icon": "ROTTEN_FLESH",
+          "parent": "COMBAT",
+          "slot": 11,
+          "guiSize": 4,
+          "itemName": "<red>Rotten Flesh",
+          "title": "<dark_gray>Combat ➜ Rotten Flesh",
+          "children": []
+        },
+        {
+          "id": "BONE_CAT",
+          "icon": "BONE",
+          "parent": "COMBAT",
+          "slot": 12,
+          "guiSize": 4,
+          "itemName": "<red>Bone",
+          "title": "<dark_gray>Combat ➜ Bone",
+          "children": []
+        },
+        {
+          "id": "ARACHNIDS",
+          "icon": "STRING",
+          "parent": "COMBAT",
+          "slot": 13,
+          "guiSize": 4,
+          "itemName": "<red>Arachnids",
+          "title": "<dark_gray>Combat ➜ Arachnids",
+          "children": []
+        },
+        {
+          "id": "GUNPOWDER",
+          "icon": "SULPHUR",
+          "parent": "COMBAT",
+          "slot": 14,
+          "guiSize": 4,
+          "itemName": "<red>Gunpowder",
+          "title": "<dark_gray>Combat ➜ Gunpowder",
+          "children": []
+        },
+        {
+          "id": "ENDERPEARL",
+          "icon": "ENDER_PEARL",
+          "parent": "COMBAT",
+          "slot": 15,
+          "guiSize": 4,
+          "itemName": "<red>Ender Pearl",
+          "title": "<dark_gray>Combat ➜ Ender Pearl",
+          "children": []
+        },
+        {
+          "id": "GHASTTEAR",
+          "icon": "GHAST_TEAR",
+          "parent": "COMBAT",
+          "slot": 16,
+          "guiSize": 4,
+          "itemName": "<red>Ghast Tear",
+          "title": "<dark_gray>Combat ➜Ghast Tear",
+          "children": []
+        },
+        {
+          "id": "SLIMES",
+          "icon": "SLIME_BALL",
+          "parent": "COMBAT",
+          "slot": 20,
+          "guiSize": 4,
+          "itemName": "<red>Slimes",
+          "title": "<dark_gray>Combat ➜ Slimes",
+          "children": []
+        },
+        {
+          "id": "MAGMACREAM",
+          "icon": "MAGMA_CREAM",
+          "parent": "COMBAT",
+          "slot": 21,
+          "guiSize": 4,
+          "itemName": "<red>Magma Cream",
+          "title": "<dark_gray>Combat ➜ Magma Cream",
+          "children": []
+        },
+        {
+          "id": "BLAZEROD",
+          "icon": "BLAZE_ROD",
+          "parent": "COMBAT",
+          "slot": 22,
+          "guiSize": 4,
+          "itemName": "<red>Blaze Rod",
+          "title": "<dark_gray>Combat ➜ Blaze Rod",
+          "children": []
+        },
+        {
+          "id": "THE_END",
+          "icon": "THE_END",
+          "_comment": "TODO: Add a the end item for this",
+          "parent": "COMBAT",
+          "slot": 23,
+          "guiSize": 4,
+          "itemName": "<red>The End",
+          "title": "<dark_gray>Combat ➜ The End",
+          "children": []
+        },
+        {
+          "id": "CRIMSON_ISLE_COMBAT",
+          "icon": "CRIMSON_ISLE",
+          "parent": "COMBAT",
+          "slot": 24,
+          "guiSize": 4,
+          "itemName": "<red>Crimson Isle",
+          "title": "<dark_gray>Combat ➜ Crimson Isle",
+          "children": []
+        },
+        {
+          "id": "SLAYERS",
+          "icon": "MADDOX_BATPHONE",
+          "parent": "COMBAT",
+          "slot": 25,
+          "guiSize": 4,
+          "itemName": "<red>Slayers",
+          "title": "<dark_gray>Combat ➜ Slayers",
+          "children": []
+        },
+        {
+          "id": "CATACOMBS",
+          "icon": "WITHER_RELIC",
+          "parent": "COMBAT",
+          "slot": 29,
+          "guiSize": 4,
+          "itemName": "<red>Catacombs",
+          "title": "<dark_gray>Combat ➜ Catacombs",
+          "children": []
+        }
+      ]
     },
     {
       "id": "WOOD_FISHES",

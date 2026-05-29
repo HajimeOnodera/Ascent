@@ -98,7 +98,7 @@ public class BazaarItemBuyMenu {
     }
 
     public static void addBuySell(Inventory inventory, BazaarEntry item,SkyblockPlayer player) {
-        String itemText = "<dark_gray>" + item.itemToSell.getDisplayName();
+        String itemText = "<dark_gray>" + (item.itemToSell == null ? "Unknown" : item.itemToSell.getDisplayName());
         int amount = BazaarInstantSellMenu.getInventoryAmount(player,item);
 
         List<Component> buyLore = List.of(
