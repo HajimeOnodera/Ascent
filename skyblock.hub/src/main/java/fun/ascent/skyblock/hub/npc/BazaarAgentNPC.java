@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.hub.npc;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
@@ -9,6 +10,8 @@ import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+
+import static fun.ascent.common.npc.AscentNpc.INTERACTED;
 
 public record BazaarAgentNPC(Instance instance) implements NpcDefinition {
     @Override
@@ -34,11 +37,19 @@ public record BazaarAgentNPC(Instance instance) implements NpcDefinition {
     }
 
     @Override public String[] firstInteractionMessages() { return new String[]{"Welcome to the Bazaar!", "Here you can instantly buy and sell resources at market prices.", "Supply and demand drive the prices, so keep an eye on trends!"}; }
-    @Override public void onFirstInteract(Player player, AscentNpc npc) { npc.speak(player, firstInteractionMessages()); }
+    @Override public void onFirstInteract(Player player, AscentNpc npc) {
+        if(((SkyblockPlayer)player).getActiveProfileData().level.curLevel > 7) {
+            npc.speak(player, firstInteractionMessages());
+        }else {
+            INTERACTED.remove(player.getUuid());
+            player.sendMessage(StringUtility.text("<red>You need Skyblock Level 7 to access this feature!"));
+        }
+    }
 
     @Override public void onInteract(Player player, AscentNpc npc) {
-        //TODO: Implement Level Check
-        BazaarCategoryMenu.openMenu((SkyblockPlayer) player, BazaarRegistry.bazaarItemList.getFarming());
-//        npc.speak(player, "The market is open! Buy or sell resources instantly.");
+        SkyblockPlayer player1 = (SkyblockPlayer) player;
+        if (player1.getActiveProfileData().level.curLevel > 7) {
+            BazaarCategoryMenu.openMenu((SkyblockPlayer) player, BazaarRegistry.bazaarItemList.getFarming());
+        }
     }
 }

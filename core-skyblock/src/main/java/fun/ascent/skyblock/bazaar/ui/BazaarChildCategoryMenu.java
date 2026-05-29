@@ -40,7 +40,6 @@ public class BazaarChildCategoryMenu {
     }
 
     private static void mouseClick(int slot, ItemStack clickedItem, SkyblockPlayer player, AbstractInventory inventory) {
-        // TODO: Handle clicks for child category menu
         int slotBase = inventory.getInnerSize() - 5;
         if(slot == slotBase){
             player.closeInventory();

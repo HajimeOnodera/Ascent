@@ -27,7 +27,7 @@ import static fun.ascent.common.StringUtility.text;
 public class AscentNpc {
 
     private static final Set<UUID> ALREADY_TALKING = new HashSet<>();
-    private static final Set<UUID> INTERACTED = new HashSet<>();
+    public static final Set<UUID> INTERACTED = new HashSet<>();
     private static final double HOLOGRAM_DELTA = 0.25;
 
     private final List<Entity> holograms = new ArrayList<>();

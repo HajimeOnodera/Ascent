@@ -1071,7 +1071,7 @@
                   "parent": "RARE_CROPS",
                   "slot": 12,
                   "guiSize": 4,
-                  "itemName": "<light_purple>Fermento</light_purple>",
+                  "itemName": "<dark_purple>Fermento</dark_purple>",
                   "title": "<dark_gray>Rare Crops ➜ Fermento</dark_gray>",
                   "children": null
                 },
@@ -1081,7 +1081,7 @@
                   "parent": "RARE_CROPS",
                   "slot": 14,
                   "guiSize": 4,
-                  "itemName": "<light_purple>Condensed Fermento</light_purple>",
+                  "itemName": "<dark_purple>Condensed Fermento</dark_purple>",
                   "title": "<dark_gray>Rare Crops ➜ Condensed Fermento</dark_gray>",
                   "children": null
                 },
@@ -1115,7 +1115,78 @@
               "guiSize": 4,
               "itemName": "<yellow>Sprayonator</yellow>",
               "title": "<dark_gray>Garden ➜ Sprayonator</dark_gray>",
-              "children": []
+              "children": [
+                {
+                  "id": "COMPOST",
+                  "icon": "COMPOST",
+                  "parent": "SPRAYONATORS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<green>Compost</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Compost</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "DUNG",
+                  "icon": "DUNG",
+                  "parent": "SPRAYONATORS",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<green>Dung</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Dung</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CHEESE_FUEL",
+                  "icon": "CHEESE_FUEL",
+                  "parent": "SPRAYONATORS",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<green>Tasty Cheese</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Tasty Cheese</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "JELLY",
+                  "icon": "JELLY",
+                  "parent": "SPRAYONATORS",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<green>Jelly</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Jelly</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PLANT_MATTER",
+                  "icon": "PLANT_MATTER",
+                  "parent": "SPRAYONATORS",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<green>Plant Matter</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Plant Matter</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "HONEY_JAR",
+                  "icon": "HONEY_JAR",
+                  "parent": "SPRAYONATORS",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<green>Honey Jar</green>",
+                  "title": "<dark_gray>Sprayonator ➜ Honey Jar</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "MOONDEW",
+                  "icon": "MOONDEW",
+                  "parent": "SPRAYONATORS",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Moondew</dark_purple>",
+                  "title": "<dark_gray>Sprayonator ➜ Moondew</dark_gray>",
+                  "children": null
+                }
+              ]
             },
             {
               "id": "OTHER_GARDEN",
@@ -1125,7 +1196,178 @@
               "guiSize": 4,
               "itemName": "<yellow>Other</yellow>",
               "title": "<dark_gray>Garden ➜ Other</dark_gray>",
-              "children": []
+              "children": [
+                {
+                  "id": "ENCHANTED_COMPOST",
+                  "icon": "ENCHANTED_COMPOST",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<blue>Compost Bundle</blue>",
+                  "title": "<dark_gray>Other ➜ Compost Bundle</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "WRIGGLING_LARVA",
+                  "icon": "WRIGGLING_LARVA",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Wriggling Larva</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Wriggling Larva</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FINE_FLOUR",
+                  "icon": "FINE_FLOUR",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<green>Fine Flour</green>",
+                  "title": "<dark_gray>Other ➜ Fine Flour</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "POTTED_CACTUS",
+                  "icon": "POTTED_CACTUS",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<green>Potted Cactus</green>",
+                  "title": "<dark_gray>Other ➜ Potted Cactus</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "WARTY",
+                  "icon": "WARTY",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Warty</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Warty</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FIRE_IN_A_BOTTLE",
+                  "icon": "FIRE_IN_A_BOTTLE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<gold>Fire in a Bottle</gold>",
+                  "title": "<dark_gray>Other ➜ Fire in a Bottle</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "TOOL_EXP_CAPSULE",
+                  "icon": "TOOL_EXP_CAPSULE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<blue>Tool Exp Capsule</blue>",
+                  "title": "<dark_gray>Other ➜ Tool Exp Capsule</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PLOT_ERASER",
+                  "icon": "PLOT_ERASER",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 19,
+                  "guiSize": 4,
+                  "itemName": "<blue>Plot Eraser</blue>",
+                  "title": "<dark_gray>Other ➜ Plot Eraser</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FILLED_ROSEWATER_FLASK",
+                  "icon": "FILLED_ROSEWATER_FLASK",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 20,
+                  "guiSize": 4,
+                  "itemName": "<gold>Filled Rosewater Flask</gold>",
+                  "title": "<dark_gray>Other ➜ Filled Rosewater Flask</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "PRICKLY_KISS",
+                  "icon": "PRICKLY_KISS",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 21,
+                  "guiSize": 4,
+                  "itemName": "<green>Prickly Kiss</green>",
+                  "title": "<dark_gray>Other ➜ Prickly Kiss</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "ETHEREAL_VINE",
+                  "icon": "ETHEREAL_VINE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 22,
+                  "guiSize": 4,
+                  "itemName": "<dark_purple>Ethereal Vine</dark_purple>",
+                  "title": "<dark_gray>Other ➜ Ethereal Vine</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "IRIDIUM",
+                  "icon": "IRIDIUM",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 23,
+                  "guiSize": 4,
+                  "itemName": "<gold>Iridium</gold>",
+                  "title": "<dark_gray>Other ➜ Iridium</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "DEAD_PLANT",
+                  "icon": "DEAD_PLANT",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 24,
+                  "guiSize": 4,
+                  "itemName": "<green>Dead Plant</green>",
+                  "title": "<dark_gray>Other ➜ Dead Plant</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "BACHELOR_ROSE",
+                  "icon": "BACHELOR_ROSE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 25,
+                  "guiSize": 4,
+                  "itemName": "<red>Bachelor's Rose</red>",
+                  "title": "<dark_gray>Other ➜ Bachelor's Rose</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "VISITOR_GRATITUDE",
+                  "icon": "VISITOR_GRATITUDE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 28,
+                  "guiSize": 4,
+                  "itemName": "<white>Visitor's Gratitude</white>",
+                  "title": "<dark_gray>Other ➜ Visitor's Gratitude</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "LOCUST_LARVA",
+                  "icon": "LOCUST_LARVA",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 29,
+                  "guiSize": 4,
+                  "itemName": "<green>Locust Larva</green>",
+                  "title": "<dark_gray>Other ➜ Locust Larva</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "FRAGRANCED_BROWN_MUSHROOM_PASTE",
+                  "icon": "FRAGRANCED_BROWN_MUSHROOM_PASTE",
+                  "parent": "OTHER_GARDEN",
+                  "slot": 30,
+                  "guiSize": 4,
+                  "itemName": "<blue>\"Fragranced\" Brown Mushroom Paste</blue>",
+                  "title": "<dark_gray>Other ➜ \"Fragranced\" Brown Mushroom Paste</dark_gray>",
+                  "children": null
+                }
+              ]
             },
             {
               "id": "GARDEN_CHIPS",
@@ -1135,7 +1377,108 @@
               "guiSize": 4,
               "itemName": "<yellow>Garden Chips</yellow>",
               "title": "<dark_gray>Garden ➜ Garden Chips</dark_gray>",
-              "children": null
+              "children": [
+                {
+                  "id": "VERMIN_VAPORIZER_GARDEN_CHIP",
+                  "icon": "VERMIN_VAPORIZER_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<blue>Vermin Vaporizer Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Vermin Vaporizer Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "SYNTHESIS_GARDEN_CHIP",
+                  "icon": "SYNTHESIS_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 11,
+                  "guiSize": 4,
+                  "itemName": "<blue>Synthesis Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Synthesis Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "SOWLEDGE_GARDEN_CHIP",
+                  "icon": "SOWLEDGE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 12,
+                  "guiSize": 4,
+                  "itemName": "<blue>Sowledge Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Sowledge Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "MECHAMIND_GARDEN_CHIP",
+                  "icon": "MECHAMIND_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 13,
+                  "guiSize": 4,
+                  "itemName": "<blue>Mechamind Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Mechamind Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "HYPERCHARGE_GARDEN_CHIP",
+                  "icon": "HYPERCHARGE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 14,
+                  "guiSize": 4,
+                  "itemName": "<blue>Hypercharge Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Hypercharge Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "EVERGREEN_GARDEN_CHIP",
+                  "icon": "EVERGREEN_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 15,
+                  "guiSize": 4,
+                  "itemName": "<blue>Evergreen Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Evergreen Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "OVERDRIVE_GARDEN_CHIP",
+                  "icon": "OVERDRIVE_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 16,
+                  "guiSize": 4,
+                  "itemName": "<blue>Overdrive Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Overdrive Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "CROPSHOT_GARDEN_CHIP",
+                  "icon": "CROPSHOT_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 19,
+                  "guiSize": 4,
+                  "itemName": "<blue>Cropshot Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Cropshot Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "QUICKDRAW_GARDEN_CHIP",
+                  "icon": "QUICKDRAW_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 20,
+                  "guiSize": 4,
+                  "itemName": "<blue>Quickdraw Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Quickdraw Chip</dark_gray>",
+                  "children": null
+                },
+                {
+                  "id": "RAREFINDER_GARDEN_CHIP",
+                  "icon": "RAREFINDER_GARDEN_CHIP",
+                  "parent": "GARDEN_CHIPS",
+                  "slot": 21,
+                  "guiSize": 4,
+                  "itemName": "<blue>Rarefinder Chip</blue>",
+                  "title": "<dark_gray>Garden Chips ➜ Rarefinder Chip</dark_gray>",
+                  "children": null
+                }
+              ]
             },
             {
               "id": "MUTATIONS",
@@ -1145,7 +1488,18 @@
               "guiSize": 4,
               "itemName": "<yellow>Mutations</yellow>",
               "title": "<dark_gray>Garden ➜ Mutations</dark_gray>",
-              "children": null
+              "children": [
+                {
+                  "id": "VEILSHROOM",
+                  "icon": "VEILSHROOM",
+                  "parent": "MUTATIONS",
+                  "slot": 10,
+                  "guiSize": 4,
+                  "itemName": "<white>Veilshroom</white>",
+                  "title": "<dark_gray>Mutations ➜ Veilshroom</dark_gray>",
+                  "children": null
+                }
+              ]
             }
           ]
         }

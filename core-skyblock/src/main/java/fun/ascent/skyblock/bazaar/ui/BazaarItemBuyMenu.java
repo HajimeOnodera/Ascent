@@ -1,17 +1,16 @@
 package fun.ascent.skyblock.bazaar.ui;
 
 import fun.ascent.common.StringUtility;
+import fun.ascent.common.npc.NpcSkin;
 import fun.ascent.skyblock.bazaar.BazaarEntry;
 import fun.ascent.skyblock.bazaar.BazaarRegistry;
 import fun.ascent.skyblock.bazaar.price.BZPriceRegistry;
 import fun.ascent.skyblock.bazaar.ui.buySell.BazaarInstantBuyMenu;
 import fun.ascent.skyblock.bazaar.ui.buySell.BazaarInstantSellMenu;
-import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.component.DataComponents;
@@ -22,10 +21,13 @@ import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.TooltipDisplay;
+import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.network.player.ResolvableProfile;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class BazaarItemBuyMenu {
 
@@ -151,9 +153,16 @@ public class BazaarItemBuyMenu {
     }
 
     public static void addUtility(Inventory inventory,SkyblockPlayer player){
-        //TODO: Put Bazaar NPC Head
-        ItemStack close = ItemStack.of(Material.BARRIER)
-                .withCustomName(StringUtility.text("<gold>Go Back")).withLore(List.of());
+        NpcSkin bazaarNPC = new NpcSkin("eyJ0aW1lc3RhbXAiOjE1NzMyMjM2NDc4NDcsInByb2ZpbGVJZCI6IjQxZDNhYmMyZDc0OTQwMGM5MDkwZDU0MzRkMDM4MzFiIiwicHJvZmlsZU5hbWUiOiJNZWdha2xvb24iLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2MyMzJlMzgyMDg5NzQyOTE1NzYxOWIwZWUwOTlmZWMwNjI4ZjYwMmZmZjEyYjY5NWRlNTRhZWYxMWQ5MjNhZDcifX19",
+                "FDFrRosEo3GRN1QUX2XDIxxB9cWznwE1Nt6zoDCUL9Ya0sudiOMey3r0wL+qgKNItbDgeflDpTwlpA1JBWbfQWWVCRRQhsN6HWPAyTqFMXyy8skaR8UMgr6My8Xz6kcWIfv3g6toUe1sowoKDBXt9z3hn4j6qiARxMOb1nSSy1Cp19di4rYOIFa7Ibu5DNNKAo0bafPYA3Mexy1DYpkJ9FFO6wyW/3U30jPCTnbysZp6XJN0scnXQcoLeBw5wy0V/NI/C7TNJKhr7YWlZKqVKW8r1kyrGgkTvC1u1AWBj3PFV3KuIlhX+G7VUD8iCvz8hvwJVRJBPlsMT6CQ5sP0eCHs38YoN9kiHtO+gHElHzp0JctQXX/7eYXV1FCMGJ8ov+u9f9V/Xu9HEdjCxwdjrRS7I/FSy5/GuBOHY+G2YIVKzMsCTkOM+F52WWF+O6/mGTo6NAdgvJb0Wvvif6/edHbUucOp2OtH67XGD61p/ktg/DmHNoXvjDCD0ld1HLO24fZrdm/cuC85/VYrEb6m9NvFZZVIoLbjbwSFuZD7AyGvHiFVdBWa9Ps3IpxiKi8lroyW8D4VLEQteN/BoB2DHTvu+jEMFJK4W+X7MG0pPAQz5F+1JAaWufR6ZH6Jrx/r4+1gjZlWzV6tmv4OXQHtDnaY0HCRvB+srNfQ/c1UZt8=");
+        ResolvableProfile profile = new ResolvableProfile(new ResolvableProfile.Partial(
+                "", UUID.randomUUID(),
+                List.of(new GameProfile.Property("textures",bazaarNPC.texture(),bazaarNPC.signature()))
+        ));
+        ItemStack close = ItemStack.builder(Material.PLAYER_HEAD)
+                .customName(StringUtility.text("<gold>Go Back"))
+                .lore(List.of())
+                .set(DataComponents.PROFILE,profile).build();
         int slot = inventory.getInnerSize() - 5;
         inventory.setItemStack(slot,close);
 
