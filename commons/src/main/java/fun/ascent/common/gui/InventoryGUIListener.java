@@ -4,6 +4,7 @@ import fun.ascent.common.item.GUIClickableItem;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.inventory.InventoryClickEvent;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 
 public class InventoryGUIListener {
@@ -35,6 +36,16 @@ public class InventoryGUIListener {
                 if (item instanceof GUIClickableItem clickable) {
                     clickable.runPost(event, player);
                 }
+            }
+        });
+
+        handler.addListener(InventoryCloseEvent.class, event -> {
+            Player player = event.getPlayer();
+            InventoryGUI gui = InventoryGUI.GUI_MAP.get(player.getUuid());
+
+            if (gui != null && event.getInventory() == gui.getInventory()) {
+                gui.onClose(event, InventoryGUI.CloseReason.PLAYER_EXITED);
+                InventoryGUI.GUI_MAP.remove(player.getUuid());
             }
         });
     }

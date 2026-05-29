@@ -2,6 +2,8 @@ package fun.ascent.common.user;
 
 import fun.ascent.common.redis.RedisManager;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import org.json.JSONObject;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPubSub;
@@ -22,6 +24,16 @@ public class UserManager {
     public static void init(String mongoUri) {
         UserDatabase.connect(mongoUri);
         startUpdateListener();
+        
+        try {
+            MinecraftServer.getGlobalEventHandler().addListener(
+                PlayerDisconnectEvent.class, event -> userCache.remove(event.getPlayer().getUuid())
+            );
+        } catch (Throwable ignored) {}
+    }
+
+    public static void invalidate(UUID uuid) {
+        userCache.remove(uuid);
     }
 
     private static void startUpdateListener() {

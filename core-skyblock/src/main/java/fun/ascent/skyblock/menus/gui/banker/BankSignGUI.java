@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.client.play.ClientUpdateSignPacket;
@@ -39,6 +40,14 @@ public class BankSignGUI {
                     session.future().complete(textInput);
                     player.sendPacket(new BlockChangePacket(session.pos(), session.originalBlock()));
                 }
+            }
+        });
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerDisconnectEvent.class, event -> {
+            Player player = event.getPlayer();
+            SignGUISession session = activeSessions.remove(player.getUuid());
+            if (session != null) {
+                session.future().completeExceptionally(new IllegalStateException("Player disconnected while sign GUI was open"));
             }
         });
     }
