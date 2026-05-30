@@ -5,6 +5,7 @@ import fun.ascent.skyblock.player.level.SkyBlockLevelRequirement;
 import fun.ascent.skyblock.player.level.SkyblockLevel;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.menus.SkyblockMenu;
+import fun.ascent.skyblock.player.level.unlocks.CustomLevelUnlock;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
@@ -26,6 +27,7 @@ public class SkyblockLevelMenu {
     private static final int EMBLEMS_SLOT = 43;
     private static final int BACK_SLOT = 48;
     private static final int CLOSE_SLOT = 49;
+    private static final int NEXT_MILESTONE_SLOT = 30;
 
     private static final int[] PROGRESSION_SLOTS = {19, 20, 21, 22, 23};
 
@@ -42,14 +44,19 @@ public class SkyblockLevelMenu {
         double currentXp = levelData.progress.curProgress;
         inv.setItemStack(INFO_SLOT, buildRankingItem(currentLevel, currentXp));
 
-        int startLevel = currentLevel;
         for (int i = 0; i < PROGRESSION_SLOTS.length; i++) {
-            int targetLevel = startLevel + i;
+            int targetLevel = currentLevel + i;
             inv.setItemStack(PROGRESSION_SLOTS[i], buildProgressionItem(targetLevel, currentLevel, currentXp));
         }
 
-        inv.setItemStack(GUIDE_SLOT, buildGuideItem(player));
-        inv.setItemStack(REWARDS_SLOT, buildRewardsOverviewItem(currentLevel));
+        // Set Next Milestone item at slot 30
+        SkyBlockLevelRequirement nextMilestone = getNextMilestone(currentLevel);
+        if (nextMilestone != null) {
+            inv.setItemStack(NEXT_MILESTONE_SLOT, buildNextMilestoneItem(nextMilestone));
+        }
+
+        inv.setItemStack(GUIDE_SLOT, buildGuideItem());
+        inv.setItemStack(REWARDS_SLOT, buildRewardsOverviewItem());
         inv.setItemStack(EMBLEMS_SLOT, buildEmblemsItem());
         inv.setItemStack(BACK_SLOT, buildBackButton());
         inv.setItemStack(CLOSE_SLOT, buildCloseButton());
@@ -72,10 +79,15 @@ public class SkyblockLevelMenu {
             } else if (slot == EMBLEMS_SLOT) {
                 player.closeInventory();
                 SkyblockLevelEmblemsMenu.open(player);
+            } else if (slot == NEXT_MILESTONE_SLOT) {
+                if (nextMilestone != null) {
+                    player.closeInventory();
+                    SkyblockLevelDetailsMenu.open(player, nextMilestone.getLevel());
+                }
             } else {
                 for (int i = 0; i < PROGRESSION_SLOTS.length; i++) {
                     if (slot == PROGRESSION_SLOTS[i]) {
-                        int targetLevel = startLevel + i;
+                        int targetLevel = currentLevel + i;
                         player.closeInventory();
                         SkyblockLevelDetailsMenu.open(player, targetLevel);
                         break;
@@ -85,6 +97,66 @@ public class SkyblockLevelMenu {
         });
 
         player.openInventory(inv);
+    }
+
+    private static SkyBlockLevelRequirement getNextMilestone(int currentLevel) {
+        for (int l = currentLevel + 1; l <= SkyBlockLevelRequirement.getMaxLevel(); l++) {
+            SkyBlockLevelRequirement req = SkyBlockLevelRequirement.getLevel(l);
+            if (req != null) {
+                boolean isMilestone = req.isMilestone() || req.getUnlocks().stream().anyMatch(unlock -> unlock instanceof CustomLevelUnlock);
+                if (isMilestone) {
+                    return req;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static ItemStack buildNextMilestoneItem(SkyBlockLevelRequirement req) {
+        ItemStack.Builder itemStackBuilder = null;
+        for (var unlock : req.getUnlocks()) {
+            if (unlock instanceof CustomLevelUnlock customUnlock) {
+                itemStackBuilder = customUnlock.getAward().getItem();
+                break;
+            }
+        }
+        if (itemStackBuilder == null && req.getPrefixItem() != null) {
+            itemStackBuilder = ItemStack.builder(req.getPrefixItem());
+        }
+        if (itemStackBuilder == null) {
+            itemStackBuilder = ItemStack.builder(Material.NETHER_STAR);
+        }
+
+        List<Component> lore = new ArrayList<>();
+        lore.add(text("<gray>Unlocks at: <gold>Level " + req.getLevel()));
+        lore.add(Component.empty());
+        lore.add(text("<gray>Rewards:"));
+
+        List<String> unlockStrings = new ArrayList<>();
+        req.getUnlocks().forEach(unlock -> unlockStrings.addAll(unlock.getDisplay(null, req.getLevel())));
+
+        if (unlockStrings.isEmpty()) {
+            unlockStrings.add("§8 +§a5 §c❤ Health");
+        }
+
+        for (String unlockStr : unlockStrings) {
+            String formatted = unlockStr.replace("§8", "<dark_gray>")
+                                      .replace("§a", "<green>")
+                                      .replace("§c", "<red>")
+                                      .replace("§e", "<yellow>")
+                                      .replace("§6", "<gold>")
+                                      .replace("§f", "<white>")
+                                      .replace("§7", "<gray>");
+            lore.add(text(formatted));
+        }
+
+        lore.add(Component.empty());
+        lore.add(text("<yellow>Click to view rewards!"));
+
+        return ItemStackCreator.clearAttributes(itemStackBuilder
+                .customName(text("<gold>Next Milestone: Level " + req.getLevel()))
+                .lore(lore))
+                .build();
     }
 
     private static ItemStack buildRankingItem(int level, double xp) {
@@ -103,20 +175,16 @@ public class SkyblockLevelMenu {
                 .build();
     }
 
-    private static String getProgressBar(double current, double max, int size) {
-        double percent = current / max;
-        int completed = (int) (percent * size);
-        completed = Math.max(0, Math.min(size, completed));
+    private static String getProgressBar(double current) {
+        double percent = current / (double) 100;
+        int completed = (int) (percent * 12);
+        completed = Math.clamp(completed, 0, 12);
 
         StringBuilder bar = new StringBuilder();
         bar.append("<green><st>");
-        for (int i = 0; i < completed; i++) {
-            bar.append("─");
-        }
+        bar.repeat("─", Math.max(0, completed));
         bar.append("</st></green><white><st>");
-        for (int i = completed; i < size; i++) {
-            bar.append("─");
-        }
+        bar.repeat("─", Math.max(0, 12 - completed));
         bar.append("</st></white>");
         return bar.toString();
     }
@@ -126,7 +194,7 @@ public class SkyblockLevelMenu {
         Material material;
 
         SkyBlockLevelRequirement req = SkyBlockLevelRequirement.getLevel(level);
-        boolean isMilestone = req != null && req.isMilestone();
+        boolean isMilestone = req != null && (req.isMilestone() || req.getUnlocks().stream().anyMatch(unlock -> unlock instanceof CustomLevelUnlock));
 
         if (level == currentLevel) {
             material = isMilestone ? Material.LIME_STAINED_GLASS : Material.LIME_STAINED_GLASS_PANE;
@@ -149,9 +217,7 @@ public class SkyblockLevelMenu {
 
         List<String> unlockStrings = new ArrayList<>();
         if (req != null) {
-            req.getUnlocks().forEach(unlock -> {
-                unlockStrings.addAll(unlock.getDisplay(null, level));
-            });
+            req.getUnlocks().forEach(unlock -> unlockStrings.addAll(unlock.getDisplay(null, level)));
         }
 
         if (unlockStrings.isEmpty()) {
@@ -181,7 +247,7 @@ public class SkyblockLevelMenu {
         if (level == currentLevel + 1) {
             lore.add(Component.empty());
             lore.add(text("<gray>Progress to Level Up:"));
-            String bar = getProgressBar(currentXp, 100, 12);
+            String bar = getProgressBar(currentXp);
             lore.add(text(bar + " <aqua>" + (int) currentXp + "</aqua><dark_gray>/</dark_gray><aqua>100 XP</aqua>"));
         }
 
@@ -198,7 +264,7 @@ public class SkyblockLevelMenu {
                 .build();
     }
 
-    private static ItemStack buildGuideItem(SkyblockPlayer player) {
+    private static ItemStack buildGuideItem() {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<gray>Your <gold>SkyBlock Guide <gray>tracks the"));
         lore.add(text("<gray>progress you have made through"));
@@ -217,7 +283,7 @@ public class SkyblockLevelMenu {
                 .build();
     }
 
-    private static ItemStack buildRewardsOverviewItem(int currentLevel) {
+    private static ItemStack buildRewardsOverviewItem() {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<gray>View all the rewards you can unlock"));
         lore.add(text("<gray>by leveling up your SkyBlock Level"));
