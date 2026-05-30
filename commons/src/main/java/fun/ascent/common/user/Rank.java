@@ -9,7 +9,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public enum Rank {
     OWNER("<red>[OWNER] ", true, NamedTextColor.RED),
     ADMIN("<red>[ADMIN] ", true, NamedTextColor.RED),
-    STAFF("<red>[<gold>ዞ<red>] ", true, NamedTextColor.RED),
+    STAFF("<red>[<gold>𝒜<red>] ", true, NamedTextColor.RED),
     YOUTUBE("<red>[<white>YOUTUBE<red>] ", false, NamedTextColor.RED),
     MVP_PLUS_PLUS("<gold>[MVP<black>++<gold>] ", false, NamedTextColor.GOLD),
     MVP_PLUS("<aqua>[MVP<red>+<aqua>] ", false, NamedTextColor.AQUA),

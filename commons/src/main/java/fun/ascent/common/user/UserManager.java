@@ -57,19 +57,25 @@ public class UserManager {
     }
 
     public static User getUser(UUID uuid) {
-        if (userCache.containsKey(uuid)) {
+        return getUser(uuid, false);
+    }
+
+    public static User getUser(UUID uuid, boolean forceMongoDB) {
+        if (!forceMongoDB && userCache.containsKey(uuid)) {
             return userCache.get(uuid);
         }
 
-        // Try Redis
-        try (Jedis jedis = RedisManager.get().getResource()) {
-            String data = jedis.get(REDIS_PREFIX + uuid);
-            if (data != null) {
-                User user = deserialize(data);
-                userCache.put(uuid, user);
-                return user;
-            }
-        } catch (Exception ignored) {}
+        if (!forceMongoDB) {
+            // Try Redis
+            try (Jedis jedis = RedisManager.get().getResource()) {
+                String data = jedis.get(REDIS_PREFIX + uuid);
+                if (data != null) {
+                    User user = deserialize(data);
+                    userCache.put(uuid, user);
+                    return user;
+                }
+            } catch (Exception ignored) {}
+        }
 
         // Try MongoDB
         User mongoUser = UserDatabase.loadUser(uuid);

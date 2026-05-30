@@ -25,6 +25,8 @@ public class LobbyConnectionListener {
 
         handler.addListener(PlayerSpawnEvent.class, event -> {
             Player player = event.getPlayer();
+            UserManager.getUser(player.getUuid(), true);
+            
             player.setGameMode(GameMode.SURVIVAL);
             player.setDisplayName(UserManager.getDisplayName(player.getUuid()));
             

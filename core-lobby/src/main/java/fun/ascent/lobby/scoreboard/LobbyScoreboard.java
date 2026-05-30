@@ -1,6 +1,7 @@
 package fun.ascent.lobby.scoreboard;
 
 import fun.ascent.common.StringUtility;
+import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.database.FriendLookup;
 import net.minestom.server.entity.Player;
@@ -61,7 +62,13 @@ public class LobbyScoreboard {
 
         renderedLines.add("<gray>" + LocalDate.now().format(formatter) + " <dark_gray>L1");
         renderedLines.add("");
-        renderedLines.add("<white>Rank: <gray>" + StringUtility.toNormalCase(UserManager.getUser(player.getUuid()).getRank().name()));
+        Rank rank = UserManager.getUser(player.getUuid()).getRank();
+        String rankPrefix = rank.getPrefix().trim();
+        if (rankPrefix.isEmpty() || rank == Rank.DEFAULT) {
+            renderedLines.add("<white>Rank: <gray>Default");
+        } else {
+            renderedLines.add("<white>Rank: " + rankPrefix);
+        }
         renderedLines.add("<white>Achievements: <yellow>" + UserManager.getUser(player.getUuid()).getAchievementPoints());
         renderedLines.add("<white>Ascent Level: <aqua>" + UserManager.getUser(player.getUuid()).getLevel());
         renderedLines.add(" ");
