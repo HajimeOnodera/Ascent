@@ -43,6 +43,10 @@ public class ProfilePlayer {
     public double playerBits = 0;
     public double playerGold = 0;
 
+    public long boosterCookieExpires = 0L;
+    public boolean claimedFreeCookie = false;
+    public double bitsMultiplier = 1.0;
+
     public transient SkyblockPlayer skyblockPlayer;
 
     public HashMap<String, Stat> stats = new HashMap<>();
@@ -64,7 +68,6 @@ public class ProfilePlayer {
 
     public List<ItemStack> inventory = new ArrayList<>();
     public List<ItemStack> armor = new ArrayList<>();
-    public List<ItemStack> enderchest = new ArrayList<>();
 
     private SkyblockDataHandler dataHandler;
 
@@ -155,10 +158,6 @@ public class ProfilePlayer {
         return playerCoins;
     }
 
-    public double getBits() {
-        return playerBits;
-    }
-
     public double getGold() {
         return playerGold;
     }
@@ -196,7 +195,6 @@ public class ProfilePlayer {
         Map<Stats, Double> statRewards = getLevelStatRewards(oldLevel, curLevel);
 
         String newColour = SkyblockLevel.getLevelColour(curLevel);
-        String oldColour = SkyblockLevel.getLevelColour(oldLevel);
 
         skyblockPlayer.sendMessage(text(centerText("§3§lSKYBLOCK LEVEL UP")));
         skyblockPlayer.sendMessage(text(centerText("§7Level " + oldLevel + " §8➜ " + newColour + "[" + curLevel + "]")));

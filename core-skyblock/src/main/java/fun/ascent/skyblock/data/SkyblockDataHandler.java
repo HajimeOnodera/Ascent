@@ -210,15 +210,6 @@ public class SkyblockDataHandler {
                 player.getEquipment(EquipmentSlot.HELMET)
             ))),
 
-        ENDERCHEST("enderchest", DatapointInventory.class, new DatapointInventory("enderchest", new ArrayList<>()),
-            (player, dp) -> {
-                // TODO: Load enderchest items when system is implemented
-            },
-            (player) -> {
-                // TODO: Save enderchest items
-                return new DatapointInventory("enderchest", new ArrayList<>());
-            }),
-
         VISITED_REGIONS("visited_regions", DatapointStringList.class, new DatapointStringList("visited_regions", new ArrayList<>())),
 
         QUESTS("quests", DatapointObject.class, new DatapointObject<>("quests", new QuestData(), QuestData.class),
@@ -270,6 +261,40 @@ public class SkyblockDataHandler {
                     player.getActiveProfile().bankLimit
                 );
                 return new DatapointBankData("bank_data", bd);
+            }),
+
+        BOOSTER_COOKIE_EXPIRES("booster_cookie_expires", DatapointLong.class, new DatapointLong("booster_cookie_expires", 0L),
+            (player, dp) -> {
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().boosterCookieExpires = (Long) dp.getValue();
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointLong("booster_cookie_expires", player.getActiveProfileData().boosterCookieExpires);
+            }),
+
+        CLAIMED_FREE_COOKIE("claimed_free_cookie", DatapointBoolean.class, new DatapointBoolean("claimed_free_cookie", false),
+            (player, dp) -> {
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().claimedFreeCookie = (Boolean) dp.getValue();
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointBoolean("claimed_free_cookie", player.getActiveProfileData().claimedFreeCookie);
+            }),
+
+
+        BITS_MULTIPLIER("bits_multiplier", DatapointDouble.class, new DatapointDouble("bits_multiplier", 1.0),
+            (player, dp) -> {
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().bitsMultiplier = (Double) dp.getValue();
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointDouble("bits_multiplier", player.getActiveProfileData().bitsMultiplier);
             }),
         ;
 

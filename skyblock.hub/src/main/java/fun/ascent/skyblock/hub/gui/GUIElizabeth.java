@@ -4,6 +4,12 @@ import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.item.GUIClickableItem;
 import fun.ascent.common.item.ItemStackCreator;
 import fun.ascent.common.StringUtility;
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import fun.ascent.skyblock.player.profiles.ProfilePlayer;
+import fun.ascent.skyblock.item.ItemRegistry;
+import fun.ascent.skyblock.item.SkyblockItem;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -387,21 +393,86 @@ public class GUIElizabeth extends InventoryGUI {
             set(new GUIClickableItem(31) {
                 @Override
                 public void run(InventoryPreClickEvent e, Player p) {
-                    p.sendMessage(StringUtility.text("<red>You do not have enough Gems or Coins to purchase a Booster Cookie!"));
+                    if (!(p instanceof SkyblockPlayer sPlayer) || sPlayer.getActiveProfileData() == null) return;
+                    ProfilePlayer profile = sPlayer.getActiveProfileData();
+
+                    if (!profile.claimedFreeCookie) {
+                        profile.claimedFreeCookie = true;
+                        SkyblockItem cookieItem = ItemRegistry.getItem("BOOSTER_COOKIE");
+                        if (cookieItem != null) {
+                            sPlayer.getInventory().addItemStack(cookieItem.buildItemStack());
+                        }
+                        sPlayer.sendMessage(text("<green>You successfully claimed your first FREE Booster Cookie!"));
+                        sPlayer.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1f));
+                        render();
+                        updateItemStacks(getInventory(), p);
+                    } else {
+                        if (sPlayer.getCoins() >= 3000000) {
+                            sPlayer.setCoins(sPlayer.getCoins() - 3000000);
+                            SkyblockItem cookieItem = ItemRegistry.getItem("BOOSTER_COOKIE");
+                            if (cookieItem != null) {
+                                sPlayer.getInventory().addItemStack(cookieItem.buildItemStack());
+                            }
+                            sPlayer.sendMessage(text("<green>You purchased a Booster Cookie for 3,000,000 Coins!"));
+                            sPlayer.playSound(Sound.sound(Key.key("entity.experience_orb.pickup"), Sound.Source.PLAYER, 1f, 1f));
+                            render();
+                            updateItemStacks(getInventory(), p);
+                        } else {
+                            sPlayer.sendMessage(text("<red>You do not have enough Coins to purchase a Booster Cookie!"));
+                        }
+                    }
                 }
 
                 @Override
                 public ItemStack.Builder getItem(Player p) {
                     List<Component> lore = new ArrayList<>();
-                    lore.add(text("<gray>Consuming grants Booster Buff:"));
-                    lore.add(text("<gray>• +25% Skill XP Boost"));
-                    lore.add(text("<gray>• Allows flight on private island"));
-                    lore.add(text("<gray>• Keep inventory coins on death"));
-                    lore.add(text("<gray>• Enables earning Bits"));
+                    lore.add(text("<gray>Acquire booster cookies from the"));
+                    lore.add(text("<gray>community shop in the hub."));
                     lore.add(Component.empty());
-                    lore.add(text("<gray>Price: <gold>1,200 Gems <gray>or <yellow>3,000,000 Coins"));
+                    lore.add(text("<light_purple>Cookie Buff:"));
+                    lore.add(text("<dark_gray>› <gray>Ability to gain <aqua>Bits!"));
+                    lore.add(text("<dark_gray>› <aqua>+25☴ <gray>on all <aqua>Wisdom <gray>stats"));
+                    lore.add(text("<dark_gray>› <aqua>+15✯ Magic Find"));
+                    lore.add(text("<dark_gray>› <gray>Keep <gold>coins <gray>on death"));
+                    lore.add(text("<dark_gray>› <yellow>Permafly <gray>on private islands and gardens"));
+                    lore.add(text("<dark_gray>› <gray>Quick access to some menus using their"));
+                    lore.add(text("  <gray>respective commands:"));
+                    lore.add(text("  <gold>/ah<gray>, <green>/bazaar<gray>, <green>/bank<gray>, <gold>/accessorybag<gray>,"));
+                    lore.add(text("  <aqua>/fishingbag<gray>, <light_purple>/timepocket<gray>, <light_purple>/anvil<gray>, <light_purple>/hex<gray>,"));
+                    lore.add(text("  <aqua>/etable<gray>, <light_purple>/potionbag<gray>, <light_purple>/rngmeter<gray>,"));
+                    lore.add(text("  <aqua>/attributemenu <gray>and <yellow>/quiver"));
+                    lore.add(text("<dark_gray>› <gray>Sell items directly to the trades and cookie menu"));
+                    lore.add(text("<dark_gray>› <gray>AFK <green>immunity <gray>on your island and garden"));
+                    lore.add(text("<dark_gray>› <gray>Toggle specific <light_purple>potion effects"));
+                    lore.add(text("<dark_gray>› <gray>Link your items in chat using <yellow>/show"));
+                    lore.add(text("<dark_gray>› <gray>Insta-sell your Material stash to the <gold>Bazaar"));
+                    lore.add(text("<dark_gray>› <gray>Increases <gold>Chocolate Factory <gray>production by <gold>+0.25x"));
+                    lore.add(text("<dark_gray>› <gray>Allows consuming <blue>Mixins <gray>directly from your inventory"));
                     lore.add(Component.empty());
-                    lore.add(text("<yellow>Click to purchase Booster Cookie!"));
+                    lore.add(text("<gray>Duration: <green>4d"));
+                    lore.add(text("<dark_gray>Farm bits from playing with the"));
+                    lore.add(text("<dark_gray>Cookie Buff active and completing"));
+                    lore.add(text("<dark_gray>specific tasks."));
+                    lore.add(Component.empty());
+
+                    if (p instanceof SkyblockPlayer sPlayer && sPlayer.getActiveProfileData() != null) {
+                        if (!sPlayer.getActiveProfileData().claimedFreeCookie) {
+                            lore.add(text("<gray>Price: <green>FREE"));
+                            lore.add(Component.empty());
+                            lore.add(text("<yellow>Click to claim your FREE Booster Cookie!"));
+                        } else {
+                            lore.add(text("<gray>Price: <gold>1,200 Gems <gray>or <yellow>3,000,000 Coins"));
+                            lore.add(Component.empty());
+                            if (sPlayer.getCoins() >= 3000000) {
+                                lore.add(text("<yellow>Click to purchase Booster Cookie!"));
+                            } else {
+                                lore.add(text("<red>You cannot afford this!"));
+                            }
+                        }
+                    } else {
+                        lore.add(text("<gray>Price: <gold>1,200 Gems <gray>or <yellow>3,000,000 Coins"));
+                    }
+
                     return ItemStackCreator.getStack("<gold>Booster Cookie", Material.COOKIE, 1, lore);
                 }
             });

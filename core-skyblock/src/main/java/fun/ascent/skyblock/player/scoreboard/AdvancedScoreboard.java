@@ -155,10 +155,21 @@ public class AdvancedScoreboard {
         @Override
         public List<String> render(SkyblockPlayer player) {
             double coins = 0;
+            double bits = 0;
             try {
-                if (player.getActiveProfileData() != null) coins = player.getActiveProfileData().playerCoins;
+                if (player.getActiveProfileData() != null) {
+                    coins = player.getActiveProfileData().playerCoins;
+                    bits = player.getActiveProfileData().playerBits;
+                }
             } catch (Exception ignored) {}
-            return List.of("<white>Purse:</white> <gold>" + String.format("%.1f", coins), "");
+            
+            List<String> lines = new ArrayList<>();
+            lines.add("<white>Purse:</white> <gold>" + String.format("%.1f", coins));
+            if (bits > 0) {
+                lines.add("<white>Bits:</white> <aqua>" + String.format("%,.0f", bits));
+            }
+            lines.add("");
+            return lines;
         }
     }
 

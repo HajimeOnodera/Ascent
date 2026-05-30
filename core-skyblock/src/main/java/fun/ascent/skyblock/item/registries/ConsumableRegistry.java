@@ -27,7 +27,8 @@ public class ConsumableRegistry {
             "VIAL_OF_VENOM",
             "WRIGGLING_LARVA",
             "GOD_POTION",
-            "GOD_POTION_2"
+            "GOD_POTION_2",
+            "BOOSTER_COOKIE"
 
     );
 
