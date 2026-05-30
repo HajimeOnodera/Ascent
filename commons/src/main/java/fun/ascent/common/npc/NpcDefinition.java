@@ -17,7 +17,8 @@ public interface NpcDefinition {
         return null;
     }
     default String[] holograms() {
-        return name() != null ? new String[] { name(), CLICK } : null;
+        return name() != null ? new String[] {
+            name(), CLICK } : null;
     }
     default NpcSkin skin() {
         return null;

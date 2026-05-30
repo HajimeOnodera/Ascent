@@ -1,6 +1,5 @@
 package fun.ascent.lobby.scoreboard;
 
-import fun.ascent.common.StringUtility;
 import fun.ascent.common.user.Rank;
 import fun.ascent.common.user.UserManager;
 import fun.ascent.database.FriendLookup;
@@ -67,7 +66,8 @@ public class LobbyScoreboard {
         if (rankPrefix.isEmpty() || rank == Rank.DEFAULT) {
             renderedLines.add("<white>Rank: <gray>Default");
         } else {
-            renderedLines.add("<white>Rank: " + rankPrefix);
+            String cleanPrefix = rankPrefix.replace("[", "").replace("]", "").trim();
+            renderedLines.add("<white>Rank: " + cleanPrefix);
         }
         renderedLines.add("<white>Achievements: <yellow>" + UserManager.getUser(player.getUuid()).getAchievementPoints());
         renderedLines.add("<white>Ascent Level: <aqua>" + UserManager.getUser(player.getUuid()).getLevel());
