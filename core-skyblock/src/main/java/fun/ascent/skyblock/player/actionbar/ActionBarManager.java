@@ -38,6 +38,8 @@ public final class ActionBarManager {
                 if (!(online instanceof SkyblockPlayer player)) continue;
                 if (player.getActiveProfileData() == null) continue;
 
+                player.updatePlayer();
+
                 ActionBar bar = ActionBar.of(player.getUuid());
 
                 double hp = player.getCurrentHealth();

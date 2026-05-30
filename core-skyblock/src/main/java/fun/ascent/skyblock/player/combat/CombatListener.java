@@ -248,7 +248,7 @@ public class CombatListener {
             DamageIndicator.spawn(player.getInstance(), player.getPosition(), actualDamage, false);
         }
 
-        player.removeHealth(actualDamage);
+        if (player.removeHealth(actualDamage)) return;
         player.triggerStatus((byte) 2);
 
         double dx = player.getPosition().x() - mob.getPosition().x();

@@ -13,6 +13,7 @@ import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -25,8 +26,11 @@ import net.minestom.server.timer.Task;
 import net.minestom.server.timer.TaskSchedule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import net.kyori.adventure.sound.Sound;
 
 import java.util.*;
+import fun.ascent.skyblock.item.SkyblockItem;
+import net.minestom.server.coordinate.Pos;
 
 @Getter
 public class SkyblockPlayer extends Player {
@@ -128,8 +132,42 @@ public class SkyblockPlayer extends Player {
         currentHealth = Math.min(currentHealth + amount, maxStat(Stats.HEALTH));
     }
 
-    public void removeHealth(double amount) {
+    public boolean removeHealth(double amount) {
         currentHealth = Math.max(0, currentHealth - amount);
+        if (currentHealth <= 0) {
+            kill();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void kill() {
+        this.currentHealth = maxStat(Stats.HEALTH);
+        this.currentMana = maxStat(Stats.INTELLIGENCE);
+
+        Pos respawnPos = getRespawnPoint();
+
+        teleport(respawnPos);
+        triggerStatus((byte) 2);
+
+        playSound(Sound.sound(Key.key("entity.player.death"), Sound.Source.PLAYER, 1.0f, 1.0f), Sound.Emitter.self());
+
+        sendMessage("§c☠ §7You died!");
+
+        if (activeProfileData != null) {
+            boolean hasActiveCookie = activeProfileData.boosterCookieExpires > System.currentTimeMillis();
+            if (!hasActiveCookie) {
+                double coins = activeProfileData.playerCoins;
+                if (coins > 0) {
+                    double lost = coins / 2.0;
+                    removeCoins(lost);
+                    sendMessage("§cYou died and lost " + String.format("%,.1f", lost) + " coins!");
+                }
+            } else {
+                sendMessage("§aSaved by Booster Cookie! Kept all your coins!");
+            }
+        }
     }
 
     public void addMana(double amount) {
@@ -146,7 +184,13 @@ public class SkyblockPlayer extends Player {
         return true;
     }
 
-    public double maxStat(Stats stat) {
+    private Map<Stats, Double> getItemStats(ItemStack stack) {
+        if (stack == null || stack.isAir()) return Collections.emptyMap();
+        SkyblockItem sbItem = SkyblockItem.fromStack(stack);
+        return sbItem != null ? sbItem.getTotalStats() : Collections.emptyMap();
+    }
+
+    private double calculateRawStat(Stats stat) {
         if (activeProfileData == null) return stat.getBaseStat();
         Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
         double base = entry != null ? entry.getCurValue() : stat.getBaseStat();
@@ -154,22 +198,40 @@ public class SkyblockPlayer extends Player {
                 .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
                 .sum();
 
-        if (stat == Stats.HEALTH) {
-            for (EquipmentSlot slot : List.of(
-                    EquipmentSlot.HELMET,
-                    EquipmentSlot.CHESTPLATE,
-                    EquipmentSlot.LEGGINGS,
-                    EquipmentSlot.BOOTS)) {
-                net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
-                if (!armorPiece.isAir()) {
+        for (EquipmentSlot slot : List.of(
+                EquipmentSlot.HELMET,
+                EquipmentSlot.CHESTPLATE,
+                EquipmentSlot.LEGGINGS,
+                EquipmentSlot.BOOTS)) {
+            ItemStack armorPiece = getEquipment(slot);
+            if (!armorPiece.isAir()) {
+                Map<Stats, Double> itemStats = getItemStats(armorPiece);
+                bonus += itemStats.getOrDefault(stat, 0.0);
+
+                if (stat == Stats.HEALTH) {
                     int growthLevel = EnchantmentNBT.getEnchantmentLevel(
                             armorPiece, EnchantmentRegistry.GROWTH);
                     bonus += growthLevel * 15.0;
                 }
+                if (stat == Stats.DEFENSE) {
+                    int protLevel = EnchantmentNBT.getEnchantmentLevel(
+                            armorPiece, EnchantmentRegistry.PROTECTION);
+                    bonus += protLevel * 4.0;
+                }
             }
         }
 
-        return stat.applyCap(base + bonus);
+        ItemStack mainHand = getEquipment(EquipmentSlot.MAIN_HAND);
+        if (!mainHand.isAir()) {
+            Map<Stats, Double> itemStats = getItemStats(mainHand);
+            bonus += itemStats.getOrDefault(stat, 0.0);
+        }
+
+        return base + bonus;
+    }
+
+    public double maxStat(Stats stat) {
+        return stat.applyCap(calculateRawStat(stat));
     }
 
     public void applyEffect(String effectId, Map<Stats, Double> bonuses, int durationSeconds) {
@@ -203,29 +265,7 @@ public class SkyblockPlayer extends Player {
     }
 
     public double playerStat(Stats stat) {
-        if (activeProfileData == null) return stat.getBaseStat();
-        Stat entry = activeProfileData.stats.get(stat.name().toLowerCase());
-        double base = entry != null ? entry.getCurValue() : stat.getBaseStat();
-        double bonus = statEffects.values().stream()
-                .mapToDouble(bonuses -> bonuses.getOrDefault(stat, 0.0))
-                .sum();
-
-        if (stat == Stats.DEFENSE) {
-            for (EquipmentSlot slot : List.of(
-                    EquipmentSlot.HELMET,
-                    EquipmentSlot.CHESTPLATE,
-                    EquipmentSlot.LEGGINGS,
-                    EquipmentSlot.BOOTS)) {
-                net.minestom.server.item.ItemStack armorPiece = getEquipment(slot);
-                if (!armorPiece.isAir()) {
-                    int protLevel = EnchantmentNBT.getEnchantmentLevel(
-                            armorPiece, EnchantmentRegistry.PROTECTION);
-                    bonus += protLevel * 4.0;
-                }
-            }
-        }
-
-        return base + bonus;
+        return stat.applyCap(calculateRawStat(stat));
     }
 
     @Nullable
