@@ -4,6 +4,8 @@ import fun.ascent.common.gui.InventoryGUI;
 import fun.ascent.common.gui.RefreshingGUI;
 import fun.ascent.common.item.GUIClickableItem;
 import fun.ascent.common.item.ItemStackCreator;
+import fun.ascent.common.user.Rank;
+import fun.ascent.common.user.UserManager;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import fun.ascent.skyblock.player.profiles.SkyblockProfile;
@@ -44,13 +46,13 @@ public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI 
     public void refreshItems(Player player) {
         if (!(player instanceof SkyblockPlayer sp)) return;
 
-        fun.ascent.common.user.Rank playerRank = fun.ascent.common.user.UserManager.getUser(player.getUuid()).getRank();
+        Rank playerRank = UserManager.getUser(player.getUuid()).getRank();
         int maxAllowed = 2;
-        if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.ADMIN)) {
+        if (playerRank.isEqualOrHigherThan(Rank.ADMIN)) {
             maxAllowed = 5;
-        } else if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.MVP_PLUS)) {
+        } else if (playerRank.isEqualOrHigherThan(Rank.MVP_PLUS)) {
             maxAllowed = 4;
-        } else if (playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.VIP)) {
+        } else if (playerRank.isEqualOrHigherThan(Rank.VIP)) {
             maxAllowed = 3;
         }
 
@@ -66,15 +68,15 @@ public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI 
             String requiredRankColor = "";
 
             if (i == 2) {
-                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.VIP);
+                isLocked = !playerRank.isEqualOrHigherThan(Rank.VIP);
                 requiredRankName = "[VIP]";
                 requiredRankColor = "<green>";
             } else if (i == 3) {
-                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.MVP_PLUS);
+                isLocked = !playerRank.isEqualOrHigherThan(Rank.MVP_PLUS);
                 requiredRankName = "[MVP<red>+<aqua>]";
                 requiredRankColor = "<aqua>";
             } else if (i == 4) {
-                isLocked = !playerRank.isEqualOrHigherThan(fun.ascent.common.user.Rank.ADMIN);
+                isLocked = !playerRank.isEqualOrHigherThan(Rank.ADMIN);
                 requiredRankName = "[ADMIN]";
                 requiredRankColor = "<red>";
             }
@@ -95,7 +97,6 @@ public class GUIProfileManagement extends InventoryGUI implements RefreshingGUI 
                         lore.add(text("<gray>Unavailable"));
                         lore.add(Component.empty());
                         lore.add(text("<gray>Requires: " + finalRankColor + finalRankName));
-                        lore.add(text("<gold>https://store.hypixel.net"));
 
                         return ItemStackCreator.getStack("<red>Locked profile slot", Material.BEDROCK, 1, lore);
                     }

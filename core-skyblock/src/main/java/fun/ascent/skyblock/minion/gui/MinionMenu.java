@@ -46,8 +46,7 @@ public final class MinionMenu {
     private static final Map<Inventory, SkyblockMinion> OPEN_MENUS = new HashMap<>();
     private static boolean updaterStarted;
 
-    private MinionMenu() {
-    }
+    private MinionMenu() {}
 
     public static void open(SkyblockPlayer player, SkyblockMinion minion) {
         ensureUpdater();
@@ -202,7 +201,7 @@ public final class MinionMenu {
                 .build());
 
         inventory.setItemStack(INFO_SLOT, MinionItems.createHead(minion.getProfile().texture())
-                .withCustomName(text("<green>" + minion.getType().getDisplayName() + " " + MinionItems.roman(minion.getTier())))
+                .withCustomName(text("<blue>" + minion.getType().getDisplayName() + " " + MinionItems.roman(minion.getTier())))
                 .withLore(buildInfoLore(minion))
                 );
 
@@ -271,15 +270,14 @@ public final class MinionMenu {
 
     private static List<Component> buildInfoLore(SkyblockMinion minion) {
         List<Component> lore = new ArrayList<>();
-        lore.add(text("<gray>Place this minion and it will"));
-        lore.add(text("<gray>start " + minion.getProfile().placementDescription()));
+        lore.add(text("<gray>Place this minion and it will start"));
+        lore.add(text("<gray>" + minion.getProfile().placementDescription()));
         lore.add(text("<gray>Minions also work when you are"));
         lore.add(text("<gray>offline!"));
         lore.add(Component.empty());
         lore.add(text("<gray>Time Between Actions: <green>" + minion.getData().getActionDelaySeconds() + "s</green>"));
         lore.add(text("<gray>Max Storage: <yellow>" + minion.getData().getMaxStorage() + "</yellow>"));
         lore.add(text("<gray>Resources Generated: <aqua>" + minion.getTotalGenerated() + "</aqua>"));
-        lore.add(text("<gray>Status: <green>" + (minion.hasIdealLayout() ? taskStatus(minion) : "Paused") + "</green>"));
         return lore;
     }
 
@@ -292,7 +290,6 @@ public final class MinionMenu {
             lore.add(text("<gray>Time Between Actions: <dark_gray>" + minion.getData().getActionDelaySeconds() + "s <white>-> <green>" + minion.getType().getActionDelaySeconds(minion.getTier() + 1) + "s"));
             lore.add(text("<gray>Max Storage: <dark_gray>" + minion.getData().getMaxStorage() + " <white>-> <green>" + minion.getType().getMaxStorage(minion.getTier() + 1)));
             lore.add(Component.empty());
-            lore.add(text("<yellow>Required Items: <white>" + formatUpgradeCost(minion) + "</white>"));
             lore.add(text("<yellow>Click to view!"));
             return lore;
         }
@@ -305,16 +302,14 @@ public final class MinionMenu {
 
     private static List<Component> buildQuickUpgradeLore(SkyblockMinion minion) {
         List<Component> lore = new ArrayList<>();
-        lore.add(text("<gray>Click here to upgrade your"));
-        lore.add(text("<gray>minion to the next tier."));
+        lore.add(text("<gray>Click here to upgrade your minion to"));
+        lore.add(text("<gray>the next tier."));
         lore.add(Component.empty());
         if (minion.canUpgrade()) {
             lore.add(text("<gray>Time Between Actions: <dark_gray>" + minion.getData().getActionDelaySeconds() + "s <white>-> <green>" + minion.getType().getActionDelaySeconds(minion.getTier() + 1) + "s"));
             lore.add(text("<gray>Max Storage: <dark_gray>" + minion.getData().getMaxStorage() + " <white>-> <green>" + minion.getType().getMaxStorage(minion.getTier() + 1)));
             lore.add(Component.empty());
-            lore.add(text("<yellow>Required Items: <white>" + formatUpgradeCost(minion) + "</white>"));
-            lore.add(text(MinionUpgradeManager.canAfford(findViewer(minion), minion) ? "<green>You have enough materials.</green>" : "<red>You do not have enough materials.</red>"));
-            lore.add(text("<yellow>Click to upgrade!</yellow>"));
+            lore.add(text(MinionUpgradeManager.canAfford(findViewer(minion), minion) ? "<green>You have enough materials.</green>" : "<red>You need <gold>" + formatUpgradeCost(minion) + " <red>more."));
             return lore;
         }
         lore.add(text("<green>Time Between Actions: " + minion.getData().getActionDelaySeconds() + "s"));
@@ -357,16 +352,6 @@ public final class MinionMenu {
     private static String prettify(String value) {
         String clean = value.toLowerCase().replace("minecraft:", "").replace('_', ' ');
         return clean.isEmpty() ? "" : Character.toUpperCase(clean.charAt(0)) + clean.substring(1);
-    }
-
-    private static String taskStatus(SkyblockMinion minion) {
-        return switch (minion.getCurrentTask()) {
-            case FILL -> "Filling Layout";
-            case HARVEST -> "Harvesting";
-            case SPAWN -> "Spawning";
-            case SLAY -> "Slaying";
-            case FISH -> "Fishing";
-        };
     }
 
     private static String formatUpgradeCost(SkyblockMinion minion) {

@@ -3,7 +3,11 @@ package fun.ascent.skyblock.island.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcType;
+import fun.ascent.skyblock.events.JerryClickedEvent;
+import fun.ascent.skyblock.island.gui.GUIJerry;
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.world.WorldHandler;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -34,17 +38,15 @@ public record JerryNPC(Instance instance) implements NpcDefinition {
     @Override
     public String[] holograms() {
         return new String[] {
-            "<gold><bold>NEW UPDATE",
-            "<white>Jerry",
-            "<yellow><bold>CLICK"
+            "<gold><bold>NEW UPDATE", "<white>Jerry", CLICK
         };
     }
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
-        if (player instanceof fun.ascent.skyblock.player.SkyblockPlayer sp) {
-            net.minestom.server.MinecraftServer.getGlobalEventHandler().call(new fun.ascent.skyblock.events.JerryClickedEvent(sp));
+        if (player instanceof SkyblockPlayer sp) {
+            MinecraftServer.getGlobalEventHandler().call(new JerryClickedEvent(sp));
         }
-        npc.speak(player, "Jerry!");
+        new GUIJerry().open(player);
     }
 }
