@@ -35,7 +35,7 @@ public class GUIProfileCreate extends InventoryGUI {
         set(GUIClickableItem.getGoBackItem(22, new GUIProfileManagement()));
 
         Player player = e.player();
-        if (!(player instanceof SkyblockPlayer sp)) return;
+        if (!(player instanceof SkyblockPlayer)) return;
 
         // Confirm button
         set(new GUIClickableItem(11) {

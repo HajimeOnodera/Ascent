@@ -164,8 +164,9 @@ public class RegionListener {
                     "Learn about <dark_green>Enchanting<white> at the <aqua>Library<white>.",
                     "Talk to <red>Maxwell<white> to learn about <gold>Magical Power<white>."};
             case COMMUNITY_CENTER -> new String[]{
-                    "Participate in elections and community events.",
-                    "Talk to <gold>Clerk Seraphine<white>."};
+                    "Participate in the <green>Mayor Elections<white>.",
+                    "Contribute to City Projects.",
+                    "Unlock upgrades, buffs, and cosmetics in the <aqua>Community Shop<white>."};
             case FISHING_OUTPOST -> new String[]{
                     "Buy fishing essentials from the <aqua>Fishing Merchant<white>.",
                     "Talk to <blue>Fisherman Gerald<white>.",
