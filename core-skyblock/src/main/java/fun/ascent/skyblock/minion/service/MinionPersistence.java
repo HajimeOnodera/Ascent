@@ -48,6 +48,8 @@ public class MinionPersistence {
             }
         }
         doc.put("storage", GSON.toJson(serializedItems));
+        doc.put("lastSavedAt", System.currentTimeMillis());
+        doc.put("totalGenerated", minion.getTotalGenerated());
         
         return doc;
     }
@@ -86,6 +88,17 @@ public class MinionPersistence {
                 }
             }
             minion.getStorage().addAll(items, minion.getData().getStorageSlots());
+        }
+
+        // Restore totalGenerated
+        if (doc.containsKey("totalGenerated")) {
+            minion.setTotalGenerated(doc.getLong("totalGenerated"));
+        }
+
+        // Apply offline production
+        if (doc.containsKey("lastSavedAt")) {
+            long lastSavedAt = doc.getLong("lastSavedAt");
+            minion.applyOfflineProduction(lastSavedAt);
         }
         
         return minion;

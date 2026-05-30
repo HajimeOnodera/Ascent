@@ -55,8 +55,9 @@ public abstract class SkyblockMinion {
     private final MinionProfile profile;
     @Getter
     private MinionData data;
+    @Getter @Setter
     private long nextActionAt;
-    @Getter
+    @Getter @Setter
     private long totalGenerated;
     @Setter
     private boolean busy;
@@ -390,7 +391,7 @@ public abstract class SkyblockMinion {
     protected void storeDrops(List<ItemStack> drops) {
         storage.addAll(drops, data.getStorageSlots());
         for (ItemStack stack : drops) {
-            totalGenerated += stack.amount();
+            this.totalGenerated += stack.amount();
         }
     }
 
@@ -399,6 +400,39 @@ public abstract class SkyblockMinion {
         warningBottom.setCustomName(MINI_MESSAGE.deserialize("<red>" + "/!\\"));
         warningTop.setCustomNameVisible(true);
         warningBottom.setCustomNameVisible(true);
+    }
+
+    /**
+     * Calculate and apply offline production.
+     * Given the timestamp when the minion was last saved, calculates how many
+     * actions would have occurred and generates those items into storage.
+     */
+    public void applyOfflineProduction(long lastSavedAt) {
+        long now = System.currentTimeMillis();
+        long elapsed = now - lastSavedAt;
+        if (elapsed <= 0) return;
+
+        long actionDelayMs = data.getActionDelaySeconds() * 1000L;
+        if (actionDelayMs <= 0) return;
+
+        long missedActions = elapsed / actionDelayMs;
+        if (missedActions <= 0) return;
+
+        List<ItemStack> dropsPerAction = profile.createHarvestDrops();
+        int maxStorage = data.getMaxStorage();
+
+        for (long i = 0; i < missedActions; i++) {
+            if (storage.totalItems() >= maxStorage) break;
+            if (!storage.canFit(dropsPerAction, data.getStorageSlots())) break;
+            storage.addAll(dropsPerAction, data.getStorageSlots());
+            for (ItemStack stack : dropsPerAction) {
+                this.totalGenerated += stack.amount();
+            }
+        }
+
+        // Set nextActionAt relative to the remainder
+        long remainder = elapsed % actionDelayMs;
+        this.nextActionAt = now + (actionDelayMs - remainder);
     }
 
     protected void clearWarning() {

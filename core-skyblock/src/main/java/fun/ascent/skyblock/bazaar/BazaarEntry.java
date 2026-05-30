@@ -119,12 +119,11 @@ public class BazaarEntry {
             String name;
             if(child.iconItem != null){
                 name = child.iconItem.getDisplayName();
-                System.err.println("ERROR: Icon Item of " + child.id + " is null");
             }else if(child.itemToSell != null){
                 name = child.itemToSell.getDisplayName();
-                System.err.println("ERROR: Item to Sell of " + child.id + " is null");
             }else {
                 name = "Unknown Item";
+                System.err.println("ERROR: Icon Item of " + child.id + " is null");
             }
             msg += " <gray>" + name +
             " <red>" + formatShortened(sellPrice) + "<dark_gray> | <green>" + formatShortened(buyPrice);

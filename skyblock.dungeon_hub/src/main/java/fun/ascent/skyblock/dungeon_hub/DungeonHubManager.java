@@ -2,6 +2,7 @@ package fun.ascent.skyblock.dungeon_hub;
 
 import fun.ascent.common.world.PolarWorlds;
 import fun.ascent.common.world.WorldRegistry;
+import fun.ascent.skyblock.dungeon.DungeonHubServiceRegistry;
 import lombok.Getter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
@@ -13,7 +14,7 @@ import java.nio.file.Path;
 
 public class DungeonHubManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(DungeonHubManager.class);
-    private static final Pos SPAWN = new Pos(-27, 121, 0, 0, 0);
+    private static final Pos SPAWN = new Pos(0, 125, 0, 0, 0);
     private static boolean initialized = false;
     @Getter
     private static InstanceContainer dungeonHubInstance;
@@ -34,13 +35,10 @@ public class DungeonHubManager {
             container.setTag(WorldRegistry.WORLD_ID_TAG, "dungeon_hub");
             container.setChunkLoader(PolarWorlds.setupMemoryPolarWorld(Path.of("maps/dungeon_hub.polar"), -1));
             dungeonHubInstance = container;
+            DungeonHubServiceRegistry.register(container, SPAWN);
             LOGGER.info("Dungeon Hub world loaded successfully.");
         } catch (Exception e) {
             LOGGER.error("Failed to load Dungeon Hub world!", e);
         }
-    }
-
-    public static Pos getSpawnPos() {
-        return SPAWN;
     }
 }
