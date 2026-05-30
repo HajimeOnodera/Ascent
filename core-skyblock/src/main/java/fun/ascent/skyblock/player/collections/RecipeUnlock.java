@@ -20,6 +20,16 @@ public class RecipeUnlock extends CollectionUnlock {
         if (item == null) {
             item = ItemRegistry.getItem(recipeName + "_I");
         }
+        if (item == null && recipeName.contains("MINION")) {
+            String genName = recipeName.replace("MINION", "GENERATOR");
+            item = ItemRegistry.getItem(genName);
+            if (item == null) {
+                item = ItemRegistry.getItem(genName + "_1");
+            }
+            if (item == null) {
+                item = ItemRegistry.getItem(genName + "_I");
+            }
+        }
         String name = ItemRegistry.formatName(recipeName);
         name = name.replaceAll("<[^>]*>", "");
         name = name.replaceAll("§[0-9a-fk-orA-FK-OR]", "");
