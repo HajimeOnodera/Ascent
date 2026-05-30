@@ -93,6 +93,7 @@ public class AdvancedScoreboard {
 
             if (i < lastLineCount) {
                 sidebar.updateLineContent(lineId, MiniMessage.miniMessage().deserialize(content));
+                sidebar.updateLineScore(lineId, score);
             } else {
                 sidebar.createLine(new Sidebar.ScoreboardLine(lineId, MiniMessage.miniMessage().deserialize(content), score));
             }

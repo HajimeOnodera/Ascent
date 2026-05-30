@@ -65,6 +65,7 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
         setCraftingTable();
         setFastTravel();
         setProfileManagement();
+        setBoosterCookie(plProfile);
     }
 
     private void setYourProfile(ProfilePlayer plProfile) {
@@ -474,6 +475,68 @@ public class SkyblockMenu extends InventoryGUI implements RefreshingGUI {
                         1,
                         lore
                 );
+            }
+        });
+    }
+
+    private void setBoosterCookie(ProfilePlayer plProfile) {
+        set(new GUIClickableItem(51) {
+            @Override
+            public void run(InventoryPreClickEvent e, Player player) {
+                BoosterCookieMenu.open((SkyblockPlayer) player);
+            }
+
+            @Override
+            public ItemStack.Builder getItem(Player player) {
+                List<Component> lore = new ArrayList<>();
+                lore.add(miniMessage().deserialize("<gray>Obtain the <light_purple>Cookie Buff <gray>from Booster").decoration(TextDecoration.ITALIC, false));
+                lore.add(miniMessage().deserialize("<gray>Cookies in the hub's community shop.").decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+
+                boolean active = plProfile.boosterCookieExpires > System.currentTimeMillis();
+                if (active) {
+                    long remainingMs = plProfile.boosterCookieExpires - System.currentTimeMillis();
+                    long remainingSeconds = remainingMs / 1000;
+                    long days = remainingSeconds / (24 * 3600);
+                    long hours = (remainingSeconds % (24 * 3600)) / 3600;
+                    long minutes = (remainingSeconds % 3600) / 60;
+                    long seconds = remainingSeconds % 60;
+                    
+                    String timeStr;
+                    if (days > 0) {
+                        timeStr = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
+                    } else if (hours > 0) {
+                        timeStr = hours + "h " + minutes + "m " + seconds + "s";
+                    } else if (minutes > 0) {
+                        timeStr = minutes + "m " + seconds + "s";
+                    } else {
+                        timeStr = seconds + "s";
+                    }
+
+                    lore.add(miniMessage().deserialize("<gray>Duration: <green>" + timeStr).decoration(TextDecoration.ITALIC, false));
+                    lore.add(miniMessage().deserialize("<gray>Bits Available: <aqua>" + String.format("%,d", (int) plProfile.cookieBits)).decoration(TextDecoration.ITALIC, false));
+                } else {
+                    lore.add(miniMessage().deserialize("<gray>Duration: <red>Not Active").decoration(TextDecoration.ITALIC, false));
+                    lore.add(miniMessage().deserialize("<gray>Bits Available: <aqua>0").decoration(TextDecoration.ITALIC, false));
+                }
+
+                lore.add(Component.empty());
+                lore.add(miniMessage().deserialize("<dark_gray>Also accessible via /boostercookie").decoration(TextDecoration.ITALIC, false));
+                lore.add(Component.empty());
+                lore.add(miniMessage().deserialize("<yellow>Click to get all the info!"));
+
+                ItemStack.Builder builder = ItemStackCreator.getStack(
+                        miniMessage().deserialize("<gold>Booster Cookie"),
+                        Material.COOKIE,
+                        1,
+                        lore
+                );
+
+                if (active) {
+                    ItemStackCreator.enchant(builder);
+                }
+
+                return builder;
             }
         });
     }

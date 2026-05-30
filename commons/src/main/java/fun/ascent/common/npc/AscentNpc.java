@@ -28,7 +28,7 @@ public class AscentNpc {
 
     private static final Set<UUID> ALREADY_TALKING = new HashSet<>();
     public static final Set<UUID> INTERACTED = new HashSet<>();
-    private static final double HOLOGRAM_DELTA = 0.25;
+    private static final double HOLOGRAM_DELTA = 0.2;
 
     private final List<Entity> holograms = new ArrayList<>();
     private final UUID uuid = UUID.randomUUID();
