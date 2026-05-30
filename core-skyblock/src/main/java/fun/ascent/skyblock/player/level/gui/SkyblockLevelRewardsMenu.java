@@ -34,7 +34,7 @@ public class SkyblockLevelRewardsMenu {
         SkyBlockLevelRequirement req = SkyBlockLevelRequirement.getLevel(level);
 
         inv.setItemStack(FEATURE_SLOT, buildFeatureItem(level));
-        inv.setItemStack(PREFIX_SLOT, buildPrefixItem(req, level));
+        inv.setItemStack(PREFIX_SLOT, buildPrefixItem(req));
         inv.setItemStack(EMBLEM_SLOT, buildEmblemItem(level));
         inv.setItemStack(STATS_SLOT, buildStatsItem(level));
         inv.setItemStack(BACK_SLOT, buildBackButton());
@@ -98,7 +98,7 @@ public class SkyblockLevelRewardsMenu {
                 .build();
     }
 
-    private static ItemStack buildPrefixItem(SkyBlockLevelRequirement req, int level) {
+    private static ItemStack buildPrefixItem(SkyBlockLevelRequirement req) {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<gray>New colors for your level prefix"));
         lore.add(text("<gray>shown in TAB and in chat!"));
@@ -136,8 +136,8 @@ public class SkyblockLevelRewardsMenu {
 
     private static ItemStack buildStatsItem(int level) {
         List<Component> lore = new ArrayList<>();
-        lore.add(text("<gray>Leveling up provides direct passive"));
-        lore.add(text("<gray>statistic boosts to your profile."));
+        lore.add(text("<gray>Statistic bonuses that will power you"));
+        lore.add(text("<gray>up as you level up."));
         lore.add(Component.empty());
         lore.add(text("<green>Active Stat Boosts:"));
         lore.add(text("  <gray>• Max Health: <red>+" + (level * 5) + " ❤ HP"));
@@ -148,7 +148,7 @@ public class SkyblockLevelRewardsMenu {
         lore.add(text("  <gray>• Strength: <red>+1 ❁ <gray>every 5 SkyBlock Levels"));
 
         return ItemStackCreator.clearAttributes(ItemStackCreator.clearAttributes(ItemStack.builder(Material.DIAMOND_HELMET))
-                .customName(text("<green>Statistic Rewards"))
+                .customName(text("<green>Stat Rewards"))
                 .lore(lore))
                 .build();
     }

@@ -98,6 +98,27 @@ public class ItemCategoryGUI extends InventoryGUI {
             });
         }
 
+        set(new GUIClickableItem(47) {
+            @Override
+            public void run(InventoryPreClickEvent event, Player player) {
+                new ItemListGUI("All").open(player);
+            }
+
+            @Override
+            public ItemStack.Builder getItem(Player p) {
+                int count = ItemRegistry.getAllItems().size();
+                return ItemStackCreator.getStack(
+                        "<green>All Items",
+                        Material.COMPASS,
+                        1,
+                        "<gray>View all available items",
+                        "",
+                        "<gray>Loaded Items: <yellow>" + count + " items",
+                        "<yellow>Click to browse all items!"
+                );
+            }
+        });
+
         set(new GUIClickableItem(49) {
             @Override
             public void run(InventoryPreClickEvent event, Player player) {

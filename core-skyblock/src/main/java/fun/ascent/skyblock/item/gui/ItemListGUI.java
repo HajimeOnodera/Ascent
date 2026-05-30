@@ -15,6 +15,15 @@ import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.coordinate.Point;
+import net.kyori.adventure.nbt.ListBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.network.packet.server.play.OpenSignEditorPacket;
+import net.minestom.server.event.EventListener;
+import net.minestom.server.event.player.PlayerEditSignEvent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,12 +32,42 @@ import java.util.List;
 public class ItemListGUI extends InventoryGUI {
 
     private final List<SkyblockItem> filteredItems;
+    private final String categoryName;
+    private final String searchQuery;
     private int page = 0;
     private Player player;
 
     public ItemListGUI(String categoryName) {
-        super("Items: " + categoryName, InventoryType.CHEST_6_ROW);
-        this.filteredItems = filterByCategory(categoryName, ItemRegistry.getAllItems());
+        this(categoryName, null);
+    }
+
+    public ItemListGUI(String categoryName, String searchQuery) {
+        super(searchQuery != null ? "Search: " + searchQuery : "Items: " + categoryName, InventoryType.CHEST_6_ROW);
+        this.categoryName = categoryName;
+        this.searchQuery = searchQuery;
+        
+        List<SkyblockItem> baseItems = filterByCategory(categoryName, ItemRegistry.getAllItems());
+        if (searchQuery != null && !searchQuery.isBlank()) {
+            this.filteredItems = filterBySearch(searchQuery, baseItems);
+        } else {
+            this.filteredItems = baseItems;
+        }
+    }
+
+    public static List<SkyblockItem> filterBySearch(String query, Collection<SkyblockItem> items) {
+        String lowerQuery = query.toLowerCase();
+        return items.stream()
+                .filter(item -> {
+                    String id = item.getItemId().toUpperCase();
+                    String name = item.getDisplayName().toLowerCase();
+                    String desc = "";
+                    if (item.convertToItemData() != null && item.convertToItemData().description() != null) {
+                        desc = item.convertToItemData().description().toLowerCase();
+                    }
+                    return id.contains(lowerQuery.toUpperCase()) || name.contains(lowerQuery) || desc.contains(lowerQuery);
+                })
+                .sorted((a, b) -> a.getDisplayName().compareToIgnoreCase(b.getDisplayName()))
+                .toList();
     }
 
     public static List<SkyblockItem> filterByCategory(String categoryName, Collection<SkyblockItem> allItems) {
@@ -43,6 +82,7 @@ public class ItemListGUI extends InventoryGUI {
                     ItemType type = item.getItemType();
 
                     return switch (categoryName) {
+                        case "All", "All Items" -> true;
                         case "Accessory" ->
                                 type.isAccessory() || name.contains("talisman") || name.contains("ring") || name.contains("artifact") || name.contains("relic") || name.contains("badge");
                         case "Admin Items" ->
@@ -106,9 +146,9 @@ public class ItemListGUI extends InventoryGUI {
         getInventory().clear();
         if (player == null) return;
 
-        // Fill bottom row with dark gray stained glass pane except page buttons
+        // Fill bottom row with dark gray stained glass pane except page buttons and search
         for (int i = 45; i < 54; i++) {
-            if (i != 48 && i != 49 && i != 50) {
+            if (i != 46 && i != 48 && i != 49 && i != 50) {
                 set(i, FILLER_ITEM);
             }
         }
@@ -142,7 +182,7 @@ public class ItemListGUI extends InventoryGUI {
                     lore.add(StringUtility.text("<yellow>Click to receive this item!"));
 
                     ItemStack.Builder builder = ItemStack.builder(stack.material())
-                            .set(DataComponents.LORE, lore);
+                             .set(DataComponents.LORE, lore);
 
                     if (stack.get(DataComponents.CUSTOM_NAME) != null) {
                         builder.set(DataComponents.CUSTOM_NAME, stack.get(DataComponents.CUSTOM_NAME));
@@ -176,6 +216,26 @@ public class ItemListGUI extends InventoryGUI {
             set(i, null);
         }
 
+        // Search Button
+        set(new GUIClickableItem(46) {
+            @Override
+            public void run(InventoryPreClickEvent e, Player p) {
+                openSearchBar(p);
+            }
+
+            @Override
+            public ItemStack.Builder getItem(Player p) {
+                List<Component> lore = new ArrayList<>();
+                lore.add(StringUtility.text("<gray>Search items in category: <aqua>" + categoryName));
+                if (searchQuery != null) {
+                    lore.add(StringUtility.text("<gray>Active Filter: <yellow>\"" + searchQuery + "\""));
+                }
+                lore.add(Component.empty());
+                lore.add(StringUtility.text("<yellow>Click to search items!"));
+                return ItemStackCreator.getStack("<gold>Search Items", Material.OAK_SIGN, 1, lore);
+            }
+        });
+
         // Navigation
         if (page > 0) {
             set(new GUIClickableItem(48) {
@@ -197,12 +257,20 @@ public class ItemListGUI extends InventoryGUI {
         set(new GUIClickableItem(49) {
             @Override
             public void run(InventoryPreClickEvent e, Player player) {
-                new ItemCategoryGUI().open(player);
+                if (searchQuery != null) {
+                    new ItemListGUI(categoryName).open(player);
+                } else {
+                    new ItemCategoryGUI().open(player);
+                }
             }
 
             @Override
             public ItemStack.Builder getItem(Player p) {
-                return ItemStackCreator.getStack("<red>Go Back", Material.BARRIER, 1, "<gray>To Categories");
+                if (searchQuery != null) {
+                    return ItemStackCreator.getStack("<red>Clear Search", Material.BARRIER, 1, "<gray>Back to category");
+                } else {
+                    return ItemStackCreator.getStack("<red>Go Back", Material.BARRIER, 1, "<gray>To Categories");
+                }
             }
         });
 
@@ -224,6 +292,42 @@ public class ItemListGUI extends InventoryGUI {
         }
 
         updateItemStacks(getInventory(), player);
+    }
+
+    private void openSearchBar(Player player) {
+        player.closeInventory();
+        Point pos = player.getPosition();
+        ListBinaryTag messages = ListBinaryTag.builder()
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"^^^^^^^^^^^^^^^\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"Enter query\"}"))
+                .add(StringBinaryTag.stringBinaryTag("{\"text\":\"\"}"))
+                .build();
+        CompoundBinaryTag frontText = CompoundBinaryTag.builder()
+                .put("messages", messages)
+                .build();
+        Block signBlock = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
+                .put("front_text", frontText)
+                .build());
+
+        player.sendPacket(new BlockChangePacket(pos, signBlock));
+        player.sendPacket(new OpenSignEditorPacket(pos, true));
+
+        EventListener<PlayerEditSignEvent> listener = EventListener.builder(PlayerEditSignEvent.class)
+                .handler(event -> {
+                    String query = event.getLines().getFirst();
+                    if (query.isBlank()) {
+                        new ItemListGUI(categoryName).open(player);
+                        return;
+                    }
+                    new ItemListGUI(categoryName, query).open(player);
+                    player.sendMessage(StringUtility.text("<green>Searching for: " + query));
+                    Block original = player.getInstance().getBlock(pos);
+                    player.sendPacket(new BlockChangePacket(pos, original));
+                })
+                .expireCount(1)
+                .build();
+        player.eventNode().addListener(listener);
     }
 
     @Override

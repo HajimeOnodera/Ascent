@@ -309,7 +309,7 @@ public final class MinionMenu {
             lore.add(text("<gray>Time Between Actions: <dark_gray>" + minion.getData().getActionDelaySeconds() + "s <white>-> <green>" + minion.getType().getActionDelaySeconds(minion.getTier() + 1) + "s"));
             lore.add(text("<gray>Max Storage: <dark_gray>" + minion.getData().getMaxStorage() + " <white>-> <green>" + minion.getType().getMaxStorage(minion.getTier() + 1)));
             lore.add(Component.empty());
-            lore.add(text(MinionUpgradeManager.canAfford(findViewer(minion), minion) ? "<green>You have enough materials.</green>" : "<red>You need <gold>" + formatUpgradeCost(minion) + " <red>more."));
+            lore.add(text(MinionUpgradeManager.canAfford(findViewer(minion), minion) ? "<green>You have enough materials.</green>" : "<red>You need <gold>" + formatUpgradeCost(minion)));
             return lore;
         }
         lore.add(text("<green>Time Between Actions: " + minion.getData().getActionDelaySeconds() + "s"));
@@ -357,10 +357,7 @@ public final class MinionMenu {
     private static String formatUpgradeCost(SkyblockMinion minion) {
         MinionUpgradeCost cost = MinionUpgradeManager.getUpgradeCost(minion);
         SkyblockItem item = ItemRegistry.getItemByMaterial(cost.material());
-        if (item != null) {
-            return cost.amount() + " " + item.getRarity().getColor() + item.getDisplayName();
-        }
-        return cost.amount() + " <white>" + prettify(cost.material().name());
+        return cost.amount() + "<red> more " + item.getDisplayName();
     }
 
     private static SkyblockPlayer findViewer(SkyblockMinion minion) {
