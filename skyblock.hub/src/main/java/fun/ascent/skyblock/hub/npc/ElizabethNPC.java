@@ -3,6 +3,8 @@ package fun.ascent.skyblock.hub.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
+import fun.ascent.skyblock.hub.gui.GUIElizabeth;
+import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
@@ -34,7 +36,16 @@ public record ElizabethNPC(Instance instance) implements NpcDefinition {
 
     @Override
     public void onInteract(Player player, AscentNpc npc) {
-        npc.speak(player, "hi ;)");
+        if (player instanceof SkyblockPlayer sp) {
+            if (sp.getActiveProfileData().level.curLevel < 3) {
+                npc.speak(player, "<white>Hello! Welcome to <aqua>SkyBlock<white>!",
+                        "<white>I have powerful items to offer, but only to experienced adventurers!",
+                        "Until then, I suggest leveling up to SkyBlock Level 3!"
+                );
+            } else {
+                new GUIElizabeth().open(player);
+            }
+        }
     }
 }
 

@@ -122,7 +122,6 @@ public class QuestData {
             }
         } else {
             if (getSkyblockPlayer() != null) {
-                activeQuest.getObjectiveCompleteText(new ArrayList<>()).forEach(getSkyblockPlayer()::sendMessage);
                 getSkyblockPlayer().playSound(Sound.sound(
                         Key.key("entity.experience_orb.pickup"),
                         Sound.Source.PLAYER, 0.5f, 1.2f));

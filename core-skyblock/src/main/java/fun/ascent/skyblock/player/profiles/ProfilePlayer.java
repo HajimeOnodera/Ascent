@@ -198,12 +198,10 @@ public class ProfilePlayer {
         String newColour = SkyblockLevel.getLevelColour(curLevel);
         String oldColour = SkyblockLevel.getLevelColour(oldLevel);
 
-        String border = "<dark_aqua><bold>" + "▬".repeat(38);
-        skyblockPlayer.sendMessage(text(border));
-        skyblockPlayer.sendMessage(text("  <dark_aqua><bold>SKYBLOCK LEVEL UP"));
-        skyblockPlayer.sendMessage(text("  " + newColour + "Level <dark_gray>[" + oldColour + oldLevel + "<dark_gray>] ➜ [" + newColour + curLevel + "<dark_gray>]"));
+        skyblockPlayer.sendMessage(text(centerText("§3§lSKYBLOCK LEVEL UP")));
+        skyblockPlayer.sendMessage(text(centerText("§7Level " + oldLevel + " §8➜ " + newColour + "[" + curLevel + "]")));
         skyblockPlayer.sendMessage(Component.empty());
-        skyblockPlayer.sendMessage(text("  <green><bold>REWARDS"));
+        skyblockPlayer.sendMessage(text(centerText("§6§lREWARDS")));
 
         for (Map.Entry<Stats, Double> entry : statRewards.entrySet()) {
             Stats stat = entry.getKey();
@@ -213,15 +211,16 @@ public class ProfilePlayer {
             String displayAmount = amount == Math.rint(amount)
                     ? String.valueOf((int) amount)
                     : String.format("%.1f", amount);
-            skyblockPlayer.sendMessage(text("    <dark_gray>+<green>" + displayAmount + " " + stat.getStatColor() + stat.getStatFormattedDisplay()));
+            
+            String symbolPart = stat.getStatSymbol() != null && !stat.getStatSymbol().isEmpty() ? " " + stat.getStatColor() + stat.getStatSymbol() : "";
+            skyblockPlayer.sendMessage(text(centerText("§8+" + displayAmount + symbolPart + " " + stat.getStatColor() + stat.getStatFormattedDisplay())));
             addToStat(stat, amount);
         }
 
         for (String rewardStr : stringRewards.keySet()) {
-            skyblockPlayer.sendMessage(text("    <dark_gray>+" + rewardStr));
+            skyblockPlayer.sendMessage(text(centerText("§8+" + rewardStr)));
         }
-
-        skyblockPlayer.sendMessage(text(border));
+        skyblockPlayer.sendMessage(Component.empty());
 
         // Premium level-up Title + Subtitle!
         Title titleObj = Title.title(
@@ -271,6 +270,16 @@ public class ProfilePlayer {
             bestiaryProgress = new BestiaryProgress();
         }
         return bestiaryProgress;
+    }
+
+    private String centerText(String text) {
+        String clean = text.replaceAll("§[0-9a-fk-orxX]", "")
+                           .replaceAll("<[^>]+>", "");
+        int cleanLength = clean.length();
+        int chatWidth = 52;
+        if (cleanLength >= chatWidth) return text;
+        int spaces = (chatWidth - cleanLength) / 2;
+        return " ".repeat(spaces) + text;
     }
 
 }

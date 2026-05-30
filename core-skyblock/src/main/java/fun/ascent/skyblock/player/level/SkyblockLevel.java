@@ -40,30 +40,6 @@ public class SkyblockLevel {
         setXp(getXp() + amount);
     }
 
-    public void addExp(int amount) {
-        addXP(amount);
-    }
-
-    public boolean removeXP(int xpAmount) {
-        if (getXp() - xpAmount >= 0) {
-            setXp(getXp() - xpAmount);
-            return true;
-        }
-        return false;
-    }
-
-    public void addLevel(int levelAmount) {
-        setLevel(getLevel() + levelAmount);
-    }
-
-    public boolean removeLevel(int levelAmount) {
-        if (getLevel() - levelAmount >= 0) {
-            setLevel(getLevel() - levelAmount);
-            return true;
-        }
-        return false;
-    }
-
     public static String getLevelColour(int level) {
         if (level >= 480) return "<dark_red>";
         if (level >= 440) return "<red>";
@@ -82,7 +58,7 @@ public class SkyblockLevel {
 
     public static Map<String, ItemStack> getRewards(int oldLevel, int curLevel) {
         Map<String, ItemStack> rewards = new LinkedHashMap<>();
-        for (int level = oldLevel; level <= curLevel; level++) {
+        for (int level = oldLevel + 1; level <= curLevel; level++) {
 
             switch (level) {
                 case 3:
