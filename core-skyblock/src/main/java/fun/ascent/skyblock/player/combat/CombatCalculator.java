@@ -2,9 +2,7 @@ package fun.ascent.skyblock.player.combat;
 
 import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
 import fun.ascent.skyblock.player.SkyblockPlayer;
-import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
-import java.util.Map;
 
 public class CombatCalculator {
 
@@ -22,11 +20,10 @@ public class CombatCalculator {
 
         boolean isCrit = Math.random() * 100.0 <= critChance;
 
-        double baseDamage = weaponDamage;
         double strengthMultiplier = 1.0 + strength / 100.0;
         double critMultiplier = isCrit ? 1.0 + critDamage / 100.0 : 1.0;
 
-        double damage = baseDamage * strengthMultiplier * critMultiplier;
+        double damage = weaponDamage * strengthMultiplier * critMultiplier;
         double enchantBoost = 0.0;
 
         int sharpnessLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SHARPNESS);
@@ -177,11 +174,7 @@ public class CombatCalculator {
     }
 
     private static double playerStat(SkyblockPlayer player, Stats stat) {
-        if (player.getActiveProfileData() == null) return stat.getBaseStat();
-
-        Map<String, Stat> stats = player.getActiveProfileData().stats;
-        Stat entry = stats.get(stat.name().toLowerCase());
-        return entry != null ? entry.getCurValue() : stat.getBaseStat();
+        return player.playerStat(stat);
     }
 
     public record CombatResult(double damage, boolean isCrit) {

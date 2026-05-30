@@ -6,6 +6,7 @@ import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.skill.SkillRegistry;
 import fun.ascent.skyblock.player.skill.SkillType;
+import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.region.Region;
 import fun.ascent.skyblock.world.region.RegionManager;
 import fun.ascent.skyblock.world.region.RegionType;
@@ -455,9 +456,9 @@ public class BlockManager {
             double fortune = 0;
             try {
                 switch (sbBlock.skillType) {
-                    case MINING -> fortune = player.getActiveProfileData().stats.get("mining_fortune").getCurValue();
-                    case FARMING -> fortune = player.getActiveProfileData().stats.get("farming_fortune").getCurValue();
-                    case FORAGING -> fortune = player.getActiveProfileData().stats.get("foraging_fortune").getCurValue();
+                    case MINING -> fortune = player.playerStat(Stats.MINING_FORTUNE);
+                    case FARMING -> fortune = player.playerStat(Stats.FARMING_FORTUNE);
+                    case FORAGING -> fortune = player.playerStat(Stats.FORAGING_FORTUNE);
                     default -> throw new IllegalArgumentException("Unexpected value: " + sbBlock.skillType);
                 }
             } catch (NullPointerException ignored) {

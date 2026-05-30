@@ -273,10 +273,6 @@ public class CombatListener {
     }
 
     private static double playerStat(SkyblockPlayer player, Stats stat) {
-        if (player.getActiveProfileData() == null) return stat.getBaseStat();
-
-        java.util.Map<String, fun.ascent.skyblock.player.stats.Stat> stats = player.getActiveProfileData().stats;
-        fun.ascent.skyblock.player.stats.Stat entry = stats.get(stat.name().toLowerCase());
-        return entry != null ? entry.getCurValue() : stat.getBaseStat();
+        return player.playerStat(stat);
     }
 }
