@@ -139,7 +139,7 @@ public class BazaarItemBuyMenu {
         );
         inventory.setItemStack(11,sell);
 
-        inventory.setItemStack(13,item.itemToSell.buildItemStack());
+        inventory.setItemStack(13,item.itemToSell == null ? ItemStack.of(Material.BARRIER).withCustomName(StringUtility.text("No Item for " + item.id))  : item.itemToSell.buildItemStack());
 
         ItemStack buyOrder = ItemStack.of(Material.FILLED_MAP).withCustomName(StringUtility.text(
                 "<green>Create Buy Order"

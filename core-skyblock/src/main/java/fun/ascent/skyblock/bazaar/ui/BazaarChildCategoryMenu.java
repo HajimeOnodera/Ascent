@@ -67,7 +67,11 @@ public class BazaarChildCategoryMenu {
         }
         for (BazaarEntry child : cur.children) {
             if(child.slot == slot){
-                BazaarItemBuyMenu.open(player,child);
+                if(child.children != null){
+                    BazaarChildCategoryMenu.open(player,child);
+                }else{
+                    BazaarItemBuyMenu.open(player,child);
+                }
                 return;
             }
         }

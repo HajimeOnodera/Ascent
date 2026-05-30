@@ -38,7 +38,7 @@ public record BazaarAgentNPC(Instance instance) implements NpcDefinition {
 
     @Override public String[] firstInteractionMessages() { return new String[]{"Welcome to the Bazaar!", "Here you can instantly buy and sell resources at market prices.", "Supply and demand drive the prices, so keep an eye on trends!"}; }
     @Override public void onFirstInteract(Player player, AscentNpc npc) {
-        if(((SkyblockPlayer)player).getActiveProfileData().level.curLevel > 7) {
+        if(((SkyblockPlayer)player).getActiveProfileData().level.curLevel >= 7) {
             npc.speak(player, firstInteractionMessages());
         }else {
             INTERACTED.remove(player.getUuid());
@@ -50,6 +50,11 @@ public record BazaarAgentNPC(Instance instance) implements NpcDefinition {
         SkyblockPlayer player1 = (SkyblockPlayer) player;
         if (player1.getActiveProfileData().level.curLevel > 7) {
             BazaarCategoryMenu.openMenu((SkyblockPlayer) player, BazaarRegistry.bazaarItemList.getFarming());
+        }else {
+            if(INTERACTED.contains(player.getUuid())) {
+                player.sendMessage(StringUtility.text("<red>You need Skyblock Level 7 to access this feature!"));
+                INTERACTED.remove(player.getUuid());
+            }
         }
     }
 }

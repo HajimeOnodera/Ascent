@@ -9,6 +9,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class BazaarEntry {
     public void initializeTransientFields(@Nullable BazaarEntry parent) {
         this.parentEntry = parent;
         if (this.icon != null) {
-            this.iconItem = ItemRegistry.getItem(this.icon.toLowerCase());
+            this.iconItem = ItemRegistry.getItem(this.icon);
         }
         if (this.id != null) {
             this.itemToSell = ItemRegistry.getItem(this.id);
@@ -89,9 +90,15 @@ public class BazaarEntry {
         }
         if(this.children == null){
             Price price = BZPriceRegistry.priceTable.get(this);
-            if(price == null) return this.iconItem.buildItemStack();
 
-            ItemStack base = this.iconItem.buildItemStack();
+            ItemStack base;
+            if(this.iconItem == null){
+                if(this.itemToSell != null) base = this.itemToSell.buildItemStack();
+                else base = ItemStack.of(Material.BARRIER).withCustomName(StringUtility.text("<red>Could not Find Item for ID: " + id));
+            }else{
+                base = this.iconItem.buildItemStack();
+            }
+            if(price == null) return base;
             return base.withCustomName(this.nameComp).withLore(
                     StringUtility.text(getRarity(this.itemToSell) + " commodity"),
                     Component.empty(),
@@ -127,7 +134,7 @@ public class BazaarEntry {
                 name = "Unknown Item";
             }
             msg += " <gray>" + name +
-            " <red>" + formatShortened(sellPrice) + "<dark_gray> | <green>" + formatShortened(buyPrice);
+            " <red>" + (child.children == null ? formatShortened(sellPrice) + "<dark_gray> | <green>" + formatShortened(buyPrice) : "");
             lore.add(StringUtility.text(msg));
         });
         lore.add(Component.empty());
@@ -159,10 +166,6 @@ public class BazaarEntry {
         } else {
             return String.format(java.util.Locale.US, "%.1f", rounded) + suffixes[suffixIndex];
         }
-    }
-
-    public String formatPrice(double val) {
-        return formatShortened(val);
     }
 
     public String getRarity(SkyblockItem item){

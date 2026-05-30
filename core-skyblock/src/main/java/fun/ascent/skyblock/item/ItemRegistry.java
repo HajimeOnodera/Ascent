@@ -421,7 +421,6 @@ public class ItemRegistry {
         item = ITEMS.get(resolvedId.toLowerCase());
         if (item != null) return item;
 
-        // Dynamic Fallback: if it's a valid vanilla material, construct a COMMON Skyblock item for it!
         String cleanId = resolvedId.toUpperCase(Locale.ROOT).replace("MINECRAFT:", "");
         Material material = safeGetMaterial("minecraft:" + cleanId.toLowerCase(Locale.ROOT));
         if (material == null) {
