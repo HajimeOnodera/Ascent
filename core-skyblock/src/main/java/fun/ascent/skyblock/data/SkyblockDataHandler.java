@@ -296,6 +296,28 @@ public class SkyblockDataHandler {
                 if (player.getActiveProfileData() == null) return null;
                 return new DatapointDouble("bits_multiplier", player.getActiveProfileData().bitsMultiplier);
             }),
+
+        COOKIE_BITS("cookie_bits", DatapointDouble.class, new DatapointDouble("cookie_bits", 0.0),
+            (player, dp) -> {
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().cookieBits = (Double) dp.getValue();
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointDouble("cookie_bits", player.getActiveProfileData().cookieBits);
+            }),
+
+        BITS_TIMER_SECONDS("bits_timer_seconds", DatapointLong.class, new DatapointLong("bits_timer_seconds", 0L),
+            (player, dp) -> {
+                if (player.getActiveProfileData() != null) {
+                    player.getActiveProfileData().bitsTimerSeconds = dp.getValue() != null ? ((Long) dp.getValue()).intValue() : 0;
+                }
+            },
+            (player) -> {
+                if (player.getActiveProfileData() == null) return null;
+                return new DatapointLong("bits_timer_seconds", (long) player.getActiveProfileData().bitsTimerSeconds);
+            }),
         ;
 
         @Getter private final String key;

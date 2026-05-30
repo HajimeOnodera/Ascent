@@ -33,7 +33,7 @@ public class SkyblockLevelPrefixRewardsMenu {
         SkyBlockLevelRequirement req = SkyBlockLevelRequirement.getLevel(level);
 
         // Title item
-        inv.setItemStack(TITLE_SLOT, buildTitleItem(req, level));
+        inv.setItemStack(TITLE_SLOT, buildTitleItem(req));
 
         // Prefix items
         int index = 0;
@@ -64,7 +64,7 @@ public class SkyblockLevelPrefixRewardsMenu {
         player.openInventory(inv);
     }
 
-    private static ItemStack buildTitleItem(SkyBlockLevelRequirement req, int level) {
+    private static ItemStack buildTitleItem(SkyBlockLevelRequirement req) {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<gray>New colors for your level prefix"));
         lore.add(text("<gray>shown in TAB and in chat!"));
@@ -106,7 +106,7 @@ public class SkyblockLevelPrefixRewardsMenu {
         List<Component> lore = new ArrayList<>();
         lore.add(text("<dark_gray>Level " + levelReq.asInt()));
         lore.add(Component.empty());
-        lore.add(text("<gray>Preview: <white>[" + levelReq.getPrefix() + levelReq.asInt() + "<white>] " + player.getName()));
+        lore.add(text("<gray>Preview: <white>[" + levelReq.getPrefix() + levelReq.asInt() + "<white>] " + player.getUsername()));
         lore.add(Component.empty());
 
         if (unlocked) {

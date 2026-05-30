@@ -16,9 +16,7 @@ import fun.ascent.skyblock.player.stats.Stats;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.title.Title;
 import net.kyori.adventure.text.Component;
-import java.time.Duration;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 
@@ -45,6 +43,8 @@ public class ProfilePlayer {
 
     public long boosterCookieExpires = 0L;
     public boolean claimedFreeCookie = false;
+    public double cookieBits = 0.0;
+    public int bitsTimerSeconds = 0;
     public double bitsMultiplier = 1.0;
 
     public transient SkyblockPlayer skyblockPlayer;
@@ -220,13 +220,7 @@ public class ProfilePlayer {
         }
         skyblockPlayer.sendMessage(Component.empty());
 
-        // Premium level-up Title + Subtitle!
-        Title titleObj = Title.title(
-                text("<dark_aqua><bold>LEVEL UP!"),
-                text(newColour + "Level " + oldLevel + " <gray>➜ " + newColour + curLevel),
-                Title.Times.times(Duration.ofMillis(300), Duration.ofMillis(2500), Duration.ofMillis(400))
-        );
-        skyblockPlayer.showTitle(titleObj);
+
 
         skyblockPlayer.playSound(Sound.sound(
                 Key.key("entity.player.levelup"),

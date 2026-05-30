@@ -15,6 +15,7 @@ import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 
 import java.util.List;
+import java.util.Random;
 
 import static fun.ascent.common.StringUtility.text;
 
@@ -107,7 +108,6 @@ public class BoosterCookie implements ItemDefinition {
                 .build();
         inv.setItemStack(11, consumeItem);
 
-        // Slot 15: Cancel
         List<Component> cancelLore = List.of(
                 text("§7I'm not hungry...")
         );
@@ -123,8 +123,6 @@ public class BoosterCookie implements ItemDefinition {
 
             if (slot == 11) {
                 player.closeInventory();
-                
-                // Perform consumption check and effect
                 if (player.getActiveProfileData() == null) return;
                 
                 ItemStack mainHand = player.getItemInMainHand();
@@ -133,10 +131,9 @@ public class BoosterCookie implements ItemDefinition {
                     return;
                 }
 
-                // Consume 1 cookie from player's hand
                 player.setItemInHand(PlayerHand.MAIN, mainHand.withAmount(amount -> amount - 1));
 
-                long duration = 4L * 24 * 60 * 60 * 1000; // 4 days in ms
+                long duration = 4L * 24 * 60 * 60 * 1000;
                 long current = System.currentTimeMillis();
                 
                 long newExpiry;
@@ -148,8 +145,8 @@ public class BoosterCookie implements ItemDefinition {
                 
                 player.getActiveProfileData().boosterCookieExpires = newExpiry;
 
-                double bitsToAdd = 4000.0 * player.getActiveProfileData().bitsMultiplier;
-                player.getActiveProfileData().playerBits += bitsToAdd;
+                double bitsToAdd = 4800.0 * player.getActiveProfileData().bitsMultiplier;
+                player.getActiveProfileData().cookieBits += bitsToAdd;
 
                 String[] suffixes = {
                     "",
@@ -163,13 +160,12 @@ public class BoosterCookie implements ItemDefinition {
                     "Delightful!",
                     "Divine!"
                 };
-                int rand = new java.util.Random().nextInt(suffixes.length);
+                int rand = new Random().nextInt(suffixes.length);
                 String suffix = suffixes[rand];
                 String message = "<yellow>You consumed a <gold>Booster Cookie<yellow>!";
                 if (!suffix.isEmpty()) {
                     message += " <light_purple>" + suffix;
                 }
-                player.sendMessage(text(message + " <green>Your Booster Buff has been extended. <aqua>+" + (int) bitsToAdd + " Bits <green>added!"));
                 player.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1f));
                 
             } else if (slot == 15) {
