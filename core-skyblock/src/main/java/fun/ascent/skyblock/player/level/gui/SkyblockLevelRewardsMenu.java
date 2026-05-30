@@ -13,7 +13,6 @@ import net.minestom.server.item.Material;
 import fun.ascent.common.item.ItemStackCreator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static fun.ascent.common.StringUtility.text;
 

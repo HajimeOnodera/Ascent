@@ -40,22 +40,18 @@ public class GUIProfileSelect extends InventoryGUI {
         set(GUIClickableItem.getCloseItem(31));
 
         Player player = e.player();
-        if (!(player instanceof SkyblockPlayer sp)) return;
+        if (!(player instanceof SkyblockPlayer)) return;
 
-        // Switch profile item
         set(new GUIClickableItem(11) {
             @Override
             public void run(InventoryPreClickEvent e, Player pl) {
                 if (!(pl instanceof SkyblockPlayer sp)) return;
 
-                // 1. Save the current active profile to persist all its items and stats
                 if (sp.getActiveProfile() != null) {
                     ProfileManager.saveProfile(sp.getActiveProfile().profileID);
                 }
 
-                // 2. Switch active profile (natively handles item clearing and loading)
                 sp.setActiveProfile(profile.profileID);
-
                 pl.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1.2f));
                 pl.sendMessage(text("<green>Switched to profile: <gold>" + profile.profileName));
                 pl.closeInventory();
@@ -75,27 +71,23 @@ public class GUIProfileSelect extends InventoryGUI {
             }
         });
 
-        // Delete profile item
         set(new GUIClickableItem(15) {
             @Override
             public void run(InventoryPreClickEvent e, Player pl) {
                 if (!(pl instanceof SkyblockPlayer sp)) return;
 
-                // Check that they aren't deleting their last remaining profile
                 if (sp.getPlayerProfiles().size() <= 1) {
                     pl.playSound(Sound.sound(Key.key("block.note_block.bass"), Sound.Source.PLAYER, 0.5f, 0.5f));
                     pl.sendMessage(text("<red>You cannot delete your last remaining profile!"));
                     return;
                 }
 
-                // Check that they are not trying to delete the active profile (handled by management GUI, but extra safe)
                 if (profile.profileID.equals(sp.getActiveProfile().profileID)) {
                     pl.playSound(Sound.sound(Key.key("block.note_block.bass"), Sound.Source.PLAYER, 0.5f, 0.5f));
                     pl.sendMessage(text("<red>You cannot delete your active profile!"));
                     return;
                 }
 
-                // Delete profile completely
                 SkyblockRepository.deleteProfile(profile.profileID);
                 sp.getPlayerProfiles().remove(profile.profileID);
                 ProfileManager.profiles.remove(profile.profileID);
@@ -103,7 +95,6 @@ public class GUIProfileSelect extends InventoryGUI {
                 pl.playSound(Sound.sound(Key.key("entity.generic.explode"), Sound.Source.PLAYER, 0.8f, 1.0f));
                 pl.sendMessage(text("<red>Deleted profile: <gold>" + profile.profileName));
 
-                // Reopen profile management
                 new GUIProfileManagement().open(pl);
             }
 

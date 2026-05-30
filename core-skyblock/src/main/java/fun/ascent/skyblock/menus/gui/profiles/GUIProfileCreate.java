@@ -35,20 +35,17 @@ public class GUIProfileCreate extends InventoryGUI {
         set(GUIClickableItem.getGoBackItem(22, new GUIProfileManagement()));
 
         Player player = e.player();
-        if (!(player instanceof SkyblockPlayer sp)) return;
+        if (!(player instanceof SkyblockPlayer)) return;
 
-        // Confirm button
         set(new GUIClickableItem(11) {
             @Override
             public void run(InventoryPreClickEvent e, Player pl) {
                 if (!(pl instanceof SkyblockPlayer sp)) return;
 
-                // 1. Save current active profile to persist all its items and stats
                 if (sp.getActiveProfile() != null) {
                     ProfileManager.saveProfile(sp.getActiveProfile().profileID);
                 }
 
-                // 2. Create the profile natively (automatically registers, saves, and sets active)
                 SkyblockProfile newProfile = ProfileManager.createProfile(sp);
 
                 pl.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1f));
@@ -69,7 +66,6 @@ public class GUIProfileCreate extends InventoryGUI {
             }
         });
 
-        // Cancel button
         set(new GUIClickableItem(15) {
             @Override
             public void run(InventoryPreClickEvent e, Player pl) {

@@ -10,7 +10,6 @@ import fun.ascent.skyblock.player.profiles.ProfilePlayer;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.Material;
 
 import java.util.List;
 

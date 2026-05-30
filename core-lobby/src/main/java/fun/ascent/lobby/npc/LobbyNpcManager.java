@@ -17,6 +17,7 @@ public final class LobbyNpcManager {
 
     public void spawnDefaults() {
         register(new SkyblockNPC(instance));
+        register(new AscentStoreNPC(instance));
     }
 
     /**

@@ -1,5 +1,6 @@
 package fun.ascent.skyblock.events.impl;
 
+import fun.ascent.skyblock.dungeon.DungeonHubServiceRegistry;
 import fun.ascent.skyblock.dungeon.DungeonServiceRegistry;
 import fun.ascent.skyblock.events.SEvent;
 import fun.ascent.skyblock.player.SkyblockPlayer;
@@ -20,6 +21,16 @@ public class PlayerJoinPreEvent extends SEvent<AsyncPlayerConfigurationEvent> {
                 DungeonServiceRegistry.get().handlePlayerJoinPre(player, event);
             } else {
                 System.err.println("[Dungeon] Dungeon system not initialized on this server!");
+            }
+            return;
+        }
+
+        if (serverType.equalsIgnoreCase("DUNGEON_HUB")) {
+            if (DungeonHubServiceRegistry.getInstance() != null) {
+                event.setSpawningInstance(DungeonHubServiceRegistry.getInstance());
+                player.setRespawnPoint(DungeonHubServiceRegistry.getSpawnPos());
+            } else {
+                System.err.println("[DungeonHub] Dungeon Hub instance not registered!");
             }
             return;
         }

@@ -25,7 +25,7 @@ public class RankCommand implements SimpleCommand {
         if (invocation.source() instanceof Player player) {
             return UserManager.getUser(player.getUniqueId()).getRank().isStaff();
         }
-        return false; // Console is blocked
+        return false;
     }
 
     @Override
