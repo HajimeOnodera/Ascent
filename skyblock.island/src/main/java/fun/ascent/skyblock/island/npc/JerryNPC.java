@@ -45,6 +45,10 @@ public record JerryNPC(Instance instance) implements NpcDefinition {
     @Override
     public void onInteract(Player player, AscentNpc npc) {
         if (player instanceof SkyblockPlayer sp) {
+            if (sp.getActiveProfileData() != null && sp.getActiveProfileData().getQuestData().isCurrentlyActive("talk_to_jerry")) {
+                MinecraftServer.getGlobalEventHandler().call(new JerryClickedEvent(sp));
+                return;
+            }
             MinecraftServer.getGlobalEventHandler().call(new JerryClickedEvent(sp));
         }
         new GUIJerry().open(player);
