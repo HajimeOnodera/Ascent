@@ -21,17 +21,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
+public class GraveyardZombieVillager extends SkyblockMobEntity implements ZoneSpawner {
 
     private static final String ZONE = "graveyard";
 
-    public GraveyardZombie() {
-        super(EntityType.ZOMBIE);
+    public GraveyardZombieVillager() {
+        super(EntityType.ZOMBIE_VILLAGER);
     }
 
     @Override
     public String displayName() {
-        return "Graveyard Zombie";
+        return "Zombie Villager";
     }
 
     @Override
@@ -42,8 +42,8 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
     @Override
     public float baseStat(Stats stat) {
         return switch (stat) {
-            case HEALTH -> 100f;
-            case DAMAGE -> 20f;
+            case HEALTH -> 120f;
+            case DAMAGE -> 24f;
             case SPEED -> 55f;
             default -> 0f;
         };
@@ -77,7 +77,7 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
 
     @Override
     public double combatXpReward() {
-        return 6.0;
+        return 7.0;
     }
 
     @Override
@@ -87,7 +87,7 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
 
     @Override
     public int xpOrbReward() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -97,9 +97,7 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
             public List<MobDrop> drops() {
                 return List.of(
                         new MobDrop(ItemStack.of(Material.ROTTEN_FLESH), 100.0, 1, 3),
-                        new MobDrop(ItemStack.of(Material.POISONOUS_POTATO), 2.0, 1, 1),
-                        new MobDrop(ItemStack.of(Material.CARROT), 1.0, 1, 1),
-                        new MobDrop(ItemStack.of(Material.POTATO), 1.0, 1, 1)
+                        new MobDrop(ItemStack.of(Material.POISONOUS_POTATO), 2.0, 1, 1)
                 );
             }
         };
@@ -107,6 +105,6 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
 
     @Override
     public List<SpawnZone> spawnZones() {
-        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(20).build());
+        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(5).build());
     }
 }

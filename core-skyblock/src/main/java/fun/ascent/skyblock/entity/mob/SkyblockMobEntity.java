@@ -131,22 +131,38 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         activeMobs.remove(this);
         super.kill();
 
-        assert getLastDamageSource() != null;
-        if (!(getLastDamageSource().getAttacker() instanceof SkyblockPlayer killer)) return;
+        if (getLastDamageSource() != null && getLastDamageSource().getAttacker() instanceof SkyblockPlayer killer) {
+            onKilledBy();
 
-        onKilledBy();
-
-        DropTable table = dropTable();
-        if (table == null || getInstance() == null) return;
-
-        Pos dropPos = getPosition().add(0, 0.5, 0);
-        for (MobDrop drop : table.roll(killer)) {
-            ItemStack stack = drop.item().withAmount(drop.rolledAmount());
-            if (ItemNBT.getItemId(stack) == null) {
-                stack = ItemRegistry.createSkyblockOrVanillaStack(stack.material(), stack.amount());
+            double combatXp = combatXpReward();
+            if (combatXp > 0) {
+                fun.ascent.skyblock.player.skill.SkillRegistry.grantXp(killer, fun.ascent.skyblock.player.skill.SkillType.COMBAT, combatXp);
             }
-            DroppedItemEntity dropped = new DroppedItemEntity(stack, killer);
-            dropped.setInstance(getInstance(), dropPos);
+
+            double coins = coinsReward();
+            if (coins > 0) {
+                killer.addCoins(coins);
+                killer.sendMessage(fun.ascent.common.StringUtility.text("<gold>+ " + coins + " Coins (" + displayName() + ")"));
+            }
+
+            int xpOrbs = xpOrbReward();
+            if (xpOrbs > 0 && getInstance() != null) {
+                net.minestom.server.entity.ExperienceOrb orb = new net.minestom.server.entity.ExperienceOrb((short) xpOrbs);
+                orb.setInstance(getInstance(), getPosition().add(0, 0.5, 0));
+            }
+
+            DropTable table = dropTable();
+            if (table != null && getInstance() != null) {
+                Pos dropPos = getPosition().add(0, 0.5, 0);
+                for (MobDrop drop : table.roll(killer)) {
+                    ItemStack stack = drop.item().withAmount(drop.rolledAmount());
+                    if (ItemNBT.getItemId(stack) == null) {
+                        stack = ItemRegistry.createSkyblockOrVanillaStack(stack.material(), stack.amount());
+                    }
+                    DroppedItemEntity dropped = new DroppedItemEntity(stack, killer);
+                    dropped.setInstance(getInstance(), dropPos);
+                }
+            }
         }
     }
 
@@ -215,7 +231,19 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         long now = System.currentTimeMillis();
         return lastAttackMillis.getAndUpdate(last ->
                 now - last >= attackCooldown() ? now : last
-        ) + attackCooldown() <= now;
+            ) + attackCooldown() <= now;
+    }
+
+    public double combatXpReward() {
+        return 0.0;
+    }
+
+    public double coinsReward() {
+        return 0.0;
+    }
+
+    public int xpOrbReward() {
+        return 0;
     }
 
     public float nameplateOffset() {

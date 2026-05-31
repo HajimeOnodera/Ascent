@@ -6,15 +6,22 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.TaskSchedule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class ZonePopulationTicker {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ZonePopulationTicker.class);
 
     public static void start() {
+        LOGGER.info("Starting Zone Population Ticker...");
         MinecraftServer.getSchedulerManager().submitTask(() -> {
             InstanceContainer world = WorldHandler.getLobby();
-            if (world == null || world.getPlayers().isEmpty()) {
+            if (world == null) {
+                return TaskSchedule.seconds(10);
+            }
+            if (world.getPlayers().isEmpty()) {
                 return TaskSchedule.seconds(10);
             }
 
@@ -25,18 +32,28 @@ public class ZonePopulationTicker {
                     int current = countInZone(zone.zoneId(), entry);
                     int needed = zone.targetCount() - current;
 
-                    for (int i = 0; i < needed; i++) {
-                        Pos pos = pickSpawnPosition(world, zone.zoneId());
-                        if (pos == null) continue;
+                    if (needed > 0) {
+                        LOGGER.info("Zone '{}': Current count of {} is {}/{} (Needed: {}). Spawning...",
+                                zone.zoneId(), entry.getPrototype().displayName(), current, zone.targetCount(), needed);
 
-                        SkyblockMobEntity mob = entry.spawn();
-                        mob.setZoneId(zone.zoneId());
+                        for (int i = 0; i < needed; i++) {
+                            Pos pos = pickSpawnPosition(world, zone.zoneId());
+                            if (pos == null) {
+                                LOGGER.warn("Could not find a valid spawn position in zone '{}'!", zone.zoneId());
+                                continue;
+                            }
 
-                        if (!world.isChunkLoaded(pos)) {
-                            world.loadChunk(pos).join();
+                            SkyblockMobEntity mob = entry.spawn();
+                            mob.setZoneId(zone.zoneId());
+
+                            if (!world.isChunkLoaded(pos)) {
+                                world.loadChunk(pos).join();
+                            }
+
+                            mob.setInstance(world, pos);
+                            LOGGER.info("Spawned {} in zone '{}' at Pos({}, {}, {})", 
+                                    mob.displayName(), zone.zoneId(), pos.blockX(), pos.blockY(), pos.blockZ());
                         }
-
-                        mob.setInstance(world, pos);
                     }
                 }
             }

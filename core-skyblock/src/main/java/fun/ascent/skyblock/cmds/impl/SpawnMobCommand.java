@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.entity.mob.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.entity.mob.mobs.graveyard.GraveyardZombie;
 import net.minestom.server.command.builder.Command;
