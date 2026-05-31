@@ -10,6 +10,8 @@ import fun.ascent.skyblock.item.ItemNBT;
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.combat.CombatListener;
+import fun.ascent.skyblock.player.skill.SkillRegistry;
+import fun.ascent.skyblock.player.skill.SkillType;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.Getter;
 import lombok.NonNull;
@@ -17,10 +19,7 @@ import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.entity.damage.Damage;
@@ -136,18 +135,17 @@ public abstract class SkyblockMobEntity extends EntityCreature {
 
             double combatXp = combatXpReward();
             if (combatXp > 0) {
-                fun.ascent.skyblock.player.skill.SkillRegistry.grantXp(killer, fun.ascent.skyblock.player.skill.SkillType.COMBAT, combatXp);
+                SkillRegistry.grantXp(killer, SkillType.COMBAT, combatXp);
             }
 
             double coins = coinsReward();
             if (coins > 0) {
                 killer.addCoins(coins);
-                killer.sendMessage(fun.ascent.common.StringUtility.text("<gold>+ " + coins + " Coins (" + displayName() + ")"));
             }
 
             int xpOrbs = xpOrbReward();
             if (xpOrbs > 0 && getInstance() != null) {
-                net.minestom.server.entity.ExperienceOrb orb = new net.minestom.server.entity.ExperienceOrb((short) xpOrbs);
+                ExperienceOrb orb = new ExperienceOrb((short) xpOrbs);
                 orb.setInstance(getInstance(), getPosition().add(0, 0.5, 0));
             }
 
@@ -182,10 +180,6 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             super.tick(time);
         } catch (Exception ignored) {
         }
-    }
-
-    private Pos nameplatePos() {
-        return getPosition().add(0, getBoundingBox().height() + nameplateOffset(), 0);
     }
 
     private void pushOverlappingMobs() {
