@@ -59,5 +59,6 @@ public class PlayerItemUseEvent extends SEvent<PlayerUseItemEvent> {
 
         definition.onRightClick(player);
         event.setCancelled(true);
+        player.clearItemUse();
     }
 }
