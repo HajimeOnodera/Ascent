@@ -34,10 +34,8 @@ public record MobDrop(ItemStack item, double chance, int minAmount, int maxAmoun
                 name = Component.text(capitalize(matName));
             }
 
-            player.sendMessage(text(
-                    "<yellow>✯ <aqua>MAGIC FIND! <gray>You found "
-            ).append(name).append(text(
-                    " <gray>(+" + Math.round(magicFind) + "% ✯ Magic Find)"
+            player.sendMessage(text("<yellow>✯ <aqua>MAGIC FIND! <gray>You found ")
+                    .append(name).append(text(" <gray>(+" + Math.round(magicFind) + "% ✯ Magic Find)"
             )));
             player.playSound(Sound.sound(Key.key("entity.player.levelup"), Sound.Source.PLAYER, 1f, 1.2f));
         }

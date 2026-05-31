@@ -165,6 +165,18 @@ public abstract class SkyblockMobEntity extends EntityCreature {
     }
 
     @Override
+    public void remove() {
+        if (nameplate != null) {
+            removePassenger(nameplate);
+            nameplate.remove();
+            nameplate = null;
+        }
+        CombatListener.cleanMobData(getUuid());
+        activeMobs.remove(this);
+        super.remove();
+    }
+
+    @Override
     public void tick(long time) {
         Instance world = getInstance();
         if (world == null) return;
