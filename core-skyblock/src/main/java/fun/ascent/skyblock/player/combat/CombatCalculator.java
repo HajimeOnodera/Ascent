@@ -1,19 +1,23 @@
 package fun.ascent.skyblock.player.combat;
 
+import fun.ascent.skyblock.enchantment.EnchantmentNBT;
+import fun.ascent.skyblock.enchantment.EnchantmentRegistry;
 import fun.ascent.skyblock.entity.mob.SkyblockMobEntity;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.stats.Stats;
+import net.minestom.server.entity.EntityType;
+import net.minestom.server.item.ItemStack;
 
 public class CombatCalculator {
 
-    public static CombatResult playerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob, net.minestom.server.item.ItemStack held, boolean isFirstHit) {
+    public static CombatResult playerHitsMob(SkyblockPlayer player, SkyblockMobEntity mob, ItemStack held, boolean isFirstHit) {
         double weaponDamage = playerStat(player, Stats.DAMAGE);
         double strength = playerStat(player, Stats.STRENGTH);
         double critChance = playerStat(player, Stats.CRITICAL_CHANCE);
         double critDamage = playerStat(player, Stats.CRITICAL_DAMAGE);
         double defense = mob.baseStat(Stats.DEFENSE);
 
-        int criticalLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.CRITICAL);
+        int criticalLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.CRITICAL);
         if (criticalLevel > 0) {
             critDamage += (criticalLevel * 10.0);
         }
@@ -26,17 +30,17 @@ public class CombatCalculator {
         double damage = weaponDamage * strengthMultiplier * critMultiplier;
         double enchantBoost = 0.0;
 
-        int sharpnessLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SHARPNESS);
+        int sharpnessLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.SHARPNESS);
         if (sharpnessLevel > 0) {
             enchantBoost += getSharpnessBoost(sharpnessLevel);
         }
 
-        int firstStrikeLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.FIRST_STRIKE);
+        int firstStrikeLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.FIRST_STRIKE);
         if (firstStrikeLevel > 0 && isFirstHit) {
             enchantBoost += (firstStrikeLevel * 0.25);
         }
 
-        int tripleStrikeLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.TRIPLE_STRIKE);
+        int tripleStrikeLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.TRIPLE_STRIKE);
         if (tripleStrikeLevel > 0) {
             int hits = CombatListener.getHitCount(mob.getUuid());
             if (hits < 3) {
@@ -44,7 +48,7 @@ public class CombatCalculator {
             }
         }
 
-        int giantKillerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.GIANT_KILLER);
+        int giantKillerLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.GIANT_KILLER);
         if (giantKillerLevel > 0) {
             double playerMax = player.maxStat(Stats.HEALTH);
             double targetMax = mob.baseStat(Stats.HEALTH);
@@ -56,7 +60,7 @@ public class CombatCalculator {
             }
         }
 
-        int executeLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.EXECUTE);
+        int executeLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.EXECUTE);
         if (executeLevel > 0) {
             double maxH = mob.baseStat(Stats.HEALTH);
             double curH = mob.getHealth();
@@ -66,7 +70,7 @@ public class CombatCalculator {
             }
         }
 
-        int prosecuteLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.PROSECUTE);
+        int prosecuteLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.PROSECUTE);
         if (prosecuteLevel > 0) {
             double maxH = mob.baseStat(Stats.HEALTH);
             double curH = mob.getHealth();
@@ -76,24 +80,24 @@ public class CombatCalculator {
             }
         }
 
-        int smiteLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.SMITE);
+        int smiteLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.SMITE);
         if (smiteLevel > 0 && isUndead(mob.getEntityType())) {
             enchantBoost += (smiteLevel * 0.08);
         }
 
-        int enderSlayerLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.ENDER_SLAYER);
+        int enderSlayerLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.ENDER_SLAYER);
         if (enderSlayerLevel > 0 && isEndMob(mob.getEntityType())) {
             enchantBoost += (enderSlayerLevel * 0.12);
         }
 
-        int cubismLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.CUBISM);
+        int cubismLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.CUBISM);
         if (cubismLevel > 0 && isCubismMob(mob.getEntityType())) {
             enchantBoost += (cubismLevel * 0.10);
         }
 
         damage *= (1.0 + enchantBoost);
 
-        int lethalityLevel = fun.ascent.skyblock.enchantment.EnchantmentNBT.getEnchantmentLevel(held, fun.ascent.skyblock.enchantment.EnchantmentRegistry.LETHALITY);
+        int lethalityLevel = EnchantmentNBT.getEnchantmentLevel(held, EnchantmentRegistry.LETHALITY);
         if (lethalityLevel > 0) {
             int stacks = CombatListener.incrementLethality(mob.getUuid());
             double defenseReduction = stacks * lethalityLevel * 0.03;
@@ -152,25 +156,16 @@ public class CombatCalculator {
         return 0.0;
     }
 
-    private static boolean isUndead(net.minestom.server.entity.EntityType type) {
-        return type == net.minestom.server.entity.EntityType.ZOMBIE 
-            || type == net.minestom.server.entity.EntityType.SKELETON
-            || type == net.minestom.server.entity.EntityType.WITHER_SKELETON
-            || type == net.minestom.server.entity.EntityType.ZOMBIE_VILLAGER
-            || type == net.minestom.server.entity.EntityType.ZOMBIFIED_PIGLIN
-            || type == net.minestom.server.entity.EntityType.STRAY;
+    private static boolean isUndead(EntityType type) {
+        return type == EntityType.ZOMBIE || type == EntityType.SKELETON || type == EntityType.WITHER_SKELETON || type == EntityType.ZOMBIE_VILLAGER || type == EntityType.ZOMBIFIED_PIGLIN || type == EntityType.STRAY;
     }
 
-    private static boolean isEndMob(net.minestom.server.entity.EntityType type) {
-        return type == net.minestom.server.entity.EntityType.ENDERMAN
-            || type == net.minestom.server.entity.EntityType.ENDERMITE
-            || type == net.minestom.server.entity.EntityType.ENDER_DRAGON;
+    private static boolean isEndMob(EntityType type) {
+        return type == EntityType.ENDERMAN || type == EntityType.ENDERMITE || type == EntityType.ENDER_DRAGON;
     }
 
-    private static boolean isCubismMob(net.minestom.server.entity.EntityType type) {
-        return type == net.minestom.server.entity.EntityType.SLIME
-            || type == net.minestom.server.entity.EntityType.MAGMA_CUBE
-            || type == net.minestom.server.entity.EntityType.CREEPER;
+    private static boolean isCubismMob(EntityType type) {
+        return type == EntityType.SLIME || type == EntityType.MAGMA_CUBE || type == EntityType.CREEPER;
     }
 
     private static double playerStat(SkyblockPlayer player, Stats stat) {

@@ -1,11 +1,15 @@
 package fun.ascent.skyblock.player.profiles;
 
+import fun.ascent.common.StringUtility;
 import fun.ascent.skyblock.island.Island;
 import fun.ascent.skyblock.island.IslandManager;
+import fun.ascent.skyblock.item.ItemRegistry;
+import fun.ascent.skyblock.item.SkyblockItem;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.collections.CollectionCategory;
 import fun.ascent.skyblock.player.collections.CollectionRegistry;
 import fun.ascent.skyblock.player.collections.gui.CollectionOverviewMenu;
+import fun.ascent.skyblock.player.level.causes.LevelCause;
 import lombok.Getter;
 import lombok.Setter;
 import net.minestom.server.coordinate.Pos;
@@ -42,7 +46,6 @@ public class SkyblockProfile {
     public void postLoad(){
         if(island == null){
             generateIsland();
-            //TODO: Notify Players of island corruption
         }
         if(spawnPos == null){spawnPos = new Pos(7,100, 5);}
         if(uniqueMinionsCrafted == null){
@@ -56,7 +59,6 @@ public class SkyblockProfile {
         if(minionsCrafted <= 0){minionsCrafted = 1;}
         if (unlockedCollections == null) {
             unlockedCollections = new HashMap<>();
-            //TODO: Notify Players of Collections corruption
         }
         if (unlockedRecipes == null) {
             unlockedRecipes = new HashSet<>();
@@ -215,9 +217,9 @@ public class SkyblockProfile {
                 this.bankTransactions = new ArrayList<>(this.bankTransactions.subList(this.bankTransactions.size() - 10, this.bankTransactions.size()));
             }
 
-            player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
-            player.sendMessage(fun.ascent.common.StringUtility.text("<green>You have just received <gold>" + fun.ascent.common.StringUtility.commaify(totalInterest) + " coins<green> as bank interest!"));
-            player.sendMessage(fun.ascent.common.StringUtility.text("<blue>------------------------------------------------"));
+            player.sendMessage(StringUtility.text("<blue>------------------------------------------------"));
+            player.sendMessage(StringUtility.text("<green>You have just received <gold>" + StringUtility.commaify(totalInterest) + " coins<green> as bank interest!"));
+            player.sendMessage(StringUtility.text("<blue>------------------------------------------------"));
         }
     }
 
@@ -281,10 +283,9 @@ public class SkyblockProfile {
                 tierVal = Integer.parseInt(canonicalId.substring(lastUnderscore + 1));
             } catch (Exception ignored) {}
             
-            fun.ascent.skyblock.item.SkyblockItem item = fun.ascent.skyblock.item.ItemRegistry.getItem(canonicalId);
+            SkyblockItem item = ItemRegistry.getItem(canonicalId);
             if (item != null) {
                 displayName = item.getDisplayName();
-                // If it ends with Roman numeral, let's strip it to keep the base minion name
                 String romanSuffix = " " + getRomanNumeral(tierVal);
                 if (displayName.endsWith(romanSuffix)) {
                     displayName = displayName.substring(0, displayName.length() - romanSuffix.length());
@@ -295,12 +296,25 @@ public class SkyblockProfile {
                 int splitIdx = genIdx >= 0 ? genIdx : minIdx;
                 if (splitIdx >= 0) {
                     String materialPart = canonicalId.substring(0, splitIdx);
-                    displayName = fun.ascent.skyblock.item.ItemRegistry.formatName(materialPart) + " Minion";
+                    displayName = ItemRegistry.formatName(materialPart) + " Minion";
                 }
             }
             
             String romanTier = getRomanNumeral(tierVal);
             player.sendMessage("§aYou crafted a Tier §e" + romanTier + " " + displayName + "§a! That's a new one!");
+            
+            int xpReward = switch (tierVal) {
+                case 7 -> 2;
+                case 8 -> 3;
+                case 9 -> 4;
+                case 10 -> 6;
+                case 11 -> 12;
+                case 12 -> 24;
+                default -> tierVal > 12 ? 24 : 1;
+            };
+            if (player.getActiveProfileData() != null) {
+                player.getActiveProfileData().addSkyblockXp(xpReward, LevelCause.CRAFT_MINIONS_CAUSE);
+            }
             
             checkMinionSlotsUnlock(player);
         }
