@@ -31,8 +31,8 @@ import net.minestom.server.network.player.ResolvableProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static fun.ascent.skyblock.player.stats.Stats.*;
@@ -42,7 +42,7 @@ import static net.minestom.server.entity.attribute.Attribute.*;
 public abstract class SkyblockMobEntity extends EntityCreature {
 
     @Getter
-    private static final List<SkyblockMobEntity> activeMobs = new ArrayList<>();
+    private static final List<SkyblockMobEntity> activeMobs = new CopyOnWriteArrayList<>();
 
     private FloatingTextEntity nameplate;
     private Component currentNameplate;
