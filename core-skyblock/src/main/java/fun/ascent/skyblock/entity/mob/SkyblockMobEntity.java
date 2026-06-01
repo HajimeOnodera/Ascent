@@ -186,6 +186,15 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             world.loadChunk(pos).join();
         }
 
+        if (nameplate != null && !nameplate.isRemoved() && nameplate.getInstance() == world) {
+            if (!getPassengers().contains(nameplate)) {
+                addPassenger(nameplate);
+            }
+            if (time % 10 == 0) {
+                nameplate.teleport(getPosition());
+            }
+        }
+
         pushOverlappingMobs();
 
         try {
