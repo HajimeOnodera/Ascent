@@ -1,18 +1,26 @@
 package fun.ascent.skyblock.entity.mob;
 
+import com.mongodb.client.MongoCollection;
+import fun.ascent.database.MongoProvider;
 import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
 import fun.ascent.skyblock.world.WorldHandler;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.TaskSchedule;
+import org.bson.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ZonePopulationTicker {
     private static final Logger LOGGER = LoggerFactory.getLogger(ZonePopulationTicker.class);
+    
+    private static final List<MobSpawnSpot> cryptSpawnSpots = new CopyOnWriteArrayList<>();
+    private static boolean spotsLoaded = false;
 
     public static void start() {
         LOGGER.info("Starting Zone Population Ticker...");
@@ -29,37 +37,137 @@ public class ZonePopulationTicker {
                 ZoneSpawner spawner = (ZoneSpawner) entry.getPrototype();
 
                 for (ZoneSpawner.SpawnZone zone : spawner.spawnZones()) {
-                    int current = countInZone(zone.zoneId(), entry);
-                    int needed = zone.targetCount() - current;
+                    if (zone.useSpots()) {
+                        if (!spotsLoaded) {
+                            loadCryptSpawnSpots();
+                        }
 
-                    if (needed > 0) {
-                        LOGGER.info("Zone '{}': Current count of {} is {}/{} (Needed: {}). Spawning...",
-                                zone.zoneId(), entry.getPrototype().displayName(), current, zone.targetCount(), needed);
+                        long now = System.currentTimeMillis();
+                        for (MobSpawnSpot spot : cryptSpawnSpots) {
+                            List<SkyblockMobEntity> active = spot.getActiveEntities();
+                            int max = zone.maxPerSpot();
 
-                        for (int i = 0; i < needed; i++) {
-                            Pos pos = pickSpawnPosition(world, zone.zoneId());
-                            if (pos == null) {
-                                LOGGER.warn("Could not find a valid spawn position in zone '{}'!", zone.zoneId());
-                                continue;
+                            if (active.size() < max) {
+                                if (spot.getNextSpawnTime() == 0) {
+                                    long delayMs = zone.spawnDelaySeconds() * 1000L;
+                                    spot.setNextSpawnTime(now + delayMs);
+                                    LOGGER.info("Spot at Pos({}, {}, {}) for {} is underpopulated ({}/{}). Queued spawn in {}s.",
+                                            spot.getPosition().blockX(), spot.getPosition().blockY(), spot.getPosition().blockZ(),
+                                            entry.getPrototype().displayName(), active.size(), max, zone.spawnDelaySeconds());
+                                } else if (now >= spot.getNextSpawnTime()) {
+                                    // Spawn the mob!
+                                    SkyblockMobEntity mob = entry.spawn();
+                                    mob.setZoneId(zone.zoneId());
+
+                                    Pos pos = spot.getPosition();
+                                    if (!world.isChunkLoaded(pos)) {
+                                        world.loadChunk(pos).join();
+                                    }
+
+                                    mob.setInstance(world, pos);
+                                    active.add(mob);
+                                    
+                                    // Reset nextSpawnTime
+                                    spot.setNextSpawnTime(0);
+                                    
+                                    LOGGER.info("Spot Spawner: Spawned {} at Pos({}, {}, {})", 
+                                            mob.displayName(), pos.blockX(), pos.blockY(), pos.blockZ());
+                                }
+                            } else {
+                                if (spot.getNextSpawnTime() != 0) {
+                                    spot.setNextSpawnTime(0);
+                                }
                             }
+                        }
+                    } else {
+                        // Fallback/Legacy global zone population logic
+                        int current = countInZone(zone.zoneId(), entry);
+                        int needed = zone.targetCount() - current;
 
-                            SkyblockMobEntity mob = entry.spawn();
-                            mob.setZoneId(zone.zoneId());
+                        if (needed > 0) {
+                            LOGGER.info("Zone '{}': Current count of {} is {}/{} (Needed: {}). Spawning...",
+                                    zone.zoneId(), entry.getPrototype().displayName(), current, zone.targetCount(), needed);
 
-                            if (!world.isChunkLoaded(pos)) {
-                                world.loadChunk(pos).join();
+                            for (int i = 0; i < needed; i++) {
+                                Pos pos = pickSpawnPosition(world, zone.zoneId());
+                                if (pos == null) {
+                                    LOGGER.warn("Could not find a valid spawn position in zone '{}'!", zone.zoneId());
+                                    continue;
+                                }
+
+                                SkyblockMobEntity mob = entry.spawn();
+                                mob.setZoneId(zone.zoneId());
+
+                                if (!world.isChunkLoaded(pos)) {
+                                    world.loadChunk(pos).join();
+                                }
+
+                                mob.setInstance(world, pos);
+                                LOGGER.info("Spawned {} in zone '{}' at Pos({}, {}, {})", 
+                                        mob.displayName(), zone.zoneId(), pos.blockX(), pos.blockY(), pos.blockZ());
                             }
-
-                            mob.setInstance(world, pos);
-                            LOGGER.info("Spawned {} in zone '{}' at Pos({}, {}, {})", 
-                                    mob.displayName(), zone.zoneId(), pos.blockX(), pos.blockY(), pos.blockZ());
                         }
                     }
                 }
             }
 
-            return TaskSchedule.seconds(5);
+            // Run every 1 second to handle accurate spawn delays
+            return TaskSchedule.seconds(1);
         });
+    }
+
+    private static synchronized void loadCryptSpawnSpots() {
+        if (spotsLoaded) return;
+        cryptSpawnSpots.clear();
+        try {
+            MongoCollection<Document> collection = MongoProvider.getCollection("crypt_spawn_spots");
+            for (Document doc : collection.find()) {
+                double x = doc.getDouble("x");
+                double y = doc.getDouble("y");
+                double z = doc.getDouble("z");
+                cryptSpawnSpots.add(new MobSpawnSpot(new Pos(x, y, z)));
+            }
+            LOGGER.info("Loaded {} Crypt Ghoul spawn spots from MongoDB.", cryptSpawnSpots.size());
+        } catch (Exception e) {
+            LOGGER.error("Failed to load Crypt Ghoul spawn spots from MongoDB!", e);
+        } finally {
+            spotsLoaded = true;
+        }
+    }
+
+    public static List<MobSpawnSpot> getCryptSpawnSpots() {
+        if (!spotsLoaded) {
+            loadCryptSpawnSpots();
+        }
+        return cryptSpawnSpots;
+    }
+
+    public static void addCryptSpawnSpot(Pos pos) {
+        try {
+            MongoCollection<Document> collection = MongoProvider.getCollection("crypt_spawn_spots");
+            Document doc = new Document()
+                    .append("x", pos.x())
+                    .append("y", pos.y())
+                    .append("z", pos.z());
+            collection.insertOne(doc);
+
+            cryptSpawnSpots.add(new MobSpawnSpot(pos));
+            LOGGER.info("Successfully added and persisted spawn spot at Pos({}, {}, {})", pos.blockX(), pos.blockY(), pos.blockZ());
+        } catch (Exception e) {
+            LOGGER.error("Failed to add spawn spot to MongoDB!", e);
+        }
+    }
+
+    public static void clearCryptSpawnSpots() {
+        try {
+            MongoCollection<Document> collection = MongoProvider.getCollection("crypt_spawn_spots");
+            collection.deleteMany(new Document());
+
+            cryptSpawnSpots.clear();
+            LOGGER.info("Successfully cleared all spawn spots from MongoDB and memory.");
+        } catch (Exception e) {
+            LOGGER.error("Failed to clear spawn spots from MongoDB!", e);
+        }
     }
 
     private static int countInZone(String zoneId, EntityRegistry entry) {
@@ -88,7 +196,6 @@ public class ZonePopulationTicker {
                 int maxZ = bounds.get(5);
 
                 java.util.Random rand = new java.util.Random();
-                // Attempt to find a solid ground surface block inside bounds
                 for (int attempt = 0; attempt < 15; attempt++) {
                     int rx = minX + rand.nextInt(maxX - minX + 1);
                     int rz = minZ + rand.nextInt(maxZ - minZ + 1);
@@ -102,11 +209,37 @@ public class ZonePopulationTicker {
                         }
                     }
                 }
-                
-                // Fallback midpoint coordinate
                 return new Pos((minX + maxX) / 2.0, (minY + maxY) / 2.0, (minZ + maxZ) / 2.0);
             }
         }
         return null;
+    }
+
+    public static class MobSpawnSpot {
+        private final Pos position;
+        private final List<SkyblockMobEntity> activeEntities = new CopyOnWriteArrayList<>();
+        private long nextSpawnTime = 0;
+
+        public MobSpawnSpot(Pos position) {
+            this.position = position;
+            this.nextSpawnTime = System.currentTimeMillis();
+        }
+
+        public Pos getPosition() {
+            return position;
+        }
+
+        public List<SkyblockMobEntity> getActiveEntities() {
+            activeEntities.removeIf(mob -> mob.isRemoved() || mob.getInstance() == null);
+            return activeEntities;
+        }
+
+        public long getNextSpawnTime() {
+            return nextSpawnTime;
+        }
+
+        public void setNextSpawnTime(long nextSpawnTime) {
+            this.nextSpawnTime = nextSpawnTime;
+        }
     }
 }

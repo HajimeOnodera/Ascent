@@ -9,5 +9,12 @@ public interface ZoneSpawner {
     List<SpawnZone> spawnZones();
 
     @Builder
-    record SpawnZone(String zoneId, int targetCount) {}
+    record SpawnZone(
+            String zoneId,
+            int targetCount,
+            boolean useSpots,
+            int spawnSpots,
+            int spawnDelaySeconds,
+            int maxPerSpot
+    ) {}
 }

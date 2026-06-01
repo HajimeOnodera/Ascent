@@ -48,7 +48,7 @@ public class CryptGhoul extends SkyblockMobEntity implements ZoneSpawner {
         return switch (stat) {
             case HEALTH -> 2000f;
             case DAMAGE -> 350f;
-            case SPEED -> 55f;
+            case SPEED -> 90f;
             default -> 0f;
         };
     }
@@ -107,6 +107,12 @@ public class CryptGhoul extends SkyblockMobEntity implements ZoneSpawner {
 
     @Override
     public List<SpawnZone> spawnZones() {
-        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(20).build());
+        return List.of(SpawnZone.builder()
+                .zoneId(ZONE)
+                .useSpots(true)
+                .spawnSpots(15)
+                .spawnDelaySeconds(14)
+                .maxPerSpot(2)
+                .build());
     }
 }
