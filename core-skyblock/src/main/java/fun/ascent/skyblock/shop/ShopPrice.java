@@ -1,15 +1,21 @@
 package fun.ascent.skyblock.shop;
 
-import fun.ascent.skyblock.item.SkyblockItem;
+import fun.ascent.skyblock.player.SkyblockPlayer;
+import net.kyori.adventure.text.Component;
 
-public class ShopPrice {
-    public int price;
-    public int maxBuyable;
-    public SkyblockItem item;
+import java.util.List;
 
-    public ShopPrice(int price, int maxBuyable, SkyblockItem item) {
-        this.price = price;
-        this.maxBuyable = maxBuyable;
-        this.item = item;
-    }
+public interface ShopPrice {
+
+    List<Component> getGUIDisplay();
+
+    String getNamePlural();
+
+    boolean canAfford(SkyblockPlayer player);
+
+    void processPurchase(SkyblockPlayer player);
+
+    ShopPrice multiply(int amount);
+
+    ShopPrice divide(double amount);
 }

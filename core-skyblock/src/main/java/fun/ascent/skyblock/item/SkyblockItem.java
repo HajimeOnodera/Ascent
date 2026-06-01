@@ -82,6 +82,8 @@ public class SkyblockItem {
     @Getter
     private final Rarity rarity;
     @Getter
+    private final double npcSellPrice;
+    @Getter
     private final Map<Stats, Double> baseStats;
     private final List<String> description;
     private final List<ItemAbility> abilities;
@@ -125,6 +127,7 @@ public class SkyblockItem {
         this.material = builder.material;
         this.itemType = builder.itemType;
         this.rarity = builder.rarity;
+        this.npcSellPrice = builder.npcSellPrice;
         this.baseStats = Collections.unmodifiableMap(new EnumMap<>(builder.baseStats));
         this.description = List.copyOf(builder.description);
         this.abilities = List.copyOf(builder.abilities);
@@ -228,7 +231,7 @@ public class SkyblockItem {
                 rarity,
                 itemType,
                 skinValue,
-                0,
+                npcSellPrice,
                 statMap,
                 gemSlotTypes,
                 soulboundValue,
@@ -542,6 +545,7 @@ public class SkyblockItem {
         Builder b = new Builder(itemId, material, rarity);
         b.displayName = displayName;
         b.itemType = itemType;
+        b.npcSellPrice = npcSellPrice;
         b.unstackable = unstackable;
         b.baseStats.putAll(baseStats);
         b.description.addAll(description);
@@ -587,6 +591,7 @@ public class SkyblockItem {
         private final Material material;
         private ItemType itemType = ItemType.NONE;
         private final Rarity rarity;
+        private double npcSellPrice = 0.0;
         private final Map<Stats, Double> baseStats = new EnumMap<>(Stats.class);
         private final List<String> description = new ArrayList<>();
         private final List<ItemAbility> abilities = new ArrayList<>();
@@ -625,6 +630,7 @@ public class SkyblockItem {
 
         public Builder displayName(String displayName) { this.displayName = displayName; return this; }
         public Builder itemType(ItemType itemType) { this.itemType = itemType; return this; }
+        public Builder npcSellPrice(double npcSellPrice) { this.npcSellPrice = npcSellPrice; return this; }
         public Builder stat(Stats stat, double value) { this.baseStats.put(stat, value); return this; }
         public Builder description(String... lines) { this.description.addAll(List.of(lines)); return this; }
         public Builder ability(ItemAbility ability) { this.abilities.add(ability); return this; }

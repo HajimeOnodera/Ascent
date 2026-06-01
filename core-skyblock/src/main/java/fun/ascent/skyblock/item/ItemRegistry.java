@@ -347,6 +347,7 @@ public class ItemRegistry {
         SkyblockItem.Builder builder = SkyblockItem.builder(data.id(), data.material(), data.rarity())
                 .displayName(data.name())
                 .itemType(data.itemType())
+                .npcSellPrice(data.npcSellPrice())
                 .glowing(data.glowing())
                 .unstackable(isUnstackable);
 

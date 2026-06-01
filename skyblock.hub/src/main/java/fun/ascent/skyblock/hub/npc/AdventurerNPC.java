@@ -3,7 +3,7 @@ package fun.ascent.skyblock.hub.npc;
 import fun.ascent.common.npc.AscentNpc;
 import fun.ascent.common.npc.NpcDefinition;
 import fun.ascent.common.npc.NpcSkin;
-import fun.ascent.skyblock.hub.shop.ShopMenu;
+import fun.ascent.skyblock.shop.ShopMenu;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
@@ -40,8 +40,14 @@ public record AdventurerNPC(Instance instance) implements NpcDefinition {
             "For a price, you can have it all!",
             "Click me again to open the Adventurer Shop!"}; }
 
-    @Override public void onFirstInteract(Player player, AscentNpc npc) { npc.speak(player, firstInteractionMessages()); }
+    @Override
+    public void onFirstInteract(Player player, AscentNpc npc) {
+        npc.speak(player, firstInteractionMessages());
+    }
 
-    @Override public void onInteract(Player player, AscentNpc npc) { ShopMenu.open((SkyblockPlayer) player, "adv_shop"); }
+    @Override
+    public void onInteract(Player player, AscentNpc npc) {
+        ShopMenu.open((SkyblockPlayer) player, "adv_shop");
+    }
 }
 

@@ -12,6 +12,7 @@ import fun.ascent.skyblock.player.profiles.SkyblockProfile;
 import fun.ascent.skyblock.player.skill.PlayerSkillData;
 import fun.ascent.skyblock.player.stats.Stat;
 import fun.ascent.skyblock.player.stats.Stats;
+import fun.ascent.skyblock.shop.PlayerShopData;
 import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
@@ -41,6 +42,7 @@ public class SkyblockPlayer extends Player {
 
     private double currentHealth;
     private double currentMana;
+    private final PlayerShopData shoppingData = new PlayerShopData();
 
     private final Map<String, Map<Stats, Double>> statEffects = new HashMap<>();
     private final Map<String, Task> effectTasks = new HashMap<>();
