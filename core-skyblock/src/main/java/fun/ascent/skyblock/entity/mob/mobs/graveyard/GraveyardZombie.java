@@ -8,7 +8,6 @@ import fun.ascent.skyblock.entity.mob.ai.LastAttackerTarget;
 import fun.ascent.skyblock.entity.mob.ai.MeleeChaseGoal;
 import fun.ascent.skyblock.entity.mob.ai.NearestPlayerTarget;
 import fun.ascent.skyblock.entity.mob.ai.RegionWanderGoal;
-import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.NonNull;
 import net.minestom.server.entity.EntityType;
@@ -21,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
+public class GraveyardZombie extends SkyblockMobEntity {
 
     private static final String ZONE = "graveyard";
 
@@ -103,10 +102,5 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
                 );
             }
         };
-    }
-
-    @Override
-    public List<SpawnZone> spawnZones() {
-        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(20).build());
     }
 }

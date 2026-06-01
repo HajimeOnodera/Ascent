@@ -1,6 +1,6 @@
 package fun.ascent.skyblock.entity.mob;
 
-import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
+import fun.ascent.skyblock.entity.mob.impl.SpotSpawner;
 import lombok.Getter;
 import net.minestom.server.entity.EntityType;
 import org.reflections.Reflections;
@@ -41,8 +41,9 @@ public class EntityRegistry {
         }
     }
 
-    public boolean isZoneSpawner() {
-        return prototype instanceof ZoneSpawner;
+
+    public boolean isSpotSpawner() {
+        return prototype instanceof SpotSpawner;
     }
 
     public static void scanAndRegister(String packageName) {
@@ -73,9 +74,10 @@ public class EntityRegistry {
         return getByClass(mob.getClass());
     }
 
-    public static List<EntityRegistry> getZoneSpawners() {
+
+    public static List<EntityRegistry> getSpotSpawners() {
         return entries.stream()
-                .filter(EntityRegistry::isZoneSpawner)
+                .filter(EntityRegistry::isSpotSpawner)
                 .toList();
     }
 }

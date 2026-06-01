@@ -1,6 +1,7 @@
 package fun.ascent.skyblock.cmds.impl;
 
-import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
+import fun.ascent.skyblock.entity.mob.SpotSpawnerTicker;
+import fun.ascent.skyblock.entity.mob.mobs.crypts.CryptGhoul;
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -30,20 +31,20 @@ public class CryptSpotCommand extends Command {
             switch (act) {
                 case "add": {
                     Pos pos = player.getPosition();
-                    ZonePopulationTicker.addCryptSpawnSpot(pos);
-                    player.sendMessage(text("&aAdded Crypt spawn spot at &f" 
+                    SpotSpawnerTicker.addSpot(CryptGhoul.class, pos);
+                    player.sendMessage(text("&aAdded Crypt spawn spot at &f"
                             + String.format("%.1f, %.1f, %.1f", pos.x(), pos.y(), pos.z())));
                     break;
                 }
                 case "list": {
-                    List<ZonePopulationTicker.MobSpawnSpot> spots = ZonePopulationTicker.getCryptSpawnSpots();
+                    List<SpotSpawnerTicker.MobSpawnSpot> spots = SpotSpawnerTicker.getSpots(CryptGhoul.class);
                     if (spots.isEmpty()) {
                         player.sendMessage(text("&7No Crypt spawn spots exist."));
                         return;
                     }
                     player.sendMessage(text("&6Active Crypt Spawn Spots:"));
                     int index = 1;
-                    for (ZonePopulationTicker.MobSpawnSpot spot : spots) {
+                    for (SpotSpawnerTicker.MobSpawnSpot spot : spots) {
                         Pos pos = spot.getPosition();
                         player.sendMessage(text(String.format(" &e#%d&7: &a%.1f, %.1f, %.1f &7(Active: %d)",
                                 index++, pos.x(), pos.y(), pos.z(), spot.getActiveEntities().size())));
@@ -51,7 +52,7 @@ public class CryptSpotCommand extends Command {
                     break;
                 }
                 case "clear": {
-                    ZonePopulationTicker.clearCryptSpawnSpots();
+                    SpotSpawnerTicker.clearSpots(CryptGhoul.class);
                     player.sendMessage(text("&aSuccessfully cleared all Crypt spawn spots."));
                     break;
                 }

@@ -4,7 +4,7 @@ import fun.ascent.common.redis.PingService;
 import fun.ascent.skyblock.Main;
 import fun.ascent.skyblock.config.ServerConfig;
 import fun.ascent.skyblock.world.WorldHandler;
-import fun.ascent.skyblock.entity.mob.ZonePopulationTicker;
+import fun.ascent.skyblock.entity.mob.SpotSpawnerTicker;
 import net.minestom.server.MinecraftServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ public class HubServer {
         // Hub Specific Initialization
         WorldHandler.initialise();
         HubManager.init();
-        ZonePopulationTicker.start();
+        SpotSpawnerTicker.start();
         
         LOGGER.info("Starting SkyBlock HUB server on {}:{}", config.host(), config.port());
         server.start(config.host(), config.port());

@@ -8,7 +8,7 @@ import fun.ascent.skyblock.entity.mob.ai.LastAttackerTarget;
 import fun.ascent.skyblock.entity.mob.ai.MeleeChaseGoal;
 import fun.ascent.skyblock.entity.mob.ai.NearestPlayerTarget;
 import fun.ascent.skyblock.entity.mob.ai.RegionWanderGoal;
-import fun.ascent.skyblock.entity.mob.impl.ZoneSpawner;
+import fun.ascent.skyblock.entity.mob.impl.SpotSpawner;
 import fun.ascent.skyblock.player.stats.Stats;
 import lombok.NonNull;
 import net.minestom.server.entity.EntityType;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CryptGhoul extends SkyblockMobEntity implements ZoneSpawner {
+public class CryptGhoul extends SkyblockMobEntity implements SpotSpawner {
     private static final String ZONE = "crypts";
 
     public CryptGhoul() {
@@ -106,13 +106,11 @@ public class CryptGhoul extends SkyblockMobEntity implements ZoneSpawner {
     }
 
     @Override
-    public List<SpawnZone> spawnZones() {
-        return List.of(SpawnZone.builder()
-                .zoneId(ZONE)
-                .useSpots(true)
-                .spawnSpots(15)
+    public SpotConfig spotConfig() {
+        return SpotConfig.builder()
+                .collectionName("crypt_spawn_spots")
                 .spawnDelaySeconds(14)
                 .maxPerSpot(2)
-                .build());
+                .build();
     }
 }
