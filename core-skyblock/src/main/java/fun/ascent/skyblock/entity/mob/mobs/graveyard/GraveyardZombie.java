@@ -96,7 +96,7 @@ public class GraveyardZombie extends SkyblockMobEntity implements ZoneSpawner {
             @Override
             public List<MobDrop> drops() {
                 return List.of(
-                        new MobDrop(ItemStack.of(Material.ROTTEN_FLESH), 100.0, 1, 3),
+                        new MobDrop(ItemStack.of(Material.ROTTEN_FLESH), 100.0, 1, 1),
                         new MobDrop(ItemStack.of(Material.POISONOUS_POTATO), 2.0, 1, 1),
                         new MobDrop(ItemStack.of(Material.CARROT), 1.0, 1, 1),
                         new MobDrop(ItemStack.of(Material.POTATO), 1.0, 1, 1)

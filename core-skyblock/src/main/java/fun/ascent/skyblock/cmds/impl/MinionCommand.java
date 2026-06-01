@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.minion.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
 import fun.ascent.skyblock.minion.gui.MinionMenu;

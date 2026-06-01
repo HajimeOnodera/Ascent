@@ -1,20 +1,14 @@
 package fun.ascent.skyblock.cmds;
 
 import fun.ascent.skyblock.bazaar.cmd.BZCommand;
-import fun.ascent.skyblock.cmds.impl.DroomCommand;
-import fun.ascent.skyblock.cmds.impl.DungeonCommand;
-import fun.ascent.skyblock.cmds.impl.SpawnMobCommand;
-import fun.ascent.skyblock.hotm.command.HotmCommand;
-import fun.ascent.skyblock.item.command.GetItemDataCommand;
-import fun.ascent.skyblock.item.command.ItemCommand;
-import fun.ascent.skyblock.item.command.SetReforgeCommand;
+import fun.ascent.skyblock.cmds.impl.*;
+import fun.ascent.skyblock.cmds.impl.HotmCommand;
+import fun.ascent.skyblock.cmds.impl.GetItemDataCommand;
+import fun.ascent.skyblock.cmds.impl.ItemCommand;
+import fun.ascent.skyblock.cmds.impl.SetReforgeCommand;
 import fun.ascent.skyblock.menus.command.GuiCommand;
-import fun.ascent.skyblock.minion.command.MinionCommand;
+import fun.ascent.skyblock.cmds.impl.MinionCommand;
 import fun.ascent.skyblock.player.level.XpCommand;
-import fun.ascent.skyblock.player.level.command.LevelsCommand;
-import fun.ascent.skyblock.player.level.command.SetSbLevelCommand;
-import fun.ascent.skyblock.player.skill.command.SkillsCommand;
-import fun.ascent.skyblock.player.stats.command.StatCommand;
 import fun.ascent.common.command.RestartCommand;
 import fun.ascent.skyblock.shop.command.ShopCommand;
 import net.minestom.server.MinecraftServer;

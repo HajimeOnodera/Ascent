@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.item.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.item.ItemRegistry;
 import fun.ascent.skyblock.item.SkyblockItem;

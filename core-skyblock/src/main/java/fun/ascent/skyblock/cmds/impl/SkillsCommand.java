@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.player.skill.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.skill.SkillType;

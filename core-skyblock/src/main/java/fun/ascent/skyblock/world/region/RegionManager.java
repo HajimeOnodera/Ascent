@@ -53,7 +53,6 @@ public class RegionManager {
     public static Region getRegion(Instance instance, Point point) {
         if (instance == null) return null;
 
-        // Check for special instances by world ID
         String worldId = instance.getTag(WorldHandler.worldID);
         if (worldId != null) {
             if (worldId.equals("dungeon_hub")) {

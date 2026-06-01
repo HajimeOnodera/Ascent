@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.player.level.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.player.SkyblockPlayer;
 import fun.ascent.skyblock.player.profiles.ProfileManager;

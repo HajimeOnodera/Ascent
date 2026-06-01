@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.hotm.command;
+package fun.ascent.skyblock.cmds.impl;
 
 import fun.ascent.skyblock.hotm.HotmTree;
 import fun.ascent.skyblock.player.SkyblockPlayer;

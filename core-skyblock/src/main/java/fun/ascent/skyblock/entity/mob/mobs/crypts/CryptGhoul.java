@@ -1,4 +1,4 @@
-package fun.ascent.skyblock.entity.mob.mobs.graveyard;
+package fun.ascent.skyblock.entity.mob.mobs.crypts;
 
 import fun.ascent.skyblock.entity.loot.DropTable;
 import fun.ascent.skyblock.entity.loot.MobDrop;
@@ -22,33 +22,32 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class GraveyardZombieVillager extends SkyblockMobEntity implements ZoneSpawner {
+public class CryptGhoul extends SkyblockMobEntity implements ZoneSpawner {
+    private static final String ZONE = "crypts";
 
-    private static final String ZONE = "graveyard";
-
-    public GraveyardZombieVillager() {
-        super(EntityType.ZOMBIE_VILLAGER);
-        setEquipment(EquipmentSlot.HELMET, ItemStack.of(Material.LEATHER_HELMET));
-        setEquipment(EquipmentSlot.CHESTPLATE, ItemStack.of(Material.LEATHER_CHESTPLATE));
-        setEquipment(EquipmentSlot.LEGGINGS, ItemStack.of(Material.LEATHER_LEGGINGS));
-        setEquipment(EquipmentSlot.BOOTS, ItemStack.of(Material.LEATHER_BOOTS));
+    public CryptGhoul() {
+        super(EntityType.ZOMBIE);
+        setEquipment(EquipmentSlot.CHESTPLATE, ItemStack.of(Material.CHAINMAIL_CHESTPLATE));
+        setEquipment(EquipmentSlot.LEGGINGS, ItemStack.of(Material.CHAINMAIL_LEGGINGS));
+        setEquipment(EquipmentSlot.BOOTS, ItemStack.of(Material.CHAINMAIL_BOOTS));
+        setEquipment(EquipmentSlot.MAIN_HAND, ItemStack.of(Material.IRON_SWORD));
     }
 
     @Override
     public String displayName() {
-        return "Zombie Villager";
+        return "Crypt Ghoul";
     }
 
     @Override
     public int level() {
-        return 1;
+        return 30;
     }
 
     @Override
     public float baseStat(Stats stat) {
         return switch (stat) {
-            case HEALTH -> 120f;
-            case DAMAGE -> 24f;
+            case HEALTH -> 2000f;
+            case DAMAGE -> 350f;
             case SPEED -> 55f;
             default -> 0f;
         };
@@ -82,17 +81,17 @@ public class GraveyardZombieVillager extends SkyblockMobEntity implements ZoneSp
 
     @Override
     public double combatXpReward() {
-        return 7.0;
+        return 36.0;
     }
 
     @Override
     public double coinsReward() {
-        return 1.0;
+        return 13.0;
     }
 
     @Override
     public int xpOrbReward() {
-        return 2;
+        return 30;
     }
 
     @Override
@@ -101,17 +100,13 @@ public class GraveyardZombieVillager extends SkyblockMobEntity implements ZoneSp
             @Override
             public List<MobDrop> drops() {
                 return List.of(
-                        new MobDrop(ItemStack.of(Material.ROTTEN_FLESH), 100.0, 1, 1),
-                        new MobDrop(ItemStack.of(Material.POISONOUS_POTATO), 2.0, 1, 1),
-                        new MobDrop(ItemStack.of(Material.CARROT), 1.0, 1, 1),
-                        new MobDrop(ItemStack.of(Material.POTATO), 1.0, 1, 1)
-                );
+                        new MobDrop(ItemStack.of(Material.ROTTEN_FLESH), 100.0, 1, 2));
             }
         };
     }
 
     @Override
     public List<SpawnZone> spawnZones() {
-        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(5).build());
+        return List.of(SpawnZone.builder().zoneId(ZONE).targetCount(20).build());
     }
 }

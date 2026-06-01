@@ -147,7 +147,7 @@ public class RegionListener {
                     "Travel to the <green>Birch Park<white>."};
             case GRAVEYARD -> new String[]{
                     "Fight Zombies.",
-                    "Travel to the Spider's Den.",
+                    "Travel to the <red>Spider's Den<white>.",
                     "Talk to <gray>Pat<white>.",
                     "Investigate the Catacombs."};
             case CRYPTS -> new String[]{
@@ -160,9 +160,10 @@ public class RegionListener {
                     "Visit <light_purple>Tia the Fairy<white> at the <light_purple>Fairy Pond<white>.",
                     "Discover hidden secrets."};
             case COMBAT_SETTLEMENT -> new String[]{
-                    "Buy Combat Tools from the <red>Weaponsmith<white>.",
+                    "Buy Combat Tools from the <red>Weaponsmith<white> and <red>Rosetta<white>.",
+                    "Talk to <red>Jax <white>at the <dark_green>Archery Range <white>to learn about bows and arrows.",
                     "Learn about <dark_green>Enchanting<white> at the <aqua>Library<white>.",
-                    "Talk to <red>Maxwell<white> to learn about <gold>Magical Power<white>."};
+                    "Talk to <red>Maxwell<white> at the <gold>Thaumaturgist <white>to learn about <gold>Magical Power<white>."};
             case COMMUNITY_CENTER -> new String[]{
                     "Participate in the <green>Mayor Elections<white>.",
                     "Contribute to City Projects.",
