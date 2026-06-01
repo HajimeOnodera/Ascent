@@ -192,11 +192,24 @@ public class ZonePopulationTicker {
 
     private static int countInZone(String zoneId, EntityRegistry entry) {
         int count = 0;
-        for (SkyblockMobEntity mob : SkyblockMobEntity.getActiveMobs()) {
-            if (EntityRegistry.getByMob(mob) == entry && belongsToZone(mob, zoneId)) {
+        List<SkyblockMobEntity> activeList = SkyblockMobEntity.getActiveMobs();
+        
+        System.out.println("[Spawner Debug] activeMobs size: " + activeList.size() + " checking zone: " + zoneId);
+        
+        for (SkyblockMobEntity mob : activeList) {
+            boolean classMatch = mob.getClass().getName().equals(entry.getPrototype().getClass().getName());
+            boolean zoneMatch = belongsToZone(mob, zoneId);
+            
+            System.out.println("[Spawner Debug]  - Mob: " + mob.getClass().getSimpleName() 
+                    + " | zoneId: " + mob.getZoneId() 
+                    + " | classMatch: " + classMatch 
+                    + " | zoneMatch: " + zoneMatch);
+            
+            if (classMatch && zoneMatch) {
                 count++;
             }
         }
+        System.out.println("[Spawner Debug] Final count in " + zoneId + ": " + count);
         return count;
     }
 
