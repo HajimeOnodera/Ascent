@@ -85,6 +85,7 @@ public abstract class SkyblockMobEntity extends EntityCreature {
         activeMobs.add(this);
         nameplate.setInstance(getInstance(), getPosition());
         addPassenger(nameplate);
+        syncNameplate();
         onSpawn();
     }
 
@@ -186,21 +187,31 @@ public abstract class SkyblockMobEntity extends EntityCreature {
             world.loadChunk(pos).join();
         }
 
-        if (nameplate != null && !nameplate.isRemoved() && nameplate.getInstance() == world) {
-            if (!getPassengers().contains(nameplate)) {
-                addPassenger(nameplate);
-            }
-            if (time % 10 == 0) {
-                nameplate.teleport(getPosition());
-            }
-        }
-
         pushOverlappingMobs();
 
         try {
             super.tick(time);
         } catch (Exception ignored) {
         }
+
+        syncNameplate();
+    }
+
+    private void syncNameplate() {
+        if (nameplate == null || nameplate.isRemoved()) return;
+
+        Instance world = getInstance();
+        if (world == null) return;
+
+        if (nameplate.getInstance() != world) {
+            nameplate.setInstance(world, getPosition());
+        }
+
+        if (!getPassengers().contains(nameplate)) {
+            addPassenger(nameplate);
+        }
+
+        nameplate.teleport(getPosition());
     }
 
     private void pushOverlappingMobs() {
