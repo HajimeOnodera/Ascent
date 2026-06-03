@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.TargetSelector;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.entity.GameMode;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;
@@ -33,10 +34,9 @@ public class NearestPlayerTarget extends TargetSelector {
         final String activeZone = zoneId;
         final double rangeSq = range * range;
 
-        // OPTIMIZATION: Query the players list directly. This avoids expensive spatial index spatial tree queries
-        // across all other entities (like damage indicators, item drops, custom displays, etc.)
         return world.getPlayers().stream()
                 .filter(p -> !p.isRemoved())
+                .filter(p -> p.getGameMode() != GameMode.CREATIVE && p.getGameMode() != GameMode.SPECTATOR)
                 .filter(p -> p.getDistanceSquared(entityCreature) <= rangeSq)
                 .filter(p -> {
                     if (activeZone == null) return true;
