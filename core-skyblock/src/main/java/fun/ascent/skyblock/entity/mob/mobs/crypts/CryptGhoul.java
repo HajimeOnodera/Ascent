@@ -48,7 +48,7 @@ public class CryptGhoul extends SkyblockMobEntity implements SpotSpawner {
         return switch (stat) {
             case HEALTH -> 2000f;
             case DAMAGE -> 350f;
-            case SPEED -> 90f;
+            case SPEED -> 75f;
             default -> 0f;
         };
     }
