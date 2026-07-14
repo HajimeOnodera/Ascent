@@ -68,8 +68,8 @@ graph TD
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/HajimeOnodera56/AscentDevv.git
-   cd AscentDevv
+   git clone https://github.com/HajimeOnodera56/Ascent.git
+   cd Ascent
    ```
 
 2. **Build the project**:
