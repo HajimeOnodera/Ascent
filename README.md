@@ -68,7 +68,7 @@ graph TD
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/HajimeOnodera56/Ascent.git
+   git clone https://github.com/HajimeOnodera/Ascent.git
    cd Ascent
    ```
 
