@@ -3,6 +3,7 @@ package fun.ascent.skyblock.minion.service;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import fun.ascent.skyblock.minion.base.SkyblockMinion;
+import fun.ascent.skyblock.minion.layout.MinionLayoutValidator;
 import fun.ascent.skyblock.minion.model.MinionType;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
@@ -58,17 +59,39 @@ public class MinionPersistence {
         MinionType type = MinionType.valueOf(doc.getString("type"));
         int tier = doc.getInteger("tier");
         UUID owner = UUID.fromString(doc.getString("owner"));
-        
-        Pos pos = new Pos(
-            doc.getDouble("x"),
-            doc.getDouble("y"),
-            doc.getDouble("z"),
-            doc.get("yaw") instanceof Double ? ((Double) doc.get("yaw")).floatValue() : ((Integer) doc.get("yaw")).floatValue(),
-            doc.get("pitch") instanceof Double ? ((Double) doc.get("pitch")).floatValue() : ((Integer) doc.get("pitch")).floatValue()
-        );
 
-        SkyblockMinion minion = MinionFactory.create(owner, type, tier, instance, pos);
-        
+        double x = doc.getDouble("x");
+        double y = doc.getDouble("y");
+        double z = doc.getDouble("z");
+
+        float yaw = doc.get("yaw") instanceof Double
+                ? ((Double) doc.get("yaw")).floatValue()
+                : ((Integer) doc.get("yaw")).floatValue();
+
+        float pitch = doc.get("pitch") instanceof Double
+                ? ((Double) doc.get("pitch")).floatValue()
+                : ((Integer) doc.get("pitch")).floatValue();
+
+        double[] yCandidates = new double[] { y, y - 1, y + 1 };
+
+        SkyblockMinion chosenMinion = null;
+        for (double yCandidate : yCandidates) {
+            Pos candidatePos = new Pos(x, yCandidate, z, yaw, pitch);
+            SkyblockMinion candidateMinion = MinionFactory.create(owner, type, tier, instance, candidatePos);
+
+            if (MinionLayoutValidator.validate(candidateMinion).valid()) {
+                chosenMinion = candidateMinion;
+                break;
+            }
+        }
+
+        if (chosenMinion == null) {
+            Pos fallbackPos = new Pos(x, y, z, yaw, pitch);
+            chosenMinion = MinionFactory.create(owner, type, tier, instance, fallbackPos);
+        }
+
+        SkyblockMinion minion = chosenMinion;
+
         // Load storage
         String json = doc.getString("storage");
         if (json != null && !json.isEmpty()) {
@@ -100,7 +123,7 @@ public class MinionPersistence {
             long lastSavedAt = doc.getLong("lastSavedAt");
             minion.applyOfflineProduction(lastSavedAt);
         }
-        
+
         return minion;
     }
 }
